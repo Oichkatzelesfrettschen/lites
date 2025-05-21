@@ -1,7 +1,21 @@
 SRCDIR := build/lites-1.1.u3
 CC ?= gcc
+
+# Target architecture (x86_64 or i686).  Determines -m32/-m64 flags.
+ARCH ?= x86_64
+
+# Base optimisation flags
 CFLAGS ?= -O2 -std=c23
-LDFLAGS ?=
+
+
+# Translate ARCH into compiler options
+ifeq ($(ARCH),i686)
+CFLAGS += -m32
+LDFLAGS += -m32
+else ifeq ($(ARCH),x86_64)
+CFLAGS += -m64
+LDFLAGS += -m64
+endif
 
 SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c')
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c')

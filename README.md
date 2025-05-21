@@ -52,6 +52,20 @@ cd lites-1.1.u3
 make
 ```
 
+For the modernized build system in this repository you can also use
+`Makefile.new` or the provided CMake files.  Both recognise an optional
+`ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default) and
+32‑bit (`ARCH=i686`) builds.  Examples:
+
+```sh
+# Using the makefile
+make -f Makefile.new ARCH=i686
+
+# Using CMake
+cmake -B build -DARCH=i686
+cmake --build build
+```
+
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators.  It can be used to reproduce historical build setups, but
 it requires root privileges and network access.
