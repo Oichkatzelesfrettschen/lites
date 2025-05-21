@@ -200,8 +200,7 @@ zone_t	net_msg_zone;
 #if 1
 /* Called by MFREE etc. */
 void
-net_input_dispose(msg)
-	char *	msg;
+net_input_dispose(char *msg)
 {
 	zfree(net_msg_zone, (vm_offset_t)msg);
 }
@@ -387,10 +386,7 @@ if(debug_netcode) {
 
 /*ARGSUSED*/
 kern_return_t
-ether_write_reply(ifp_p, return_code, count)
-	char *		ifp_p;
-	kern_return_t	return_code;
-	unsigned int	count;
+ether_write_reply(char *ifp_p, kern_return_t return_code, unsigned int count)
 {
 	panic("ether_write_reply called");
 	return EOPNOTSUPP;
@@ -471,8 +467,7 @@ void ether_error()
  * Name points to the full device name (including unit number).
  */
 struct ifnet *
-iface_find(name)
-	char		*name;
+iface_find(char *name)
 {
 	register struct ifnet	*ifp;
 	register struct ether_softc *es;

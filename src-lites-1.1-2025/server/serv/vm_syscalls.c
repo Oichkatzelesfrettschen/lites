@@ -321,8 +321,7 @@ msync(p, uap, retval)
 }
 
 void
-munmapfd(fd)
-	int fd;
+munmapfd(int fd)
 {
 	struct proc *curproc = get_proc();
 #ifdef DEBUG

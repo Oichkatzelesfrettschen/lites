@@ -165,8 +165,7 @@ dev_number_hash_lookup(xdev_t dev)
  * Map kernel device error codes to BSD error numbers.
  */
 int
-dev_error_to_errno(err)
-	int	err;
+dev_error_to_errno(int err)
 {
 	/* Unnecessary: the emulator does the mapping */
 	return err;

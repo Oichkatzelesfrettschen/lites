@@ -192,10 +192,7 @@ start_server_op(
 }
 
 int
-end_server_op(p, error, interrupt)
-    register int	error;
-    boolean_t	*interrupt;
-    register struct proc *p;
+end_server_op(struct proc *p, int error, boolean_t *interrupt)
 {
 	proc_invocation_t pk;
 	if (p == 0) {

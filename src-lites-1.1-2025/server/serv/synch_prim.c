@@ -446,8 +446,7 @@ int hzto(tv)
 }
 
 int
-time_to_hz(tv)
-	struct timeval *tv;
+time_to_hz(struct timeval *tv)
 {
 	register long	ticks, sec;
 

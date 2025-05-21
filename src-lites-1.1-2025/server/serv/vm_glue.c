@@ -195,13 +195,7 @@ int indent = 0;
 
 /*ARGSUSED2*/
 void
-#if __STDC__
 iprintf(const char *fmt, ...)
-#else
-iprintf(fmt /* , va_alist */)
-	char *fmt;
-	/* va_dcl */
-#endif
 {
 	register int i;
 	va_list ap;
