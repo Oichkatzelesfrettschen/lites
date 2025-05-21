@@ -35,3 +35,4 @@ ugh
 - http://web.archive.org/web/19990502223408/https://www.cs.utah.edu/projects/flux/mach4-i386/html/mach4-UK22.html
 - http://web.archive.org/web/19990508181023/http://www.cs.utah.edu/projects/flux/
 - http://web.archive.org/web/20031206081657/http://www-2.cs.cmu.edu/afs/cs/project/mach/public/www/sources/sources_top.html
+\nFor an overview of the available releases and a script that can generate\ndiff patches between them, see [docs/HISTORY.md](docs/HISTORY.md).
