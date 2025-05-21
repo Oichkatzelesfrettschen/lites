@@ -18,6 +18,20 @@ the intel bits are all over the place, spread out on multiple ftp servers, sites
 
 ugh
 
+## Building
+
+This repository ships with a `setup.sh` script that installs a fairly
+complete set of development tools and cross-compilers.  It is intended
+for use inside a fresh Debian or Ubuntu container.  Run it as root
+before attempting to compile any of the archived Lites sources:
+
+```bash
+sudo ./setup.sh
+```
+
+The script does not fetch or build the Mach kernel itself, so a working
+Mach environment is still required for successful compilation of Lites.
+
 - http://web.archive.org/web/20031205031618/http://www.cs.hut.fi/~jvh/lites.html
 - https://web.archive.org/web/19970716001117/http://www.cs.hut.fi/~jvh/lites-1.0-announcement.html
 - http://ftp.funet.fi/pub/mach/lites/
