@@ -263,8 +263,7 @@ mach_error_t disk_ioctl(
 }
 
 mach_port_t
-disk_port(dev)
-	dev_t	dev;
+disk_port(dev_t dev)
 {
 	return (disk_port_lookup(dev));
 }

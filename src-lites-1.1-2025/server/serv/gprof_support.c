@@ -99,8 +99,7 @@ sampled_pc_t gprof_pc_samples[512];
  * Memory allocator for callarcs.
  */
 void
-gprof_callarc_get(n)
-	int n;			/* this many callarcs */
+gprof_callarc_get(int n)			/* this many callarcs */
 {
     kern_return_t kr;
     vm_address_t page;
@@ -305,8 +304,7 @@ mcount_done:
  */
 /*ARGSUSED*/
 int
-gprof_take_samples(arg)
-	caddr_t arg;
+gprof_take_samples(caddr_t arg)
 {
     kern_return_t kr;
     int samplecnt, i;
@@ -417,10 +415,7 @@ gprof_stop_profiling()
  */
 
 kern_return_t
-bsd_mon_switch(proc_port, intr, onoff)
-	mach_port_t	proc_port;
-	boolean_t	*intr;
-	int		*onoff;
+bsd_mon_switch(mach_port_t proc_port, boolean_t *intr, int *onoff)
 {
 	int old_value;
 	kern_return_t kr;
@@ -453,11 +448,7 @@ bsd_mon_switch(proc_port, intr, onoff)
 }
 
 kern_return_t
-bsd_mon_dump(proc_port, intr, mon_data, mon_data_cnt)
-	mach_port_t	proc_port;
-	boolean_t	*intr;
-	char		**mon_data;
-	int		*mon_data_cnt;
+bsd_mon_dump(mach_port_t proc_port, boolean_t *intr, char **mon_data, int *mon_data_cnt)
 {
 	vm_address_t	mon_buffer;
 	vm_size_t	mon_size;

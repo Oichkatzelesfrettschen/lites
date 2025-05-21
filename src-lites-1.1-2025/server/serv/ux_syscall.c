@@ -58,8 +58,7 @@ extern char	*syscallnames[];
  * Generic system call.
  */
 boolean_t
-ux_generic_server(InHeadP, OutHeadP)
-	mach_msg_header_t *InHeadP, *OutHeadP;
+ux_generic_server(mach_msg_header_t *InHeadP, mach_msg_header_t *OutHeadP)
 {
 	register struct bsd_request	*req = (struct bsd_request *)InHeadP;
 	register struct bsd_reply	*rep = (struct bsd_reply *)OutHeadP;
@@ -309,12 +308,7 @@ ux_generic_server(InHeadP, OutHeadP)
  */
 
 boolean_t
-rpsleep(rsleep, arg1, arg2, mesg1, mesg2)
-int (*rsleep)();
-int arg1;
-int arg2;
-char *mesg1;
-char *mesg2;
+rpsleep(int (*rsleep)(), int arg1, int arg2, char *mesg1, char *mesg2)
 {
     label_t lsave;
     boolean_t ret = TRUE;
