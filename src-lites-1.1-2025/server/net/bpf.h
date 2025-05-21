@@ -234,18 +234,18 @@ struct bpf_insn {
 #endif /* !_DEVICE_BPF_H_ XXX */
 
 #ifdef KERNEL
-int	 bpf_validate __P((struct bpf_insn *, int));
-int	 bpfopen __P((dev_t, int));
-int	 bpfclose __P((dev_t, int));
-int	 bpfread __P((dev_t, struct uio *));
-int	 bpfwrite __P((dev_t, struct uio *));
-int	 bpfioctl __P((dev_t, int, caddr_t, int));
-int	 bpf_select __P((dev_t, int, struct proc *));
-void	 bpf_tap __P((caddr_t, u_char *, u_int));
-void	 bpf_mtap __P((caddr_t, struct mbuf *));
-void	 bpfattach __P((caddr_t *, struct ifnet *, u_int, u_int));
-void	 bpfilterattach __P((int));
-u_int	 bpf_filter __P((struct bpf_insn *, u_char *, u_int, u_int));
+int	 bpf_validate (struct bpf_insn *, int);
+int	 bpfopen (dev_t, int);
+int	 bpfclose (dev_t, int);
+int	 bpfread (dev_t, struct uio *);
+int	 bpfwrite (dev_t, struct uio *);
+int	 bpfioctl (dev_t, int, caddr_t, int);
+int	 bpf_select (dev_t, int, struct proc *);
+void	 bpf_tap (caddr_t, u_char *, u_int);
+void	 bpf_mtap (caddr_t, struct mbuf *);
+void	 bpfattach (caddr_t *, struct ifnet *, u_int, u_int);
+void	 bpfilterattach (int);
+u_int	 bpf_filter (struct bpf_insn *, u_char *, u_int, u_int);
 #endif
 
 /*

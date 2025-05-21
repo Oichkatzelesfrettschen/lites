@@ -53,11 +53,11 @@
  * FOR ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
  */
 
-EXTERN int minixfs_lookup __P((struct vop_lookup_args *ap));
-EXTERN void minixfs_dirbad __P((struct inode *ip, doff_t offset, char *how));
-EXTERN int minixfs_dirbadentry __P((struct vnode *, struct direct *, int ));
-EXTERN int minixfs_direnter __P((struct inode *, struct vnode *,register struct componentname*));
-EXTERN int minixfs_dirremove __P((struct vnode *dvp, struct componentname *cnp));
-EXTERN int minixfs_dirrewrite __P((struct inode *dp, struct inode* ip, struct componentname *cnp));
-EXTERN int minixfs_dirempty __P((register struct inode* ip, ino_t parentino, struct ucred *cred));
-EXTERN int minixfs_checkpath __P((struct inode*,struct inode*,struct ucred*));
+EXTERN int minixfs_lookup (struct vop_lookup_args *ap);
+EXTERN void minixfs_dirbad (struct inode *ip, doff_t offset, char *how);
+EXTERN int minixfs_dirbadentry (struct vnode *, struct direct *, int );
+EXTERN int minixfs_direnter (struct inode *, struct vnode *,register struct componentname*);
+EXTERN int minixfs_dirremove (struct vnode *dvp, struct componentname *cnp);
+EXTERN int minixfs_dirrewrite (struct inode *dp, struct inode* ip, struct componentname *cnp);
+EXTERN int minixfs_dirempty (register struct inode* ip, ino_t parentino, struct ucred *cred);
+EXTERN int minixfs_checkpath (struct inode*,struct inode*,struct ucred*);

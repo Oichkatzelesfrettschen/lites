@@ -147,18 +147,18 @@ u_char	ether_ipmulticast_min[6];
 u_char	ether_ipmulticast_max[6];
 struct	ifqueue arpintrq;
 
-struct	llinfo_arp *arptnew __P((struct in_addr *));
+struct	llinfo_arp *arptnew (struct in_addr *);
 struct	llinfo_arp llinfo_arp;		/* head of the llinfo queue */
 
-void	arpwhohas __P((struct arpcom *, struct in_addr *));
-void	arpintr __P((void));
-int	arpresolve __P((struct arpcom *,
-	   struct rtentry *, struct mbuf *, struct sockaddr *, u_char *));
-void	arp_rtrequest __P((int, struct rtentry *, struct sockaddr *));
-void	arpwhohas __P((struct arpcom *, struct in_addr *));
+void	arpwhohas (struct arpcom *, struct in_addr *);
+void	arpintr (void);
+int	arpresolve (struct arpcom *,
+	   struct rtentry *, struct mbuf *, struct sockaddr *, u_char *);
+void	arp_rtrequest (int, struct rtentry *, struct sockaddr *);
+void	arpwhohas (struct arpcom *, struct in_addr *);
 
-int	ether_addmulti __P((struct ifreq *, struct arpcom *));
-int	ether_delmulti __P((struct ifreq *, struct arpcom *));
+int	ether_addmulti (struct ifreq *, struct arpcom *);
+int	ether_delmulti (struct ifreq *, struct arpcom *);
 
 /*
  * Ethernet multicast address structure.  There is one of these for each

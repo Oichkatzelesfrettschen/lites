@@ -25,7 +25,7 @@
 struct __dummy { unsigned long a[100]; };
 #define ADDR (*(struct __dummy *) addr)
 
-extern __inline__ int set_bit(int nr, void * addr)
+static inline int set_bit(int nr, void * addr)
 {
 	int oldbit;
 
@@ -35,7 +35,7 @@ extern __inline__ int set_bit(int nr, void * addr)
 	return oldbit;
 }
 
-extern __inline__ int clear_bit(int nr, void * addr)
+static inline int clear_bit(int nr, void * addr)
 {
 	int oldbit;
 
@@ -45,7 +45,7 @@ extern __inline__ int clear_bit(int nr, void * addr)
 	return oldbit;
 }
 
-extern __inline__ int change_bit(int nr, void * addr)
+static inline int change_bit(int nr, void * addr)
 {
 	int oldbit;
 
@@ -59,7 +59,7 @@ extern __inline__ int change_bit(int nr, void * addr)
  * This routine doesn't need to be atomic, but it's faster to code it
  * this way.
  */
-extern __inline__ int test_bit(int nr, void * addr)
+static inline int test_bit(int nr, void * addr)
 {
 	int oldbit;
 
@@ -72,7 +72,7 @@ extern __inline__ int test_bit(int nr, void * addr)
 /*
  * Find-bit routines..
  */
-extern inline int find_first_zero_bit(void * addr, unsigned size)
+static inline int find_first_zero_bit(void * addr, unsigned size)
 {
 	int res;
 
@@ -96,7 +96,7 @@ extern inline int find_first_zero_bit(void * addr, unsigned size)
 	return res;
 }
 
-extern inline int find_next_zero_bit (void * addr, int size, int offset)
+static inline int find_next_zero_bit (void * addr, int size, int offset)
 {
 	unsigned long * p = ((unsigned long *) addr) + (offset >> 5);
 	int set = 0, bit = offset & 31, res;
@@ -128,7 +128,7 @@ extern inline int find_next_zero_bit (void * addr, int size, int offset)
  * ffz = Find First Zero in word. Undefined if no zero exists,
  * so code should check against ~0UL first..
  */
-extern inline unsigned long ffz(unsigned long word)
+static inline unsigned long ffz(unsigned long word)
 {
 	__asm__("bsfl %1,%0"
 		:"=r" (word)
@@ -142,7 +142,7 @@ extern inline unsigned long ffz(unsigned long word)
 /*
  * find the first occurrence of byte 'c', or 1 past the area if none
  */
-extern inline char * memscan(void * addr, unsigned char c, int size)
+static inline char * memscan(void * addr, unsigned char c, int size)
 {
         if (!size)
                 return addr;

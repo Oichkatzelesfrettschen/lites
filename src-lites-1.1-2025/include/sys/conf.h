@@ -91,15 +91,15 @@ struct vnode;
 struct bdevsw {
         char    *d_name;
 	int	d_flags;
-	int	(*d_open)	__P((dev_t dev, int oflags, int devtype,
-				     struct proc *p));
-	int	(*d_close)	__P((dev_t dev, int fflag, int devtype,
-				     struct proc *p));
-	int	(*d_strategy)	__P((struct buf *bp));
-	int	(*d_ioctl)	__P((dev_t dev, ioctl_cmd_t cmd, caddr_t data,
-				     int fflag, struct proc *p));
+	int	(*d_open)	(dev_t dev, int oflags, int devtype,
+				     struct proc *p);
+	int	(*d_close)	(dev_t dev, int fflag, int devtype,
+				     struct proc *p);
+	int	(*d_strategy)	(struct buf *bp);
+	int	(*d_ioctl)	(dev_t dev, ioctl_cmd_t cmd, caddr_t data,
+				     int fflag, struct proc *p);
 	int	(*d_dump)	();	/* parameters vary by architecture */
-	int	(*d_psize)	__P((dev_t dev));
+	int	(*d_psize)	(dev_t dev);
 };
 
 #ifdef KERNEL
@@ -109,23 +109,23 @@ extern struct bdevsw bdevsw[];
 struct cdevsw {
         char    *d_name;
 	int	d_flags;
-	int	(*d_open)	__P((dev_t dev, int oflags, int devtype,
-				     struct proc *p));
-	int	(*d_close)	__P((dev_t dev, int fflag, int devtype,
-				     struct proc *));
-	int	(*d_read)	__P((dev_t dev, struct uio *uio, int ioflag));
-	int	(*d_write)	__P((dev_t dev, struct uio *uio, int ioflag));
-	int	(*d_ioctl)	__P((dev_t dev, ioctl_cmd_t cmd, caddr_t data,
-				     int fflag, struct proc *p));
-	int	(*d_stop)	__P((struct tty *tp, int rw));
-	int	(*d_reset)	__P((int uban));	/* XXX */
-	struct	tty *(*d_tty)	__P((dev_t dev));
-	int	(*d_select)	__P((dev_t dev, int which, struct proc *p));
+	int	(*d_open)	(dev_t dev, int oflags, int devtype,
+				     struct proc *p);
+	int	(*d_close)	(dev_t dev, int fflag, int devtype,
+				     struct proc *);
+	int	(*d_read)	(dev_t dev, struct uio *uio, int ioflag);
+	int	(*d_write)	(dev_t dev, struct uio *uio, int ioflag);
+	int	(*d_ioctl)	(dev_t dev, ioctl_cmd_t cmd, caddr_t data,
+				     int fflag, struct proc *p);
+	int	(*d_stop)	(struct tty *tp, int rw);
+	int	(*d_reset)	(int uban);	/* XXX */
+	struct	tty *(*d_tty)	(dev_t dev);
+	int	(*d_select)	(dev_t dev, int which, struct proc *p);
 	/* return pager port. eg. device_map */
-	kern_return_t (*d_mmap)	__P((mach_port_t, vm_prot_t, vm_offset_t,
-				     vm_size_t, mach_port_t *, int));
-	int	(*d_strategy)	__P((struct buf *bp));
-	mach_port_t (*d_port)	__P((dev_t));
+	kern_return_t (*d_mmap)	(mach_port_t, vm_prot_t, vm_offset_t,
+				     vm_size_t, mach_port_t *, int);
+	int	(*d_strategy)	(struct buf *bp);
+	mach_port_t (*d_port)	(dev_t);
 };
 
 #ifdef KERNEL
@@ -137,17 +137,17 @@ extern char devioc[], devcls[];
 #endif
 
 struct linesw {
-	int	(*l_open)	__P((dev_t dev, struct tty *tp));
-	int	(*l_close)	__P((struct tty *tp, int flag));
-	int	(*l_read)	__P((struct tty *tp, struct uio *uio,
-				     int flag));
-	int	(*l_write)	__P((struct tty *tp, struct uio *uio,
-				     int flag));
-	int	(*l_ioctl)	__P((struct tty *tp, ioctl_cmd_t cmd,
-				     caddr_t data, int flag, struct proc *p));
-	int	(*l_rint)	__P((int c, struct tty *tp));
-	int	(*l_start)	__P((struct tty *tp));
-	int	(*l_modem)	__P((struct tty *tp, int flag));
+	int	(*l_open)	(dev_t dev, struct tty *tp);
+	int	(*l_close)	(struct tty *tp, int flag);
+	int	(*l_read)	(struct tty *tp, struct uio *uio,
+				     int flag);
+	int	(*l_write)	(struct tty *tp, struct uio *uio,
+				     int flag);
+	int	(*l_ioctl)	(struct tty *tp, ioctl_cmd_t cmd,
+				     caddr_t data, int flag, struct proc *p);
+	int	(*l_rint)	(int c, struct tty *tp);
+	int	(*l_start)	(struct tty *tp);
+	int	(*l_modem)	(struct tty *tp, int flag);
 };
 
 #ifdef KERNEL

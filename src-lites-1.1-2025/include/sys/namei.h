@@ -168,8 +168,8 @@ struct	namecache {
 
 #ifdef KERNEL
 u_long	nextvnodeid;
-int	namei __P((struct nameidata *ndp));
-int	lookup __P((struct nameidata *ndp));
+int	namei (struct nameidata *ndp);
+int	lookup (struct nameidata *ndp);
 #endif
 
 /*

@@ -51,8 +51,8 @@ struct selinfo {
 #ifdef KERNEL
 struct proc;
 
-void	selrecord __P((struct proc *selector, struct selinfo *));
-void	selwakeup __P((struct selinfo *));
+void	selrecord (struct proc *selector, struct selinfo *);
+void	selwakeup (struct selinfo *);
 #endif
 
 #endif /* !_SYS_SELECT_H_ */

@@ -77,7 +77,7 @@ struct	in_aliasreq {
 #ifdef	KERNEL
 extern	struct	in_ifaddr *in_ifaddr;
 extern	struct	ifqueue	ipintrq;		/* ip packet input queue */
-void	in_socktrim __P((struct sockaddr_in *));
+void	in_socktrim (struct sockaddr_in *);
 
 
 /*
@@ -191,10 +191,10 @@ struct in_multistep {
 	IN_NEXT_MULTI((step), (inm)); \
 }
 
-int	in_ifinit __P((struct ifnet *,
-	    struct in_ifaddr *, struct sockaddr_in *, int));
-struct	in_multi *in_addmulti __P((struct in_addr *, struct ifnet *));
-int	in_delmulti __P((struct in_multi *));
-void	in_ifscrub __P((struct ifnet *, struct in_ifaddr *));
-int	in_control __P((struct socket *, ioctl_cmd_t, caddr_t, struct ifnet *));
+int	in_ifinit (struct ifnet *,
+	    struct in_ifaddr *, struct sockaddr_in *, int);
+struct	in_multi *in_addmulti (struct in_addr *, struct ifnet *);
+int	in_delmulti (struct in_multi *);
+void	in_ifscrub (struct ifnet *, struct in_ifaddr *);
+int	in_control (struct socket *, ioctl_cmd_t, caddr_t, struct ifnet *);
 #endif

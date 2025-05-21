@@ -165,25 +165,25 @@ struct diskslices {
 struct buf;
 struct disklabel;
 
-typedef int ds_setgeom_t __P((struct disklabel *lp));
+typedef int ds_setgeom_t (struct disklabel *lp);
 
-int	dscheck __P((struct buf *bp, struct diskslices *ssp));
-void	dsclose __P((dev_t dev, int mode, struct diskslices *ssp));
-void	dsgone __P((struct diskslices **sspp));
-int	dsinit __P((char *dname, dev_t dev, d_strategy_t *strat,
-		    struct disklabel *lp, struct diskslices **sspp));
-int	dsioctl __P((char *dname, dev_t dev, int cmd, caddr_t data, int flags,
+int	dscheck (struct buf *bp, struct diskslices *ssp);
+void	dsclose (dev_t dev, int mode, struct diskslices *ssp);
+void	dsgone (struct diskslices **sspp);
+int	dsinit (char *dname, dev_t dev, d_strategy_t *strat,
+		    struct disklabel *lp, struct diskslices **sspp);
+int	dsioctl (char *dname, dev_t dev, int cmd, caddr_t data, int flags,
 		     struct diskslices **sspp, d_strategy_t *strat,
-		     ds_setgeom_t *setgeom));
-int	dsisopen __P((struct diskslices *ssp));
-char	*dsname __P((char *dname, int unit, int slice, int part,
-		     char *partname));
-int	dsopen __P((char *dname, dev_t dev, int mode, struct diskslices **sspp,
+		     ds_setgeom_t *setgeom);
+int	dsisopen (struct diskslices *ssp);
+char	*dsname (char *dname, int unit, int slice, int part,
+		     char *partname);
+int	dsopen (char *dname, dev_t dev, int mode, struct diskslices **sspp,
 		    struct disklabel *lp, d_strategy_t *strat,
 		    ds_setgeom_t *setgeom, struct bdevsw *bdevsw,
-		    struct cdevsw *cdevsw));
-int	dssize __P((dev_t dev, struct diskslices **sspp, d_open_t dopen,
-		    d_close_t dclose));
+		    struct cdevsw *cdevsw);
+int	dssize (dev_t dev, struct diskslices **sspp, d_open_t dopen,
+		    d_close_t dclose);
 
 #endif /* KERNEL */
 

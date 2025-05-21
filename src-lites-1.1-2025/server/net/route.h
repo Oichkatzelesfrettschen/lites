@@ -235,27 +235,27 @@ struct	route_cb route_cb;
 struct	rtstat	rtstat;
 struct	radix_node_head *rt_tables[AF_MAX+1];
 
-void	 route_init __P((void));
-int	 route_output __P((struct mbuf *, struct socket *));
-int	 route_usrreq __P((struct socket *,
-	    int, struct mbuf *, struct mbuf *, struct mbuf *));
-void	 rt_ifmsg __P((struct ifnet *));
-void	 rt_maskedcopy __P((struct sockaddr *,
-	    struct sockaddr *, struct sockaddr *));
-void	 rt_missmsg __P((int, struct rt_addrinfo *, int, int));
-void	 rt_newaddrmsg __P((int, struct ifaddr *, int, struct rtentry *));
-int	 rt_setgate __P((struct rtentry *,
-	    struct sockaddr *, struct sockaddr *));
-void	 rt_setmetrics __P((u_long, struct rt_metrics *, struct rt_metrics *));
-void	 rtable_init __P((void **));
-void	 rtalloc __P((struct route *));
+void	 route_init (void);
+int	 route_output (struct mbuf *, struct socket *);
+int	 route_usrreq (struct socket *,
+	    int, struct mbuf *, struct mbuf *, struct mbuf *);
+void	 rt_ifmsg (struct ifnet *);
+void	 rt_maskedcopy (struct sockaddr *,
+	    struct sockaddr *, struct sockaddr *);
+void	 rt_missmsg (int, struct rt_addrinfo *, int, int);
+void	 rt_newaddrmsg (int, struct ifaddr *, int, struct rtentry *);
+int	 rt_setgate (struct rtentry *,
+	    struct sockaddr *, struct sockaddr *);
+void	 rt_setmetrics (u_long, struct rt_metrics *, struct rt_metrics *);
+void	 rtable_init (void **);
+void	 rtalloc (struct route *);
 struct rtentry *
-	 rtalloc1 __P((struct sockaddr *, int));
-void	 rtfree __P((struct rtentry *));
-int	 rtinit __P((struct ifaddr *, int, int));
-int	 rtioctl __P((int, caddr_t, struct proc *));
-int	 rtredirect __P((struct sockaddr *, struct sockaddr *,
-	    struct sockaddr *, int, struct sockaddr *, struct rtentry **));
-int	 rtrequest __P((int, struct sockaddr *,
-	    struct sockaddr *, struct sockaddr *, int, struct rtentry **));
+	 rtalloc1 (struct sockaddr *, int);
+void	 rtfree (struct rtentry *);
+int	 rtinit (struct ifaddr *, int, int);
+int	 rtioctl (int, caddr_t, struct proc *);
+int	 rtredirect (struct sockaddr *, struct sockaddr *,
+	    struct sockaddr *, int, struct sockaddr *, struct rtentry **);
+int	 rtrequest (int, struct sockaddr *,
+	    struct sockaddr *, struct sockaddr *, int, struct rtentry **);
 #endif
