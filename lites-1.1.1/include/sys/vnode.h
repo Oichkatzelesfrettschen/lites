@@ -247,10 +247,10 @@ extern int		vttoif_tab[];
 #define	VHOLD(vp)	vhold(vp)
 #define	VREF(vp)	vref(vp)
 
-void	holdrele __P((struct vnode *));
-void	vattr_null __P((struct vattr *));
-void	vhold __P((struct vnode *));
-void	vref __P((struct vnode *));
+void	holdrele (struct vnode *);
+void	vattr_null (struct vattr *);
+void	vhold (struct vnode *);
+void	vref (struct vnode *);
 #else
 #define	HOLDRELE(vp)	(vp)->v_holdcnt--	/* decrease buf or page ref */
 #define	VATTR_NULL(vap)	(*(vap) = va_null)	/* initialize a vattr */
@@ -275,9 +275,9 @@ extern	struct vattr va_null;		/* predefined null vattr structure */
 
 #ifdef NFS
 #if NFS
-void	lease_check __P((struct vnode *vp, struct proc *p,
-	    struct ucred *ucred, int flag));
-void	lease_updatetime __P((int deltat));
+void	lease_check (struct vnode *vp, struct proc *p,
+	    struct ucred *ucred, int flag);
+void	lease_updatetime (int deltat);
 #define	LEASE_CHECK(vp, p, cred, flag)	lease_check((vp), (p), (cred), (flag))
 #define	LEASE_UPDATETIME(dt)		lease_updatetime(dt)
 #else
@@ -375,7 +375,7 @@ struct vnodeopv_desc {
 /*
  * A default routine which just returns an error.
  */
-int vn_default_error __P((void));
+int vn_default_error (void);
 
 /*
  * A generic structure.
@@ -419,35 +419,35 @@ struct vattr;
 struct vnode;
 struct vop_bwrite_args;
 
-int 	bdevvp __P((dev_t dev, struct vnode **vpp));
-int 	getnewvnode __P((enum vtagtype tag,
-	    struct mount *mp, int (**vops)(), struct vnode **vpp));
-int	vinvalbuf __P((struct vnode *vp, int save, struct ucred *cred,
-	    struct proc *p, int slpflag, int slptimeo));
-void 	vattr_null __P((struct vattr *vap));
-int 	vcount __P((struct vnode *vp));
-int 	vget __P((struct vnode *vp, int lockflag));
-void 	vgone __P((struct vnode *vp));
-void 	vgoneall __P((struct vnode *vp));
-int	vn_bwrite __P((struct vop_bwrite_args *ap));
-int 	vn_close __P((struct vnode *vp,
-	    int flags, struct ucred *cred, struct proc *p));
-int 	vn_closefile __P((struct file *fp, struct proc *p));
-int	vn_ioctl __P((struct file *fp, ioctl_cmd_t com, caddr_t data,
-		      struct proc *p));
-int 	vn_open __P((struct nameidata *ndp, int fmode, int cmode));
-int 	vn_rdwr __P((enum uio_rw rw, struct vnode *vp, caddr_t base,
+int 	bdevvp (dev_t dev, struct vnode **vpp);
+int 	getnewvnode (enum vtagtype tag,
+	    struct mount *mp, int (**vops)(), struct vnode **vpp);
+int	vinvalbuf (struct vnode *vp, int save, struct ucred *cred,
+	    struct proc *p, int slpflag, int slptimeo);
+void 	vattr_null (struct vattr *vap);
+int 	vcount (struct vnode *vp);
+int 	vget (struct vnode *vp, int lockflag);
+void 	vgone (struct vnode *vp);
+void 	vgoneall (struct vnode *vp);
+int	vn_bwrite (struct vop_bwrite_args *ap);
+int 	vn_close (struct vnode *vp,
+	    int flags, struct ucred *cred, struct proc *p);
+int 	vn_closefile (struct file *fp, struct proc *p);
+int	vn_ioctl (struct file *fp, ioctl_cmd_t com, caddr_t data,
+		      struct proc *p);
+int 	vn_open (struct nameidata *ndp, int fmode, int cmode);
+int 	vn_rdwr (enum uio_rw rw, struct vnode *vp, caddr_t base,
 	    int len, off_t offset, enum uio_seg segflg, int ioflg,
-	    struct ucred *cred, int *aresid, struct proc *p));
-int	vn_read __P((struct file *fp, struct uio *uio, struct ucred *cred));
-int	vn_select __P((struct file *fp, int which, struct proc *p));
-int	vn_stat __P((struct vnode *vp, struct stat *sb, struct proc *p));
-int	vn_write __P((struct file *fp, struct uio *uio, struct ucred *cred));
+	    struct ucred *cred, int *aresid, struct proc *p);
+int	vn_read (struct file *fp, struct uio *uio, struct ucred *cred);
+int	vn_select (struct file *fp, int which, struct proc *p);
+int	vn_stat (struct vnode *vp, struct stat *sb, struct proc *p);
+int	vn_write (struct file *fp, struct uio *uio, struct ucred *cred);
 struct vnode *
-	checkalias __P((struct vnode *vp, dev_t nvp_rdev, struct mount *mp));
-void 	vput __P((struct vnode *vp));
-void 	vref __P((struct vnode *vp));
-void 	vrele __P((struct vnode *vp));
+	checkalias (struct vnode *vp, dev_t nvp_rdev, struct mount *mp);
+void 	vput (struct vnode *vp);
+void 	vref (struct vnode *vp);
+void 	vrele (struct vnode *vp);
 #endif /* KERNEL */
 
 #endif /* !_SYS_VNODE_H_ */
