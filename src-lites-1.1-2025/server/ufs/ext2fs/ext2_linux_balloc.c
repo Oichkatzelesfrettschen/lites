@@ -41,8 +41,10 @@
 #include <ufs/ext2fs/fs.h>
 #include <sys/stat.h>
 
-#ifdef i386
+#if defined(i386) || defined(__i386__)
 #include <ufs/ext2fs/i386-bitops.h>
+#elif defined(__x86_64__)
+#include <ufs/ext2fs/x86_64-bitops.h>
 #else
 #error Provide an bitops.h file, please !
 #endif
