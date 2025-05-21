@@ -76,7 +76,7 @@ struct mapent {
 struct	map *kmemmap, *mbmap, *swapmap;
 int	nswapmap;
 
-long	rmalloc __P((struct map *, long));
-void	rmfree __P((struct map *, long, long));
-void	rminit __P((struct map *, long, long, char *, int));
+long	rmalloc (struct map *, long);
+void	rmfree (struct map *, long, long);
+void	rminit (struct map *, long, long, char *, int);
 #endif

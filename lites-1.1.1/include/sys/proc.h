@@ -353,16 +353,16 @@ typedef struct proc_invocation {
 
 void    proc_exit(struct proc *p, int);
 
-struct proc *pfind __P((pid_t));	/* Find process by id. */
-struct pgrp *pgfind __P((pid_t));	/* Find process group by id. */
+struct proc *pfind (pid_t);	/* Find process by id. */
+struct pgrp *pgfind (pid_t);	/* Find process group by id. */
 
-void	mi_switch __P((void));
-void	resetpriority __P((struct proc *));
-void	setrunnable __P((struct proc *));
-void	setrunqueue __P((struct proc *));
-void	sleep __P((void *chan, int pri));
-int	tsleep __P((void *chan, int pri, char *wmesg, int timo));
-void	unsleep __P((struct proc *));
-void	wakeup __P((void *chan));
+void	mi_switch (void);
+void	resetpriority (struct proc *);
+void	setrunnable (struct proc *);
+void	setrunqueue (struct proc *);
+void	sleep (void *chan, int pri);
+int	tsleep (void *chan, int pri, char *wmesg, int timo);
+void	unsleep (struct proc *);
+void	wakeup (void *chan);
 #endif	/* KERNEL */
 #endif	/* !_SYS_PROC_H_ */
