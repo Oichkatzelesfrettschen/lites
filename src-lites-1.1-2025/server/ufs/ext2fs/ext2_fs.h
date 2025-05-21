@@ -23,8 +23,10 @@
 
 #include <sys/types.h>
 
-#ifdef i386
+#if defined(i386) || defined(__i386__)
 #include <i386/types.h>
+#elif defined(__x86_64__)
+#include <i386/types.h> /* TODO: add x86_64 types header */
 #else
 #error need processor specific types
 #endif
