@@ -116,20 +116,20 @@ struct ifnet {
 	}	if_data;
 /* procedure handles */
 	int	(*if_init)		/* init routine */
-		__P((int));
+		(int);
 	int	(*if_output)		/* output routine (enqueue) */
-		__P((struct ifnet *, struct mbuf *, struct sockaddr *,
-		     struct rtentry *));
+		(struct ifnet *, struct mbuf *, struct sockaddr *,
+		     struct rtentry *);
 	int	(*if_start)		/* initiate output routine */
-		__P((struct ifnet *));
+		(struct ifnet *);
 	int	(*if_done)		/* output complete routine */
-		__P((struct ifnet *));	/* (XXX not used; fake prototype) */
+		(struct ifnet *);	/* (XXX not used; fake prototype) */
 	int	(*if_ioctl)		/* ioctl routine */
-		__P((struct ifnet *, ioctl_cmd_t, caddr_t));
+		(struct ifnet *, ioctl_cmd_t, caddr_t);
 	int	(*if_reset)	
-		__P((int));		/* new autoconfig will permit removal */
+		(int);		/* new autoconfig will permit removal */
 	int	(*if_watchdog)		/* timer routine */
-		__P((int));
+		(int);
 	struct	ifqueue {
 		struct	mbuf *ifq_head;
 		struct	mbuf *ifq_tail;
@@ -331,39 +331,39 @@ struct	ifconf {
 
 struct	ifnet	*ifnet;
 
-void	ether_ifattach __P((struct ifnet *));
-void	ether_input __P((struct ifnet *, struct ether_header *, struct mbuf *));
-int	ether_output __P((struct ifnet *,
-	   struct mbuf *, struct sockaddr *, struct rtentry *));
-char	*ether_sprintf __P((u_char *));
+void	ether_ifattach (struct ifnet *);
+void	ether_input (struct ifnet *, struct ether_header *, struct mbuf *);
+int	ether_output (struct ifnet *,
+	   struct mbuf *, struct sockaddr *, struct rtentry *);
+char	*ether_sprintf (u_char *);
 
-void	if_attach __P((struct ifnet *));
-void	if_down __P((struct ifnet *));
-void	if_qflush __P((struct ifqueue *));
-void	if_slowtimo __P((void *));
-void	if_up __P((struct ifnet *));
+void	if_attach (struct ifnet *);
+void	if_down (struct ifnet *);
+void	if_qflush (struct ifqueue *);
+void	if_slowtimo (void *);
+void	if_up (struct ifnet *);
 #ifdef vax
-void	ifubareset __P((int));
+void	ifubareset (int);
 #endif
-int	ifconf __P((ioctl_cmd_t, caddr_t));
-void	ifinit __P((void));
-int	ifioctl __P((struct socket *, int, caddr_t, struct proc *));
-int	ifpromisc __P((struct ifnet *, int));
-struct	ifnet *ifunit __P((char *));
+int	ifconf (ioctl_cmd_t, caddr_t);
+void	ifinit (void);
+int	ifioctl (struct socket *, int, caddr_t, struct proc *);
+int	ifpromisc (struct ifnet *, int);
+struct	ifnet *ifunit (char *);
 
-struct	ifaddr *ifa_ifwithaddr __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithaf __P((int));
-struct	ifaddr *ifa_ifwithdstaddr __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithnet __P((struct sockaddr *));
-struct	ifaddr *ifa_ifwithroute __P((int, struct sockaddr *,
-					struct sockaddr *));
-struct	ifaddr *ifaof_ifpforaddr __P((struct sockaddr *, struct ifnet *));
-void	ifafree __P((struct ifaddr *));
-void	link_rtrequest __P((int, struct rtentry *, struct sockaddr *));
+struct	ifaddr *ifa_ifwithaddr (struct sockaddr *);
+struct	ifaddr *ifa_ifwithaf (int);
+struct	ifaddr *ifa_ifwithdstaddr (struct sockaddr *);
+struct	ifaddr *ifa_ifwithnet (struct sockaddr *);
+struct	ifaddr *ifa_ifwithroute (int, struct sockaddr *,
+					struct sockaddr *);
+struct	ifaddr *ifaof_ifpforaddr (struct sockaddr *, struct ifnet *);
+void	ifafree (struct ifaddr *);
+void	link_rtrequest (int, struct rtentry *, struct sockaddr *);
 
-int	loioctl __P((struct ifnet *, int, caddr_t));
-void	loopattach __P((int));
-int	looutput __P((struct ifnet *,
-	   struct mbuf *, struct sockaddr *, struct rtentry *));
-void	lortrequest __P((int, struct rtentry *, struct sockaddr *));
+int	loioctl (struct ifnet *, int, caddr_t);
+void	loopattach (int);
+int	looutput (struct ifnet *,
+	   struct mbuf *, struct sockaddr *, struct rtentry *);
+void	lortrequest (int, struct rtentry *, struct sockaddr *);
 #endif

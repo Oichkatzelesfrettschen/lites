@@ -75,7 +75,7 @@ struct ppp_softc {
 	struct ifnet sc_if;	/* network-visible interface */
 	u_int	sc_flags;	/* see below */
 	void	*sc_devp;	/* pointer to device-dependent structure */
-	int	(*sc_start) __P((struct ppp_softc *));	/* start routine */
+	int	(*sc_start) (struct ppp_softc *);	/* start routine */
 	short	sc_mru;		/* max receive unit */
 	pid_t	sc_xfer;	/* used in xferring unit to another dev */
 	struct	ifqueue sc_inq;	/* TTY side input queue */

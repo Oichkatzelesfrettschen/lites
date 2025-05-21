@@ -45,12 +45,6 @@
 
 #if NBPFILTER > 0
 
-#ifndef __GNUC__
-#define inline
-#else
-#define inline __inline
-#endif
-
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>

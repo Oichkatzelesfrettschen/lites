@@ -68,7 +68,7 @@ struct ttysize {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	ioctl __P((int, unsigned int, ...));
+int	ioctl (int, unsigned int, ...);
 __END_DECLS
 #endif /* KERNEL */
 #endif /* !_SYS_IOCTL_H_ */
