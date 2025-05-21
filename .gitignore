@@ -1,3 +1,5 @@
+diffs/
+
 # Ignore object files
 *.o
 
@@ -18,3 +20,4 @@ a.out
 /obj/
 /dist/
 /release/
+

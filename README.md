@@ -28,6 +28,9 @@ links that are still reachable, mostly via the Internet Archive.
 - http://web.archive.org/web/19990508181023/http://www.cs.utah.edu/projects/flux/
 - http://web.archive.org/web/20031206081657/http://www-2.cs.cmu.edu/afs/cs/project/mach/public/www/sources/sources_top.html
 
+For an overview of the available releases and a script that can generate diff patches between them, see [docs/HISTORY.md](docs/HISTORY.md).
+
+
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
 detail.
