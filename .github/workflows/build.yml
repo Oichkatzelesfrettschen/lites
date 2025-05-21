@@ -1,0 +1,38 @@
+name: Build Lites
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache apt packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/cache/apt/archives
+            /var/lib/apt/lists
+          key: ${{ runner.os }}-apt-${{ hashFiles('setup.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Run setup script
+        run: sudo bash ./setup.sh
+
+      - name: Configure lites-1.1.1
+        run: |
+          cd lites-1.1.1
+          ./configure
+
+      - name: Build lites-1.1.1
+        run: |
+          cd lites-1.1.1
+          make
+
