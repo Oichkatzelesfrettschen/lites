@@ -16,7 +16,10 @@
 # WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
 #
 # HISTORY
-# $Log: $
+# $Log: Makefile,v $
+# Revision 1.1.1.1  1995/03/02  21:49:36  mike
+# Initial Lites release from hut.fi
+#
 # $EndLog$
 #
 #	File:	 include/ns532/Makefile

@@ -19,7 +19,13 @@
  */
 /*
  * HISTORY
- * $Log: $
+ * $Log: param.h,v $
+ * Revision 1.2  1995/03/10  17:18:27  mike
+ * Changes to make it compile/link in the new build environment
+ *
+ * Revision 1.1.1.1  1995/03/02  21:49:38  mike
+ * Initial Lites release from hut.fi
+ *
  */
 
 /*
