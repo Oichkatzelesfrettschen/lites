@@ -25,7 +25,10 @@
 # 
 # 
 # HISTORY
-# $Log:	Makefile,v $
+# $Log: Makefile,v $
+# Revision 1.1.1.1  1995/03/02  21:49:25  mike
+# Initial Lites release from hut.fi
+#
 # Revision 2.2  92/06/25  17:18:57  mrt
 # 	Created for ODE make
 # 	[92/06/16  16:18:31  mrt]
