@@ -21,3 +21,6 @@ a.out
 /dist/
 /release/
 
+# Ignore archived source tarballs
+*.tar.gz
+

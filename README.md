@@ -4,6 +4,10 @@ Lites is a 4.4BSD based Unix server that runs on top of the Mach
 microkernel.  This repository collects several historical releases and
 patch sets.
 
+The tree is preserved mainly for reference.  Should a directory named
+`lites-1.1-2025` (or similarly named) appear, it represents an ongoing
+modernization effort and is not part of the original snapshots.
+
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
 links that are still reachable, mostly via the Internet Archive.
@@ -37,11 +41,13 @@ detail.
 
 ## Building
 
-Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  To
-build one of the included releases, for example `lites-1.1.1`, run:
+Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  Each
+release is provided as a `*.tar.gz` archive.  Unpack the desired
+version and build it inside the resulting directory.  For example:
 
 ```sh
-cd lites-1.1.1
+tar -xzf lites-1.1.u3.tar.gz
+cd lites-1.1.u3
 ./configure
 make
 ```
