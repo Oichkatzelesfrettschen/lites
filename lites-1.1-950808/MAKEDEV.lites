@@ -1,0 +1,41 @@
+#!/bin/sh -
+#
+# Very basic MAKEDEV script for the devices to be used with lites.
+#
+# Device "make" file.  Valid arguments:
+#       all     Makes all lites devices (time and X11)
+#
+#       time 	time related devices (time, timezone)
+#	X11	X11 related devices (iopl, kbd, mouse)
+#		These are _NOT_ the same as used under CMU UX!
+#
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/etc
+umask 77
+for i
+do
+case $i in
+all)
+        sh MAKEDEV.lites time X11
+	;;
+
+time)
+	rm -f time timezone
+	mknod time		c 25 0 
+	mknod timezone		c 26 0 
+	chown root.wheel time timezone
+	chmod 644 time timezone
+	;;
+
+X11)	
+	rm -f iopl kbd mouse
+	mknod iopl		c 22 0 
+	mknod kbd		c 23 0 
+	mknod mouse		c 24 0 
+	chown root.bin iopl kbd mouse
+	chmod 666 iopl kbd mouse
+	;;
+esac
+done
+
+
