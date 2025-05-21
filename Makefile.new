@@ -1,6 +1,6 @@
 SRCDIR := build/lites-1.1.u3
 CC ?= gcc
-CFLAGS ?= -O2
+CFLAGS ?= -O2 -std=c23
 LDFLAGS ?=
 
 SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c')

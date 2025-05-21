@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
+set(CMAKE_C_STANDARD 23)
 
 # Optionally allow building out-of-tree archives.
 set(LITES_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3" CACHE PATH "Extracted lites source")
