@@ -25,7 +25,10 @@
  *
  *	From MK78 bootstrap.
  *
- * $Log: queue.h,v $
+ * $Log: cmu_queue.h,v $
+ * Revision 1.1.1.1  1995/03/02  21:49:33  mike
+ * Initial Lites release from hut.fi
+ *
  *
  */
 /*

@@ -15,7 +15,10 @@
  */
 /*
  * HISTORY
- * $Log: $
+ * $Log: malloc.h,v $
+ * Revision 1.1.1.1  1995/03/02  21:49:34  mike
+ * Initial Lites release from hut.fi
+ *
  */
 /* 
  *	File:	include/sys/malloc.h

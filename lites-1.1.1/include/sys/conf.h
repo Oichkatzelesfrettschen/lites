@@ -15,7 +15,10 @@
  */
 /*
  * HISTORY
- * $Log: $
+ * $Log: conf.h,v $
+ * Revision 1.1.1.1  1995/03/02  21:49:33  mike
+ * Initial Lites release from hut.fi
+ *
  */
 /* 
  *	File:	sys/conf.h

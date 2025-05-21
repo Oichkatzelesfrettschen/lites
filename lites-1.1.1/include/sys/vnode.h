@@ -15,7 +15,10 @@
  */
 /*
  * HISTORY
- * $Log: $
+ * $Log: vnode.h,v $
+ * Revision 1.1.1.1  1995/03/02  21:49:36  mike
+ * Initial Lites release from hut.fi
+ *
  */
 /* 
  *	File:	include/sys/vnode.h
