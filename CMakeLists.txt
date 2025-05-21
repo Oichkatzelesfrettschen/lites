@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
 
+# Allow selecting the build architecture with -DARCH=i686 or ARCH
+set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
+set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
+set(LDFLAGS "$ENV{LDFLAGS}" CACHE STRING "Additional linker flags")
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CFLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
+
+if(ARCH STREQUAL "i686")
+    add_compile_options(-m32)
+    add_link_options(-m32)
+elseif(ARCH STREQUAL "x86_64")
+    add_compile_options(-m64)
+    add_link_options(-m64)
+endif()
+
 # Optionally allow building out-of-tree archives.
 set(LITES_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3" CACHE PATH "Extracted lites source")
 
