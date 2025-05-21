@@ -66,7 +66,6 @@
 #define	__inline	inline		/* convert to C++ keyword */
 #else
 #ifndef __GNUC__
-#define	__inline			/* delete GCC keyword */
 #endif /* !__GNUC__ */
 #endif /* !__cplusplus */
 
@@ -77,7 +76,6 @@
 
 #ifndef __GNUC__
 #define	__const				/* delete pseudo-ANSI C keywords */
-#define	__inline
 #define	__signed
 #define	__volatile
 /*
@@ -90,7 +88,6 @@
  */
 #ifndef	NO_ANSI_KEYWORDS
 #define	const				/* delete ANSI C keywords */
-#define	inline
 #define	signed
 #define	volatile
 #endif
