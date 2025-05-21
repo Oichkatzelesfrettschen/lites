@@ -62,7 +62,7 @@ SOFTWARE.
 /* 
  * ARGO TP
  *
- * $Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_usrreq.c,v 1.1.1.1 1995/03/02 21:49:55 mike Exp $
+ * Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_usrreq.c,v 1.1.1.1 1995/03/02 21:49:55 mike Exp 
  * $Source: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_usrreq.c,v $
  *
  * tp_usrreq(), the fellow that gets called from most of the socket code.

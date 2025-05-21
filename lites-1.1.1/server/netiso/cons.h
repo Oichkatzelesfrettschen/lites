@@ -60,7 +60,7 @@ SOFTWARE.
  * ARGO Project, Computer Sciences Dept., University of Wisconsin - Madison
  */
 /*
- * $Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/cons.h,v 1.1.1.1 1995/03/02 21:49:57 mike Exp $
+ * Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/cons.h,v 1.1.1.1 1995/03/02 21:49:57 mike Exp 
  * $Source: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/cons.h,v $
  *
  * interface between TP and CONS
