@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
+set(CMAKE_C_STANDARD 23)
 
 # Allow selecting the build architecture with -DARCH=i686 or ARCH
 set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")

@@ -5,8 +5,8 @@ CC ?= gcc
 ARCH ?= x86_64
 
 # Base optimisation flags
-CFLAGS ?= -O2
-LDFLAGS ?=
+CFLAGS ?= -O2 -std=c23
+
 
 # Translate ARCH into compiler options
 ifeq ($(ARCH),i686)
