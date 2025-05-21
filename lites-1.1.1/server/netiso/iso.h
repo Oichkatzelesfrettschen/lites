@@ -59,7 +59,7 @@ SOFTWARE.
 /*
  * ARGO Project, Computer Sciences Dept., University of Wisconsin - Madison
  */
-/* $Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/iso.h,v 1.1.1.1 1995/03/02 21:49:56 mike Exp $ */
+/* Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/iso.h,v 1.1.1.1 1995/03/02 21:49:56 mike Exp  */
 /* $Source: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/iso.h,v $ */
 
 #ifndef __ISO__

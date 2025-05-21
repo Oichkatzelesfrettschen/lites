@@ -1,7 +1,7 @@
-/* $Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_driver.c,v 1.1.1.1 1995/03/02 21:49:56 mike Exp $ */
+/* Header: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_driver.c,v 1.1.1.1 1995/03/02 21:49:56 mike Exp  */
 /* $Source: /n/fast/usr/lsrc/mach/CVS/lites/server/netiso/tp_driver.c,v $ */
 #ifndef lint
-static char *rcsid = "$Header/**/$";
+static char *rcsid = "Header/**/";
 #endif lint
 #define _XEBEC_PG static
 
