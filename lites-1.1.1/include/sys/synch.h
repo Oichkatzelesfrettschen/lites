@@ -28,7 +28,10 @@
  * 05-Jan-94  Johannes Helander (jvh) at Helsinki University of Technology
  *	Ansified prototypes.
  *
- * $Log:	synch.h,v $
+ * $Log: synch.h,v $
+ * Revision 1.1.1.1  1995/03/02  21:49:35  mike
+ * Initial Lites release from hut.fi
+ *
  * Revision 2.1  92/04/21  17:15:26  rwd
  * BSDSS
  * 

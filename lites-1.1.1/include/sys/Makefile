@@ -15,7 +15,10 @@
 #
 #
 # HISTORY
-# $Log: $
+# $Log: Makefile,v $
+# Revision 1.1.1.1  1995/03/02  21:49:33  mike
+# Initial Lites release from hut.fi
+#
 #
 #	File:	include/sys/Makefile
 #	Author:	Johannes Helander, Helsinki University of Technology, 1994.
