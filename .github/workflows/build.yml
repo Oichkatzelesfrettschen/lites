@@ -1,38 +1,46 @@
-name: Build Lites
+name: Build
 
 on:
-  push:
-    branches: ["*"]
   pull_request:
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            cc: gcc
+            host: x86_64-linux-gnu
+          - arch: i686
+            cc: i686-linux-gnu-gcc
+            host: i686-linux-gnu
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Cache apt packages
-        uses: actions/cache@v3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-i686-linux-gnu g++-i686-linux-gnu
+
+      - name: Extract sources
+        run: |
+          mkdir -p build
+          tar -xzf "Historical Archives/lites-1.1.u3.tar.gz" -C build
+
+      - name: Build for ${{ matrix.arch }}
+        run: |
+          make -f Makefile.new clean
+          make -f Makefile.new CC=${{ matrix.cc }}
+          mv lites_server lites_server-${{ matrix.arch }}
+          mv lites_emulator lites_emulator-${{ matrix.arch }}
+
+      - name: Upload ${{ matrix.arch }} artifacts
+        uses: actions/upload-artifact@v3
         with:
+          name: lites-${{ matrix.arch }}
           path: |
-            /var/cache/apt/archives
-            /var/lib/apt/lists
-          key: ${{ runner.os }}-apt-${{ hashFiles('setup.sh') }}
-          restore-keys: |
-            ${{ runner.os }}-apt-
-
-      - name: Run setup script
-        run: sudo bash ./setup.sh
-
-      - name: Configure lites-1.1.1
-        run: |
-          cd lites-1.1.1
-          ./configure
-
-      - name: Build lites-1.1.1
-        run: |
-          cd lites-1.1.1
-          make
+            lites_server-${{ matrix.arch }}
+            lites_emulator-${{ matrix.arch }}
 

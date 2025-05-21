@@ -1,159 +1,93 @@
-/*
- * this is mixture of i386/bitops.h and asm/string.h
- * taken from the Linux source tree 
- *
- * XXX replace with Mach routines or reprogram in C
- */
+
 #ifndef _X86_64_BITOPS_H
 #define _X86_64_BITOPS_H
 
-/*
- * Copyright 1992, Linus Torvalds.
- */
+/* 64-bit bit operations implemented using GCC built-ins. */
 
-/*
- * These have to be done with inline assembly: that way the bit-setting
- * is guaranteed to be atomic. All bit operations return 0 if the bit
- * was cleared before the operation and != 0 if it was not.
- *
- * bit 0 is the LSB of addr; bit 64 is the LSB of (addr+1).
- */
-
-/*
- * Some hacks to defeat gcc over-optimizations..
- */
-struct __dummy { unsigned long a[100]; };
-#define ADDR (*(struct __dummy *) addr)
-
-extern __inline__ int set_bit(int nr, void * addr)
+static inline int set_bit(int nr, void *addr)
 {
-	int oldbit;
-
-	__asm__ __volatile__("btsq %2,%1\n\tsbbl %0,%0"
-		:"=r" (oldbit),"=m" (ADDR)
-		:"ir" (nr));
-	return oldbit;
+    unsigned long *p = (unsigned long *)addr + (nr >> 6);
+    unsigned long mask = 1UL << (nr & 63);
+    unsigned long old = __atomic_fetch_or(p, mask, __ATOMIC_SEQ_CST);
+    return (old & mask) != 0;
 }
 
-extern __inline__ int clear_bit(int nr, void * addr)
+static inline int clear_bit(int nr, void *addr)
 {
-	int oldbit;
-
-	__asm__ __volatile__("btrq %2,%1\n\tsbbl %0,%0"
-		:"=r" (oldbit),"=m" (ADDR)
-		:"ir" (nr));
-	return oldbit;
+    unsigned long *p = (unsigned long *)addr + (nr >> 6);
+    unsigned long mask = 1UL << (nr & 63);
+    unsigned long old = __atomic_fetch_and(p, ~mask, __ATOMIC_SEQ_CST);
+    return (old & mask) != 0;
 }
 
-extern __inline__ int change_bit(int nr, void * addr)
+static inline int change_bit(int nr, void *addr)
 {
-	int oldbit;
-
-	__asm__ __volatile__("btcq %2,%1\n\tsbbl %0,%0"
-		:"=r" (oldbit),"=m" (ADDR)
-		:"ir" (nr));
-	return oldbit;
+    unsigned long *p = (unsigned long *)addr + (nr >> 6);
+    unsigned long mask = 1UL << (nr & 63);
+    unsigned long old, new;
+    do {
+        old = __atomic_load_n(p, __ATOMIC_SEQ_CST);
+        new = old ^ mask;
+    } while (!__atomic_compare_exchange_n(p, &old, new, 0,
+                                          __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST));
+    return (old & mask) != 0;
 }
 
-/*
- * This routine doesn't need to be atomic, but it's faster to code it
- * this way.
- */
-extern __inline__ int test_bit(int nr, void * addr)
+static inline int test_bit(int nr, void *addr)
 {
-	int oldbit;
-
-	__asm__ __volatile__("btq %2,%1\n\tsbbl %0,%0"
-		:"=r" (oldbit)
-		:"m" (ADDR),"ir" (nr));
-	return oldbit;
+    unsigned long *p = (unsigned long *)addr + (nr >> 6);
+    unsigned long mask = 1UL << (nr & 63);
+    return (__atomic_load_n(p, __ATOMIC_SEQ_CST) & mask) != 0;
 }
 
-/*
- * Find-bit routines..
- */
-extern inline int find_first_zero_bit(void * addr, unsigned size)
+static inline unsigned long ffz(unsigned long word)
 {
-	int res;
-
-	if (!size)
-		return 0;
-	__asm__("
-		cld
-		movq $-1,%%eax
-		xorq %%rdx,%%rdx
-		repe; scasq
-		je 1f
-		xorq -8(%%edi),%%eax
-		subq $8,%%edi
-		bsfq %%eax,%%edx
-1:		subq %%rbx,%%edi
-		shlq $3,%%edi
-		addq %%edi,%%edx"
-		:"=d" (res)
-		:"c" ((size + 63) >> 6), "D" (addr), "b" (addr)
-		:"ax", "cx", "di");
-	return res;
+    return __builtin_ffsl(~word) - 1;
 }
 
-extern inline int find_next_zero_bit (void * addr, int size, int offset)
+static inline int find_first_zero_bit(void *addr, unsigned size)
 {
-	unsigned long * p = ((unsigned long *) addr) + (offset >> 6);
-	int set = 0, bit = offset & 63, res;
-	
-	if (bit) {
-		/*
-		 * Look for zero in first byte
-		 */
-		__asm__("
-			bsfq %1,%0
-			jne 1f
-			movq $64, %0
-1:			"
-			: "=r" (set)
-			: "r" (~(*p >> bit)));
-		if (set < (64 - bit))
-			return set + offset;
-		set = 64 - bit;
-		p++;
-	}
-	/*
-	 * No zero yet, search remaining full bytes for a zero
-	 */
-	res = find_first_zero_bit (p, size - 64 * (p - (unsigned long *) addr));
-	return (offset + set + res);
+    unsigned long *p = addr;
+    unsigned long idx = 0;
+
+    while (size >= 64) {
+        if (*p != ~0UL)
+            return idx + ffz(*p);
+        p++;
+        idx += 64;
+        size -= 64;
+    }
+
+    if (size) {
+        unsigned long last = *p | (~0UL << size);
+        if (last != ~0UL)
+            return idx + ffz(last);
+        idx += size;
+    }
+
+    return idx;
 }
 
-/*
- * ffz = Find First Zero in word. Undefined if no zero exists,
- * so code should check against ~0UL first..
- */
-extern inline unsigned long ffz(unsigned long word)
+static inline int find_next_zero_bit(void *addr, int size, int offset)
 {
-	__asm__("bsfq %1,%0"
-		:"=r" (word)
-		:"r" (~word));
-	return word;
+    int bit = offset;
+    while (bit < size) {
+        if (!test_bit(bit, addr))
+            return bit;
+        bit++;
+    }
+    return size;
 }
 
-/* 
- * memscan() taken from linux asm/string.h
- */
-/*
- * find the first occurrence of byte 'c', or 1 past the area if none
- */
-extern inline char * memscan(void * addr, unsigned char c, int size)
+static inline char *memscan(void *addr, unsigned char c, int size)
 {
-        if (!size)
-                return addr;
-        __asm__("cld
-                repnz; scasb
-                jnz 1f
-                dec %%edi
-1:              "
-                : "=D" (addr), "=c" (size)
-                : "0" (addr), "1" (size), "a" (c));
-        return addr;
+    unsigned char *p = addr;
+    while (size--) {
+        if (*p == c)
+            return (char *)p;
+        p++;
+    }
+    return (char *)p;
 }
 
 #endif /* _X86_64_BITOPS_H */
