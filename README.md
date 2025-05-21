@@ -48,7 +48,7 @@ version and build it inside the resulting directory.  For example:
 ```sh
 tar -xzf lites-1.1.u3.tar.gz
 cd lites-1.1.u3
-./configure
+./conf/configure    # or use the ./configure symlink
 make
 ```
 
