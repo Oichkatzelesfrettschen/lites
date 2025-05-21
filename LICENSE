@@ -1,0 +1,18 @@
+The lites repository contains historical releases of the Lites server.
+Source files carry the original copyright notices and licenses.
+Major components include:
+
+* The University of Utah Computer Systems Laboratory license permitting
+  free use with acknowledgment. This appears in top level Makefiles and
+  many server sources.
+* The Regents of the University of California BSD license with the
+  advertising clause for networking sources under `server/netiso`.
+* The Carnegie Mellon University Mach license for machine dependent
+  server code under `server/*`.
+* IBM's copyright notice and redistribution terms for ISO networking
+  code under `server/netiso`.
+* A Minix filesystem license by Csizmazia Balazs under
+  `server/ufs/minixfs`.
+
+Each file should retain its own license header.  Redistribution of this
+repository must comply with all of the above notices.
