@@ -1,0 +1,26 @@
+diffs/
+
+# Ignore object files
+*.o
+
+# Ignore executables
+*.exe
+*.out
+a.out
+
+# Ignore temporary files
+*~
+*.tmp
+*.swp
+*.swo
+
+# Ignore generated build directories
+/build/
+/bin/
+/obj/
+/dist/
+/release/
+
+# Ignore archived source tarballs
+*.tar.gz
+

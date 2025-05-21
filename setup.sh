@@ -136,6 +136,25 @@ rm /tmp/protoc.zip
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
 
+# verify links from the README
+if [ -f README.md ]; then
+  echo "Checking repository links..."
+  bad_links=""
+  while read -r url; do
+    status=$(curl -fsL -o /dev/null -w '%{http_code}' --connect-timeout 10 "$url" || echo "000")
+    if [ "$status" != "200" ]; then
+      echo "Link failure: $url -> $status"
+      bad_links+="$url\n"
+    fi
+  done < <(grep -oE 'https?://[^ )]+"?' README.md | tr -d '"')
+  if [ -n "$bad_links" ]; then
+    printf '%b' "$bad_links" > linkcheck.log
+    echo "Nonfunctional links logged to linkcheck.log"
+  else
+    echo "All links OK"
+  fi
+fi
+
 #— clean up
 apt-get clean
 rm -rf /var/lib/apt/lists/*
