@@ -58,6 +58,7 @@ MIGFLAGS 	= ${DEFINES}
 ASFLAGS		= ${${TARGET_MACHINE}ASFLAGS}
 
 i386_OFILES = ntoh.o memcmp.o in_cksum.o
+x86_64_OFILES = ntoh.o memcmp.o in_cksum.o
 parisc_OFILES =
 ns532_OFILES = misc_asm.s memcmp.o in_cksum.o bcmp.o
 mips_OFILES = ntoh.o memcmp.o

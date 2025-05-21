@@ -1,3 +1,4 @@
+
 #ifndef _X86_64_BITOPS_H
 #define _X86_64_BITOPS_H
 
