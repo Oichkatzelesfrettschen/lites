@@ -56,18 +56,19 @@ For the modernized build system in this repository you can also use
 `Makefile.new` or the provided CMake files.  Both automatically build from
 the `src-lites-1.1-2025` directory when it is present.  Set the `SRCDIR` or
 `LITES_SRC_DIR` variables to override this behaviour.  The tools recognise an
-optional `ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default),
-32‑bit (`ARCH=i686`) and PowerPC (`ARCH=ppc64` or `ARCH=ppc`) builds.
+optional `ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default) and
+32‑bit (`ARCH=i686`) builds.  Other architectures were supported in historical
+releases but are not handled by the modern build system.
 Examples:
 
 ```sh
 # Using the makefile
 make -f Makefile.new ARCH=i686
-make -f Makefile.new ARCH=ppc64
+make -f Makefile.new ARCH=x86_64
 
 # Using CMake (optionally override the source directory)
 cmake -B build -DARCH=i686
-cmake -B build -DARCH=ppc64 -DLITES_SRC_DIR=src-lites-1.1-2025
+cmake -B build -DARCH=x86_64 -DLITES_SRC_DIR=src-lites-1.1-2025
 cmake --build build
 ```
 
