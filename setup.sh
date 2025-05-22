@@ -46,7 +46,7 @@ for pkg in \
 done
 
 pip3 install --no-cache-dir \
-  pre-commit \
+  pre-commit cmake ninja meson \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
