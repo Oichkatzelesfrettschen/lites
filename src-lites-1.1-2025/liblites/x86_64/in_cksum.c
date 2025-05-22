@@ -46,7 +46,7 @@
  * This routine is very heavily used in the network
  * code and should be modified for each CPU to be as fast as possible.
  * 
- * This implementation originated on the i386 but is generic.
+ * This algorithm was first written for 32-bit x86 but is portable.
 */
 
 #undef	ADDCARRY
