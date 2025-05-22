@@ -63,7 +63,7 @@ extern struct ifnet loif;
 static int igmp_timers_are_running = 0;
 static u_long igmp_all_hosts_group;
 
-static void igmp_sendreport __P((struct in_multi *));
+static void igmp_sendreport (struct in_multi *);
 
 void
 igmp_init()
@@ -296,7 +296,7 @@ igmp_sendreport(inm)
 	igmp->igmp_cksum = in_cksum(m, IGMP_MINLEN);
 
 	imo = &simo;
-	bzero((caddr_t)imo, sizeof(*imo));
+	bzero((caddr_t)imo, sizeof(*imo);
 	imo->imo_multicast_ifp = inm->inm_ifp;
 	imo->imo_multicast_ttl = 1;
 	/*

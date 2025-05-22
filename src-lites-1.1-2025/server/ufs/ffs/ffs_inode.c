@@ -58,13 +58,13 @@
 #include <ufs/ffs/fs.h>
 #include <ufs/ffs/ffs_extern.h>
 
-static int ffs_indirtrunc __P((struct inode *, daddr_t, daddr_t, daddr_t, int,
-	    long *));
+static int ffs_indirtrunc (struct inode *, daddr_t, daddr_t, daddr_t, int,
+	    long *);
 
 int
 ffs_init()
 {
-	return (ufs_init());
+	return (ufs_init();
 }
 
 /*
@@ -121,7 +121,7 @@ ffs_update(ap)
 		ip->i_din.di_ogid = ip->i_gid;		/* XXX */
 	}						/* XXX */
 	if (error = bread(ip->i_devvp,
-	    fsbtodb(fs, ino_to_fsba(fs, ip->i_number)),
+	    fsbtodb(fs, ino_to_fsba(fs, ip->i_number),
 		(int)fs->fs_bsize, NOCRED, &bp)) {
 		brelse(bp);
 		return (error);
@@ -129,7 +129,7 @@ ffs_update(ap)
 	*((struct dinode *)bp->b_data +
 	    ino_to_fsbo(fs, ip->i_number)) = ip->i_din;
 	if (ap->a_waitfor)
-		return (bwrite(bp));
+		return (bwrite(bp);
 	else {
 		bdwrite(bp);
 		return (0);
@@ -185,11 +185,11 @@ ffs_truncate(ap)
 		bzero((char *)&oip->i_shortlink, (u_int)oip->i_size);
 		oip->i_size = 0;
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 1));
+		return (VOP_UPDATE(ovp, &tv, &tv, 1);
 	}
 	if (oip->i_size == length) {
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 0));
+		return (VOP_UPDATE(ovp, &tv, &tv, 0);
 	}
 #if QUOTA
 	if (error = getinoquota(oip))
@@ -219,7 +219,7 @@ ffs_truncate(ap)
 		else
 			bawrite(bp);
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 1));
+		return (VOP_UPDATE(ovp, &tv, &tv, 1);
 	}
 	/*
 	 * Shorten the size of the file. If the file is not being
@@ -242,7 +242,7 @@ ffs_truncate(ap)
 		oip->i_size = length;
 		size = blksize(fs, oip, lbn);
 		(void) vnode_pager_uncache(ovp);
-		bzero((char *)bp->b_data + offset, (u_int)(size - offset));
+		bzero((char *)bp->b_data + offset, (u_int)(size - offset);
 		allocbuf(bp, size);
 		if (aflags & IO_SYNC)
 			bwrite(bp);
@@ -456,7 +456,7 @@ ffs_indirtrunc(ip, lbn, dbn, lastbn, level, countp)
 	MALLOC(copy, daddr_t *, fs->fs_bsize, M_TEMP, M_WAITOK);
 	bcopy((caddr_t)bap, (caddr_t)copy, (u_int)fs->fs_bsize);
 	bzero((caddr_t)&bap[last + 1],
-	  (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t));
+	  (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t);
 	if (last == -1)
 		bp->b_flags |= B_INVAL;
 	error = bwrite(bp);

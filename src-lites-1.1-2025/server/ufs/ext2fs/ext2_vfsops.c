@@ -69,7 +69,7 @@
 #include <ufs/ext2fs/ext2_fs.h>
 #include <ufs/ext2fs/ext2_fs_sb.h>
 
-int ext2_sbupdate __P((struct ufsmount *, int));
+int ext2_sbupdate (struct ufsmount *, int);
 
 struct vfsops ext2fs_vfsops = {
 	"ext2fs",
@@ -112,7 +112,7 @@ ext2_mountroot()
 		panic("ext2_mountroot: can't setup bdevvp's");
 
 	mp = bsd_malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	bzero((char *)mp, (u_long)sizeof(struct mount);
 	mp->mnt_op = &ext2fs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	if (error = ext2_mountfs(rootvp, mp, p)) {
@@ -129,7 +129,7 @@ ext2_mountroot()
 	mp->mnt_vnodecovered = NULLVP;
 	ump = VFSTOUFS(mp);
 	fs = ump->um_e2fs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt);
 	fs->fs_fsmnt[0] = '/';
 	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
 	    MNAMELEN);
@@ -196,7 +196,7 @@ ext2_mount(mp, path, data, ndp, p)
 			/*
 			 * Process export requests.
 			 */
-			return (vfs_export(mp, &ump->um_export, &args.export));
+			return (vfs_export(mp, &ump->um_export, &args.export);
 		}
 	}
 	/*
@@ -444,7 +444,7 @@ ext2_reload(mountp, cred, p)
 		return (EIO);		/* XXX needs translation */
 	}
 	fs = VFSTOUFS(mountp)->um_e2fs;
-	bcopy(bp->b_data, fs->s_es, sizeof(struct ext2_super_block));
+	bcopy(bp->b_data, fs->s_es, sizeof(struct ext2_super_block);
 
 	if(error = compute_sb_data(devvp, es, fs)) {
 		brelse(bp);
@@ -478,7 +478,7 @@ loop:
 		 */
 		ip = VTOI(vp);
 		if (error =
-		    bread(devvp, fsbtodb(fs, ino_to_fsba(fs, ip->i_number)),
+		    bread(devvp, fsbtodb(fs, ino_to_fsba(fs, ip->i_number),
 		    (int)fs->s_blocksize, NOCRED, &bp)) {
 			vput(vp);
 			return (error);
@@ -568,7 +568,7 @@ ext2_mountfs(devvp, mp, p)
 		M_UFSMNT, M_WAITOK);
 	ump->um_e2fs->s_es = bsd_malloc(sizeof(struct ext2_super_block), 
 		M_UFSMNT, M_WAITOK);
-	bcopy(es, ump->um_e2fs->s_es, (u_int)sizeof(struct ext2_super_block));
+	bcopy(es, ump->um_e2fs->s_es, (u_int)sizeof(struct ext2_super_block);
 	if(error = compute_sb_data(devvp, ump->um_e2fs->s_es, ump->um_e2fs)) {
 		brelse(bp);
 		return error;
@@ -871,7 +871,7 @@ ext2_vget(mp, ino, vpp)
 	type = ump->um_devvp->v_tag == VT_MFS ? M_MFSNODE : M_FFSNODE; /* XXX */
 	MALLOC(ip, struct inode *, sizeof(struct inode), type, M_WAITOK);
 	insmntque(vp, mp);
-	bzero((caddr_t)ip, sizeof(struct inode));
+	bzero((caddr_t)ip, sizeof(struct inode);
 	vp->v_data = ip;
 	ip->i_vnode = vp;
 	ip->i_e2fs = fs = ump->um_e2fs;
@@ -891,9 +891,9 @@ ext2_vget(mp, ino, vpp)
 
 	/* Read in the disk contents for the inode, copy into the inode. */
 #if 0
-printf("ext2_vget(%d) dbn= %d ", ino, fsbtodb(fs, ino_to_fsba(fs, ino)));
+printf("ext2_vget(%d) dbn= %d ", ino, fsbtodb(fs, ino_to_fsba(fs, ino));
 #endif
-	if (error = bread(ump->um_devvp, fsbtodb(fs, ino_to_fsba(fs, ino)),
+	if (error = bread(ump->um_devvp, fsbtodb(fs, ino_to_fsba(fs, ino),
 	    (int)fs->s_blocksize, NOCRED, &bp)) {
 		/*
 		 * The inode does not contain anything useful, so it would
@@ -987,7 +987,7 @@ ext2_fhtovp(mp, fhp, nam, vpp, exflagsp, credanonp)
 	if (ufhp->ufid_ino < ROOTINO ||
 	    ufhp->ufid_ino >= fs->s_groups_count * fs->s_es->s_inodes_per_group)
 		return (ESTALE);
-	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp));
+	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp);
 }
 
 /*
@@ -1027,7 +1027,7 @@ ext2_sbupdate(mp, waitfor)
 printf("\nupdating superblock, waitfor=%s\n", waitfor == MNT_WAIT ? "yes":"no");
 */
 	bp = getblk(mp->um_devvp, SBLOCK, SBSIZE, 0, 0);
-	bcopy((caddr_t)es, bp->b_data, (u_int)sizeof(struct ext2_super_block));
+	bcopy((caddr_t)es, bp->b_data, (u_int)sizeof(struct ext2_super_block);
 	if (waitfor == MNT_WAIT)
 		error = bwrite(bp);
 	else

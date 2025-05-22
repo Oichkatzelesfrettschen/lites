@@ -50,7 +50,7 @@ struct utsname {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	uname __P((struct utsname *));
+int	uname (struct utsname *);
 __END_DECLS
 
 #endif	/* !_SYS_UTSNAME_H */

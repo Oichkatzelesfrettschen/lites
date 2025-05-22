@@ -131,26 +131,26 @@
 
 struct ppp_softc ppp_softc[NPPP];
 
-void	pppattach __P((void));
-int	pppopen __P((dev_t dev, struct tty *tp));
-void	pppclose __P((struct tty *tp, int flag));
-int	pppread __P((struct tty *tp, struct uio *uio, int flag));
-int	pppwrite __P((struct tty *tp, struct uio *uio, int flag));
-int	ppptioctl __P((struct tty *tp, int cmd, caddr_t data, int flag,
-		       struct proc *));
-int	pppoutput __P((struct ifnet *ifp, struct mbuf *m0,
-		       struct sockaddr *dst));
-void	pppinput __P((int c, struct tty *tp));
-int	pppioctl __P((struct ifnet *ifp, int cmd, caddr_t data));
-void	pppstart __P((struct tty *tp));
+void	pppattach (void);
+int	pppopen (dev_t dev, struct tty *tp);
+void	pppclose (struct tty *tp, int flag);
+int	pppread (struct tty *tp, struct uio *uio, int flag);
+int	pppwrite (struct tty *tp, struct uio *uio, int flag);
+int	ppptioctl (struct tty *tp, int cmd, caddr_t data, int flag,
+		       struct proc *);
+int	pppoutput (struct ifnet *ifp, struct mbuf *m0,
+		       struct sockaddr *dst);
+void	pppinput (int c, struct tty *tp);
+int	pppioctl (struct ifnet *ifp, int cmd, caddr_t data);
+void	pppstart (struct tty *tp);
 
-static int	pppasyncstart __P((struct ppp_softc *));
-static u_short	pppfcs __P((u_short fcs, u_char *cp, int len));
-static int	pppgetm __P((struct ppp_softc *sc));
-static struct	mbuf *ppp_btom __P((struct ppp_softc *sc));
-static void	pppdumpm __P((struct mbuf *m0, int pktlen));
-static void	pppdumpb __P((u_char *b, int l));
-static void	ppplogchar __P((struct ppp_softc *, int));
+static int	pppasyncstart (struct ppp_softc *);
+static u_short	pppfcs (u_short fcs, u_char *cp, int len);
+static int	pppgetm (struct ppp_softc *sc);
+static struct	mbuf *ppp_btom (struct ppp_softc *sc);
+static void	pppdumpm (struct mbuf *m0, int pktlen);
+static void	pppdumpb (u_char *b, int l);
+static void	ppplogchar (struct ppp_softc *, int);
 
 /*
  * Some useful mbuf macros not in mbuf.h.
@@ -307,7 +307,7 @@ pppopen(dev, tp)
     }
 
     sc->sc_ilen = 0;
-    bzero(sc->sc_asyncmap, sizeof(sc->sc_asyncmap));
+    bzero(sc->sc_asyncmap, sizeof(sc->sc_asyncmap);
     sc->sc_asyncmap[0] = 0xffffffff;
     sc->sc_asyncmap[3] = 0x60000000;
     sc->sc_rasyncmap = 0;
@@ -445,7 +445,7 @@ pppwrite(tp, uio, flag)
     *ph1 = *ph2;
     m0->m_data += PPP_HDRLEN;
     m0->m_len -= PPP_HDRLEN;
-    return (pppoutput(&sc->sc_if, m0, &dst));
+    return (pppoutput(&sc->sc_if, m0, &dst);
 }
 
 /*
@@ -513,14 +513,14 @@ ppptioctl(tp, cmd, data, flag, p)
     case PPPIOCSXASYNCMAP:
 	if (error = suser(p->p_ucred, &p->p_acflag))
 	    return (error);
-	bcopy(data, sc->sc_asyncmap, sizeof(sc->sc_asyncmap));
+	bcopy(data, sc->sc_asyncmap, sizeof(sc->sc_asyncmap);
 	sc->sc_asyncmap[1] = 0;		    /* mustn't escape 0x20 - 0x3f */
 	sc->sc_asyncmap[2] &= ~0x40000000;  /* mustn't escape 0x5e */
 	sc->sc_asyncmap[3] |= 0x60000000;   /* must escape 0x7d, 0x7e */
 	break;
 
     case PPPIOCGXASYNCMAP:
-	bcopy(sc->sc_asyncmap, data, sizeof(sc->sc_asyncmap));
+	bcopy(sc->sc_asyncmap, data, sizeof(sc->sc_asyncmap);
 	break;
 
     case PPPIOCSMRU:
@@ -787,7 +787,7 @@ ppp_dequeue(sc)
 	/* this code assumes the IP/TCP header is in one non-shared mbuf */
 	if (ip->ip_p == IPPROTO_TCP) {
 	    type = sl_compress_tcp(mp, ip, &sc->sc_comp,
-				   !(sc->sc_flags & SC_NO_TCP_CCID));
+				   !(sc->sc_flags & SC_NO_TCP_CCID);
 	    switch (type) {
 	    case TYPE_UNCOMPRESSED_TCP:
 		protocol = PPP_VJC_UNCOMP;

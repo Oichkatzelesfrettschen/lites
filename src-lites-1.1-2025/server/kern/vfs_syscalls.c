@@ -60,7 +60,7 @@
 #include <vm/vm.h>
 #include <sys/sysctl.h>
 
-static int change_dir __P((struct nameidata *ndp, struct proc *p));
+static int change_dir (struct nameidata *ndp, struct proc *p);
 
 /*
  * Virtual File System System Calls
@@ -135,7 +135,7 @@ mount(p, uap, retval)
 	 */
 	mp = (struct mount *)malloc((u_long)sizeof(struct mount),
 		M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	bzero((char *)mp, (u_long)sizeof(struct mount);
 	mp->mnt_op = vfssw[uap->type];
 	if (error = vfs_lock(mp)) {
 		free((caddr_t)mp, M_MOUNT);
@@ -239,7 +239,7 @@ unmount(p, uap, retval)
 	}
 	mp = vp->v_mount;
 	vput(vp);
-	return (dounmount(mp, uap->flags, p));
+	return (dounmount(mp, uap->flags, p);
 }
 
 /*
@@ -349,7 +349,7 @@ quotactl(p, uap, retval)
 		return (error);
 	mp = nd.ni_vp->v_mount;
 	vrele(nd.ni_vp);
-	return (VFS_QUOTACTL(mp, uap->cmd, uap->uid, uap->arg, p));
+	return (VFS_QUOTACTL(mp, uap->cmd, uap->uid, uap->arg, p);
 }
 
 /*
@@ -379,7 +379,7 @@ statfs(p, uap, retval)
 	if (error = VFS_STATFS(mp, sp, p))
 		return (error);
 	sp->f_flags = mp->mnt_flag & MNT_VISFLAGMASK;
-	return (copyout((caddr_t)sp, (caddr_t)uap->buf, sizeof(*sp)));
+	return (copyout((caddr_t)sp, (caddr_t)uap->buf, sizeof(*sp));
 }
 
 /*
@@ -407,7 +407,7 @@ fstatfs(p, uap, retval)
 	if (error = VFS_STATFS(mp, sp, p))
 		return (error);
 	sp->f_flags = mp->mnt_flag & MNT_VISFLAGMASK;
-	return (copyout((caddr_t)sp, (caddr_t)uap->buf, sizeof(*sp)));
+	return (copyout((caddr_t)sp, (caddr_t)uap->buf, sizeof(*sp));
 }
 
 /*
@@ -661,7 +661,7 @@ ocreat(p, uap, retval)
 	openuap.path = uap->path;
 	openuap.mode = uap->mode;
 	openuap.flags = O_WRONLY | O_CREAT | O_TRUNC;
-	return (open(p, &openuap, retval));
+	return (open(p, &openuap, retval);
 }
 #endif /* COMPAT_43 */
 
@@ -763,7 +763,7 @@ mkfifo(p, uap, retval)
 	vattr.va_type = VFIFO;
 	vattr.va_mode = (uap->mode & ALLPERMS) &~ p->p_fd->fd_cmask;
 	LEASE_CHECK(nd.ni_dvp, p, p->p_ucred, LEASE_WRITE);
-	return (VOP_MKNOD(nd.ni_dvp, &nd.ni_vp, &nd.ni_cnd, &vattr));
+	return (VOP_MKNOD(nd.ni_dvp, &nd.ni_vp, &nd.ni_cnd, &vattr);
 #endif /* FIFO */
 }
 
@@ -1052,7 +1052,7 @@ ostat(p, uap, retval)
 	if (error)
 		return (error);
 	cvtstat(&sb, &osb);
-	error = copyout((caddr_t)&osb, (caddr_t)uap->ub, sizeof (osb));
+	error = copyout((caddr_t)&osb, (caddr_t)uap->ub, sizeof (osb);
 	return (error);
 }
 
@@ -1082,7 +1082,7 @@ olstat(p, uap, retval)
 	if (error)
 		return (error);
 	cvtstat(&sb, &osb);
-	error = copyout((caddr_t)&osb, (caddr_t)uap->ub, sizeof (osb));
+	error = copyout((caddr_t)&osb, (caddr_t)uap->ub, sizeof (osb);
 	return (error);
 }
 
@@ -1139,7 +1139,7 @@ stat(p, uap, retval)
 	vput(nd.ni_vp);
 	if (error)
 		return (error);
-	error = copyout((caddr_t)&sb, (caddr_t)uap->ub, sizeof (sb));
+	error = copyout((caddr_t)&sb, (caddr_t)uap->ub, sizeof (sb);
 	return (error);
 }
 
@@ -1197,7 +1197,7 @@ lstat(p, uap, retval)
 		sb.st_size = sb1.st_size;
 		sb.st_blocks = sb1.st_blocks;
 	}
-	error = copyout((caddr_t)&sb, (caddr_t)uap->ub, sizeof (sb));
+	error = copyout((caddr_t)&sb, (caddr_t)uap->ub, sizeof (sb);
 	return (error);
 }
 
@@ -1626,7 +1626,7 @@ otruncate(p, uap, retval)
 
 	nuap.path = uap->path;
 	nuap.length = uap->length;
-	return (truncate(p, &nuap, retval));
+	return (truncate(p, &nuap, retval);
 }
 
 /*
@@ -1646,7 +1646,7 @@ oftruncate(p, uap, retval)
 
 	nuap.fd = uap->fd;
 	nuap.length = uap->length;
-	return (ftruncate(p, &nuap, retval));
+	return (ftruncate(p, &nuap, retval);
 }
 #endif /* COMPAT_43 || COMPAT_SUNOS */
 
@@ -1949,7 +1949,7 @@ ogetdirentries(p, uap, retval)
 	VOP_UNLOCK(vp);
 	if (error)
 		return (error);
-	error = copyout((caddr_t)&loff, (caddr_t)uap->basep, sizeof(long));
+	error = copyout((caddr_t)&loff, (caddr_t)uap->basep, sizeof(long);
 	*retval = uap->count - auio.uio_resid;
 	return (error);
 }
@@ -2003,7 +2003,7 @@ unionread:
 #if UNION
 {
 	extern int (**union_vnodeop_p)();
-	extern struct vnode *union_lowervp __P((struct vnode *));
+	extern struct vnode *union_lowervp (struct vnode *);
 
 	if ((uap->count == auio.uio_resid) &&
 	    (vp->v_op == union_vnodeop_p)) {
@@ -2041,7 +2041,7 @@ unionread:
 		vrele(tvp);
 		goto unionread;
 	}
-	error = copyout((caddr_t)&loff, (caddr_t)uap->basep, sizeof(long));
+	error = copyout((caddr_t)&loff, (caddr_t)uap->basep, sizeof(long);
 	*retval = uap->count - auio.uio_resid;
 	return (error);
 }

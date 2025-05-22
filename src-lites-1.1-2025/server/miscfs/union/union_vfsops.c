@@ -431,7 +431,7 @@ union_statfs(mp, sbp, p)
 	       		um->um_uppervp);
 #endif
 
-	bzero(&mstat, sizeof(mstat));
+	bzero(&mstat, sizeof(mstat);
 
 	if (um->um_lowervp) {
 		error = VFS_STATFS(um->um_lowervp->v_mount, &mstat, p);
@@ -480,7 +480,7 @@ union_statfs(mp, sbp, p)
 	sbp->f_ffree += mstat.f_ffree;
 
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
+		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid);
 		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
 		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
 	}
@@ -534,7 +534,7 @@ union_vptofh(vp, fhp)
 	return (EOPNOTSUPP);
 }
 
-int union_init __P((void));
+int union_init (void);
 
 struct vfsops union_vfsops = {
 	"union",

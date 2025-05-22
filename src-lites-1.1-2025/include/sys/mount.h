@@ -215,26 +215,26 @@ struct mbuf;
 
 struct vfsops {
 	char	*vfs_name;
-	int	(*vfs_mount)	__P((struct mount *mp, char *path, caddr_t data,
-				    struct nameidata *ndp, struct proc *p));
-	int	(*vfs_start)	__P((struct mount *mp, int flags,
-				    struct proc *p));
-	int	(*vfs_unmount)	__P((struct mount *mp, int mntflags,
-				    struct proc *p));
-	int	(*vfs_root)	__P((struct mount *mp, struct vnode **vpp));
-	int	(*vfs_quotactl)	__P((struct mount *mp, int cmds, uid_t uid,
-				    caddr_t arg, struct proc *p));
-	int	(*vfs_statfs)	__P((struct mount *mp, struct statfs *sbp,
-				    struct proc *p));
-	int	(*vfs_sync)	__P((struct mount *mp, int waitfor,
-				    struct ucred *cred, struct proc *p));
-	int	(*vfs_vget)	__P((struct mount *mp, ino_t ino,
-				    struct vnode **vpp));
-	int	(*vfs_fhtovp)	__P((struct mount *mp, struct fid *fhp,
+	int	(*vfs_mount)	(struct mount *mp, char *path, caddr_t data,
+				    struct nameidata *ndp, struct proc *p);
+	int	(*vfs_start)	(struct mount *mp, int flags,
+				    struct proc *p);
+	int	(*vfs_unmount)	(struct mount *mp, int mntflags,
+				    struct proc *p);
+	int	(*vfs_root)	(struct mount *mp, struct vnode **vpp);
+	int	(*vfs_quotactl)	(struct mount *mp, int cmds, uid_t uid,
+				    caddr_t arg, struct proc *p);
+	int	(*vfs_statfs)	(struct mount *mp, struct statfs *sbp,
+				    struct proc *p);
+	int	(*vfs_sync)	(struct mount *mp, int waitfor,
+				    struct ucred *cred, struct proc *p);
+	int	(*vfs_vget)	(struct mount *mp, ino_t ino,
+				    struct vnode **vpp);
+	int	(*vfs_fhtovp)	(struct mount *mp, struct fid *fhp,
 				    struct mbuf *nam, struct vnode **vpp,
-				    int *exflagsp, struct ucred **credanonp));
-	int	(*vfs_vptofh)	__P((struct vnode *vp, struct fid *fhp));
-	int	(*vfs_init)	__P((void));
+				    int *exflagsp, struct ucred **credanonp);
+	int	(*vfs_vptofh)	(struct vnode *vp, struct fid *fhp);
+	int	(*vfs_init)	(void);
 	int	vfs_refcount;
 };
 
@@ -427,14 +427,14 @@ struct msdosfs_args {
 /*
  * exported vnode operations
  */
-struct	mount *getvfs __P((fsid_t *));      /* return vfs given fsid */
+struct	mount *getvfs (fsid_t *);      /* return vfs given fsid */
 int	vfs_export			    /* process mount export info */
-	  __P((struct mount *, struct netexport *, struct export_args *));
+	  (struct mount *, struct netexport *, struct export_args *);
 struct	netcred *vfs_export_lookup	    /* lookup host in fs export list */
-	  __P((struct mount *, struct netexport *, struct mbuf *));
-int	vfs_lock __P((struct mount *));     /* lock a vfs */
-int	vfs_mountedon __P((struct vnode *));/* is a vfs mounted on vp */
-void	vfs_unlock __P((struct mount *));   /* unlock a vfs */
+	  (struct mount *, struct netexport *, struct mbuf *);
+int	vfs_lock (struct mount *);     /* lock a vfs */
+int	vfs_mountedon (struct vnode *);/* is a vfs mounted on vp */
+void	vfs_unlock (struct mount *);   /* unlock a vfs */
 extern	TAILQ_HEAD(mntlist, mount) mountlist;	/* mounted filesystem list */
 extern	struct vfsops *vfssw[];			/* filesystem type table */
 
@@ -443,13 +443,13 @@ extern	struct vfsops *vfssw[];			/* filesystem type table */
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	fstatfs __P((int, struct statfs *));
-int	getfh __P((const char *, fhandle_t *));
-int	getfsstat __P((struct statfs *, long, int));
-int	getmntinfo __P((struct statfs **, int));
-int	mount __P((int, const char *, int, void *));
-int	statfs __P((const char *, struct statfs *));
-int	unmount __P((const char *, int));
+int	fstatfs (int, struct statfs *);
+int	getfh (const char *, fhandle_t *);
+int	getfsstat (struct statfs *, long, int);
+int	getmntinfo (struct statfs **, int);
+int	mount (int, const char *, int, void *);
+int	statfs (const char *, struct statfs *);
+int	unmount (const char *, int);
 __END_DECLS
 
 #endif /* KERNEL */

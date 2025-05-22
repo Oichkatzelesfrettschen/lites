@@ -122,22 +122,22 @@ bpfilterattach(n)
 }
 #endif
 
-static int	bpf_allocbufs __P((struct bpf_d *));
-static int	bpf_allocbufs __P((struct bpf_d *));
-static void	bpf_freed __P((struct bpf_d *));
-static void	bpf_freed __P((struct bpf_d *));
-static void	bpf_ifname __P((struct ifnet *, struct ifreq *));
-static void	bpf_ifname __P((struct ifnet *, struct ifreq *));
-static void	bpf_mcopy __P((const void *, void *, u_int));
-static int	bpf_movein __P((struct uio *, int,
-		    struct mbuf **, struct sockaddr *, int *));
-static int	bpf_setif __P((struct bpf_d *, struct ifreq *));
-static int	bpf_setif __P((struct bpf_d *, struct ifreq *));
+static int	bpf_allocbufs (struct bpf_d *);
+static int	bpf_allocbufs (struct bpf_d *);
+static void	bpf_freed (struct bpf_d *);
+static void	bpf_freed (struct bpf_d *);
+static void	bpf_ifname (struct ifnet *, struct ifreq *);
+static void	bpf_ifname (struct ifnet *, struct ifreq *);
+static void	bpf_mcopy (const void *, void *, u_int);
+static int	bpf_movein (struct uio *, int,
+		    struct mbuf **, struct sockaddr *, int *);
+static int	bpf_setif (struct bpf_d *, struct ifreq *);
+static int	bpf_setif (struct bpf_d *, struct ifreq *);
 static inline void
-		bpf_wakeup __P((struct bpf_d *));
-static void	catchpacket __P((struct bpf_d *, u_char *, u_int,
-		    u_int, void (*)(const void *, void *, u_int)));
-static void	reset_d __P((struct bpf_d *));
+		bpf_wakeup (struct bpf_d *);
+static void	catchpacket (struct bpf_d *, u_char *, u_int,
+		    u_int, void (*)(const void *, void *, u_int));
+static void	reset_d (struct bpf_d *);
 
 static int
 bpf_movein(uio, linktype, mp, sockp, datlen)
@@ -327,7 +327,7 @@ bpfopen(dev, flag)
 		return (EBUSY);
 
 	/* Mark "free" and do most initialization. */
-	bzero((char *)d, sizeof(*d));
+	bzero((char *)d, sizeof(*d);
 	d->bd_bufsize = bpf_bufsize;
 
 	return (0);
@@ -938,7 +938,7 @@ bpfselect(dev, rw)
 	register dev_t dev;
 	int rw;
 {
-	return (bpf_select(dev, rw, u.u_procp));
+	return (bpf_select(dev, rw, u.u_procp);
 }
 #endif
 
@@ -1145,7 +1145,7 @@ catchpacket(d, pkt, pktlen, snaplen, cpfn)
 	/*
 	 * Copy the packet data into the store buffer and update its length.
 	 */
-	(*cpfn)(pkt, (u_char *)hp + hdrlen, (hp->bh_caplen = totlen - hdrlen));
+	(*cpfn)(pkt, (u_char *)hp + hdrlen, (hp->bh_caplen = totlen - hdrlen);
 	d->bd_slen = curlen + totlen;
 }
 
@@ -1279,7 +1279,7 @@ ifpromisc(ifp, pswitch)
 		ifp->if_flags &= ~IFF_PROMISC;
 	}
 	ifr.ifr_flags = ifp->if_flags;
-	return ((*ifp->if_ioctl)(ifp, SIOCSIFFLAGS, (caddr_t)&ifr));
+	return ((*ifp->if_ioctl)(ifp, SIOCSIFFLAGS, (caddr_t)&ifr);
 }
 #endif
 

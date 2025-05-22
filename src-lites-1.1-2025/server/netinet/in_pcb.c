@@ -67,7 +67,7 @@ in_pcballoc(so, head)
 	MALLOC(inp, struct inpcb *, sizeof(*inp), M_PCB, M_WAITOK);
 	if (inp == NULL)
 		return (ENOBUFS);
-	bzero((caddr_t)inp, sizeof(*inp));
+	bzero((caddr_t)inp, sizeof(*inp);
 	inp->inp_head = head;
 	inp->inp_socket = so;
 	insque(inp, head);
@@ -145,7 +145,7 @@ in_pcbbind(inp, nam)
 				head->inp_lport = IPPORT_RESERVED;
 			lport = htons(head->inp_lport);
 		} while (in_pcblookup(head,
-			    zeroin_addr, 0, inp->inp_laddr, lport, wild));
+			    zeroin_addr, 0, inp->inp_laddr, lport, wild);
 	inp->inp_lport = lport;
 	return (0);
 }
@@ -226,9 +226,9 @@ in_pcbconnect(inp, nam)
 			u_short fport = sin->sin_port;
 
 			sin->sin_port = 0;
-			ia = ifatoia(ifa_ifwithdstaddr(sintosa(sin)));
+			ia = ifatoia(ifa_ifwithdstaddr(sintosa(sin));
 			if (ia == 0)
-				ia = ifatoia(ifa_ifwithnet(sintosa(sin)));
+				ia = ifatoia(ifa_ifwithnet(sintosa(sin));
 			sin->sin_port = fport;
 			if (ia == 0)
 				ia = in_ifaddr;
@@ -311,7 +311,7 @@ in_setsockaddr(inp, nam)
 	
 	nam->m_len = sizeof (*sin);
 	sin = mtod(nam, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof (*sin));
+	bzero((caddr_t)sin, sizeof (*sin);
 	sin->sin_family = AF_INET;
 	sin->sin_len = sizeof(*sin);
 	sin->sin_port = inp->inp_lport;
@@ -327,7 +327,7 @@ in_setpeeraddr(inp, nam)
 	
 	nam->m_len = sizeof (*sin);
 	sin = mtod(nam, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof (*sin));
+	bzero((caddr_t)sin, sizeof (*sin);
 	sin->sin_family = AF_INET;
 	sin->sin_len = sizeof(*sin);
 	sin->sin_port = inp->inp_fport;
@@ -352,7 +352,7 @@ in_pcbnotify(head, dst, fport_arg, laddr, lport_arg, cmd, notify)
 	u_int fport_arg, lport_arg;
 	struct in_addr laddr;
 	ioctl_cmd_t cmd;
-	void (*notify) __P((struct inpcb *, int));
+	void (*notify) (struct inpcb *, int);
 {
 	extern mach_error_t inetctlerrmap[];
 	register struct inpcb *inp, *oinp;
@@ -412,7 +412,7 @@ in_losing(inp)
 
 	if ((rt = inp->inp_route.ro_rt)) {
 		inp->inp_route.ro_rt = 0;
-		bzero((caddr_t)&info, sizeof(info));
+		bzero((caddr_t)&info, sizeof(info);
 		info.rti_info[RTAX_DST] =
 			(struct sockaddr *)&inp->inp_route.ro_dst;
 		info.rti_info[RTAX_GATEWAY] = rt->rt_gateway;

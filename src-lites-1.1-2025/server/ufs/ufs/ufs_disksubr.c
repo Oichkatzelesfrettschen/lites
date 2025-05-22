@@ -180,7 +180,7 @@ readdisklabel(dev, strat, lp)
 		msg = "I/O error";
 	else for (dlp = (struct disklabel *)bp->b_data;
 	    dlp <= (struct disklabel *)((char *)bp->b_data +
-	    DEV_BSIZE - sizeof(*dlp));
+	    DEV_BSIZE - sizeof(*dlp);
 	    dlp = (struct disklabel *)((char *)dlp + sizeof(long))) {
 		if (dlp->d_magic != DISKMAGIC || dlp->d_magic2 != DISKMAGIC) {
 			if (msg == NULL)
@@ -265,7 +265,7 @@ writedisklabel(dev, strat, lp)
 		labelpart = 0;
 	}
 	bp = geteblk((int)lp->d_secsize);
-	bp->b_dev = makedev(major(dev), dkminor(dkunit(dev), labelpart));
+	bp->b_dev = makedev(major(dev), dkminor(dkunit(dev), labelpart);
 	bp->b_blkno = LABELSECTOR;
 	bp->b_bcount = lp->d_secsize;
 	bp->b_flags = B_READ;
@@ -274,7 +274,7 @@ writedisklabel(dev, strat, lp)
 		goto done;
 	for (dlp = (struct disklabel *)bp->b_data;
 	    dlp <= (struct disklabel *)
-	      ((char *)bp->b_data + lp->d_secsize - sizeof(*dlp));
+	      ((char *)bp->b_data + lp->d_secsize - sizeof(*dlp);
 	    dlp = (struct disklabel *)((char *)dlp + sizeof(long))) {
 		if (dlp->d_magic == DISKMAGIC && dlp->d_magic2 == DISKMAGIC &&
 		    dkcksum(dlp) == 0) {
@@ -329,7 +329,7 @@ diskerr(bp, dname, what, pri, blkdone, lp)
 	register struct disklabel *lp;
 {
 	int unit = dkunit(bp->b_dev), part = dkpart(bp->b_dev);
-	register void (*pr) __P((const char *, ...));
+	register void (*pr) (const char *, ...);
 	char partname = 'a' + part;
 	int sn;
 

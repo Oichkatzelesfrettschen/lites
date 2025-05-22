@@ -166,8 +166,8 @@ struct mrtstat {
 };
 
 
-int	ip_mrouter_cmd __P((int, struct socket *, struct mbuf *));
-int	ip_mrouter_done __P((void));
+int	ip_mrouter_cmd (int, struct socket *, struct mbuf *);
+int	ip_mrouter_done (void);
 
 #endif /* KERNEL */
 

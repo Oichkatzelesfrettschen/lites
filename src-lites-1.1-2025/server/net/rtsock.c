@@ -57,10 +57,10 @@ struct walkarg {
 };
 
 static struct mbuf *
-		rt_msg1 __P((int, struct rt_addrinfo *));
-static int	rt_msg2 __P((int,
-		    struct rt_addrinfo *, caddr_t, struct walkarg *));
-static void	rt_xaddrs __P((caddr_t, caddr_t, struct rt_addrinfo *));
+		rt_msg1 (int, struct rt_addrinfo *);
+static int	rt_msg2 (int,
+		    struct rt_addrinfo *, caddr_t, struct walkarg *);
+static void	rt_xaddrs (caddr_t, caddr_t, struct rt_addrinfo *);
 
 /* Sleazy use of local variables throughout file, warning!!!! */
 #define dst	info.rti_info[RTAX_DST]
@@ -85,7 +85,7 @@ route_usrreq(so, req, m, nam, control)
 	if (req == PRU_ATTACH) {
 		MALLOC(rp, struct rawcb *, sizeof(*rp), M_PCB, M_WAITOK);
 		if (so->so_pcb = (caddr_t)rp)
-			bzero(so->so_pcb, sizeof(*rp));
+			bzero(so->so_pcb, sizeof(*rp);
 
 	}
 	if (req == PRU_DETACH && rp) {
@@ -363,7 +363,7 @@ rt_xaddrs(cp, cplim, rtinfo)
 	register struct sockaddr *sa;
 	register int i;
 
-	bzero(rtinfo->rti_info, sizeof(rtinfo->rti_info));
+	bzero(rtinfo->rti_info, sizeof(rtinfo->rti_info);
 	for (i = 0; (i < RTAX_MAX) && (cp < cplim); i++) {
 		if ((rtinfo->rti_addrs & (1 << i)) == 0)
 			continue;
@@ -591,7 +591,7 @@ rt_ifmsg(ifp)
 
 	if (route_cb.any_count == 0)
 		return;
-	bzero((caddr_t)&info, sizeof(info));
+	bzero((caddr_t)&info, sizeof(info);
 	m = rt_msg1(RTM_IFINFO, &info);
 	if (m == 0)
 		return;
@@ -627,7 +627,7 @@ rt_newaddrmsg(cmd, ifa, error, rt)
 	if (route_cb.any_count == 0)
 		return;
 	for (pass = 1; pass < 3; pass++) {
-		bzero((caddr_t)&info, sizeof(info));
+		bzero((caddr_t)&info, sizeof(info);
 		if ((cmd == RTM_ADD && pass == 1) ||
 		    (cmd == RTM_DELETE && pass == 2)) {
 			register struct ifa_msghdr *ifam;
@@ -681,7 +681,7 @@ sysctl_dumpentry(rn, w)
 
 	if (w->w_op == NET_RT_FLAGS && !(rt->rt_flags & w->w_arg))
 		return 0;
-	bzero((caddr_t)&info, sizeof(info));
+	bzero((caddr_t)&info, sizeof(info);
 	dst = rt_key(rt);
 	gate = rt->rt_gateway;
 	netmask = rt_mask(rt);
@@ -719,7 +719,7 @@ sysctl_iflist(af, w)
 	struct	rt_addrinfo info;
 	int	len, error = 0;
 
-	bzero((caddr_t)&info, sizeof(info));
+	bzero((caddr_t)&info, sizeof(info);
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
 		if (w->w_arg && w->w_arg != ifp->if_index)
 			continue;
@@ -791,7 +791,7 @@ sysctl_rtable(name, namelen, where, given, new, newlen)
 	if (namelen != 3)
 		return (EINVAL);
 	af = name[0];
-	Bzero(&w, sizeof(w));
+	Bzero(&w, sizeof(w);
 	w.w_where = where;
 	w.w_given = *given;
 	w.w_needed = 0 - w.w_given;

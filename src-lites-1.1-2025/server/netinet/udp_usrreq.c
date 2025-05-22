@@ -68,9 +68,9 @@ int	udpcksum = 0;		/* XXX */
 struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET };
 struct	inpcb *udp_last_inpcb = &udb;
 
-static	void udp_detach __P((struct inpcb *));
-static	void udp_notify __P((struct inpcb *, int));
-static	struct mbuf *udp_saveopt __P((caddr_t, int, int));
+static	void udp_detach (struct inpcb *);
+static	void udp_notify (struct inpcb *, int);
+static	struct mbuf *udp_saveopt (caddr_t, int, int);
 
 void
 udp_init()
@@ -367,7 +367,7 @@ udp_ctlinput(cmd, sa, ip)
 	    ((unsigned)cmd >= PRC_NCMDS || inetctlerrmap[cmd] == 0))
 		return;
 	if (ip) {
-		uh = (struct udphdr *)((caddr_t)ip + (ip->ip_hl << 2));
+		uh = (struct udphdr *)((caddr_t)ip + (ip->ip_hl << 2);
 		in_pcbnotify(&udb, sa, uh->uh_dport, ip->ip_src, uh->uh_sport,
 			cmd, udp_notify);
 	} else
@@ -427,7 +427,7 @@ udp_output(inp, m, addr, control)
 	ui->ui_next = ui->ui_prev = 0;
 	ui->ui_x1 = 0;
 	ui->ui_pr = IPPROTO_UDP;
-	ui->ui_len = htons((u_short)len + sizeof (struct udphdr));
+	ui->ui_len = htons((u_short)len + sizeof (struct udphdr);
 	ui->ui_src = inp->inp_laddr;
 	ui->ui_dst = inp->inp_faddr;
 	ui->ui_sport = inp->inp_lport;
@@ -463,7 +463,7 @@ release:
 }
 
 u_long	udp_sendspace = 9216;		/* really max datagram size */
-u_long	udp_recvspace = 40 * (1024 + sizeof(struct sockaddr_in));
+u_long	udp_recvspace = 40 * (1024 + sizeof(struct sockaddr_in);
 					/* 40 1K datagrams */
 
 /*ARGSUSED*/
@@ -479,7 +479,7 @@ udp_usrreq(so, req, m, addr, control)
 
 	if (req == PRU_CONTROL)
 		return (in_control(so, (int)m, (caddr_t)addr,
-			(struct ifnet *)control));
+			(struct ifnet *)control);
 	if (inp == NULL && req != PRU_ATTACH) {
 		error = EINVAL;
 		goto release;
@@ -557,7 +557,7 @@ udp_usrreq(so, req, m, addr, control)
 		break;
 
 	case PRU_SEND:
-		return (udp_output(inp, m, addr, control));
+		return (udp_output(inp, m, addr, control);
 
 	case PRU_ABORT:
 		soisdisconnected(so);
@@ -633,7 +633,7 @@ udp_sysctl(name, namelen, oldp, oldlenp, newp, newlen)
 
 	switch (name[0]) {
 	case UDPCTL_CHECKSUM:
-		return (sysctl_int(oldp, oldlenp, newp, newlen, &udpcksum));
+		return (sysctl_int(oldp, oldlenp, newp, newlen, &udpcksum);
 	default:
 		return (ENOPROTOOPT);
 	}

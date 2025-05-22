@@ -49,18 +49,18 @@
  */
 
 EXTERN minixfs_mountroot();
-EXTERN int minixfs_blkatoff __P((struct vop_blkatoff_args *ap));
-EXTERN minixfs_start __P((struct mount *mp, int flags, struct proc *p));
-EXTERN minixfs_quotactl __P((struct mount *mp, int cmd, uid_t uid, caddr_t arg, struct proc *p));
-EXTERN minixfs_sync __P((struct mount *mp, int waitfor));
-EXTERN int minixfs_root __P((struct mount *mp, struct vnode **vpp));
-EXTERN minixfs_vget __P(( struct mount *mp, ino_t ino, struct vnode **vpp));
-EXTERN minixfs_fhtovp __P(( struct mount *mp, struct fid *fhp, int setgen, struct vnode **vpp));
-EXTERN minixfs_vptofh __P(( struct vnode *vp, struct fid *fhp));
-EXTERN int minixfs_mount __P((register struct mount *, char *, caddr_t, struct nameidata *, struct proc *));
-EXTERN int minixfs_mountfs __P(( register struct vnode *, struct mount *, struct proc *p));
-EXTERN int minixfs_unmount __P((struct mount *mp, int mntflags, struct proc *p));
-EXTERN int minixfs_statfs __P(( struct mount *mp, register struct statfs *sbp, struct proc *p));
-EXTERN int minixfs_vinit __P((struct mount *, int (**specops)(), int (**fifoops)(), struct vnode **));
-EXTERN int minixfs_sbupdate __P((struct ufsmount *, int));
+EXTERN int minixfs_blkatoff (struct vop_blkatoff_args *ap);
+EXTERN minixfs_start (struct mount *mp, int flags, struct proc *p);
+EXTERN minixfs_quotactl (struct mount *mp, int cmd, uid_t uid, caddr_t arg, struct proc *p);
+EXTERN minixfs_sync (struct mount *mp, int waitfor);
+EXTERN int minixfs_root (struct mount *mp, struct vnode **vpp);
+EXTERN minixfs_vget ( struct mount *mp, ino_t ino, struct vnode **vpp);
+EXTERN minixfs_fhtovp ( struct mount *mp, struct fid *fhp, int setgen, struct vnode **vpp);
+EXTERN minixfs_vptofh ( struct vnode *vp, struct fid *fhp);
+EXTERN int minixfs_mount (register struct mount *, char *, caddr_t, struct nameidata *, struct proc *);
+EXTERN int minixfs_mountfs ( register struct vnode *, struct mount *, struct proc *p);
+EXTERN int minixfs_unmount (struct mount *mp, int mntflags, struct proc *p);
+EXTERN int minixfs_statfs ( struct mount *mp, register struct statfs *sbp, struct proc *p);
+EXTERN int minixfs_vinit (struct mount *, int (**specops)(), int (**fifoops)(), struct vnode **);
+EXTERN int minixfs_sbupdate (struct ufsmount *, int);
 EXTERN struct vfsops minixfs_vfsops;

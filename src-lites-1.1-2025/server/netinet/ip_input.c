@@ -109,7 +109,7 @@ extern	int if_index;
 u_long	*ip_ifmatrix;
 #endif
 
-static void save_rte __P((u_char *, struct in_addr));
+static void save_rte (u_char *, struct in_addr);
 /*
  * IP initialization: fill in IP protocol switch table.
  * All protocols not implemented in kernel go to raw IP protocol handler.
@@ -502,7 +502,7 @@ ip_reass(ip, fp)
 			break;
 		}
 		q = q->ipf_next;
-		m_freem(dtom(q->ipf_prev));
+		m_freem(dtom(q->ipf_prev);
 		ip_deq(q->ipf_prev);
 	}
 
@@ -548,7 +548,7 @@ insert:
 	((struct ip *)ip)->ip_src = fp->ipq_src;
 	((struct ip *)ip)->ip_dst = fp->ipq_dst;
 	remque(fp);
-	(void) m_free(dtom(fp));
+	(void) m_free(dtom(fp);
 	m = dtom(ip);
 	m->m_len += (ip->ip_hl << 2);
 	m->m_data -= (ip->ip_hl << 2);
@@ -580,10 +580,10 @@ ip_freef(fp)
 	for (q = fp->ipq_next; q != (struct ipasfrag *)fp; q = p) {
 		p = q->ipf_next;
 		ip_deq(q);
-		m_freem(dtom(q));
+		m_freem(dtom(q);
 	}
 	remque(fp);
-	(void) m_free(dtom(fp));
+	(void) m_free(dtom(fp);
 }
 
 /*
@@ -735,7 +735,7 @@ ip_dooptions(m)
 			 * locate outgoing interface
 			 */
 			bcopy((caddr_t)(cp + off), (caddr_t)&ipaddr.sin_addr,
-			    sizeof(ipaddr.sin_addr));
+			    sizeof(ipaddr.sin_addr);
 			if (opt == IPOPT_SSRR) {
 #define	INA	struct in_ifaddr *
 #define	SA	struct sockaddr *
@@ -750,12 +750,12 @@ ip_dooptions(m)
 			}
 			ip->ip_dst = ipaddr.sin_addr;
 			bcopy((caddr_t)&(IA_SIN(ia)->sin_addr),
-			    (caddr_t)(cp + off), sizeof(struct in_addr));
+			    (caddr_t)(cp + off), sizeof(struct in_addr);
 			cp[IPOPT_OFFSET] += sizeof(struct in_addr);
 			/*
 			 * Let ip_intr's mcast routing check handle mcast pkts
 			 */
-			forward = !IN_MULTICAST(ntohl(ip->ip_dst.s_addr));
+			forward = !IN_MULTICAST(ntohl(ip->ip_dst.s_addr);
 			break;
 
 		case IPOPT_RR:
@@ -770,7 +770,7 @@ ip_dooptions(m)
 			if (off > optlen - sizeof(struct in_addr))
 				break;
 			bcopy((caddr_t)(&ip->ip_dst), (caddr_t)&ipaddr.sin_addr,
-			    sizeof(ipaddr.sin_addr));
+			    sizeof(ipaddr.sin_addr);
 			/*
 			 * locate outgoing interface; if we're the destination,
 			 * use the incoming interface (should be same).
@@ -782,7 +782,7 @@ ip_dooptions(m)
 				goto bad;
 			}
 			bcopy((caddr_t)&(IA_SIN(ia)->sin_addr),
-			    (caddr_t)(cp + off), sizeof(struct in_addr));
+			    (caddr_t)(cp + off), sizeof(struct in_addr);
 			cp[IPOPT_OFFSET] += sizeof(struct in_addr);
 			break;
 
@@ -812,7 +812,7 @@ ip_dooptions(m)
 				if (ia == 0)
 					continue;
 				bcopy((caddr_t)&IA_SIN(ia)->sin_addr,
-				    (caddr_t)sin, sizeof(struct in_addr));
+				    (caddr_t)sin, sizeof(struct in_addr);
 				ipt->ipt_ptr += sizeof(struct in_addr);
 				break;
 
@@ -821,7 +821,7 @@ ip_dooptions(m)
 				    sizeof(struct in_addr) > ipt->ipt_len)
 					goto bad;
 				bcopy((caddr_t)sin, (caddr_t)&ipaddr.sin_addr,
-				    sizeof(struct in_addr));
+				    sizeof(struct in_addr);
 				if (ifa_ifwithaddr((SA)&ipaddr) == 0)
 					continue;
 				ipt->ipt_ptr += sizeof(struct in_addr);
@@ -832,7 +832,7 @@ ip_dooptions(m)
 			}
 			ntime = iptime();
 			bcopy((caddr_t)&ntime, (caddr_t)cp + ipt->ipt_ptr - 1,
-			    sizeof(n_time));
+			    sizeof(n_time);
 			ipt->ipt_ptr += sizeof(n_time);
 		}
 	}
@@ -933,7 +933,7 @@ ip_srcroute()
 	*(mtod(m, struct in_addr *)) = *p--;
 #if DIAGNOSTIC
 	if (ipprintfs)
-		printf(" hops %lx", ntohl(mtod(m, struct in_addr *)->s_addr));
+		printf(" hops %lx", ntohl(mtod(m, struct in_addr *)->s_addr);
 #endif
 
 	/*
@@ -953,7 +953,7 @@ ip_srcroute()
 	while (p >= ip_srcrt.route) {
 #if DIAGNOSTIC
 		if (ipprintfs)
-			printf(" %lx", ntohl(q->s_addr));
+			printf(" %lx", ntohl(q->s_addr);
 #endif
 		*q++ = *p--;
 	}
@@ -963,7 +963,7 @@ ip_srcroute()
 	*q = ip_srcrt.dst;
 #if DIAGNOSTIC
 	if (ipprintfs)
-		printf(" %lx\n", ntohl(q->s_addr));
+		printf(" %lx\n", ntohl(q->s_addr);
 #endif
 	return (m);
 }
@@ -1072,7 +1072,7 @@ ip_forward(m, srcrt)
 	 * Save at most 64 bytes of the packet in case
 	 * we need to generate an ICMP message to the src.
 	 */
-	mcopy = m_copy(m, 0, imin((int)ip->ip_len, 64));
+	mcopy = m_copy(m, 0, imin((int)ip->ip_len, 64);
 
 #if GATEWAY
 	ip_ifmatrix[rt->rt_ifp->if_index +
@@ -1177,15 +1177,15 @@ ip_sysctl(name, namelen, oldp, oldlenp, newp, newlen)
 
 	switch (name[0]) {
 	case IPCTL_FORWARDING:
-		return (sysctl_int(oldp, oldlenp, newp, newlen, &ipforwarding));
+		return (sysctl_int(oldp, oldlenp, newp, newlen, &ipforwarding);
 	case IPCTL_SENDREDIRECTS:
 		return (sysctl_int(oldp, oldlenp, newp, newlen,
-			&ipsendredirects));
+			&ipsendredirects);
 	case IPCTL_DEFTTL:
-		return (sysctl_int(oldp, oldlenp, newp, newlen, &ip_defttl));
+		return (sysctl_int(oldp, oldlenp, newp, newlen, &ip_defttl);
 #ifdef notyet
 	case IPCTL_DEFMTU:
-		return (sysctl_int(oldp, oldlenp, newp, newlen, &ip_mtu));
+		return (sysctl_int(oldp, oldlenp, newp, newlen, &ip_mtu);
 #endif
 	default:
 		return (EOPNOTSUPP);

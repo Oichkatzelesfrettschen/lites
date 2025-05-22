@@ -50,7 +50,7 @@
 #include <net/if_types.h>
 
 int	ifqmaxlen = IFQ_MAXLEN;
-void	if_slowtimo __P((void *arg));
+void	if_slowtimo (void *arg);
 
 /*
  * Network interface utility routines.
@@ -87,7 +87,7 @@ ifubareset(uban)
 
 int if_index = 0;
 struct ifaddr **ifnet_addrs;
-static char *sprint_d __P((u_int, char *, int));
+static char *sprint_d (u_int, char *, int);
 
 /*
  * Attach an interface to the
@@ -123,7 +123,7 @@ if_attach(ifp)
 	/*
 	 * create a Link Level name for this device
 	 */
-	unitname = sprint_d((u_int)ifp->if_unit, workbuf, sizeof(workbuf));
+	unitname = sprint_d((u_int)ifp->if_unit, workbuf, sizeof(workbuf);
 	namelen = strlen(ifp->if_name);
 	unitlen = strlen(unitname);
 #define _offsetof(t, m) ((int)((caddr_t)&((t *)0)->m))
@@ -476,7 +476,7 @@ ifioctl(so, cmd, data, p)
 
 	case SIOCGIFCONF:
 	case OSIOCGIFCONF:
-		return (ifconf(cmd, data));
+		return (ifconf(cmd, data);
 	}
 	ifr = (struct ifreq *)data;
 	ifp = ifunit(ifr->ifr_name);
@@ -544,7 +544,7 @@ ifioctl(so, cmd, data, p)
                  */
                 if (ifr->ifr_mtu < 72 || ifr->ifr_mtu > 65535)
                         return (EINVAL);
-                return ((*ifp->if_ioctl)(ifp, cmd, data));
+                return ((*ifp->if_ioctl)(ifp, cmd, data);
 
 	case SIOCADDMULTI:
 	case SIOCDELMULTI:
@@ -552,14 +552,14 @@ ifioctl(so, cmd, data, p)
 			return (error);
 		if (ifp->if_ioctl == NULL)
 			return (EOPNOTSUPP);
-		return ((*ifp->if_ioctl)(ifp, cmd, data));
+		return ((*ifp->if_ioctl)(ifp, cmd, data);
 
 	default:
 		if (so->so_proto == 0)
 			return (EOPNOTSUPP);
 #if COMPAT_43
 		return ((*so->so_proto->pr_usrreq)(so, PRU_CONTROL,
-			cmd, data, ifp));
+			cmd, data, ifp);
 #else
 	    {
 		int ocmd = cmd;
@@ -598,7 +598,7 @@ ifioctl(so, cmd, data, p)
 			cmd = SIOCGIFNETMASK;
 		}
 		error =  ((*so->so_proto->pr_usrreq)(so, PRU_CONTROL,
-							    cmd, data, ifp));
+							    cmd, data, ifp);
 		switch (ocmd) {
 
 		case OSIOCGIFADDR:
@@ -642,9 +642,9 @@ ifconf(cmd, data)
 			continue;
 		*cp++ = '0' + ifp->if_unit; *cp = '\0';
 		if ((ifa = ifp->if_addrlist) == 0) {
-			bzero((caddr_t)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+			bzero((caddr_t)&ifr.ifr_addr, sizeof(ifr.ifr_addr);
 			error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
-			    sizeof (ifr));
+			    sizeof (ifr);
 			if (error)
 				break;
 			space -= sizeof (ifr), ifrp++;
@@ -658,21 +658,21 @@ ifconf(cmd, data)
 				ifr.ifr_addr = *sa;
 				osa->sa_family = sa->sa_family;
 				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
-						sizeof (ifr));
+						sizeof (ifr);
 				ifrp++;
 			} else
 #endif
 			if (sa->sa_len <= sizeof(*sa)) {
 				ifr.ifr_addr = *sa;
 				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
-						sizeof (ifr));
+						sizeof (ifr);
 				ifrp++;
 			} else {
 				space -= sa->sa_len - sizeof(*sa);
 				if (space < sizeof (ifr))
 					break;
 				error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
-						sizeof (ifr.ifr_name));
+						sizeof (ifr.ifr_name);
 				if (error == 0)
 				    error = copyout((caddr_t)sa,
 				      (caddr_t)&ifrp->ifr_addr, sa->sa_len);

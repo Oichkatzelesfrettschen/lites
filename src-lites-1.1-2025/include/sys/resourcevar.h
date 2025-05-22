@@ -82,9 +82,9 @@ struct plimit {
 	    (p)->p_stats->p_prof.pr_addr, (p)->p_stats->p_prof.pr_ticks)
 
 #ifdef KERNEL
-void	 addupc_intr __P((struct proc *p, u_long pc, u_int ticks));
-void	 addupc_task __P((struct proc *p, u_long pc, u_int ticks));
+void	 addupc_intr (struct proc *p, u_long pc, u_int ticks);
+void	 addupc_task (struct proc *p, u_long pc, u_int ticks);
 struct plimit
-	*limcopy __P((struct plimit *lim));
+	*limcopy (struct plimit *lim);
 #endif
 #endif	/* !_SYS_RESOURCEVAR_H_ */

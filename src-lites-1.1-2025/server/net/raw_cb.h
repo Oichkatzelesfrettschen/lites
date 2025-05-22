@@ -57,13 +57,13 @@ struct rawcb {
 #ifdef KERNEL
 struct rawcb rawcb;			/* head of list */
 
-int	 raw_attach __P((struct socket *, int));
-void	 raw_ctlinput __P((int, struct sockaddr *));
-void	 raw_detach __P((struct rawcb *));
-void	 raw_disconnect __P((struct rawcb *));
-void	 raw_init __P((void));
-void	 raw_input __P((struct mbuf *,
-	    struct sockproto *, struct sockaddr *, struct sockaddr *));
-int	 raw_usrreq __P((struct socket *,
-	    int, struct mbuf *, struct mbuf *, struct mbuf *));
+int	 raw_attach (struct socket *, int);
+void	 raw_ctlinput (int, struct sockaddr *);
+void	 raw_detach (struct rawcb *);
+void	 raw_disconnect (struct rawcb *);
+void	 raw_init (void);
+void	 raw_input (struct mbuf *,
+	    struct sockproto *, struct sockaddr *, struct sockaddr *);
+int	 raw_usrreq (struct socket *,
+	    int, struct mbuf *, struct mbuf *, struct mbuf *);
 #endif

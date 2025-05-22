@@ -163,19 +163,19 @@ int sigprop[NSIG + 1] = {
 /*
  * Machine-independent functions:
  */
-int	coredump __P((struct proc *p));
-void	execsigs __P((struct proc *p));
-void	gsignal __P((int pgid, int sig));
-int	issig __P((struct proc *p));
-void	pgsignal __P((struct pgrp *pgrp, int sig, int checkctty));
-void	postsig __P((int sig));
-void	psignal __P((struct proc *p, int sig));
-void	siginit __P((struct proc *p));
-void	trapsignal __P((struct proc *p, int sig, unsigned code));
+int	coredump (struct proc *p);
+void	execsigs (struct proc *p);
+void	gsignal (int pgid, int sig);
+int	issig (struct proc *p);
+void	pgsignal (struct pgrp *pgrp, int sig, int checkctty);
+void	postsig (int sig);
+void	psignal (struct proc *p, int sig);
+void	siginit (struct proc *p);
+void	trapsignal (struct proc *p, int sig, unsigned code);
 
 /*
  * Machine-dependent functions:
  */
-boolean_t sendsig __P((struct proc *, thread_t thread, sig_t action, int sig, unsigned code, int returnmask));
+boolean_t sendsig (struct proc *, thread_t thread, sig_t action, int sig, unsigned code, int returnmask);
 #endif	/* KERNEL */
 #endif	/* !_SYS_SIGNALVAR_H_ */
