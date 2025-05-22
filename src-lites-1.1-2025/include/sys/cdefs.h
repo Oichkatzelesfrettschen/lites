@@ -21,3 +21,6 @@
 #define __pure2
 #endif
 #define __dead
+#define __unused       __attribute__((__unused__))
+
+#endif /* _CDEFS_H_ */
