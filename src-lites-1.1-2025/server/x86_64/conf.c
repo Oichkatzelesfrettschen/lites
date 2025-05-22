@@ -1,16 +1,16 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
  * Copyright (c) 1994 Johannes Helander
  * Copyright (c) 1994 Timo Rinne
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON AND JOHANNES HELANDER AND TIMO RINNE ALLOW FREE USE
  * OF THIS SOFTWARE IN ITS "AS IS" CONDITION.  CARNEGIE MELLON AND
  * JOHANNES HELANDER AND TIMO RINNE DISCLAIM ANY LIABILITY OF ANY KIND
@@ -23,7 +23,7 @@
  * lites-950323 from jvh.
  *
  */
-/* 
+/*
  *	File:	 x86_64/server/conf.c
  *	Authors:
  *	Randall Dean, Carnegie Mellon University, 1992.
@@ -328,7 +328,7 @@ int isa_disk_ioctl(
 {
 	mach_port_t		device_port = disk_port(dev);
 	mach_msg_type_number_t	count;
-	register int		error;
+	int		error;
 
 	switch (cmd) {
 #if !OSFMACH3
@@ -451,7 +451,7 @@ int kbd_ioctl(
 	int flag,
 	struct proc *p)
 {
-	/* 
+	/*
 	 * XXX a newer version of this stuff is now in char_ioctl
 	 * XXX which is not the proper place
 	 */

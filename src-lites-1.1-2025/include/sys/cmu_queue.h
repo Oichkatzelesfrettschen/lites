@@ -1,15 +1,15 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1994,1993,1991,1990,1989,1988,1987 Carnegie Mellon University
  * Copyright (c) 1994 Johannes Helander
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON AND JOHANNES HELANDER ALLOW FREE USE OF THIS
  * SOFTWARE IN ITS "AS IS" CONDITION.  CARNEGIE MELLON AND JOHANNES
  * HELANDER DISCLAIM ANY LIABILITY OF ANY KIND FOR ANY DAMAGES
@@ -90,7 +90,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_init(q)	((q)->next = (q)->prev = q)
 
-/* 
+/*
  * Fill queue chain element with a value known to be invalid.
  */
 #define queue_chain_init(qc) ((qc)->next = (qc)->prev = (void *)(-1L))
@@ -178,7 +178,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define queue_enter(head, elt, type, field)			\
 { 								\
-	register queue_entry_t prev;				\
+	queue_entry_t prev;				\
 								\
 	prev = (head)->prev;					\
 	if ((head) == prev) {					\
@@ -205,7 +205,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define queue_enter_first(head, elt, type, field)		\
 { 								\
-	register queue_entry_t next;				\
+	queue_entry_t next;				\
 								\
 	next = (head)->next;					\
 	if ((head) == next) {					\
@@ -242,7 +242,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_enter_after(head, elt, newe, type, field)		\
 {								\
-	register queue_entry_t	next;				\
+	queue_entry_t	next;				\
 								\
 	next = (elt)->field.next;				\
 								\
@@ -267,7 +267,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_enter_before(head, elt, newe, type, field)	\
 {								\
-	register queue_entry_t	prev;				\
+	queue_entry_t	prev;				\
 								\
 	prev = (elt)->field.prev;				\
 								\
@@ -292,7 +292,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_remove(head, elt, type, field)			\
 {								\
-	register queue_entry_t	next, prev;			\
+	queue_entry_t	next, prev;			\
 								\
 	next = (elt)->field.next;				\
 	prev = (elt)->field.prev;				\
@@ -319,7 +319,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_remove_first(head, entry, type, field)		\
 {								\
-	register queue_entry_t	next;				\
+	queue_entry_t	next;				\
 								\
 	(entry) = (type) ((head)->next);			\
 	next = (entry)->field.next;				\
@@ -342,7 +342,7 @@ typedef	struct queue_entry	*queue_entry_t;
  */
 #define	queue_remove_last(head, entry, type, field)		\
 {								\
-	register queue_entry_t	prev;				\
+	queue_entry_t	prev;				\
 								\
 	(entry) = (type) ((head)->prev);			\
 	prev = (entry)->field.prev;				\

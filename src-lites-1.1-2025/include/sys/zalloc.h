@@ -1,26 +1,26 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
- * any improvements or extensions that they make and grant Carnegie Mellon 
+ *
+ * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
 /*
@@ -34,7 +34,7 @@
  *
  * Revision 2.1  92/04/21  17:15:27  rwd
  * BSDSS
- * 
+ *
  *
  */
 
@@ -75,7 +75,7 @@ typedef struct zone {
 
 vm_offset_t	zalloc(zone_t zone);
 vm_offset_t	zget(zone_t zone);
-zone_t		zinit(vm_size_t size, vm_size_t max, vm_size_t alloc, 
+zone_t		zinit(vm_size_t size, vm_size_t max, vm_size_t alloc,
 		      boolean_t pageable, char *name);
 void		zfree(zone_t zone, vm_offset_t elem);
 void		zchange(zone_t zone, boolean_t pageable, boolean_t sleepable,
@@ -99,7 +99,7 @@ void		zchange(zone_t zone, boolean_t pageable, boolean_t sleepable,
 
 #define ZFREE(zone, element)		\
 	MACRO_BEGIN			\
-	register zone_t	z = (zone);	\
+	zone_t	z = (zone);	\
 					\
 	mutex_lock(&z->lock);		\
 	ADD_TO_ZONE(z, element);	\
@@ -108,7 +108,7 @@ void		zchange(zone_t zone, boolean_t pageable, boolean_t sleepable,
 
 #define	ZALLOC(zone, ret, type)			\
 	MACRO_BEGIN				\
-	register zone_t	z = (zone);		\
+	zone_t	z = (zone);		\
 						\
 	mutex_lock(&z->lock);			\
 	REMOVE_FROM_ZONE(zone, ret, type);	\
@@ -119,7 +119,7 @@ void		zchange(zone_t zone, boolean_t pageable, boolean_t sleepable,
 
 #define	ZGET(zone, ret, type)			\
 	MACRO_BEGIN				\
-	register zone_t	z = (zone);		\
+	zone_t	z = (zone);		\
 						\
 	mutex_lock(&z->lock);			\
 	REMOVE_FROM_ZONE(zone, ret, type);	\
