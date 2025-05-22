@@ -33,6 +33,7 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
+  pre-commit \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
 done
@@ -64,6 +65,7 @@ fi
 
 if command -v pre-commit >/dev/null 2>&1; then
   pre-commit install --install-hooks >/dev/null 2>&1 || true
+  pre-commit --version || true
 fi
 
 # Provide a yacc alias when only bison or byacc are installed
