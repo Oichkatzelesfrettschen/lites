@@ -1,25 +1,27 @@
-/* 
+#ifndef MACH_OPTIONS_H
+#define MACH_OPTIONS_H
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990,1989 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -31,30 +33,30 @@
  *
  * Revision 2.8  91/05/14  17:58:35  mrt
  * 	Correcting copyright
- * 
+ *
  * Revision 2.7  91/02/14  14:21:03  mrt
  * 	Added new Mach copyright
  * 	[91/02/13  12:41:31  mrt]
- * 
+ *
  * Revision 2.6  90/09/09  14:35:04  rpd
  * 	Remove special option , debug_mutex and thread_calls.
  * 	[90/08/24            rwd]
- * 
+ *
  * Revision 2.5  90/06/02  15:14:14  rpd
  * 	Removed RCS Source, Header lines.
  * 	[90/05/03  00:07:27  rpd]
- * 
+ *
  * Revision 2.4  90/03/14  21:12:15  rwd
  * 	Added new option:
  * 		WAIT_DEBUG:	keep track of who a blocked thread is
  * 				waiting for.
  * 	[90/03/01            rwd]
- * 
+ *
  * Revision 2.3  90/01/19  14:37:25  rwd
  * 	New option:
  * 		THREAD_CALLS:	cthread_* version of thread_* calls.
  * 	[90/01/03            rwd]
- * 
+ *
  * Revision 2.2  89/12/08  19:54:09  rwd
  * 	Added code:
  * 		MUTEX_SPECIAL:	Have extra kernel threads available for
@@ -80,7 +82,7 @@
  * 	[89/11/13            rwd]
  * 	Added copyright.  Removed all options.
  * 	[89/10/23            rwd]
- * 
+ *
  */
 /*
  * options.h
@@ -92,3 +94,5 @@
 /*#define RED_ZONE*/
 #define WAIT_DEBUG
 #define CTHREAD_SIGNAL
+
+#endif /* MACH_OPTIONS_H */
