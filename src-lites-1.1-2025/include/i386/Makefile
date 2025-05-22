@@ -31,7 +31,7 @@
 # in the directory "machine". This eliminates the need for 
 # machine links in the sources.
 
-DATAFILES		= endian.h limits.h signal.h param.h stdarg.h \
+DATAFILES               = asm.h endian.h limits.h signal.h param.h stdarg.h \
 			  ansi.h types.h cpu.h ptrace.h vmparam.h exec.h \
 			  trap.h varargs.h
 
