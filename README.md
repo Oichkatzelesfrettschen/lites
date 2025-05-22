@@ -74,9 +74,10 @@ cmake --build build
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators along with standard build utilities such as build-essential,
 GCC, clang, llvm, m4, CMake, Ninja and Meson.  It also sets up debugging
-and profiling tools and provides pre-commit support.  Run `pre-commit
-run -a` after editing sources to keep formatting consistent.  The script
-requires root privileges and network access.
+and profiling tools, installs the pre-commit hooks and generates a
+`compile_commands.json` database for clang tooling.  Run `pre-commit run -a`
+after editing sources to keep formatting consistent.  The script requires
+root privileges and network access.
 
 Additional notes are kept in [`docs/`](docs/).
 

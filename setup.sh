@@ -25,7 +25,7 @@ apt-get update -y
 for pkg in \
   build-essential gcc g++ clang lld llvm \
   clang-format clang-tidy uncrustify astyle editorconfig pre-commit \
-  make bmake ninja-build cmake meson \
+  make bmake ninja-build cmake meson bear \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
   libopenblas-dev liblapack-dev libeigen3-dev \
@@ -137,6 +137,17 @@ rm /tmp/protoc.zip
 
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
+
+# Install git hooks and sanity check dev tools
+pre-commit install >/dev/null 2>&1 || true
+clang-format --version >/dev/null 2>&1 || true
+clang-tidy --version >/dev/null 2>&1 || true
+
+# Generate a compilation database for clang tooling
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1 || true
+if [ -f build/compile_commands.json ]; then
+  ln -sf build/compile_commands.json compile_commands.json
+fi
 
 # verify links from the README
 if [ -f README.md ]; then
