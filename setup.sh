@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
+# log file for any package installation failures
+FAIL_LOG=/tmp/setup_failures.log
+: > "$FAIL_LOG"
 
 #— helper to pin to the repo’s exact version if it exists
 apt_pin_install(){
@@ -10,9 +13,20 @@ apt_pin_install(){
   # Attempt to install the exact version if available. Failures are logged but
   # do not abort the overall setup so subsequent installation methods may run.
   if [ -n "$ver" ]; then
-    apt-get install -y "${pkg}=${ver}" || apt-get install -y "$pkg" || true
+    apt_pkg="${pkg}=${ver}"
   else
-    apt-get install -y "$pkg" || true
+    apt_pkg="$pkg"
+  fi
+
+  if ! apt-get install -y "$apt_pkg"; then
+    echo "apt:$pkg" >> "$FAIL_LOG"
+    # if this looks like a python package try pip
+    if [[ "$pkg" == python3-* ]]; then
+      pip_pkg="${pkg#python3-}"
+      if ! pip3 install --no-cache-dir "$pip_pkg"; then
+        echo "pip:$pip_pkg" >> "$FAIL_LOG"
+      fi
+    fi
   fi
 }
 
@@ -21,7 +35,9 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-apt-get update -y || true
+if ! apt-get update -y; then
+  echo "apt:update" >> "$FAIL_LOG"
+fi
 
 #— core build tools, formatters, analysis, science libs
 for pkg in \
@@ -48,10 +64,14 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
-pip3 install --no-cache-dir \
+for pip_pkg in \
   pre-commit cmake ninja meson \
   tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools
+  tensorflow-model-optimization mlflow onnxruntime-tools; do
+  if ! pip3 install --no-cache-dir "$pip_pkg"; then
+    echo "pip:$pip_pkg" >> "$FAIL_LOG"
+  fi
+done
 
 # Ensure pre-commit is installed regardless of package source
 if ! command -v pre-commit >/dev/null 2>&1; then
@@ -159,17 +179,22 @@ done
 #— IA-16 (8086/286) cross-compiler
 IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
            | awk -F\" '/tag_name/{print $4; exit}')
-curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
-  | tar -Jx -C /opt
+if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
+  | tar -Jx -C /opt; then
+  echo "ia16-gcc" >> "$FAIL_LOG"
+fi
 echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
 export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
 #— protoc installer (pinned)
 PROTO_VERSION=25.1
-curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
-  -o /tmp/protoc.zip
-unzip -d /usr/local /tmp/protoc.zip
-rm /tmp/protoc.zip
+if curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
+  -o /tmp/protoc.zip; then
+  unzip -d /usr/local /tmp/protoc.zip || echo "protoc:unzip" >> "$FAIL_LOG"
+  rm /tmp/protoc.zip
+else
+  echo "protoc" >> "$FAIL_LOG"
+fi
 
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
@@ -179,7 +204,9 @@ clang-format --version >/dev/null 2>&1 || true
 clang-tidy --version >/dev/null 2>&1 || true
 
 # Generate a compilation database for clang tooling
-cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1 || true
+if ! cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1; then
+  echo "cmake:compdb" >> "$FAIL_LOG"
+fi
 if [ -f build/compile_commands.json ]; then
   ln -sf build/compile_commands.json compile_commands.json
 fi
@@ -198,6 +225,7 @@ if [ -f README.md ]; then
   if [ -n "$bad_links" ]; then
     printf '%b' "$bad_links" > linkcheck.log
     echo "Nonfunctional links logged to linkcheck.log"
+    echo "linkcheck" >> "$FAIL_LOG"
   else
     echo "All links OK"
   fi
@@ -206,5 +234,12 @@ fi
 #— clean up
 apt-get clean
 rm -rf /var/lib/apt/lists/*
+
+if [ -s "$FAIL_LOG" ]; then
+  echo "Some installations failed. See $FAIL_LOG for details." >&2
+  cat "$FAIL_LOG" >&2
+else
+  echo "All packages installed successfully" >&2
+fi
 
 exit 0

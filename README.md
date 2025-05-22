@@ -103,7 +103,9 @@ and profiling tools, installs the pre-commit hooks and generates a
 after editing sources to keep formatting consistent.  The script ensures
 that `pre-commit`, `yacc` (via `byacc` or `bison`) and the Swift toolchain
 are installed, falling back to pip or additional package installs if
-necessary.  The script requires root privileges and network access.
+necessary.  Any package failures are recorded in `/tmp/setup_failures.log`
+so the remainder of the setup can continue.  The script requires root
+privileges and network access.
 
 Additional notes are kept in [`docs/`](docs/).
 
