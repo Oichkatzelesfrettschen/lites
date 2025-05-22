@@ -1,4 +1,4 @@
 Checks: '-*,clang-analyzer-*'
 WarningsAsErrors: ''
-ExtraArgs: ['-std=c2x']
+ExtraArgs: ['-std=c23']
 ExtraArgsCC: ['-std=c++17']

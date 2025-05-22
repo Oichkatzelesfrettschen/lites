@@ -50,6 +50,7 @@
 #include <sys/resource.h>
 #include <sys/msgbuf.h>
 #include <sys/user.h>
+#include <c23_arch.h>
 
 #include <serv/syscalltrace.h>
 

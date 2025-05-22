@@ -74,6 +74,7 @@
 
 #include <serv/import_mach.h>
 #include <sys/param.h>
+#include <c23_arch.h>
 #include <sys/systm.h>
 #include <sys/buf.h>	/* for B_TAPE */
 #include <sys/conf.h>
