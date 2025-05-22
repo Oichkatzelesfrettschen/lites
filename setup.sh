@@ -50,17 +50,13 @@ pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
-
-# Ensure pre-commit is available even if the distribution package failed
-if ! command -v pre-commit >/dev/null 2>&1; then
-  pip3 install --no-cache-dir pre-commit
-# Ensure pre-commit is available even without network access
+# Ensure pre-commit is installed regardless of package source
 if ! command -v pre-commit >/dev/null 2>&1; then
   if apt-cache show pre-commit >/dev/null 2>&1; then
     apt_pin_install pre-commit || true
   else
     echo "Attempting to install pre-commit via pip" >&2
-    pip3 install pre-commit || true
+    pip3 install --no-cache-dir pre-commit || true
   fi
 fi
 
