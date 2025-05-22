@@ -71,9 +71,16 @@ cmake -B build -DARCH=ppc64 -DLITES_SRC_DIR=src-lites-1.1-2025
 cmake --build build
 ```
 
+
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators.  It can be used to reproduce historical build setups, but
 it requires root privileges and network access.
+
+## Tooling
+
+This repository ships `.clang-format`, `.clang-tidy` and a basic
+`pre-commit` configuration.  Running `pre-commit install` will ensure that
+new patches are automatically formatted and checked with `clang-tidy`.
 
 Additional notes are kept in [`docs/`](docs/).
 

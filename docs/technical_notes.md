@@ -13,3 +13,7 @@ To experiment with cross compilation or multiple architectures, see the
 `setup.sh` script in the repository root. It installs a full toolchain and
 qemu-based emulation targets.
 
+The modernized sources target the C23 standard.  Development uses
+`clang-format` and `clang-tidy` via `pre-commit` to keep the codebase
+consistent across platforms.
+
