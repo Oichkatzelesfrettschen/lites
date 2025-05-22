@@ -7,10 +7,12 @@ apt_pin_install(){
   pkg="$1"
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}')
+  # Attempt to install the exact version if available. Failures are logged but
+  # do not abort the overall setup so subsequent installation methods may run.
   if [ -n "$ver" ]; then
-    apt-get install -y "${pkg}=${ver}"
+    apt-get install -y "${pkg}=${ver}" || apt-get install -y "$pkg" || true
   else
-    apt-get install -y "$pkg"
+    apt-get install -y "$pkg" || true
   fi
 }
 
