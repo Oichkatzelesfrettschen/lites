@@ -107,5 +107,8 @@ necessary.  Any package failures are recorded in `/tmp/setup_failures.log`
 so the remainder of the setup can continue.  The script requires root
 privileges and network access.
 
+You can also invoke `scripts/run-precommit.sh` which automatically installs
+`pre-commit` via pip when missing.
+
 Additional notes are kept in [`docs/`](docs/).
 

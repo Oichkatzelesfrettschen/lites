@@ -75,11 +75,11 @@ done
 
 # Ensure pre-commit is installed regardless of package source
 if ! command -v pre-commit >/dev/null 2>&1; then
-  if apt-cache show pre-commit >/dev/null 2>&1; then
+  echo "pre-commit not found, installing via pip..." >&2
+  if ! pip3 install --no-cache-dir pre-commit; then
+    echo "pip:pre-commit" >> "$FAIL_LOG"
+    # Fallback to apt if available
     apt_pin_install pre-commit || true
-  else
-    echo "Attempting to install pre-commit via pip" >&2
-    pip3 install --no-cache-dir pre-commit || true
   fi
 fi
 
