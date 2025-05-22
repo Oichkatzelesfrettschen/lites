@@ -6,6 +6,11 @@ set(CMAKE_C_STANDARD 23)
 set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
 set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
 set(LDFLAGS "$ENV{LDFLAGS}" CACHE STRING "Additional linker flags")
+set(LITES_MACH_DIR "$ENV{LITES_MACH_DIR}" CACHE PATH "Mach kernel source directory")
+if(NOT LITES_MACH_DIR AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/openmach")
+    set(LITES_MACH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/openmach")
+endif()
+set(MACH_DIR "${LITES_MACH_DIR}")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CFLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
@@ -93,7 +98,8 @@ if(EXISTS "${LITES_SRC_DIR}")
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
-        "${LITES_SRC_DIR}/server")
+        "${LITES_SRC_DIR}/server"
+        $<$<BOOL:${MACH_DIR}>:${MACH_DIR}/include>)
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
@@ -108,7 +114,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         add_executable(lites_emulator ${EMULATOR_SRC})
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
-            "${LITES_SRC_DIR}/emulator")
+            "${LITES_SRC_DIR}/emulator"
+            $<$<BOOL:${MACH_DIR}>:${MACH_DIR}/include>)
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")

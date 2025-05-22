@@ -39,6 +39,29 @@ The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
 detail.
 
+## Mach kernel headers
+
+Lites relies on headers from a Mach kernel source tree such as the
+OpenMach/Mach4 distribution.  The modern build system looks for these
+headers in the directory specified by the `LITES_MACH_DIR` environment
+variable.  If that variable is unset and a directory named `openmach`
+exists at the repository root, it will be used automatically (a git
+submodule can conveniently provide it).
+
+Example using the makefile:
+
+```sh
+git submodule add <mach-repo-url> openmach  # once
+make -f Makefile.new LITES_MACH_DIR=openmach
+```
+
+Or with CMake:
+
+```sh
+cmake -B build -DLITES_MACH_DIR=openmach
+cmake --build build
+```
+
 ## Building
 
 Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  Each
@@ -81,7 +104,6 @@ after editing sources to keep formatting consistent.  The script ensures
 that `pre-commit`, `yacc` (via `byacc` or `bison`) and the Swift toolchain
 are installed, falling back to pip or additional package installs if
 necessary.  The script requires root privileges and network access.
-ster
 
 Additional notes are kept in [`docs/`](docs/).
 
