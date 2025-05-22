@@ -19,7 +19,7 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-apt-get update -y
+apt-get update -y || true
 
 #— core build tools, formatters, analysis, science libs
 for pkg in \
@@ -49,6 +49,16 @@ pip3 install --no-cache-dir \
   pre-commit cmake ninja meson \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
+
+# Ensure pre-commit is available even without network access
+if ! command -v pre-commit >/dev/null 2>&1; then
+  if apt-cache show pre-commit >/dev/null 2>&1; then
+    apt_pin_install pre-commit || true
+  else
+    echo "Attempting to install pre-commit via pip" >&2
+    pip3 install pre-commit || true
+  fi
+fi
 
 if command -v pre-commit >/dev/null 2>&1; then
   pre-commit install-hooks || true

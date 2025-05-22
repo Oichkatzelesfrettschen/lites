@@ -77,8 +77,11 @@ and emulators along with standard build utilities such as build-essential,
 GCC, clang, llvm, m4, CMake, Ninja and Meson.  It also sets up debugging
 and profiling tools, installs the pre-commit hooks and generates a
 `compile_commands.json` database for clang tooling.  Run `pre-commit run -a`
-after editing sources to keep formatting consistent.  The script requires
-root privileges and network access.
+after editing sources to keep formatting consistent.  The script attempts to
+install `pre-commit` via both the system package manager and `pip`.  If those
+fail (for example on an offline system), run `pip install pre-commit` manually
+before invoking `pre-commit run -a`.  The script requires root privileges and
+network access when installing packages.
 
 Additional notes are kept in [`docs/`](docs/).
 
