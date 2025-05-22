@@ -39,32 +39,36 @@
 /* Cleaned up for Lites -- jvh 5/94 */
 
 /*
- * Definitions unique to i386 cpu support.
+ * Definitions specific to x86_64 CPU support.
  */
 /*
  * definitions of cpu-dependent requirements
  * referenced in generic code
  */
 
-#undef	COPY_SIGCODE	/* don't copy sigcode above user stack in exec */
+#undef COPY_SIGCODE /* don't copy sigcode above user stack in exec */
 
 /*
  * Kinds of processor
+ *
+ * These identifiers reflect early x86 generations and are
+ * retained for compatibility with existing code.
  */
 
-#define	CPU_386SX	0
-#define	CPU_386		1
-#define	CPU_486SX	2
-#define	CPU_486		3
-#define	CPU_586		4
+#define CPU_386SX 0
+#define CPU_386 1
+#define CPU_486SX 2
+#define CPU_486 3
+#define CPU_586 4
 
 /*
  * CTL_MACHDEP definitions.
  */
-#define	CPU_CONSDEV		1	/* dev_t: console terminal device */
-#define	CPU_MAXID		2	/* number of valid machdep ids */
+#define CPU_CONSDEV 1 /* dev_t: console terminal device */
+#define CPU_MAXID 2   /* number of valid machdep ids */
 
-#define CTL_MACHDEP_NAMES { \
-	{ 0, 0 }, \
-	{ "console_device", CTLTYPE_STRUCT }, \
-}
+#define CTL_MACHDEP_NAMES\
+  {\
+      {0, 0},\
+      {"console_device", CTLTYPE_STRUCT},\
+  }
