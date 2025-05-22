@@ -46,8 +46,8 @@
  * This routine is very heavily used in the network
  * code and should be modified for each CPU to be as fast as possible.
  * 
- * This implementation is 386 version.
- */
+ * This implementation originated on the i386 but is generic.
+*/
 
 #undef	ADDCARRY
 #define ADDCARRY(sum)  {				\
