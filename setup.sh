@@ -231,6 +231,14 @@ if [ -f README.md ]; then
   fi
 fi
 
+# Clone OpenMach headers if not already present
+if [ ! -d openmach ]; then
+  echo "Cloning OpenMach repository..." >&2
+  if ! git clone --depth=1 https://github.com/mach4/mach4.git openmach; then
+    echo "openmach" >> "$FAIL_LOG"
+  fi
+fi
+
 #— clean up
 apt-get clean
 rm -rf /var/lib/apt/lists/*

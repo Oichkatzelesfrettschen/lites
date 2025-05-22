@@ -47,6 +47,8 @@ headers in the directory specified by the `LITES_MACH_DIR` environment
 variable.  If that variable is unset and a directory named `openmach`
 exists at the repository root, it will be used automatically (a git
 submodule can conveniently provide it).
+Running `setup.sh` will automatically clone the OpenMach repository when
+network access is available.
 
 Example using the makefile:
 

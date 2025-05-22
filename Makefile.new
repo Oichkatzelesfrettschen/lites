@@ -16,6 +16,9 @@ endif
 ifneq ($(MACHDIR),)
 MACH_INCDIR := -I$(MACHDIR)/include
 endif
+ifeq ($(MACHDIR),)
+$(error Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule)
+endif
 
 # Target architecture (x86_64 or i686). Determines -m32/-m64 flags.
 ARCH ?= x86_64
@@ -43,17 +46,27 @@ ARCH_DIR := i386
 endif
 
 # Directories under server that are architecture independent
-SERVER_COMMON_DIRS := $(shell find $(SRCDIR)/server -mindepth 1 -maxdepth 1 -type d \
-    | grep -Ev '/(i386|x86_64|mips|ns532|parisc)$' | tr '\n' ' ')
+SERVER_COMMON_DIRS := \
+  $(SRCDIR)/server/kern \
+  $(SRCDIR)/server/miscfs \
+  $(SRCDIR)/server/vm \
+  $(SRCDIR)/server/netiso \
+  $(SRCDIR)/server/serv \
+  $(SRCDIR)/server/netinet \
+  $(SRCDIR)/server/ufs \
+  $(SRCDIR)/server/nfs \
+  $(SRCDIR)/server/netccitt \
+  $(SRCDIR)/server/net \
+  $(SRCDIR)/server/netns
 
 # Source files and include directories for the selected architecture
 SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
-SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.s))
-SERVER_INCDIRS := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -type d | sed 's/^/-I/'))
+SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
+SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
-EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.s')
-EMULATOR_INCDIRS := $(shell find $(SRCDIR)/emulator -type d | sed 's/^/-I/')
+EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')
+EMULATOR_INCDIRS := -I$(SRCDIR)/emulator
 endif
 
 TARGETS := lites_server
@@ -65,10 +78,10 @@ all: prepare $(TARGETS)
 
 prepare:
 	@if [ ! -e $(SRCDIR)/include/machine ]; then \
-	arch_dir=$(ARCH); \
-	[ "$$arch_dir" = "i686" ] && arch_dir=i386; \
-	ln -s $$arch_dir $(SRCDIR)/include/machine; \
-fi
+	  arch_dir=$(ARCH); \
+	  [ "$$arch_dir" = "i686" ] && arch_dir=i386; \
+	  ln -s $$arch_dir $(SRCDIR)/include/machine; \
+	fi
 
 lites_server: $(SERVER_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(LDFLAGS) -o $@
