@@ -97,7 +97,7 @@
 
 /*
  * Size of kernel malloc arena in CLBYTES-sized logical pages
- */ 
+ */
 #ifndef NKMEMCLUSTERS
 #define	NKMEMCLUSTERS	(2048*1024/CLBYTES)
 #endif
@@ -142,7 +142,7 @@
 
 #ifndef KERNEL
 /* DELAY is in locore.s for the kernel */
-#define	DELAY(n)	{ register int N = (n); while (--N > 0); }
+#define	DELAY(n)	do { volatile int N = (n); while (--N > 0); } while (0)
 #endif
 
 /* LITES stuff */

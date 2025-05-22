@@ -21,6 +21,3 @@
 #define __pure2
 #endif
 #define __dead
-#define __pure
-
-#endif /* !_CDEFS_H_ */
