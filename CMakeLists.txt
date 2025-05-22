@@ -36,6 +36,21 @@ else()
 endif()
 set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
 
+# Ensure an include/machine symlink exists before collecting sources.
+if(EXISTS "${LITES_SRC_DIR}/include")
+    if(NOT EXISTS "${LITES_SRC_DIR}/include/machine")
+        set(_machine_arch "${ARCH}")
+        if(_machine_arch STREQUAL "i686")
+            set(_machine_arch "i386")
+        endif()
+        if(EXISTS "${LITES_SRC_DIR}/include/${_machine_arch}")
+            execute_process(
+                COMMAND "${CMAKE_COMMAND}" -E create_symlink "${_machine_arch}" "machine"
+                WORKING_DIRECTORY "${LITES_SRC_DIR}/include")
+        endif()
+    endif()
+endif()
+
 # Collect sources for server and emulator if the directory exists
 if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB_RECURSE SERVER_SRC
