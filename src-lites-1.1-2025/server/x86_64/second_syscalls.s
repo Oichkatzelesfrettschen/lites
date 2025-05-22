@@ -21,7 +21,7 @@
 #
  */
 /* 
- *	File:	i386/second_syscalls.s
+ *	File:	x86_64/second_syscalls.s
  *	Author:	Johannes Helander, Helsinki University of Technology, 1994.
  *	Date:	June 1994
  *
