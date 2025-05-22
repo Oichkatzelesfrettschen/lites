@@ -55,16 +55,16 @@
 
 extern u_long nextgennumber;
 
-static daddr_t	ffs_alloccg __P((struct inode *, int, daddr_t, int));
-static daddr_t	ffs_alloccgblk __P((struct fs *, struct cg *, daddr_t));
-static daddr_t	ffs_clusteralloc __P((struct inode *, int, daddr_t, int));
-static ino_t	ffs_dirpref __P((struct fs *));
-static daddr_t	ffs_fragextend __P((struct inode *, int, long, int, int));
-static void	ffs_fserr __P((struct fs *, u_int, char *));
+static daddr_t	ffs_alloccg (struct inode *, int, daddr_t, int);
+static daddr_t	ffs_alloccgblk (struct fs *, struct cg *, daddr_t);
+static daddr_t	ffs_clusteralloc (struct inode *, int, daddr_t, int);
+static ino_t	ffs_dirpref (struct fs *);
+static daddr_t	ffs_fragextend (struct inode *, int, long, int, int);
+static void	ffs_fserr (struct fs *, u_int, char *);
 static u_long	ffs_hashalloc
-		    __P((struct inode *, int, long, int, u_long (*)()));
-static ino_t	ffs_nodealloccg __P((struct inode *, int, daddr_t, int));
-static daddr_t	ffs_mapsearch __P((struct fs *, struct cg *, daddr_t, int));
+		    (struct inode *, int, long, int, u_long (*)());
+static ino_t	ffs_nodealloccg (struct inode *, int, daddr_t, int);
+static daddr_t	ffs_mapsearch (struct fs *, struct cg *, daddr_t, int);
 
 /*
  * Allocate a block in the file system.

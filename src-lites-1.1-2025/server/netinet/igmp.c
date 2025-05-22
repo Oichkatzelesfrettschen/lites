@@ -63,7 +63,7 @@ extern struct ifnet loif;
 static int igmp_timers_are_running = 0;
 static u_long igmp_all_hosts_group;
 
-static void igmp_sendreport __P((struct in_multi *));
+static void igmp_sendreport (struct in_multi *);
 
 void
 igmp_init()

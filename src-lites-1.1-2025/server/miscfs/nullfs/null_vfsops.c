@@ -350,7 +350,7 @@ nullfs_vptofh(vp, fhp)
 	return VFS_VPTOFH(NULLVPTOLOWERVP(vp), fhp);
 }
 
-int nullfs_init __P((void));
+int nullfs_init (void);
 
 struct vfsops null_vfsops = {
 	"null",

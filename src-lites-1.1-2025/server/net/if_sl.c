@@ -177,8 +177,8 @@ struct sl_softc sl_softc[NSL];
 #define TRANS_FRAME_END	 	0xdc		/* transposed frame end */
 #define TRANS_FRAME_ESCAPE 	0xdd		/* transposed frame esc */
 
-static int slinit __P((struct sl_softc *));
-static struct mbuf *sl_btom __P((struct sl_softc *, int));
+static int slinit (struct sl_softc *);
+static struct mbuf *sl_btom (struct sl_softc *, int);
 
 /*
  * Called from boot code to establish sl interfaces.

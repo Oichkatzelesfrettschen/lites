@@ -605,8 +605,8 @@ tpip_ctlinput(cmd, sin)
 {
 	extern mach_error_t inetctlerrmap[];
 	extern struct in_addr zeroin_addr;
-	void tp_quench __P((struct inpcb *,int));
-	void tpin_abort __P((struct inpcb *,int));
+	void tp_quench (struct inpcb *,int);
+	void tpin_abort (struct inpcb *,int);
 
 	if (sin->sin_family != AF_INET && sin->sin_family != AF_IMPLINK)
 		return 0;

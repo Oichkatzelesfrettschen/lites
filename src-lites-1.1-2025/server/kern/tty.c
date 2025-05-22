@@ -64,11 +64,11 @@
 
 #include <vm/vm.h>
 
-static int	proc_compare __P((struct proc *p1, struct proc *p2));
-static int	ttnread __P((struct tty *));
-static void	ttyblock __P((struct tty *tp));
-static void	ttyecho __P((int, struct tty *tp));
-static void	ttyrubo __P((struct tty *, int));
+static int	proc_compare (struct proc *p1, struct proc *p2);
+static int	ttnread (struct tty *);
+static void	ttyblock (struct tty *tp);
+static void	ttyecho (int, struct tty *tp);
+static void	ttyrubo (struct tty *, int);
 
 /* Symbolic sleep message strings. */
 char ttclos[]	= "ttycls";
@@ -1350,7 +1350,7 @@ ttycheckoutq(tp, wait)
 				splx(s);
 				return (0);
 			}
-			timeout((void (*)__P((void *)))wakeup,
+			timeout((void (*)(void *))wakeup,
 			    (void *)&tp->t_outq, hz);
 			SET(tp->t_state, TS_ASLEEP);
 			sleep((caddr_t)&tp->t_outq, PZERO - 1);

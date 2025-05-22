@@ -67,13 +67,13 @@ struct ctldebug debug13 = { "doreallocblks", &doreallocblks };
 /*
  * Local declarations
  */
-struct buf *cluster_newbuf __P((struct vnode *, struct buf *, long, daddr_t,
-	    daddr_t, long, int));
-struct buf *cluster_rbuild __P((struct vnode *, u_quad_t, struct buf *,
-	    daddr_t, daddr_t, long, int, long));
-void	    cluster_wbuild __P((struct vnode *, struct buf *, long,
-	    daddr_t, int, daddr_t));
-struct cluster_save *cluster_collectbufs __P((struct vnode *, struct buf *));
+struct buf *cluster_newbuf (struct vnode *, struct buf *, long, daddr_t,
+	    daddr_t, long, int);
+struct buf *cluster_rbuild (struct vnode *, u_quad_t, struct buf *,
+	    daddr_t, daddr_t, long, int, long);
+void	    cluster_wbuild (struct vnode *, struct buf *, long,
+	    daddr_t, int, daddr_t);
+struct cluster_save *cluster_collectbufs (struct vnode *, struct buf *);
 
 #if DIAGNOSTIC
 /*

@@ -83,18 +83,18 @@ int	ip_mrtproto;				/* for netstat only */
 #define ovbcopy bcopy
 
 /* Static forwards */
-static	int ip_mrouter_init __P((struct socket *));
-static	int add_vif __P((struct vifctl *));
-static	int del_vif __P((vifi_t *vifip));
-static	int add_lgrp __P((struct lgrplctl *));
-static	int del_lgrp __P((struct lgrplctl *));
-static	int grplst_member __P((struct vif *, struct in_addr));
-static	u_long nethash __P((struct in_addr in));
-static	int add_mrt __P((struct mrtctl *));
-static	int del_mrt __P((struct in_addr *));
-static	struct mrt *mrtfind __P((struct in_addr));
-static	void phyint_send __P((struct mbuf *, struct vif *));
-static	void tunnel_send __P((struct mbuf *, struct vif *));
+static	int ip_mrouter_init (struct socket *);
+static	int add_vif (struct vifctl *);
+static	int del_vif (vifi_t *vifip);
+static	int add_lgrp (struct lgrplctl *);
+static	int del_lgrp (struct lgrplctl *);
+static	int grplst_member (struct vif *, struct in_addr);
+static	u_long nethash (struct in_addr in);
+static	int add_mrt (struct mrtctl *);
+static	int del_mrt (struct in_addr *);
+static	struct mrt *mrtfind (struct in_addr);
+static	void phyint_send (struct mbuf *, struct vif *);
+static	void tunnel_send (struct mbuf *, struct vif *);
 
 #define INSIZ sizeof(struct in_addr)
 #define	same(a1, a2) (bcmp((caddr_t)(a1), (caddr_t)(a2), INSIZ) == 0)

@@ -534,7 +534,7 @@ union_vptofh(vp, fhp)
 	return (EOPNOTSUPP);
 }
 
-int union_init __P((void));
+int union_init (void);
 
 struct vfsops union_vfsops = {
 	"union",

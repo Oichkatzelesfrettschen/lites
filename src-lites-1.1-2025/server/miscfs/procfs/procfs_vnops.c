@@ -87,7 +87,7 @@ static struct pfsnames {
 };
 #define Nprocent (sizeof(procent)/sizeof(procent[0]))
 
-static pid_t atopid __P((const char *, u_int));
+static pid_t atopid (const char *, u_int);
 
 /*
  * set things up for doing i/o on

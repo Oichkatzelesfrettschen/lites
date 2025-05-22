@@ -151,7 +151,7 @@ noreturn system_setup()
 	register struct pdevinit *pdev;
 	register int i;
 	int s;
-	extern int (*mountroot) __P((void));
+	extern int (*mountroot) (void);
 	extern struct pdevinit pdevinit[];
 	kern_return_t	kr;
 	proc_invocation_t pk = get_proc_invocation();
@@ -361,7 +361,7 @@ noreturn system_setup()
 #if EXT2FS
 	/* XXX if FFS fails, fall back to EXT2FS */
 	if (kr == EINVAL) {
-		extern int ext2_mountroot __P((void));
+		extern int ext2_mountroot (void);
 
 		kr = ext2_mountroot();
 	}

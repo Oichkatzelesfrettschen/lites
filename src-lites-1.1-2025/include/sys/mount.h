@@ -208,10 +208,8 @@ struct mount {
  * Operations supported on mounted file system.
  */
 #ifdef KERNEL
-#ifdef __STDC__
 struct nameidata;
 struct mbuf;
-#endif
 
 struct vfsops {
 	char	*vfs_name;

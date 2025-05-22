@@ -59,9 +59,9 @@
 #include <machine/mtpr.h>
 #endif
 
-static struct mbuf *ip_insertoptions __P((struct mbuf *, struct mbuf *, int *));
+static struct mbuf *ip_insertoptions (struct mbuf *, struct mbuf *, int *);
 static void ip_mloopback
-	__P((struct ifnet *, struct mbuf *, struct sockaddr_in *));
+	(struct ifnet *, struct mbuf *, struct sockaddr_in *);
 
 #define ovbcopy bcopy
 

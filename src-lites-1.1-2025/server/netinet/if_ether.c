@@ -79,11 +79,11 @@ int	arpt_keep = (20*60);	/* once resolved, good for 20 more minutes */
 int	arpt_down = 20;		/* once declared down, don't send for 20 secs */
 #define	rt_expire rt_rmx.rmx_expire
 
-static	void arprequest __P((struct arpcom *, u_long *, u_long *, u_char *));
-static	void arptfree __P((struct llinfo_arp *));
-static	void arptimer __P((void *));
-static	struct llinfo_arp *arplookup __P((u_long, int, int));
-static	void in_arpinput __P((struct mbuf *));
+static	void arprequest (struct arpcom *, u_long *, u_long *, u_char *);
+static	void arptfree (struct llinfo_arp *);
+static	void arptimer (void *);
+static	struct llinfo_arp *arplookup (u_long, int, int);
+static	void in_arpinput (struct mbuf *);
 
 extern	struct ifnet loif;
 struct	llinfo_arp llinfo_arp = {&llinfo_arp, &llinfo_arp};

@@ -51,8 +51,8 @@
 #include <vm/vm.h>
 #include <sys/sysctl.h>
 
-void	pffasttimo __P((void *));
-void	pfslowtimo __P((void *));
+void	pffasttimo (void *);
+void	pfslowtimo (void *);
 
 #define	ADDDOMAIN(x)	{ \
 	extern struct domain __CONCAT(x,domain); \

@@ -414,7 +414,7 @@ tcp_ctlinput(cmd, sa, ip)
 	register struct tcphdr *th;
 	extern struct in_addr zeroin_addr;
 	extern mach_error_t inetctlerrmap[];
-	void (*notify) __P((struct inpcb *, int)) = tcp_notify;
+	void (*notify) (struct inpcb *, int) = tcp_notify;
 
 	if (cmd == PRC_QUENCH)
 		notify = tcp_quench;

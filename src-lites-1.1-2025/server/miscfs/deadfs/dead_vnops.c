@@ -46,46 +46,46 @@
  */
 int	dead_badop(),
 	dead_ebadf();
-int	dead_lookup __P((struct vop_lookup_args *));
-#define dead_create ((int (*) __P((struct  vop_create_args *)))dead_badop)
-#define dead_mknod ((int (*) __P((struct  vop_mknod_args *)))dead_badop)
-int	dead_open __P((struct vop_open_args *));
-#define dead_close ((int (*) __P((struct  vop_close_args *)))nullop)
-#define dead_access ((int (*) __P((struct  vop_access_args *)))dead_ebadf)
-#define dead_getattr ((int (*) __P((struct  vop_getattr_args *)))dead_ebadf)
-#define dead_setattr ((int (*) __P((struct  vop_setattr_args *)))dead_ebadf)
-int	dead_read __P((struct vop_read_args *));
-int	dead_write __P((struct vop_write_args *));
-int	dead_ioctl __P((struct vop_ioctl_args *));
-int	dead_select __P((struct vop_select_args *));
-#define dead_mmap ((int (*) __P((struct  vop_mmap_args *)))dead_badop)
-#define dead_fsync ((int (*) __P((struct  vop_fsync_args *)))nullop)
-#define dead_seek ((int (*) __P((struct  vop_seek_args *)))nullop)
-#define dead_remove ((int (*) __P((struct  vop_remove_args *)))dead_badop)
-#define dead_link ((int (*) __P((struct  vop_link_args *)))dead_badop)
-#define dead_rename ((int (*) __P((struct  vop_rename_args *)))dead_badop)
-#define dead_mkdir ((int (*) __P((struct  vop_mkdir_args *)))dead_badop)
-#define dead_rmdir ((int (*) __P((struct  vop_rmdir_args *)))dead_badop)
-#define dead_symlink ((int (*) __P((struct  vop_symlink_args *)))dead_badop)
-#define dead_readdir ((int (*) __P((struct  vop_readdir_args *)))dead_ebadf)
-#define dead_readlink ((int (*) __P((struct  vop_readlink_args *)))dead_ebadf)
-#define dead_abortop ((int (*) __P((struct  vop_abortop_args *)))dead_badop)
-#define dead_inactive ((int (*) __P((struct  vop_inactive_args *)))nullop)
-#define dead_reclaim ((int (*) __P((struct  vop_reclaim_args *)))nullop)
-int	dead_lock __P((struct vop_lock_args *));
-#define dead_unlock ((int (*) __P((struct  vop_unlock_args *)))nullop)
-int	dead_bmap __P((struct vop_bmap_args *));
-int	dead_strategy __P((struct vop_strategy_args *));
-int	dead_print __P((struct vop_print_args *));
-#define dead_islocked ((int (*) __P((struct  vop_islocked_args *)))nullop)
-#define dead_pathconf ((int (*) __P((struct  vop_pathconf_args *)))dead_ebadf)
-#define dead_advlock ((int (*) __P((struct  vop_advlock_args *)))dead_ebadf)
-#define dead_blkatoff ((int (*) __P((struct  vop_blkatoff_args *)))dead_badop)
-#define dead_valloc ((int (*) __P((struct  vop_valloc_args *)))dead_badop)
-#define dead_vfree ((int (*) __P((struct  vop_vfree_args *)))dead_badop)
-#define dead_truncate ((int (*) __P((struct  vop_truncate_args *)))nullop)
-#define dead_update ((int (*) __P((struct  vop_update_args *)))nullop)
-#define dead_bwrite ((int (*) __P((struct  vop_bwrite_args *)))nullop)
+int	dead_lookup (struct vop_lookup_args *);
+#define dead_create ((int (*) (struct  vop_create_args *))dead_badop)
+#define dead_mknod ((int (*) (struct  vop_mknod_args *))dead_badop)
+int	dead_open (struct vop_open_args *);
+#define dead_close ((int (*) (struct  vop_close_args *))nullop)
+#define dead_access ((int (*) (struct  vop_access_args *))dead_ebadf)
+#define dead_getattr ((int (*) (struct  vop_getattr_args *))dead_ebadf)
+#define dead_setattr ((int (*) (struct  vop_setattr_args *))dead_ebadf)
+int	dead_read (struct vop_read_args *);
+int	dead_write (struct vop_write_args *);
+int	dead_ioctl (struct vop_ioctl_args *);
+int	dead_select (struct vop_select_args *);
+#define dead_mmap ((int (*) (struct  vop_mmap_args *))dead_badop)
+#define dead_fsync ((int (*) (struct  vop_fsync_args *))nullop)
+#define dead_seek ((int (*) (struct  vop_seek_args *))nullop)
+#define dead_remove ((int (*) (struct  vop_remove_args *))dead_badop)
+#define dead_link ((int (*) (struct  vop_link_args *))dead_badop)
+#define dead_rename ((int (*) (struct  vop_rename_args *))dead_badop)
+#define dead_mkdir ((int (*) (struct  vop_mkdir_args *))dead_badop)
+#define dead_rmdir ((int (*) (struct  vop_rmdir_args *))dead_badop)
+#define dead_symlink ((int (*) (struct  vop_symlink_args *))dead_badop)
+#define dead_readdir ((int (*) (struct  vop_readdir_args *))dead_ebadf)
+#define dead_readlink ((int (*) (struct  vop_readlink_args *))dead_ebadf)
+#define dead_abortop ((int (*) (struct  vop_abortop_args *))dead_badop)
+#define dead_inactive ((int (*) (struct  vop_inactive_args *))nullop)
+#define dead_reclaim ((int (*) (struct  vop_reclaim_args *))nullop)
+int	dead_lock (struct vop_lock_args *);
+#define dead_unlock ((int (*) (struct  vop_unlock_args *))nullop)
+int	dead_bmap (struct vop_bmap_args *);
+int	dead_strategy (struct vop_strategy_args *);
+int	dead_print (struct vop_print_args *);
+#define dead_islocked ((int (*) (struct  vop_islocked_args *))nullop)
+#define dead_pathconf ((int (*) (struct  vop_pathconf_args *))dead_ebadf)
+#define dead_advlock ((int (*) (struct  vop_advlock_args *))dead_ebadf)
+#define dead_blkatoff ((int (*) (struct  vop_blkatoff_args *))dead_badop)
+#define dead_valloc ((int (*) (struct  vop_valloc_args *))dead_badop)
+#define dead_vfree ((int (*) (struct  vop_vfree_args *))dead_badop)
+#define dead_truncate ((int (*) (struct  vop_truncate_args *))nullop)
+#define dead_update ((int (*) (struct  vop_update_args *))nullop)
+#define dead_bwrite ((int (*) (struct  vop_bwrite_args *))nullop)
 
 int (**dead_vnodeop_p)();
 struct vnodeopv_entry_desc dead_vnodeop_entries[] = {

@@ -356,10 +356,8 @@ extern int tp_rttadd, tp_rttdiv;
 
 #include <netiso/tp_states.h>
 #include <netiso/tp_events.h>
-#if defined(__STDC__) || defined(__cplusplus)
 #undef ATTR
 #define ATTR(X) ev_union.EV_ ## X
-#endif /* defined(__STDC__) || defined(__cplusplus) */
 
 #endif  /* tp_NSTATES  */
 #endif /* KERNEL */

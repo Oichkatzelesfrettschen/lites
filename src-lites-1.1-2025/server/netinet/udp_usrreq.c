@@ -68,9 +68,9 @@ int	udpcksum = 0;		/* XXX */
 struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET };
 struct	inpcb *udp_last_inpcb = &udb;
 
-static	void udp_detach __P((struct inpcb *));
-static	void udp_notify __P((struct inpcb *, int));
-static	struct mbuf *udp_saveopt __P((caddr_t, int, int));
+static	void udp_detach (struct inpcb *);
+static	void udp_notify (struct inpcb *, int);
+static	struct mbuf *udp_saveopt (caddr_t, int, int);
 
 void
 udp_init()
