@@ -94,5 +94,5 @@ struct bpf_if {
 };
 
 #ifdef KERNEL
-int	 bpf_setf __P((struct bpf_d *, struct bpf_program *));
+int	 bpf_setf (struct bpf_d *, struct bpf_program *);
 #endif

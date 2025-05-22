@@ -88,22 +88,22 @@ struct union_node {
 #define UN_ULOCK	0x04		/* Upper node is locked */
 #define UN_KLOCK	0x08		/* Keep upper node locked on vput */
 
-extern int union_allocvp __P((struct vnode **, struct mount *,
+extern int union_allocvp (struct vnode **, struct mount *,
 				struct vnode *, struct vnode *,
 				struct componentname *, struct vnode *,
-				struct vnode *));
-extern int union_copyfile __P((struct proc *, struct ucred *,
-				struct vnode *, struct vnode *));
-extern int union_mkshadow __P((struct union_mount *, struct vnode *,
-				struct componentname *, struct vnode **));
-extern int union_vn_create __P((struct vnode **, struct union_node *,
-				struct proc *));
-extern int union_cn_close __P((struct vnode *, int, struct ucred *,
-				struct proc *));
-extern void union_removed_upper __P((struct union_node *un));
-extern struct vnode *union_lowervp __P((struct vnode *));
-extern void union_newlower __P((struct union_node *, struct vnode *));
-extern void union_newupper __P((struct union_node *, struct vnode *));
+				struct vnode *);
+extern int union_copyfile (struct proc *, struct ucred *,
+				struct vnode *, struct vnode *);
+extern int union_mkshadow (struct union_mount *, struct vnode *,
+				struct componentname *, struct vnode **);
+extern int union_vn_create (struct vnode **, struct union_node *,
+				struct proc *);
+extern int union_cn_close (struct vnode *, int, struct ucred *,
+				struct proc *);
+extern void union_removed_upper (struct union_node *un);
+extern struct vnode *union_lowervp (struct vnode *);
+extern void union_newlower (struct union_node *, struct vnode *);
+extern void union_newupper (struct union_node *, struct vnode *);
 
 #define	MOUNTTOUNIONMOUNT(mp) ((struct union_mount *)((mp)->mnt_data))
 #define	VTOUNION(vp) ((struct union_node *)(vp)->v_data)

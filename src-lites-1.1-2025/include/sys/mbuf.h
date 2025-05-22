@@ -376,17 +376,17 @@ int	max_hdr;			/* largest link+protocol header */
 int	max_datalen;			/* MHLEN - max_hdr */
 extern	int mbtypes[];			/* XXX */
 
-struct	mbuf *m_copym __P((struct mbuf *, int, int, int));
-struct	mbuf *m_free __P((struct mbuf *));
-struct	mbuf *m_get __P((int, int));
-struct	mbuf *m_getclr __P((int, int));
-struct	mbuf *m_gethdr __P((int, int));
-struct	mbuf *m_prepend __P((struct mbuf *, int, int));
-struct	mbuf *m_pullup __P((struct mbuf *, int));
-struct	mbuf *m_get_retry __P((int));
-struct	mbuf *m_retryhdr __P((int, int));
-void	m_copyback __P((struct mbuf *, int, int, caddr_t));
-void	m_freem __P((struct mbuf *));
+struct	mbuf *m_copym (struct mbuf *, int, int, int);
+struct	mbuf *m_free (struct mbuf *);
+struct	mbuf *m_get (int, int);
+struct	mbuf *m_getclr (int, int);
+struct	mbuf *m_gethdr (int, int);
+struct	mbuf *m_prepend (struct mbuf *, int, int);
+struct	mbuf *m_pullup (struct mbuf *, int);
+struct	mbuf *m_get_retry (int);
+struct	mbuf *m_retryhdr (int, int);
+void	m_copyback (struct mbuf *, int, int, caddr_t);
+void	m_freem (struct mbuf *);
 struct mbuf *mclgetx(void (*fun)(char *), caddr_t arg, caddr_t addr, int len, int wait);
 
 #ifdef MBTYPES

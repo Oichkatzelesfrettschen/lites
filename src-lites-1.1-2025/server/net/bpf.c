@@ -45,7 +45,6 @@
 
 #if NBPFILTER > 0
 
-
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>

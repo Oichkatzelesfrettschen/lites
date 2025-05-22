@@ -329,7 +329,7 @@ struct partinfo {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-struct disklabel *getdiskbyname __P((const char *));
+struct disklabel *getdiskbyname (const char *);
 __END_DECLS
 
 #endif

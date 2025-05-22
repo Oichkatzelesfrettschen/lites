@@ -35,7 +35,7 @@
 
 typedef struct session *tpr_t;
 
-tpr_t	tprintf_open __P((struct proc *));
-void	tprintf_close __P((tpr_t));
+tpr_t	tprintf_open (struct proc *);
+void	tprintf_close (tpr_t);
 
-void	tprintf __P((tpr_t, const char *fmt, ...));
+void	tprintf (tpr_t, const char *fmt, ...);
