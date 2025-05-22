@@ -24,7 +24,7 @@ apt-get update -y
 #— core build tools, formatters, analysis, science libs
 for pkg in \
   build-essential gcc g++ clang lld llvm \
-  clang-format clang-tidy uncrustify astyle editorconfig pre-commit \
+  clang-format clang-tidy uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
@@ -46,8 +46,13 @@ for pkg in \
 done
 
 pip3 install --no-cache-dir \
+  pre-commit \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
+
+if command -v pre-commit >/dev/null 2>&1; then
+  pre-commit install-hooks || true
+fi
 
 #— QEMU emulation for foreign binaries
 for pkg in \
