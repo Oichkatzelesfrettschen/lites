@@ -47,7 +47,7 @@
 #elif defined(__x86_64__)
 #include <ufs/ext2fs/x86_64-bitops.h>
 #else
-#error please provide bit operation functions
+#include <ufs/ext2fs/generic-bitops.h>
 #endif
 
 /* this is supposed to mark a buffer dirty on ready for delayed writing

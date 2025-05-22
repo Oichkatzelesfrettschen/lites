@@ -46,7 +46,7 @@
 #elif defined(__x86_64__)
 #include <ufs/ext2fs/x86_64-bitops.h>
 #else
-#error Provide an bitops.h file, please !
+#include <ufs/ext2fs/generic-bitops.h>
 #endif
 
 unsigned long ext2_count_free (struct buffer_head *, unsigned int);
