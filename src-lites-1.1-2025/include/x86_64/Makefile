@@ -27,7 +27,7 @@
 #	Date:	 1992, 1994
 #
 # This Makefile copies the header files from the bsdss source
-# i386 directory to the export directory where they can be found
+# x86_64 directory to the export directory where they can be found
 # in the directory "machine". This eliminates the need for 
 # machine links in the sources.
 
