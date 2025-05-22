@@ -165,7 +165,7 @@
 #define MAP_FILE_BASE	0x90000000
 
 /*
- * i386 stack sits above emulator.
+ * x86_64 stack sits above emulator.
  */
 #define	EMULATOR_ABOVE_STACK	0
 
