@@ -1,0 +1,4 @@
+Checks: '-*,clang-analyzer-*'
+WarningsAsErrors: ''
+ExtraArgs: ['-std=c2x']
+ExtraArgsCC: ['-std=c++17']

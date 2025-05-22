@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format
+        entry: clang-format -i
+        language: system
+        files: \.(c|h|cpp|hpp|cc)$
+      - id: clang-tidy-c
+        name: clang-tidy C
+        entry: clang-tidy --extra-arg=-std=c2x
+        language: system
+        types: [c]
+      - id: clang-tidy-cpp
+        name: clang-tidy C++
+        entry: clang-tidy --extra-arg=-std=c++17
+        language: system
+        types: [c++,cpp]
