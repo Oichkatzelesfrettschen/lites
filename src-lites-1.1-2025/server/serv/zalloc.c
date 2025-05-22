@@ -1,15 +1,15 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
  * Copyright (c) 1994 Johannes Helander
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON AND JOHANNES HELANDER ALLOW FREE USE OF THIS
  * SOFTWARE IN ITS "AS IS" CONDITION.  CARNEGIE MELLON AND JOHANNES
  * HELANDER DISCLAIM ANY LIABILITY OF ANY KIND FOR ANY DAMAGES
@@ -22,7 +22,7 @@
  * Initial Lites release from hut.fi
  *
  */
-/* 
+/*
  *	File:	serv/zalloc.c
  *	Authors:
  *	Randall Dean, Carnegie Mellon University, 1992.
@@ -92,7 +92,7 @@ zone_t zinit(size, max, alloc, pageable, name)
 	boolean_t	pageable;	/* is this zone pageable? */
 	char		*name;		/* a name for the zone */
 {
-	register zone_t		z;
+	zone_t		z;
 
 	if (zone_zone == ZONE_NULL)
 		z = (zone_t) zdata;
@@ -136,11 +136,11 @@ zone_t zinit(size, max, alloc, pageable, name)
  *	Cram the given memory into the specified zone.
  */
 void zcram(zone, newmem, size)
-	register zone_t		zone;
+	zone_t		zone;
 	vm_offset_t		newmem;
 	vm_size_t		size;
 {
-	register vm_size_t	elem_size;
+	vm_size_t	elem_size;
 
 	elem_size = zone->elem_size;
 
@@ -159,9 +159,9 @@ void zcram(zone, newmem, size)
  *	zalloc returns an element from the specified zone.
  */
 vm_offset_t zalloc(zone)
-	register zone_t	zone;
+	zone_t	zone;
 {
-	register vm_offset_t	addr;
+	vm_offset_t	addr;
 
 	if (zone == ZONE_NULL)
 		panic ("zalloc: null zone");
@@ -221,9 +221,9 @@ vm_offset_t zalloc(zone)
  *	processing an interrupt).
  */
 vm_offset_t zget(zone)
-	register zone_t	zone;
+	zone_t	zone;
 {
-	register vm_offset_t	addr;
+	vm_offset_t	addr;
 
 	if (zone == ZONE_NULL)
 		panic ("zalloc: null zone");
@@ -236,7 +236,7 @@ vm_offset_t zget(zone)
 }
 
 void zfree(zone, elem)
-	register zone_t	zone;
+	zone_t	zone;
 	vm_offset_t	elem;
 {
 	lock_zone(zone);

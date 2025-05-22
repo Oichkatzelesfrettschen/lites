@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1994, The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  *
@@ -139,7 +139,7 @@
 #define	PC_PRIV_USER	3
 #define	USERMODE(pc)	(((pc) & PC_PRIV_MASK) != PC_PRIV_KERN)
 
-#define	DELAY(n)	{ register int N = (n); while (--N > 0); }
+#define	DELAY(n)	do { volatile int N = (n); while (--N > 0); } while (0)
 
 #ifdef HPUXCOMPAT
 /*
