@@ -27,14 +27,23 @@ elseif(ARCH STREQUAL "ppc64")
 endif()
 
 # Optionally allow building out-of-tree archives.
-set(LITES_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3" CACHE PATH "Extracted lites source")
+# Prefer the modernised tree if present.  Otherwise fall back to an
+# extracted historical archive under build/.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
+    set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
+else()
+    set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3")
+endif()
+set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
 
 # Collect sources for server and emulator if the directory exists
 if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB_RECURSE SERVER_SRC
         "${LITES_SRC_DIR}/server/*.c")
-    file(GLOB_RECURSE EMULATOR_SRC
-        "${LITES_SRC_DIR}/emulator/*.c")
+    if(EXISTS "${LITES_SRC_DIR}/emulator")
+        file(GLOB_RECURSE EMULATOR_SRC
+            "${LITES_SRC_DIR}/emulator/*.c")
+    endif()
 
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
@@ -43,11 +52,13 @@ if(EXISTS "${LITES_SRC_DIR}")
     target_compile_options(lites_server PRIVATE -std=c2x ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
 
-    add_executable(lites_emulator ${EMULATOR_SRC})
-    target_include_directories(lites_emulator PRIVATE
-        "${LITES_SRC_DIR}/include"
-        "${LITES_SRC_DIR}/emulator")
-    target_compile_options(lites_emulator PRIVATE -std=c2x ${CFLAGS})
-    target_link_options(lites_emulator PRIVATE ${LDFLAGS})
+    if(EMULATOR_SRC)
+        add_executable(lites_emulator ${EMULATOR_SRC})
+        target_include_directories(lites_emulator PRIVATE
+            "${LITES_SRC_DIR}/include"
+            "${LITES_SRC_DIR}/emulator")
+        target_compile_options(lites_emulator PRIVATE -std=c2x ${CFLAGS})
+        target_link_options(lites_emulator PRIVATE ${LDFLAGS})
+    endif()
 endif()
 

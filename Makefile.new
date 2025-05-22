@@ -1,4 +1,9 @@
-SRCDIR := build/lites-1.1.u3
+# Prefer the modernised source tree if present
+ifeq ($(wildcard src-lites-1.1-2025),src-lites-1.1-2025)
+SRCDIR ?= src-lites-1.1-2025
+else
+SRCDIR ?= build/lites-1.1.u3
+endif
 CC ?= gcc
 
 # Target architecture (x86_64, i686, ppc64 or ppc).  Determines -m32/-m64 flags
@@ -25,15 +30,24 @@ CFLAGS += -m64
 endif
 
 SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c')
+ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c')
+endif
 
-all: lites_server lites_emulator
+TARGETS := lites_server
+ifneq ($(EMULATOR_SRC),)
+TARGETS += lites_emulator
+endif
+
+all: $(TARGETS)
 
 lites_server: $(SERVER_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include -I$(SRCDIR)/server $^ $(LDFLAGS) -o $@
 
+ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include -I$(SRCDIR)/emulator $^ $(LDFLAGS) -o $@
+        $(CC) $(CFLAGS) -I$(SRCDIR)/include -I$(SRCDIR)/emulator $^ $(LDFLAGS) -o $@
+endif
 
 clean:
 	rm -f lites_server lites_emulator
