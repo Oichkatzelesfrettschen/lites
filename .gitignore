@@ -20,6 +20,7 @@ a.out
 /obj/
 /dist/
 /release/
+compile_commands.json
 
 # Ignore archived source tarballs
 *.tar.gz

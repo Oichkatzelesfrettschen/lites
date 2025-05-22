@@ -143,6 +143,17 @@ rm /tmp/protoc.zip
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
 
+# Install git hooks and sanity check dev tools
+pre-commit install >/dev/null 2>&1 || true
+clang-format --version >/dev/null 2>&1 || true
+clang-tidy --version >/dev/null 2>&1 || true
+
+# Generate a compilation database for clang tooling
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1 || true
+if [ -f build/compile_commands.json ]; then
+  ln -sf build/compile_commands.json compile_commands.json
+fi
+
 # verify links from the README
 if [ -f README.md ]; then
   echo "Checking repository links..."
