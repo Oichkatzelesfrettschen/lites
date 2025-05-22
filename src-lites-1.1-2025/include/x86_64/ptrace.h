@@ -36,5 +36,5 @@
 /*
  * Machine dependent trace commands.
  *
- * None for the i386 at this time.
- */
+ * None for x86_64 at this time.
+*/
