@@ -18,14 +18,28 @@ CFLAGS ?= -O2 $(C23_FLAG)
 ifeq ($(ARCH),i686)
 CFLAGS += -m32
 LDFLAGS += -m32
+ARCH_INCDIR := -I$(SRCDIR)/include/i386
 else ifeq ($(ARCH),x86_64)
 CFLAGS += -m64
 LDFLAGS += -m64
 ARCH_INCDIR := -I$(SRCDIR)/include/x86_64
 endif
 
-SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c' -o -name '*.s')
-SERVER_INCDIRS := $(shell find $(SRCDIR)/server -type d | sed 's/^/-I/')
+# Map ARCH to the corresponding directory name
+ARCH_DIR := $(ARCH)
+ifeq ($(ARCH),i686)
+ARCH_DIR := i386
+endif
+
+# Directories under server that are architecture independent
+SERVER_COMMON_DIRS := $(shell find $(SRCDIR)/server -mindepth 1 -maxdepth 1 -type d \
+    | grep -Ev '/(i386|x86_64|mips|ns532|parisc)$' | tr '\n' ' ')
+
+# Source files and include directories for the selected architecture
+SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
+SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.s))
+SERVER_INCDIRS := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -type d | sed 's/^/-I/'))
+
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.s')
 EMULATOR_INCDIRS := $(shell find $(SRCDIR)/emulator -type d | sed 's/^/-I/')

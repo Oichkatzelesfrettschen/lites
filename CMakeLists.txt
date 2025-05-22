@@ -53,11 +53,41 @@ endif()
 
 # Collect sources for server and emulator if the directory exists
 if(EXISTS "${LITES_SRC_DIR}")
-    file(GLOB_RECURSE SERVER_SRC
-        "${LITES_SRC_DIR}/server/*.c" "${LITES_SRC_DIR}/server/*.s")
+    # Collect architecture specific and common server sources
+    file(GLOB SERVER_SUBDIRS RELATIVE "${LITES_SRC_DIR}/server" "${LITES_SRC_DIR}/server/*")
+    set(SERVER_DIRS "${LITES_SRC_DIR}/server/${ARCH}")
+    foreach(dir ${SERVER_SUBDIRS})
+        if(IS_DIRECTORY "${LITES_SRC_DIR}/server/${dir}")
+            if(NOT dir STREQUAL "i386" AND NOT dir STREQUAL "x86_64" AND
+               NOT dir STREQUAL "mips" AND NOT dir STREQUAL "ns532" AND
+               NOT dir STREQUAL "parisc")
+                list(APPEND SERVER_DIRS "${LITES_SRC_DIR}/server/${dir}")
+            endif()
+        endif()
+    endforeach()
+    set(SERVER_SRC)
+    foreach(dir ${SERVER_DIRS})
+        file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.s")
+        list(APPEND SERVER_SRC ${_dir_src})
+    endforeach()
+
     if(EXISTS "${LITES_SRC_DIR}/emulator")
-        file(GLOB_RECURSE EMULATOR_SRC
-            "${LITES_SRC_DIR}/emulator/*.c" "${LITES_SRC_DIR}/emulator/*.s")
+        file(GLOB EMULATOR_SUBDIRS RELATIVE "${LITES_SRC_DIR}/emulator" "${LITES_SRC_DIR}/emulator/*")
+        set(EMULATOR_DIRS "${LITES_SRC_DIR}/emulator/${ARCH}")
+        foreach(dir ${EMULATOR_SUBDIRS})
+            if(IS_DIRECTORY "${LITES_SRC_DIR}/emulator/${dir}")
+                if(NOT dir STREQUAL "i386" AND NOT dir STREQUAL "x86_64" AND
+                   NOT dir STREQUAL "mips" AND NOT dir STREQUAL "ns532" AND
+                   NOT dir STREQUAL "parisc")
+                    list(APPEND EMULATOR_DIRS "${LITES_SRC_DIR}/emulator/${dir}")
+                endif()
+            endif()
+        endforeach()
+        set(EMULATOR_SRC)
+        foreach(dir ${EMULATOR_DIRS})
+            file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.s")
+            list(APPEND EMULATOR_SRC ${_dir_src})
+        endforeach()
     endif()
 
     add_executable(lites_server ${SERVER_SRC})
@@ -67,6 +97,9 @@ if(EXISTS "${LITES_SRC_DIR}")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
+    elseif(ARCH STREQUAL "i686")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/i386")
     endif()
     target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
@@ -79,6 +112,9 @@ if(EXISTS "${LITES_SRC_DIR}")
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")
+        elseif(ARCH STREQUAL "i686")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/i386")
         endif()
         target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
