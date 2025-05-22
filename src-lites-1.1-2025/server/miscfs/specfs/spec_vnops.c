@@ -544,7 +544,7 @@ spec_close(ap)
 {
 	register struct vnode *vp = ap->a_vp;
 	dev_t dev = vp->v_rdev;
-	int (*devclose) __P((dev_t, int, int, struct proc *));
+	int (*devclose) (dev_t, int, int, struct proc *);
 	int mode, error;
 
 	switch (vp->v_type) {

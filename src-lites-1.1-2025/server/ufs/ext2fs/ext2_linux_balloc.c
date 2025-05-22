@@ -49,7 +49,7 @@
 #error Provide an bitops.h file, please !
 #endif
 
-unsigned long ext2_count_free __P((struct buffer_head *, unsigned int));
+unsigned long ext2_count_free (struct buffer_head *, unsigned int);
 
 #define in_range(b, first, len)		((b) >= (first) && (b) <= (first) + (len) - 1)
 

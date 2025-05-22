@@ -391,7 +391,7 @@ umapfs_vptofh(vp, fhp)
 	return (VFS_VPTOFH(UMAPVPTOLOWERVP(vp), fhp));
 }
 
-int umapfs_init __P((void));
+int umapfs_init (void);
 
 struct vfsops umap_vfsops = {
 	"umap",

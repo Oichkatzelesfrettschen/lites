@@ -352,7 +352,7 @@ in_pcbnotify(head, dst, fport_arg, laddr, lport_arg, cmd, notify)
 	u_int fport_arg, lport_arg;
 	struct in_addr laddr;
 	ioctl_cmd_t cmd;
-	void (*notify) __P((struct inpcb *, int));
+	void (*notify) (struct inpcb *, int);
 {
 	extern mach_error_t inetctlerrmap[];
 	register struct inpcb *inp, *oinp;

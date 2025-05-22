@@ -61,16 +61,11 @@
 #include <sys/time.h>
 #endif
 
-#ifdef __STDC__
-/*
- * Forward structure declarations for function prototypes [sic].
- */
-struct	mbuf;
-struct	proc;
-struct	rtentry;	
-struct	socket;
-struct	ether_header;
-#endif
+struct  mbuf;
+struct  proc;
+struct  rtentry;
+struct  socket;
+struct  ether_header;
 /*
  * Structure describing information about an interface
  * which may be of interest to management entities.

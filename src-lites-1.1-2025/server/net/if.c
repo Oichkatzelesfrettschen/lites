@@ -50,7 +50,7 @@
 #include <net/if_types.h>
 
 int	ifqmaxlen = IFQ_MAXLEN;
-void	if_slowtimo __P((void *arg));
+void	if_slowtimo (void *arg);
 
 /*
  * Network interface utility routines.
@@ -87,7 +87,7 @@ ifubareset(uban)
 
 int if_index = 0;
 struct ifaddr **ifnet_addrs;
-static char *sprint_d __P((u_int, char *, int));
+static char *sprint_d (u_int, char *, int);
 
 /*
  * Attach an interface to the

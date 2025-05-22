@@ -78,7 +78,7 @@ int	npty = NPTY;		/* for pstat -t */
 #define	PF_NOSTOP	0x40
 #define PF_UCNTL	0x80		/* user control mode */
 
-void	ptsstop __P((struct tty *, int));
+void	ptsstop (struct tty *, int);
 
 /* Lookup pty */
 struct tty *
@@ -269,14 +269,8 @@ ptcwakeup(tp, flag)
 }
 
 /*ARGSUSED*/
-#ifdef __STDC__
 ptcopen(dev_t dev, int flag, int devtype, struct proc *p)
-#else
-ptcopen(dev, flag, devtype, p)
-	dev_t dev;
-	int flag, devtype;
-	struct proc *p;
-#endif
+
 {
 	register struct tty *tp;
 	struct pt_ioctl *pti;

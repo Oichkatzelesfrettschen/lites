@@ -109,7 +109,7 @@ extern	int if_index;
 u_long	*ip_ifmatrix;
 #endif
 
-static void save_rte __P((u_char *, struct in_addr));
+static void save_rte (u_char *, struct in_addr);
 /*
  * IP initialization: fill in IP protocol switch table.
  * All protocols not implemented in kernel go to raw IP protocol handler.

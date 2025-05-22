@@ -69,7 +69,7 @@
 #include <ufs/ext2fs/ext2_fs.h>
 #include <ufs/ext2fs/ext2_fs_sb.h>
 
-int ext2_sbupdate __P((struct ufsmount *, int));
+int ext2_sbupdate (struct ufsmount *, int);
 
 struct vfsops ext2fs_vfsops = {
 	"ext2fs",

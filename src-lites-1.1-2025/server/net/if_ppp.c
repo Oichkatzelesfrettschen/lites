@@ -131,26 +131,26 @@
 
 struct ppp_softc ppp_softc[NPPP];
 
-void	pppattach __P((void));
-int	pppopen __P((dev_t dev, struct tty *tp));
-void	pppclose __P((struct tty *tp, int flag));
-int	pppread __P((struct tty *tp, struct uio *uio, int flag));
-int	pppwrite __P((struct tty *tp, struct uio *uio, int flag));
-int	ppptioctl __P((struct tty *tp, int cmd, caddr_t data, int flag,
-		       struct proc *));
-int	pppoutput __P((struct ifnet *ifp, struct mbuf *m0,
-		       struct sockaddr *dst));
-void	pppinput __P((int c, struct tty *tp));
-int	pppioctl __P((struct ifnet *ifp, int cmd, caddr_t data));
-void	pppstart __P((struct tty *tp));
+void	pppattach (void);
+int	pppopen (dev_t dev, struct tty *tp);
+void	pppclose (struct tty *tp, int flag);
+int	pppread (struct tty *tp, struct uio *uio, int flag);
+int	pppwrite (struct tty *tp, struct uio *uio, int flag);
+int	ppptioctl (struct tty *tp, int cmd, caddr_t data, int flag,
+		       struct proc *);
+int	pppoutput (struct ifnet *ifp, struct mbuf *m0,
+		       struct sockaddr *dst);
+void	pppinput (int c, struct tty *tp);
+int	pppioctl (struct ifnet *ifp, int cmd, caddr_t data);
+void	pppstart (struct tty *tp);
 
-static int	pppasyncstart __P((struct ppp_softc *));
-static u_short	pppfcs __P((u_short fcs, u_char *cp, int len));
-static int	pppgetm __P((struct ppp_softc *sc));
-static struct	mbuf *ppp_btom __P((struct ppp_softc *sc));
-static void	pppdumpm __P((struct mbuf *m0, int pktlen));
-static void	pppdumpb __P((u_char *b, int l));
-static void	ppplogchar __P((struct ppp_softc *, int));
+static int	pppasyncstart (struct ppp_softc *);
+static u_short	pppfcs (u_short fcs, u_char *cp, int len);
+static int	pppgetm (struct ppp_softc *sc);
+static struct	mbuf *ppp_btom (struct ppp_softc *sc);
+static void	pppdumpm (struct mbuf *m0, int pktlen);
+static void	pppdumpb (u_char *b, int l);
+static void	ppplogchar (struct ppp_softc *, int);
 
 /*
  * Some useful mbuf macros not in mbuf.h.

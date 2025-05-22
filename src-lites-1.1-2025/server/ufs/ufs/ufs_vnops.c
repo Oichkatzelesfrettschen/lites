@@ -78,9 +78,9 @@
 #include <ufs/ufs/ufsmount.h>
 #include <ufs/ufs/ufs_extern.h>
 
-static int ufs_chmod __P((struct vnode *, int, struct ucred *, struct proc *));
+static int ufs_chmod (struct vnode *, int, struct ucred *, struct proc *);
 static int ufs_chown
-	__P((struct vnode *, uid_t, gid_t, struct ucred *, struct proc *));
+	(struct vnode *, uid_t, gid_t, struct ucred *, struct proc *);
 
 #if EXT2FS
 #include <ufs/ext2fs/ext2_extern.h>

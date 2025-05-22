@@ -46,45 +46,45 @@
 #include <sys/tty.h>
 #include <sys/conf.h>
 
-#define	ttynodisc ((int (*) __P((dev_t, struct tty *)))enodev)
-#define	ttyerrclose ((int (*) __P((struct tty *, int flags)))enodev)
-#define	ttyerrio ((int (*) __P((struct tty *, struct uio *, int)))enodev)
-#define	ttyerrinput ((int (*) __P((int c, struct tty *)))enodev)
-#define	ttyerrstart ((int (*) __P((struct tty *)))enodev)
+#define	ttynodisc ((int (*) (dev_t, struct tty *))enodev)
+#define	ttyerrclose ((int (*) (struct tty *, int flags))enodev)
+#define	ttyerrio ((int (*) (struct tty *, struct uio *, int))enodev)
+#define	ttyerrinput ((int (*) (int c, struct tty *))enodev)
+#define	ttyerrstart ((int (*) (struct tty *))enodev)
 
-int	nullioctl __P((struct tty *tp, int cmd, caddr_t data,
-			int flag, struct proc *p));
+int	nullioctl (struct tty *tp, int cmd, caddr_t data,
+			int flag, struct proc *p);
 
 #include "tb.h"
 #if NTB > 0
-int	tbopen __P((dev_t dev, struct tty *tp));
-int	tbclose __P((struct tty *tp, int flags));
-int	tbread __P((struct tty *, struct uio *, int flags));
-int	tbioctl __P((struct tty *tp, int cmd, caddr_t data,
-			int flag, struct proc *p));
-int	tbinput __P((int c, struct tty *tp));
+int	tbopen (dev_t dev, struct tty *tp);
+int	tbclose (struct tty *tp, int flags);
+int	tbread (struct tty *, struct uio *, int flags);
+int	tbioctl (struct tty *tp, int cmd, caddr_t data,
+			int flag, struct proc *p);
+int	tbinput (int c, struct tty *tp);
 #endif
 
 #include "sl.h"
 #if NSL > 0
-int	slopen __P((dev_t dev, struct tty *tp));
-int	slclose __P((struct tty *tp, int flags));
-int	sltioctl __P((struct tty *tp, int cmd, caddr_t data,
-			int flag, struct proc *p));
-int	slinput __P((int c, struct tty *tp));
-int	slstart __P((struct tty *tp));
+int	slopen (dev_t dev, struct tty *tp);
+int	slclose (struct tty *tp, int flags);
+int	sltioctl (struct tty *tp, int cmd, caddr_t data,
+			int flag, struct proc *p);
+int	slinput (int c, struct tty *tp);
+int	slstart (struct tty *tp);
 #endif
 
 #include "ppp.h"
 #if NPPP > 0
-int	pppopen __P((dev_t dev, struct tty *tp));
-int	pppclose __P((struct tty *tp, int flags));
-int	pppread __P((struct tty *tp, struct uio *uio, int flags));
-int	pppwrite __P((struct tty *tp, struct uio *uio, int flags));
-int	ppptioctl __P((struct tty *tp, int cmd, caddr_t data,
-		       	int flag, struct proc *p));
-int	pppinput __P((int c, struct tty *tp));
-int	pppstart __P((struct tty *tp));
+int	pppopen (dev_t dev, struct tty *tp);
+int	pppclose (struct tty *tp, int flags);
+int	pppread (struct tty *tp, struct uio *uio, int flags);
+int	pppwrite (struct tty *tp, struct uio *uio, int flags);
+int	ppptioctl (struct tty *tp, int cmd, caddr_t data,
+		       	int flag, struct proc *p);
+int	pppinput (int c, struct tty *tp);
+int	pppstart (struct tty *tp);
 #endif
 
 struct	linesw linesw[] =

@@ -91,10 +91,10 @@ struct nfs_diskless nfs_diskless = { 0 };
 
 extern u_long nfs_procids[NFS_NPROCS];
 extern u_long nfs_prog, nfs_vers;
-void nfs_disconnect __P((struct nfsmount *));
-void nfsargs_ntoh __P((struct nfs_args *));
-static struct mount *nfs_mountdiskless __P((char *, char *, int,
-    struct sockaddr_in *, struct nfs_args *, register struct vnode **));
+void nfs_disconnect (struct nfsmount *);
+void nfsargs_ntoh (struct nfs_args *);
+static struct mount *nfs_mountdiskless (char *, char *, int,
+    struct sockaddr_in *, struct nfs_args *, register struct vnode **);
 
 /*
  * nfs statfs call

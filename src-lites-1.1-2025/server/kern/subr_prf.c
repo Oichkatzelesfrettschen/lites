@@ -126,10 +126,10 @@ extern	cnputc();		/* standard console putc */
 int	(*v_putc)() = cnputc;	/* routine to putc on virtual console */
 #endif
 
-void  logpri __P((int level));
-static void  putchar __P((int ch, int flags, struct tty *tp));
-static char *ksprintn __P((u_long num, int base, int *len));
-void kprintf __P((const char *fmt, int flags, struct tty *tp, va_list ap));
+void  logpri (int level);
+static void  putchar (int ch, int flags, struct tty *tp);
+static char *ksprintn (u_long num, int base, int *len);
+void kprintf (const char *fmt, int flags, struct tty *tp, va_list ap);
 
 int consintr = 1;			/* Ok to handle console interrupts? */
 

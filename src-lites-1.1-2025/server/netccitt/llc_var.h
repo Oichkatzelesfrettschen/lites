@@ -39,12 +39,8 @@
  *	@(#)llc_var.h	8.1 (Berkeley) 6/10/93
  */
 
-#ifdef __STDC__
-/*
- * Forward structure declarations for function prototypes [sic].
- */
 struct llc;
-#endif
+
 
 #define	NPAIDB_LINK	0
 

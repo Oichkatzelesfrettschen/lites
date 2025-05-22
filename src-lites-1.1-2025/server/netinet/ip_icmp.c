@@ -180,7 +180,7 @@ icmp_input(m, hlen)
 	int icmplen = ip->ip_len;
 	register int i;
 	struct in_ifaddr *ia;
-	void (*ctlfunc) __P((int, struct sockaddr *, struct ip *));
+	void (*ctlfunc) (int, struct sockaddr *, struct ip *);
 	int code;
 	extern u_char ip_protox[];
 

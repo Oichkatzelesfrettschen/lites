@@ -61,7 +61,7 @@
 #include <ufs/ffs/fs.h>
 #include <ufs/ffs/ffs_extern.h>
 
-int ffs_sbupdate __P((struct ufsmount *, int));
+int ffs_sbupdate (struct ufsmount *, int);
 
 struct vfsops ufs_vfsops = {
 	"ffs",

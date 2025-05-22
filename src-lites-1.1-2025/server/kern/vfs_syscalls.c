@@ -60,7 +60,7 @@
 #include <vm/vm.h>
 #include <sys/sysctl.h>
 
-static int change_dir __P((struct nameidata *ndp, struct proc *p));
+static int change_dir (struct nameidata *ndp, struct proc *p);
 
 /*
  * Virtual File System System Calls
@@ -2003,7 +2003,7 @@ unionread:
 #if UNION
 {
 	extern int (**union_vnodeop_p)();
-	extern struct vnode *union_lowervp __P((struct vnode *));
+	extern struct vnode *union_lowervp (struct vnode *);
 
 	if ((uap->count == auio.uio_resid) &&
 	    (vp->v_op == union_vnodeop_p)) {
