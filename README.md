@@ -81,6 +81,7 @@ after editing sources to keep formatting consistent.  The script ensures
 that `pre-commit`, `yacc` (via `byacc` or `bison`) and the Swift toolchain
 are installed, falling back to pip or additional package installs if
 necessary.  The script requires root privileges and network access.
+ster
 
 Additional notes are kept in [`docs/`](docs/).
 
