@@ -63,7 +63,7 @@ if ! command -v pre-commit >/dev/null 2>&1; then
 fi
 
 if command -v pre-commit >/dev/null 2>&1; then
-  pre-commit install-hooks || true
+  pre-commit install --install-hooks >/dev/null 2>&1 || true
 fi
 
 # Provide a yacc alias when only bison or byacc are installed
@@ -173,7 +173,6 @@ rm /tmp/protoc.zip
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
 
 # Install git hooks and sanity check dev tools
-pre-commit install >/dev/null 2>&1 || true
 clang-format --version >/dev/null 2>&1 || true
 clang-tidy --version >/dev/null 2>&1 || true
 
