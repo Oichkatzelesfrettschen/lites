@@ -50,8 +50,22 @@ pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
+# Ensure pre-commit is available even if the distribution package failed
+if ! command -v pre-commit >/dev/null 2>&1; then
+  pip3 install --no-cache-dir pre-commit
+fi
+
 if command -v pre-commit >/dev/null 2>&1; then
   pre-commit install-hooks || true
+fi
+
+# Provide a yacc alias when only bison or byacc are installed
+if ! command -v yacc >/dev/null 2>&1; then
+  if command -v byacc >/dev/null 2>&1; then
+    ln -sf "$(command -v byacc)" /usr/local/bin/yacc
+  elif command -v bison >/dev/null 2>&1; then
+    ln -sf "$(command -v bison)" /usr/local/bin/yacc
+  fi
 fi
 
 #— QEMU emulation for foreign binaries
@@ -102,6 +116,14 @@ for pkg in \
   fpc lazarus zig nim nimble crystal shards gforth; do
   apt_pin_install "$pkg"
 done
+
+# Verify swift installation and provide guidance if missing
+if ! command -v swift >/dev/null 2>&1; then
+  echo "Swift not found after installation. Attempting to install via apt..."
+  apt_pin_install swift || true
+  apt_pin_install swift-lldb || true
+  apt_pin_install swiftpm || true
+fi
 
 #— GUI & desktop-dev frameworks
 for pkg in \
