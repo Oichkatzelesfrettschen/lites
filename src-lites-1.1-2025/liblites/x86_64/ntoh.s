@@ -38,11 +38,11 @@
  *
  */
 
-#include <i386/asm.h>
+#include <x86_64/asm.h>
 
 Entry(ntohl)
 ENTRY(htonl)
-	movl	4(%esp), %eax
+	movl    8(%rsp), %eax
 	rorw	$8, %ax
 	ror	$16,%eax
 	rorw	$8, %ax
@@ -51,6 +51,6 @@ ENTRY(htonl)
 
 Entry(ntohs)
 ENTRY(htons)
-	movzwl	4(%esp), %eax
+	movzwl  8(%rsp), %eax
 	rorw	$8, %ax
 	ret

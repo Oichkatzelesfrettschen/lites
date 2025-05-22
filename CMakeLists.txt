@@ -39,16 +39,20 @@ set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
 # Collect sources for server and emulator if the directory exists
 if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB_RECURSE SERVER_SRC
-        "${LITES_SRC_DIR}/server/*.c")
+        "${LITES_SRC_DIR}/server/*.c" "${LITES_SRC_DIR}/server/*.s")
     if(EXISTS "${LITES_SRC_DIR}/emulator")
         file(GLOB_RECURSE EMULATOR_SRC
-            "${LITES_SRC_DIR}/emulator/*.c")
+            "${LITES_SRC_DIR}/emulator/*.c" "${LITES_SRC_DIR}/emulator/*.s")
     endif()
 
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server")
+    if(ARCH STREQUAL "x86_64")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/x86_64")
+    endif()
     target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
 
@@ -57,6 +61,10 @@ if(EXISTS "${LITES_SRC_DIR}")
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator")
+        if(ARCH STREQUAL "x86_64")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/x86_64")
+        endif()
         target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
     endif()
