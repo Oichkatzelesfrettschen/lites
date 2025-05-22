@@ -313,11 +313,7 @@ check_dev(dev_t	dev, char *str)
 #include "mach4_includes.h"
 #include "osfmach3.h"
 
-#if MACH4_INCLUDES || OSFMACH3
-#include <i386/disk.h>
-#else
-#include <i386at/disk.h>
-#endif
+#include <sys/disk.h>
 
 int isa_disk_ioctl(
 	dev_t dev,
