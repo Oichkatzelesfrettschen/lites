@@ -90,6 +90,15 @@
 #include <sys/syscall.h>
 #include <sys/namei.h>
 #include <sys/vnode.h>
+#ifdef __x86_64__
+#include <stdint.h>
+/*
+ * Mach defines x86_thread_state64_t as 21 64-bit registers.  Verify
+ * that our structure from the system headers matches this layout.
+ */
+_Static_assert(sizeof(struct x86_thread_state64) == 21 * sizeof(uint64_t),
+               "x86_thread_state64 layout mismatch");
+#endif
 
 void set_arg_addr(arg_size,
 	     arg_start_p,
@@ -132,11 +141,25 @@ void set_emulator_state(
 			      (thread_state_t)&ts,
 			      &count)) != KERN_SUCCESS)
 	panic("set_emulator_state",ret);
+    /*
+     * The thread state structure changed when Mach gained
+     * native 64-bit support.  Prefer the new 64-bit register
+     * names when available so the layout matches the Mach
+     * kernel's x86_thread_state64_t definition.
+     */
+#ifdef __x86_64__
+    ts.rip = li->pc;
+    ts.rsp = li->sp;
+    ts.rflags = 0;
+    ts.rbx = li->zero_start;
+    ts.rdi = li->zero_count;
+#else
     ts.eip = li->pc;
     ts.uesp = li->sp;
     ts.efl = 0;
     ts.ebx = li->zero_start;
     ts.edi = li->zero_count;
+#endif
 
     if ((ret=thread_set_state(p->p_thread,
 			      X86_THREAD_STATE64,
@@ -186,8 +209,13 @@ thread_dup(child_thread, new_state, new_state_count, parent_pid, rc)
 	if (new_state_count != X86_THREAD_STATE64_COUNT)
 	    return (FALSE);
 
-	regs->eax = parent_pid;
-	regs->edx = rc;
+#ifdef __x86_64__
+        regs->rax = parent_pid;
+        regs->rdx = rc;
+#else
+        regs->eax = parent_pid;
+        regs->edx = rc;
+#endif
 
 	(void) thread_set_state(child_thread, X86_THREAD_STATE64,
 				new_state, new_state_count);
