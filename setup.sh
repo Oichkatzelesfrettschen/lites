@@ -62,6 +62,7 @@ for pkg in \
   bcc bin86 elks-libc \
   gcc-ia64-linux-gnu g++-ia64-linux-gnu \
   gcc-i686-linux-gnu g++-i686-linux-gnu \
+  libc6-dev-i386 \
   gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
   gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
   gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
@@ -69,6 +70,7 @@ for pkg in \
   gcc-powerpc-linux-gnu g++-powerpc-linux-gnu \
   gcc-powerpc64-linux-gnu g++-powerpc64-linux-gnu \
   gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu \
+  libc6-dev-powerpc-cross libc6-dev-ppc64-cross \
   gcc-m68k-linux-gnu g++-m68k-linux-gnu \
   gcc-hppa-linux-gnu g++-hppa-linux-gnu \
   gcc-loongarch64-linux-gnu g++-loongarch64-linux-gnu \

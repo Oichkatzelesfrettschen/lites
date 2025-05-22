@@ -54,15 +54,17 @@ make
 
 For the modernized build system in this repository you can also use
 `Makefile.new` or the provided CMake files.  Both recognise an optional
-`ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default) and
-32‑bit (`ARCH=i686`) builds.  Examples:
+`ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default), 32‑bit
+(`ARCH=i686`) and PowerPC (`ARCH=ppc64` or `ARCH=ppc`) builds.  Examples:
 
 ```sh
 # Using the makefile
 make -f Makefile.new ARCH=i686
+make -f Makefile.new ARCH=ppc64
 
 # Using CMake
 cmake -B build -DARCH=i686
+cmake -B build -DARCH=ppc64
 cmake --build build
 ```
 
