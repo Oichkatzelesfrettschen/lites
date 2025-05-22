@@ -21,12 +21,13 @@ LDFLAGS += -m32
 else ifeq ($(ARCH),x86_64)
 CFLAGS += -m64
 LDFLAGS += -m64
+ARCH_INCDIR := -I$(SRCDIR)/include/x86_64
 endif
 
-SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c')
+SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c' -o -name '*.s')
 SERVER_INCDIRS := $(shell find $(SRCDIR)/server -type d | sed 's/^/-I/')
 ifneq ($(wildcard $(SRCDIR)/emulator),)
-EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c')
+EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.s')
 EMULATOR_INCDIRS := $(shell find $(SRCDIR)/emulator -type d | sed 's/^/-I/')
 endif
 
@@ -45,13 +46,13 @@ prepare:
 fi
 
 lites_server: $(SERVER_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(SERVER_INCDIRS) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(SERVER_INCDIRS) $^ $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(EMULATOR_INCDIRS) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(EMULATOR_INCDIRS) $^ $(LDFLAGS) -o $@
 endif
-
+	
 clean:
 	rm -f lites_server lites_emulator
 

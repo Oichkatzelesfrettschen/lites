@@ -31,7 +31,7 @@
  *	errno is not used by the server so don't bother with it.
  */
 
-#include <i386/asm.h>
+#include <x86_64/asm.h>
 #include <sys/syscall.h>
 
 #ifdef __ELF__	/* affects underscores only */
@@ -39,11 +39,11 @@
 #define kernel_trap(trap_name,trap_number,number_args) \
 	.globl trap_name; \
 trap_name : \
-	movl	$ trap_number,%eax; \
+	movq    $ trap_number,%rax; \
 	SVC; \
 	jc 1f; \
 	ret; \
-1:	movl $-1,%eax; \
+1:	movq $-1,%rax; \
 	ret;
 
 #else /* __ELF__ */
@@ -51,11 +51,11 @@ trap_name : \
 #define kernel_trap(trap_name,trap_number,number_args) \
 	.globl _ ## trap_name; \
 _ ## trap_name : \
-	movl	$ trap_number,%eax; \
+	movq    $ trap_number,%rax; \
 	SVC; \
 	jc 1f; \
 	ret; \
-1:	movl $-1,%eax; \
+1:	movq $-1,%rax; \
 	ret;
 
 #endif /* __ELF__ */

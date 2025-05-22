@@ -32,7 +32,7 @@
  * 
  */
 
-#include <i386/asm.h>
+#include <x86_64/asm.h>
 
 #ifdef	GPROF
 	.globl	_gprof_do_profiling
@@ -41,12 +41,12 @@
 	.globl	_mcount
 mcount:
 _mcount:
-	cmpl	$0,_gprof_do_profiling
+	cmpq    $0,_gprof_do_profiling
 	jz	1f
-	pushl	0(%esp)
-	pushl	4(%ebp)
+	pushq   (%rsp)
+	pushq   8(%rbp)
 	call	_mcountaux
-	leal	8(%esp),%esp
+	leaq    16(%rsp),%rsp
 1:	ret
 #endif
 
@@ -56,19 +56,19 @@ _mcount:
  * int len
  */
 ENTRY(bcmp)
-	pushl	%esi
-	pushl	%edi
+	pushq   %rsi
+	pushq   %rdi
 
-	xorl	%eax, %eax
-	movl	12(%esp), %esi
-	movl	16(%esp), %edi
-	movl	20(%esp), %ecx
+	xorq    %rax, %rax
+	movq    24(%rsp), %rsi
+	movq    32(%rsp), %rdi
+	movq    40(%rsp), %rcx
 
 	cld
 	 repe; cmpsb
 	je	0f
-	incl	%eax
+	incq    %rax
 	
-0:	popl	%edi
-	popl	%esi
+0:	popq    %rdi
+	popq    %rsi
 	ret
