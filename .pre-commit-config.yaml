@@ -13,7 +13,7 @@ repos:
         files: \.(c|h|cpp|hpp|cc)$
       - id: clang-tidy-c
         name: clang-tidy C
-        entry: clang-tidy --extra-arg=-std=c2x
+        entry: clang-tidy --extra-arg=-std=c23
         language: system
         types: [c]
       - id: clang-tidy-cpp

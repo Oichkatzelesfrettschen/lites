@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 23)
 
-# Allow selecting the build architecture with -DARCH=i686, ARCH=ppc64 or ARCH=ppc
-set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64, i686, ppc64 or ppc)")
+# Allow selecting the build architecture with -DARCH=i686 or ARCH=x86_64
+set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
 set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
 set(LDFLAGS "$ENV{LDFLAGS}" CACHE STRING "Additional linker flags")
 
@@ -16,14 +16,14 @@ if(ARCH STREQUAL "i686")
 elseif(ARCH STREQUAL "x86_64")
     add_compile_options(-m64)
     add_link_options(-m64)
-elseif(ARCH STREQUAL "ppc")
-    set(CMAKE_SYSTEM_NAME Linux)
-    set(CMAKE_C_COMPILER powerpc-linux-gnu-gcc)
-    set(CMAKE_CXX_COMPILER powerpc-linux-gnu-g++)
-elseif(ARCH STREQUAL "ppc64")
-    set(CMAKE_SYSTEM_NAME Linux)
-    set(CMAKE_C_COMPILER powerpc64-linux-gnu-gcc)
-    set(CMAKE_CXX_COMPILER powerpc64-linux-gnu-g++)
+endif()
+
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-std=c23 HAS_STD_C23)
+if(HAS_STD_C23)
+    set(C23_FLAG "-std=c23")
+else()
+    set(C23_FLAG "-std=c2x")
 endif()
 
 # Optionally allow building out-of-tree archives.
@@ -49,7 +49,7 @@ if(EXISTS "${LITES_SRC_DIR}")
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server")
-    target_compile_options(lites_server PRIVATE -std=c2x ${CFLAGS})
+    target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
 
     if(EMULATOR_SRC)
@@ -57,7 +57,7 @@ if(EXISTS "${LITES_SRC_DIR}")
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator")
-        target_compile_options(lites_emulator PRIVATE -std=c2x ${CFLAGS})
+        target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
     endif()
 endif()

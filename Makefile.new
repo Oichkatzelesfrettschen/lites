@@ -6,12 +6,12 @@ SRCDIR ?= build/lites-1.1.u3
 endif
 CC ?= gcc
 
-# Target architecture (x86_64, i686, ppc64 or ppc).  Determines -m32/-m64 flags
-# or cross-compilers where appropriate.
+# Target architecture (x86_64 or i686). Determines -m32/-m64 flags.
 ARCH ?= x86_64
 
 # Base optimisation flags
-CFLAGS ?= -O2 -std=c2x
+C23_FLAG := $(shell $(CC) -std=c23 -E -x c /dev/null >/dev/null 2>&1 && echo -std=c23 || echo -std=c2x)
+CFLAGS ?= -O2 $(C23_FLAG)
 
 
 # Translate ARCH into compiler options and cross-compilers
@@ -21,12 +21,6 @@ LDFLAGS += -m32
 else ifeq ($(ARCH),x86_64)
 CFLAGS += -m64
 LDFLAGS += -m64
-else ifeq ($(ARCH),ppc)
-CC = powerpc-linux-gnu-gcc
-CFLAGS += -m32
-else ifeq ($(ARCH),ppc64)
-CC = powerpc64-linux-gnu-gcc
-CFLAGS += -m64
 endif
 
 SERVER_SRC := $(shell find $(SRCDIR)/server -name '*.c')
