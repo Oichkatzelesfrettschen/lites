@@ -20,6 +20,17 @@ MACH_LIBS := $(wildcard $(MACHDIR)/lib/*.a)
 LDFLAGS += -L$(MACHDIR)/lib $(MACH_LIBS)
 endif
 endif
+MACHLIBDIR ?= $(LITES_MACH_LIB_DIR)
+ifeq ($(MACHLIBDIR),)
+ifneq ($(MACHDIR),)
+ifneq ($(wildcard $(MACHDIR)/lib),)
+MACHLIBDIR := $(MACHDIR)/lib
+endif
+endif
+endif
+ifneq ($(MACHLIBDIR),)
+MACH_LIBS := $(wildcard $(MACHLIBDIR)/*.a)
+endif
 ifeq ($(MACHDIR),)
 $(error Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule)
 endif
@@ -88,11 +99,11 @@ prepare:
 	fi
 
 lites_server: $(SERVER_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(LDFLAGS) -o $@
+        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $^ $(LDFLAGS) -o $@
+        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 endif
 	
 clean:

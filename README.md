@@ -53,18 +53,23 @@ exists at the repository root, it will be used automatically (a git
 submodule can conveniently provide it).
 Running `setup.sh` will automatically clone the OpenMach repository when
 network access is available.
+If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
+location (for example `openmach/lib`).  When the variable is not set and
+`openmach/lib` exists, it will be used automatically.
 
 Example using the makefile:
 
 ```sh
 git submodule add <mach-repo-url> openmach  # once
-make -f Makefile.new LITES_MACH_DIR=openmach
+make -f Makefile.new LITES_MACH_DIR=openmach \
+    LITES_MACH_LIB_DIR=openmach/lib
 ```
 
 Or with CMake:
 
 ```sh
-cmake -B build -DLITES_MACH_DIR=openmach
+cmake -B build -DLITES_MACH_DIR=openmach \
+      -DLITES_MACH_LIB_DIR=openmach/lib
 cmake --build build
 ```
 
