@@ -13,9 +13,8 @@
 #ifndef xtype_h
 #define xtype_h
 
+#include <stdbool.h>
 #include <sys/types.h>
-
-typedef unsigned int	bool;
 
 /*
  * upi internal error codes

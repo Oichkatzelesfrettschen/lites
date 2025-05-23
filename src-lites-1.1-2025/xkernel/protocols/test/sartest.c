@@ -14,6 +14,7 @@
  * Ping-pong test of the SAR protocol
  */
 
+#include <stdbool.h>
 #include "site.h"
 #include "eth.h"
 #include "sarProt.h"
@@ -47,19 +48,19 @@ static int lens[] = {
 #include "common_test.c"
 
 static int
-sarIsServer()
+sarIsServer(void)
 {
   return 0;
 }
 
 static int
-sarIsClient()
+sarIsClient(void)
 {
   return 1;
 }
 
-void
-  showStatistics()
+static void
+showStatistics(void)
 {
   int stats[10];
   
@@ -81,13 +82,10 @@ void
 static int word;
 static int rcvdMsgs;
 
-static bool 
-show(ptr, len, arg)
-char *ptr;
-int len;
-char *arg;
+static bool
+show(char *ptr, int len, char *arg)
 {
-  int i, isav, j, *iptr = (int*)ptr;
+  int i, isav, *iptr = (int*)ptr;
   int start, *startp;
   int error = 0;
 
@@ -127,18 +125,16 @@ char *arg;
   }
 #endif TIME
 
-  return TRUE;
+  return true;
 }
 
 static int bufs;
 static int currentLen;
 
 static xkern_return_t
-sarDemux( self, lls, dg )
-    XObj self, lls;
-    Msg *dg;
+sarDemux(XObj self, XObj lls, Msg *dg)
 {
-  int i, len = msgLen(dg);
+  int len = msgLen(dg);
 
   if (len == currentLen) 
     rcvdMsgs++;
@@ -154,8 +150,7 @@ sarDemux( self, lls, dg )
 
 
 static int
-sarRunTest( len )
-    int len;
+sarRunTest(int len)
 {
     Msg		savedMsg, msg;
     int 	test, trips, i;
@@ -220,7 +215,7 @@ sarRunTest( len )
 
 
 static void
-testInit()
+testInit(void)
 {
   isClient = sarIsClient;
   isServer = sarIsServer;
