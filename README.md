@@ -111,5 +111,9 @@ privileges and network access.
 You can also invoke `scripts/run-precommit.sh` which automatically installs
 `pre-commit` via pip when missing.
 
+The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
+ensures a `compile_commands.json` database is generated on demand so
+clang-tidy can analyse the sources even before the project has been built.
+
 Additional notes are kept in [`docs/`](docs/).
 
