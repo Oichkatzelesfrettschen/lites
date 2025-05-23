@@ -4,7 +4,7 @@
 
 #include <fcntl.h>
 
-main(argc, argv) char **argv;
+int main(int argc, char **argv)
 {
   int i, fd;
   char c[6], d;
@@ -19,4 +19,5 @@ main(argc, argv) char **argv;
       if (d == '\n') i--;
     }
   }
+  return 0;
 }

@@ -24,10 +24,7 @@ extern	char *	rindex(
  */
 
 
-void
-main( argc, argv )
-    int		argc;
-    char	**argv;
+int main(int argc, char **argv)
 {
     char	*str;
     char	*lastSlash;
@@ -52,5 +49,6 @@ main( argc, argv )
 	*lastSlash = 0;
     }
     printf("%s\n", str);
+    return 0;
 }
   

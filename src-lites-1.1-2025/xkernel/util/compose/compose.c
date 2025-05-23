@@ -574,10 +574,7 @@ end_driver_build(FILE *fptr)
 }
 
 
-static int
-genProtlCode( fptr, p )
-    FILE	*fptr;
-    PROTOCOL	*p;
+static int genProtlCode(FILE *fptr, PROTOCOL *p)
 {
     PROTOCOL	*llp;
     int		i;

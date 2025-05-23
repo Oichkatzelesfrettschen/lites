@@ -8,7 +8,7 @@
 
 struct hostent *gethostbyname();
 
-main(argc, argv) char **argv;
+int main(int argc, char **argv)
 {
   char *n, **hn;
   struct hostent *h;
@@ -22,4 +22,5 @@ main(argc, argv) char **argv;
       printf("%d", *n &0xff);
     }
   }
+  return 0;
 }
