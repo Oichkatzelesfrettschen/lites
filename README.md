@@ -99,13 +99,12 @@ cmake --build build
 
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators along with standard build utilities such as build-essential,
-GCC, clang, llvm, m4, CMake, Ninja and Meson.  It also sets up debugging
-and profiling tools, installs the pre-commit hooks and generates a
+GCC, clang, llvm, m4, CMake, Ninja and Meson.  BSD make (`bmake`) and the optional `mk-configure` framework are installed as well.  The script also sets up debugging and profiling tools, installs the pre-commit hooks and generates a
 `compile_commands.json` database for clang tooling.  Run `pre-commit run -a`
-after editing sources to keep formatting consistent.  The script ensures
-that `pre-commit`, `yacc` (via `byacc` or `bison`) and the Swift toolchain
-are installed, falling back to pip or additional package installs if
-necessary.  Any package failures are recorded in `/tmp/setup_failures.log`
+after editing sources to keep formatting consistent.  The script installs `pre-commit` via pip when missing and ensures a `.pre-commit-config.yaml` file exists.  It also verifies
+that `yacc` (via `byacc` or `bison`) and the Swift toolchain
+are available, falling back to additional package installs if necessary.
+Any package failures are recorded in `/tmp/setup_failures.log`
 so the remainder of the setup can continue.  The script requires root
 privileges and network access.
 
