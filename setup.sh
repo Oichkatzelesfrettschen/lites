@@ -39,11 +39,21 @@ if ! apt-get update -y; then
   echo "apt:update" >> "$FAIL_LOG"
 fi
 
+# Install aptitude first as required for bmake installation
+if ! apt-get install -y aptitude; then
+  echo "apt:aptitude" >> "$FAIL_LOG"
+fi
+
+# Use aptitude to install bmake specifically
+if ! aptitude -y install bmake; then
+  echo "aptitude:bmake" >> "$FAIL_LOG"
+fi
+
 #— core build tools, formatters, analysis, science libs
 for pkg in \
   build-essential gcc g++ clang lld llvm \
   clang-format clang-tidy uncrustify astyle editorconfig \
-  make bmake mk-configure ninja-build cmake meson \
+  make mk-configure ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
   libopenblas-dev liblapack-dev libeigen3-dev \
@@ -66,13 +76,10 @@ for pkg in \
 done
 
 for pip_pkg in \
-
   pre-commit cmake ninja meson configuredb compiledb pyyaml \
-
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
   pytest pyyaml pylint pythonfuzz; do
-  pyyaml; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
     echo "pip:$pip_pkg" >> "$FAIL_LOG"
   fi
