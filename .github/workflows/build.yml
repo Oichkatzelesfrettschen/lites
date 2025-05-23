@@ -11,10 +11,20 @@ jobs:
       matrix:
         include:
           - arch: x86_64
+            compiler: gcc
             cc: gcc
             host: x86_64-linux-gnu
+          - arch: x86_64
+            compiler: clang
+            cc: clang
+            host: x86_64-linux-gnu
           - arch: i686
+            compiler: gcc
             cc: i686-linux-gnu-gcc
+            host: i686-linux-gnu
+          - arch: i686
+            compiler: clang
+            cc: clang
             host: i686-linux-gnu
     steps:
       - uses: actions/checkout@v3
@@ -22,25 +32,25 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-i686-linux-gnu g++-i686-linux-gnu
+          sudo apt-get install -y build-essential gcc-i686-linux-gnu g++-i686-linux-gnu clang llvm
 
       - name: Extract sources
         run: |
           mkdir -p build
           tar -xzf "Historical Archives/lites-1.1.u3.tar.gz" -C build
 
-      - name: Build for ${{ matrix.arch }}
+      - name: Build for ${{ matrix.arch }} with ${{ matrix.compiler }}
         run: |
           make -f Makefile.new clean
-          make -f Makefile.new CC=${{ matrix.cc }}
-          mv lites_server lites_server-${{ matrix.arch }}
-          mv lites_emulator lites_emulator-${{ matrix.arch }}
+          make -f Makefile.new ARCH=${{ matrix.arch }} CC=${{ matrix.cc }}
+          mv lites_server lites_server-${{ matrix.arch }}-${{ matrix.compiler }}
+          mv lites_emulator lites_emulator-${{ matrix.arch }}-${{ matrix.compiler }}
 
-      - name: Upload ${{ matrix.arch }} artifacts
+      - name: Upload ${{ matrix.arch }} ${{ matrix.compiler }} artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: lites-${{ matrix.arch }}
+          name: lites-${{ matrix.arch }}-${{ matrix.compiler }}
           path: |
-            lites_server-${{ matrix.arch }}
-            lites_emulator-${{ matrix.arch }}
+            lites_server-${{ matrix.arch }}-${{ matrix.compiler }}
+            lites_emulator-${{ matrix.arch }}-${{ matrix.compiler }}
 
