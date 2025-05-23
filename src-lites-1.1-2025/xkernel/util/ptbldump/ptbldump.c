@@ -31,17 +31,12 @@ struct xobj *protl_tab[1];
 void 	xFree( a ) char *a; {}
 void 	xTraceLock() {}
 void 	xTraceUnlock() {}
-xkern_return_t	findRomOpts( str, opt, numOpts, arg )
-    char	*str;
-    RomOpt 	*opt;
-    int 	numOpts;
-    VOID 	*arg;
+xkern_return_t findRomOpts(char *str, RomOpt *opt, int numOpts, VOID *arg)
 {    
 }
 
 char *
-xMalloc( n )
-    unsigned n;
+char *xMalloc(unsigned n)
 {
     return malloc(n);
 }
@@ -62,9 +57,7 @@ static FILE	*declFile, *mapFile;
 
 
 static int
-addMapPair( key, value, arg )
-    VOID	*key, *arg;
-    int	 	value;
+static int addMapPair(VOID *key, int value, VOID *arg)
 {
     long	hlpId = *(long *)key;
     char	*hlpName;
@@ -78,10 +71,7 @@ addMapPair( key, value, arg )
 }
 
 
-static int
-doEntry( key, value, arg )
-    VOID	*key, *arg;
-    int	 	value;
+static int doEntry(VOID *key, int value, VOID *arg)
 {
     PtblEntry	*e = (PtblEntry *)value;
 
@@ -157,9 +147,7 @@ dumpTables()
 
 
 int
-main( argc, argv )
-    int 	argc;
-    char	**argv;
+int main(int argc, char **argv)
 {
     int	i;
     

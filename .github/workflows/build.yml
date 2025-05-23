@@ -24,6 +24,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-i686-linux-gnu g++-i686-linux-gnu
 
+      - name: Check for K&R style functions
+        run: scripts/check-kr.sh
+
       - name: Extract sources
         run: |
           mkdir -p build

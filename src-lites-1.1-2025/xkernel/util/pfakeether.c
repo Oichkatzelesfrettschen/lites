@@ -2,7 +2,7 @@
 
 */
 
-main(argc, argv) char **argv;
+int main(int argc, char **argv)
 {
   int i, base;
   char *ea;
@@ -19,4 +19,5 @@ main(argc, argv) char **argv;
     }
     printf("%.2x:%.2x:%.2x", i&0xff, (base>>8)&0xff, base&0xff);
   }
+  return 0;
 }

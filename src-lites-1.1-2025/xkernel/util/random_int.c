@@ -1,4 +1,4 @@
-main( argc, argv) char **argv;
+int main(int argc, char **argv)
 {
   int mod = atoi(argv[1]), rn;
   int i, p;
@@ -9,4 +9,5 @@ main( argc, argv) char **argv;
 
   rn = rand() % mod;
   printf("%d", rn);
+  return 0;
 }

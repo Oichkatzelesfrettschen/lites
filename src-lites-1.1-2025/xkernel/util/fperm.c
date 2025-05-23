@@ -30,9 +30,7 @@
 
 #define ERROR	2
 
-main( argc, argv )
-    int		argc;
-    char **	argv;
+int main(int argc, char **argv)
 {
     int		mask;
     struct stat	sb;
