@@ -15,6 +15,10 @@ endif
 endif
 ifneq ($(MACHDIR),)
 MACH_INCDIR := -I$(MACHDIR)/include
+ifneq ($(wildcard $(MACHDIR)/lib/*.a),)
+MACH_LIBS := $(wildcard $(MACHDIR)/lib/*.a)
+LDFLAGS += -L$(MACHDIR)/lib $(MACH_LIBS)
+endif
 endif
 MACHLIBDIR ?= $(LITES_MACH_LIB_DIR)
 ifeq ($(MACHLIBDIR),)
