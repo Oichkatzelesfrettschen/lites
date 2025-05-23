@@ -13,9 +13,15 @@ jobs:
           - arch: x86_64
             cc: gcc
             host: x86_64-linux-gnu
+            sanitize: 0
           - arch: i686
             cc: i686-linux-gnu-gcc
             host: i686-linux-gnu
+            sanitize: 0
+          - arch: x86_64
+            cc: gcc
+            host: x86_64-linux-gnu
+            sanitize: 1
     steps:
       - uses: actions/checkout@v3
 
@@ -34,16 +40,20 @@ jobs:
 
       - name: Build for ${{ matrix.arch }}
         run: |
+          suffix=""
+          if [ "${{ matrix.sanitize }}" = "1" ]; then
+            suffix="-asan"
+          fi
           make -f Makefile.new clean
-          make -f Makefile.new CC=${{ matrix.cc }}
-          mv lites_server lites_server-${{ matrix.arch }}
-          mv lites_emulator lites_emulator-${{ matrix.arch }}
+          make -f Makefile.new CC=${{ matrix.cc }} SANITIZE=${{ matrix.sanitize }}
+          mv lites_server lites_server-${{ matrix.arch }}$suffix
+          mv lites_emulator lites_emulator-${{ matrix.arch }}$suffix
 
-      - name: Upload ${{ matrix.arch }} artifacts
+      - name: Upload ${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }} artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: lites-${{ matrix.arch }}
+          name: lites-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
           path: |
-            lites_server-${{ matrix.arch }}
-            lites_emulator-${{ matrix.arch }}
+            lites_server-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
+            lites_emulator-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
 

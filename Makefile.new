@@ -38,6 +38,13 @@ ARCH ?= x86_64
 C23_FLAG := $(shell $(CC) -std=c23 -E -x c /dev/null >/dev/null 2>&1 && echo -std=c23 || echo -std=c2x)
 CFLAGS ?= -O2 $(C23_FLAG)
 
+# Optional address sanitizer
+SANITIZE ?= 0
+ifeq ($(SANITIZE),1)
+CFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address
+endif
+
 
 # Translate ARCH into compiler options and cross-compilers
 ifeq ($(ARCH),i686)
