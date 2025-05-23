@@ -13,3 +13,6 @@ To experiment with cross compilation or multiple architectures, see the
 `setup.sh` script in the repository root. It installs a full toolchain and
 qemu-based emulation targets.
 
+The modernized sources in `src-lites-1.1-2025` require a compiler with full
+C23 support. GCC 13 or Clang 17 (or newer) are known to work.
+
