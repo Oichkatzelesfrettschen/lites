@@ -120,5 +120,19 @@ The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
 clang-tidy can analyse the sources even before the project has been built.
 
+To try the built binaries under QEMU use `scripts/run-qemu.sh`.  The script
+launches the `lites_server` (and the optional `lites_emulator` when present)
+inside QEMU for either `x86_64` or `i686`:
+
+```sh
+# default to x86_64
+scripts/run-qemu.sh
+
+# explicitly run the 32‑bit build
+scripts/run-qemu.sh i686
+```
+The helpers expect the binaries produced by `Makefile.new` in the repository
+root and require the corresponding `qemu-system` binary in `PATH`.
+
 Additional notes are kept in [`docs/`](docs/).
 
