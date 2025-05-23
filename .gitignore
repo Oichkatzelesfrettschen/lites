@@ -22,6 +22,12 @@ a.out
 /release/
 compile_commands.json
 
+# Environment and tool configs
+.pylintrc
+pytest.ini
+configuredb.conf
+configuredb.sqlite
+
 # Ignore archived source tarballs
 *.tar.gz
 

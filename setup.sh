@@ -68,7 +68,8 @@ done
 for pip_pkg in \
   pre-commit cmake ninja meson configuredb \
   tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools; do
+  tensorflow-model-optimization mlflow onnxruntime-tools \
+  pytest pyyaml pylint pythonfuzz; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
     echo "pip:$pip_pkg" >> "$FAIL_LOG"
   fi
@@ -111,6 +112,25 @@ if command -v configuredb >/dev/null 2>&1; then
   # initialize configuration and database
   configuredb >/dev/null 2>&1 || true
 fi
+
+# Verify python tooling installations
+for tool in pre-commit configuredb pytest pylint pythonfuzz; do
+  if command -v "$tool" >/dev/null 2>&1; then
+    "$tool" --version >/dev/null 2>&1 || true
+  fi
+done
+python3 - <<'EOF'
+import yaml, sys
+sys.stdout.write(yaml.__version__)
+EOF
+
+# Create baseline config files if absent
+[ -f pytest.ini ] || cat > pytest.ini <<'EOF'
+[pytest]
+addopts = -ra
+EOF
+
+[ -f .pylintrc ] || pylint --generate-rcfile > .pylintrc
 
 # Provide a yacc alias when only bison or byacc are installed
 if ! command -v yacc >/dev/null 2>&1; then
