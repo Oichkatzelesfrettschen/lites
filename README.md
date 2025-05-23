@@ -89,12 +89,15 @@ the `src-lites-1.1-2025` directory when it is present.  Set the `SRCDIR` or
 optional `ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default) and
 32‑bit (`ARCH=i686`) builds.  Other architectures were supported in historical
 releases but are not handled by the modern build system.
+Set `SANITIZE=1` to compile with address sanitizer support, which appends
+`-fsanitize=address` to `CFLAGS` and `LDFLAGS`.
 Examples:
 
 ```sh
 # Using the makefile
 make -f Makefile.new ARCH=i686
 make -f Makefile.new ARCH=x86_64
+make -f Makefile.new ARCH=x86_64 SANITIZE=1
 
 # Using CMake (optionally override the source directory)
 cmake -B build -DARCH=i686
