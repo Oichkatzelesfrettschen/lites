@@ -49,7 +49,8 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  pre-commit \
+  pre-commit configuredb \
+  sqlite3 \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
 done
@@ -65,7 +66,7 @@ for pkg in \
 done
 
 for pip_pkg in \
-  pre-commit cmake ninja meson \
+  pre-commit cmake ninja meson configuredb \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
@@ -98,6 +99,17 @@ EOF
   fi
   pre-commit install --install-hooks >/dev/null 2>&1 || true
   pre-commit --version || true
+fi
+
+# Ensure configuredb is available
+if ! command -v configuredb >/dev/null 2>&1; then
+  # install local helper if package is missing
+  ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
+fi
+
+if command -v configuredb >/dev/null 2>&1; then
+  # initialize configuration and database
+  configuredb >/dev/null 2>&1 || true
 fi
 
 # Provide a yacc alias when only bison or byacc are installed
