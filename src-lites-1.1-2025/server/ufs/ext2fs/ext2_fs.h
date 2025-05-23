@@ -25,7 +25,7 @@
 
 #if defined(i386) || defined(__i386__)
 #include <i386/types.h>
-#elif defined(__x86_64__)
+#elif defined(__x86_64__) || defined(__amd64__)
 #include <x86_64/types.h>
 #else
 #error need processor specific types
