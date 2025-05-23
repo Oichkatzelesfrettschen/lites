@@ -49,7 +49,8 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  pre-commit \
+  pre-commit configuredb \
+  sqlite3 \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
 done
@@ -57,7 +58,7 @@ done
 #— Python & deep-learning / MLOps
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
-  python3-numpy python3-scipy python3-pandas \
+  python3-numpy python3-scipy python3-pandas python3-yaml \
   python3-matplotlib python3-scikit-learn \
   python3-torch python3-torchvision python3-torchaudio \
   python3-onnx python3-onnxruntime; do
@@ -65,9 +66,12 @@ for pkg in \
 done
 
 for pip_pkg in \
-  pre-commit compiledb cmake ninja meson \
+
+  pre-commit cmake ninja meson configuredb compiledb pyyaml \
+
   tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools; do
+  tensorflow-model-optimization mlflow onnxruntime-tools \
+  pyyaml; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
     echo "pip:$pip_pkg" >> "$FAIL_LOG"
   fi
@@ -98,6 +102,17 @@ EOF
   fi
   pre-commit install --install-hooks >/dev/null 2>&1 || true
   pre-commit --version || true
+fi
+
+# Ensure configuredb is available
+if ! command -v configuredb >/dev/null 2>&1; then
+  # install local helper if package is missing
+  ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
+fi
+
+if command -v configuredb >/dev/null 2>&1; then
+  # initialize configuration and database
+  configuredb >/dev/null 2>&1 || true
 fi
 
 # Provide a yacc alias when only bison or byacc are installed

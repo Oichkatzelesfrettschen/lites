@@ -4,6 +4,10 @@ Lites is a 4.4BSD based Unix server that runs on top of the Mach
 microkernel.  This repository collects several historical releases and
 patch sets.
 
+When cloning the repository use
+`git clone --recurse-submodules <repo-url>` to automatically fetch the
+OpenMach kernel source tree required by the modern build system.
+
 The tree is preserved mainly for reference.  Should a directory named
 `lites-1.1-2025` (or similarly named) appear, it represents an ongoing
 modernization effort and is not part of the original snapshots.
@@ -49,18 +53,23 @@ exists at the repository root, it will be used automatically (a git
 submodule can conveniently provide it).
 Running `setup.sh` will automatically clone the OpenMach repository when
 network access is available.
+If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
+location (for example `openmach/lib`).  When the variable is not set and
+`openmach/lib` exists, it will be used automatically.
 
 Example using the makefile:
 
 ```sh
 git submodule add <mach-repo-url> openmach  # once
-make -f Makefile.new LITES_MACH_DIR=openmach
+make -f Makefile.new LITES_MACH_DIR=openmach \
+    LITES_MACH_LIB_DIR=openmach/lib
 ```
 
 Or with CMake:
 
 ```sh
-cmake -B build -DLITES_MACH_DIR=openmach
+cmake -B build -DLITES_MACH_DIR=openmach \
+      -DLITES_MACH_LIB_DIR=openmach/lib
 cmake --build build
 ```
 
