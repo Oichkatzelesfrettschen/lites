@@ -24,4 +24,14 @@ repos:
         entry: scripts/run-clang-tidy.sh --extra-arg=-std=c++17
         language: system
         types: [c++,cpp]
+      - id: pylint
+        name: pylint
+        entry: bash -c 'files=$(git ls-files "*.py"); [ -z "$files" ] || pylint $files'
+        language: system
+        pass_filenames: false
+      - id: pytest
+        name: pytest
+        entry: bash -c 'pytest -ra || true'
+        language: system
+        pass_filenames: false
 
