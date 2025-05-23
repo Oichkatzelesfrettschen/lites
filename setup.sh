@@ -43,7 +43,7 @@ fi
 for pkg in \
   build-essential gcc g++ clang lld llvm \
   clang-format clang-tidy uncrustify astyle editorconfig \
-  make bmake ninja-build cmake meson \
+  make bmake mk-configure ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
   libopenblas-dev liblapack-dev libeigen3-dev \
@@ -84,6 +84,18 @@ if ! command -v pre-commit >/dev/null 2>&1; then
 fi
 
 if command -v pre-commit >/dev/null 2>&1; then
+  # ensure configuration exists
+  if [ ! -f .pre-commit-config.yaml ]; then
+    cat > .pre-commit-config.yaml <<'EOF'
+minimum_pre_commit_version: '2.20.0'
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+EOF
+  fi
   pre-commit install --install-hooks >/dev/null 2>&1 || true
   pre-commit --version || true
 fi
