@@ -1,0 +1,3 @@
+
+FILES = bidctl bidctl_state bidctl_timer bidctl_id
+DIRS = 

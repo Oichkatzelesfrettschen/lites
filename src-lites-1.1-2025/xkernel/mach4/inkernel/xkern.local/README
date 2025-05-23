@@ -1,0 +1,6 @@
+
+This directory contains example configuration files for an in-kernel
+x-kernel.  You would be well advised to look these data files over
+carefully, or to recreate them from appropriate graph.comp, prottbl
+and rom files rather than using them as-is.
+

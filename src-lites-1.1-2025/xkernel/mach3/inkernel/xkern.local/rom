@@ -1,0 +1,11 @@
+# DECstations:
+arp     192.12.69.54    08:00:2b:1c:19:cd       lock # handel
+arp     192.12.69.137   08:00:2b:1b:c4:bb       lock # berlioz
+arp     192.12.69.98    08:00:2b:1c:18:e8       lock # tchaikovsky
+arp     192.12.69.99    08:00:2b:23:6d:ec       lock # mozart
+# HP Snakes:
+arp     192.12.69.10    08:00:09:27:b4:2d       lock # cage
+arp     192.12.69.24    08:00:09:27:b4:a6       lock # britten
+arp     192.12.69.26    08:00:09:27:c4:49       lock # ives
+arp     192.12.69.25    08:00:09:27:f4:7f       lock # ravel
+arp     192.12.69.14    08:00:09:27:c4:47       lock # sibelius

@@ -1,0 +1,6 @@
+
+This directory contains code implementing the Proxy API for the Mach3
+platform, allowing x-kernel protocol graphs to be split across task
+boundaries.  This code is here for exploratory purposes only.  It is
+neither supported nor documented. 
+

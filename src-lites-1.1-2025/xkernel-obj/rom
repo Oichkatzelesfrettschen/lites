@@ -1,0 +1,42 @@
+#
+# $RCSfile: rom.mach3,v $
+#
+# x-kernel v3.2
+#
+# Copyright (c) 1993,1991,1990  Arizona Board of Regents
+#
+# $Revision: 1.7 $
+# $Date: 1993/10/01 20:29:48 $
+#
+#
+
+ethdrv/wd0 priority 20
+
+# ARP-osoitteet
+
+arp	193.209.237.25	0:0:c0:9:dd:15	lock	#koff.nixu.fi
+arp	193.209.237.1	0:0:c:2:7:70		#hkinixu.nixu.fi
+#arp	130.233.192.249 0:0:c0:9:dd:15		#juustolettu.cs.hut.fi
+#arp	130.233.192.251	0:20:af:de:7a:e		#tomaattikeitto.cs.hut.fi
+#arp	130.233.192.254	0:0:c:46:7b:8		#cs-gw.cs.hut.fi
+
+ip	gateway	193.209.237.1
+netmask	193.209.237.25	255.255.255.0
+
+dns	koff				193.209.237.25
+dns	olvi				193.209.237.26
+dns 	jalopeno			193.209.237.20
+dns 	tequila				193.209.237.23
+dns	koff.nixu.fi			193.209.237.25
+dns	olvi.nixu.fi			193.209.237.26
+dns 	jalopeno.nixu.fi		193.209.237.20
+dns 	tequila.nixu.fi			193.209.237.23
+
+dns	juustolettu			130.233.192.249
+dns	papuherkku			130.233.192.250
+dns	tomaattikeitto			130.233.192.251
+dns	cs-gw				130.233.192.254
+dns	juustolettu.cs.hut.fi		130.233.192.249
+dns	papuherkku.cs.hut.fi		130.233.192.250
+dns	tomaattikeitto.cs.hut.fi	130.233.192.251
+dns	cs-gw.cs.hut.fi			130.233.192.254

@@ -1,0 +1,9 @@
+This directory contains the assembly code interface to some system calls.
+The system calls are renamed by prefixing them with "sc_".  This makes
+it possible to implement additional stuff in the original function,
+calling the actual system call only if necessary.
+
+This assembly code is specific to the DECstation 5000 (mips) platform.
+It should be possible to port the socket code to other platforms by
+writing analogous system call interface code for those platforms.
+

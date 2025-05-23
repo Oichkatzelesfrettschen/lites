@@ -1,0 +1,186 @@
+/*     
+ * $RCSfile: xk_uproxy.defs,v $
+ *
+ * x-kernel v3.2
+ *
+ * Copyright (c) 1993,1991,1990  Arizona Board of Regents
+ *
+ *
+ * $Revision: 1.10 $
+ * $Date: 1993/09/16 22:04:16 $
+ */
+
+
+
+subsystem  
+#ifdef KERNEL
+KernelServer
+#endif
+xk_uproxy 844415;	
+
+userprefix call_uproxy_;
+serverprefix do_uproxy_;
+
+#include <mach/std_types.defs>
+
+rcsid "$Header: /usr/var/tmp/x32/tmpdist/mach3/api/proxy/RCS/xk_uproxy.defs,v 1.10 1993/09/16 22:04:16 menze Exp $";
+
+
+#include "xk_mig_t.defs"
+
+simport "uproxy.h";
+uimport "assert.h";
+uimport "proxy_offset.h";
+
+routine
+abort
+(
+	reqPort	:	mach_port_t;
+	lproxyPort :	mach_port_make_send_t
+);
+
+
+
+routine
+xGetProtlByName
+(
+	reqPort	:	mach_port_t;
+	name	:	xk_string_80_t;
+    out	protl	:	xobj_ext_id_t
+);
+	
+
+/* 
+ * MIG doesn't support variable length in-out arguments.  
+ * Control is never supposed to be on the fast path anyway, so 
+ * we'll just copy the entire buffer.  
+ */
+routine
+xControl
+(
+	reqPort	:	mach_port_t;
+	obj	:	xobj_ext_id_t;
+	opcode	:	int;
+ inout 	buf	:	xk_ctl_buf_t;
+ inout	bufLen	:	int
+);	
+
+
+routine
+xOpenEnable
+(
+	reqPort	:	mach_port_t;
+	lproxyPort :	mach_port_make_send_t;
+    out retVal	:	xkern_return_t;
+	hlpRcv	:	xobj_ext_id_t;
+	hlpType	:	xobj_ext_id_t;
+	llp	:	xobj_ext_id_t;
+	part	:	xk_part_t
+);
+
+
+routine
+xOpenDisable
+(
+	reqPort	:	mach_port_t;
+	lproxyPort :	mach_port_make_send_t;
+    out retVal	:	xkern_return_t;
+	hlpRcv	:	xobj_ext_id_t;
+	hlpType	:	xobj_ext_id_t;
+	llp	:	xobj_ext_id_t;
+	part	:	xk_part_t
+);
+
+
+routine
+xOpen
+(
+	reqPort	:	mach_port_t;
+	lproxyPort :	mach_port_make_send_t;
+    out retObj	:	xobj_ext_id_t;
+	hlpRcv	:	xobj_ext_id_t;
+	hlpType	:	xobj_ext_id_t;
+	llp	:	xobj_ext_id_t;
+	part	:	xk_part_t
+);
+
+
+routine
+dumpXObj
+(
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	obj	:	xobj_ext_id_t;
+    out	dump	:	xk_xobj_dump_t
+);
+
+
+/* 
+ * Make sure the lproxy protocol has a handle on the indicated lower session
+ */
+routine
+xDuplicate
+(
+	reqPort	:	mach_port_t;
+	lproxyPort :	mach_port_make_send_t;
+    out	retVal	:	xkern_return_t;
+	hlp	:	xobj_ext_id_t;
+	obj	:	xobj_ext_id_t
+);
+
+
+routine
+xPush
+(
+	reqPort	:	mach_port_t;
+    out	handle	:	xmsg_handle_t;
+	lls	:	xobj_ext_id_t;
+	xmsg	:	xk_msg_data_t;
+	xmsgool :	xk_large_msg_data_t, servercopy;
+	attr	:	xk_msg_attr_t
+);
+
+
+
+routine
+xCall
+(
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	lls	:	xobj_ext_id_t;
+	reqmsg	:	xk_msg_data_t;
+	reqool  :	xk_large_msg_data_t, servercopy; 
+    out	repmsg	:	xk_msg_data_t;
+    out	repool  :	xk_large_msg_data_t;
+	reqAttr	:	xk_msg_attr_t
+);
+
+
+
+
+routine
+xClose
+(
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+    	lls	:	xobj_ext_id_t
+);
+
+
+
+routine
+ping
+(
+	reqPort	:	mach_port_t
+);
+
+
+routine
+pingtest
+(
+	reqPort	:	mach_port_t;
+	repPort	:	mach_port_make_send_t;
+	number	:	int
+);
+
+

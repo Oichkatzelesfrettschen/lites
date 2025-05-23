@@ -1,0 +1,3 @@
+FILES = in_hacks sb tcp_debug tcp_subr tcp_timer tcp_usrreq tcp_x	\
+	tcp_output tcp_input tcp_hdr tcp_port
+DIRS =

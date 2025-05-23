@@ -1,0 +1,116 @@
+/*     
+ * $RCSfile: xk_lproxy.defs,v $
+ *
+ * x-kernel v3.2
+ *
+ * Copyright (c) 1993,1991,1990  Arizona Board of Regents
+ *
+ *
+ * $Revision: 1.14 $
+ * $Date: 1993/09/16 22:03:39 $
+ */
+
+
+subsystem  
+#ifdef KERNEL
+KernelUser
+#endif
+xk_lproxy 844315;
+
+userprefix call_lproxy_;
+serverprefix do_lproxy_;
+
+#include <mach/std_types.defs>
+#include <mach/mach_types.defs>
+
+rcsid "$Header: /usr/var/tmp/x32/tmpdist/mach3/api/proxy/RCS/xk_lproxy.defs,v 1.14 1993/09/16 22:03:39 menze Exp $";
+
+
+#include "xk_mig_t.defs"
+
+import  "assert.h";
+simport "lproxy.h";
+uimport "proxy_offset.h";
+
+
+routine
+dumpXObj
+(
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	obj	:	xobj_ext_id_t;
+    out	dump	:	xk_xobj_dump_t
+);
+
+
+routine
+xOpenDone
+(
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	lls	:	xobj_ext_id_t;
+	llp	:	xobj_ext_id_t;
+	hlpRcv	:	xobj_ext_id_t;
+	hlpType	:	xobj_ext_id_t
+);
+
+
+/* 
+ * The xk_msg_data_t is nominally defined as a variable length array.
+ * This is, in fact, what the server will see.  Lproxy clients, by
+ * convention, will pass in a pointer to an 'xk_and_mach_msg_t'
+ * structure cast as a pointer to a character buffer.  The MIG
+ * translation routines in lproxyUser will be post-processed to deal
+ * with this structure (and to use the given mach message buffer) 
+ * instead of a direct variable-length array. 
+ */
+
+routine 
+xDemux
+(	
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	lls	:	xobj_ext_id_t;	
+	req	:	xk_msg_data_t;
+	/* 
+	 * msgStart is a dummy parameter that the server stub passes to
+	 * the server routine
+	 */
+	msgStart:	int;
+	msgOol	:	xk_large_msg_data_t, servercopy;
+	reqAttr	:	xk_msg_attr_t
+);
+
+
+/* 
+ * 'req is treated in the same manner as the msg in xDemux.
+ * 'rep is a pointer to an x-kernel Msg structure, constructed
+ *  with the same buffer passed in as 'reqmsg'.
+ *  call_lproxy_xCallDemux will pop the appropriate amount off of
+ * 'repmsg' so it contains only the x-kernel message data.
+ */
+
+routine 
+xCallDemux
+(	
+	reqPort	:	mach_port_t;
+    out	retVal	:	xkern_return_t;
+	lls	:	xobj_ext_id_t;	
+	req	:	xk_msg_data_t;
+	/* 
+	 * reqMsgStart is a dummy parameter that the server stub passes to
+	 * the server routine
+	 */
+	reqMsgStart:	int;
+	reqool	:	xk_large_msg_data_t, servercopy;
+    out	rep	:	xk_msg_data_t;
+    out repool	:	xk_large_msg_data_t;
+	reqAttr	:	xk_msg_attr_t
+);
+
+
+routine
+ping
+(
+	reqPort	:	mach_port_t
+);

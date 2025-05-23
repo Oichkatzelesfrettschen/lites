@@ -1,0 +1,15 @@
+PCDOTOS = 
+PCDOTCS = 
+PCDOTSS = 
+
+COMPOSE_INCLUDES = -I. 
+
+./$(HOW)/%.o : ./%.c
+	$(DEFAULTRULE)
+
+COMPOSE_LIB_PROTS := +ethdrv++eth++arp++vnet++ip++icmp++tcp++udp++xksocket++udptest+
+
+COMPOSE_LIB_OBJ =  $(ethdrv_FILES) $(eth_FILES) $(arp_FILES) $(vnet_FILES) $(ip_FILES) $(icmp_FILES) $(tcp_FILES) $(udp_FILES) $(xksocket_FILES) $(udptest_FILES)
+
+COMPOSE_EXT_LIBS =  $(ethdrv_LIBS) $(eth_LIBS) $(arp_LIBS) $(vnet_LIBS) $(ip_LIBS) $(icmp_LIBS) $(tcp_LIBS) $(udp_LIBS) $(xksocket_LIBS) $(udptest_LIBS)
+

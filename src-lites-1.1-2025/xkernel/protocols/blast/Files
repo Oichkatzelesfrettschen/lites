@@ -1,0 +1,3 @@
+FILES = blast blast_control blast_debug blast_input blast_output \
+        blast_util blast_hdr blast_stack
+DIRS =

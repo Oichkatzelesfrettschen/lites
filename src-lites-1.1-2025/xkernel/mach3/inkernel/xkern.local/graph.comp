@@ -1,0 +1,8 @@
+name=xklance/SE0;
+
+name=eth        protocols=xklance/SE0;
+name=arp        protocols=eth;
+name=vnet       protocols=eth,arp;
+name=ip         protocols=vnet;
+name=tcp        protocols=ip;
+name=tcptest    protocols=tcp;

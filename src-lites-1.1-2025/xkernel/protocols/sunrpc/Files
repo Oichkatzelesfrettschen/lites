@@ -1,0 +1,2 @@
+FILES = sunrpc sunrpc_client sunrpc_ctl sunrpc_error sunrpc_hdr sunrpc_server xrpc_callmsg xrpc_print xrpc_prot 
+DIRS =

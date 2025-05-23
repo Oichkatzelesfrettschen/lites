@@ -1,0 +1,26 @@
+@;
+name=ethdrv/SE0     trace=TR_ALWAYS;
+name=eth    protocols=ethdrv/SE0;
+name=arp    protocols=eth;
+name=vnet   protocols=eth,arp;
+name=ip     protocols=vnet;
+name=icmp   protocols=ip;
+name=vmux   protocols=vnet,ip;
+name=blast  protocols=vmux;
+name=bidctl protocols=ip;
+name=tcp    protocols=ip;
+name=rat    protocols=tcp,ip;
+name=vsize/lower  protocols=blast,rat;
+name=vsize/upper protocols=vmux, vsize/lower;
+name=bid    protocols=vsize/upper,bidctl;
+name=icmp   protocols=ip;
+name=udp    protocols=ip;
+name=chan   protocols=bid,bidctl;
+name=srx    protocols=chan,bidctl;
+name=rrx    protocols=chan,bidctl;
+name=vcache protocols=chan;
+name=machripc protocols=vcache,udp,bidctl;
+name=ssr    protocols=machripc;
+name=nns    protocols=udp,bidctl,arp;
+@;
+

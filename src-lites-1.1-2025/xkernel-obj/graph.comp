@@ -1,0 +1,27 @@
+# x-kernel v3.2
+# This graph exercises the TCP protocol.
+
+@;
+
+#
+# Be sure to check whether the name SE0 corresponds to your ethernet
+# device (see /etc/NETWORKS)
+#
+
+name=ethdrv/wd0;
+name=eth protocols=ethdrv/wd0;
+name=arp protocols=eth;
+name=vnet protocols=eth,arp;
+name=ip protocols=vnet trace=TR_GROSS_EVENTS;
+name=icmp protocols=ip trace=TR_MORE_EVENTS;
+name=tcp protocols=ip trace=TR_GROSS_EVENTS;
+name=udp protocols=ip trace=TR_EVENTS;
+name=xksocket protocols=tcp,udp trace=TR_GROSS_EVENTS;
+name=udptest protocols=udp trace=TR_GROSS_EVENTS;
+#name=tcptest protocols=tcp trace=TR_GROSS_EVENTS;
+#name=tcptest/server protocols=tcp trace=TR_GROSS_EVENTS;
+#name=tcptest/client protocols=tcp trace=TR_GROSS_EVENTS;
+@;
+
+#name=prottest	trace=TR_GROSS_EVENTS;
+
