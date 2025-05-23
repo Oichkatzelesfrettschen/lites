@@ -68,7 +68,8 @@ done
 for pip_pkg in \
   pre-commit cmake ninja meson configuredb \
   tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools; do
+  tensorflow-model-optimization mlflow onnxruntime-tools \
+  pyyaml; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
     echo "pip:$pip_pkg" >> "$FAIL_LOG"
   fi
