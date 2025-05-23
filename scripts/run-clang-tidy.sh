@@ -9,8 +9,15 @@ if [ ! -f "$compdb" ]; then
     if [ -f build/compile_commands.json ]; then
       ln -sf build/compile_commands.json "$compdb"
     fi
-  else
-    echo "[run-clang-tidy] Warning: failed to generate compilation database" >&2
+  fi
+fi
+
+if [ ! -f "$compdb" ] && command -v compiledb >/dev/null 2>&1; then
+  echo "[run-clang-tidy] Falling back to compiledb" >&2
+  if [ -f Makefile ]; then
+    compiledb -n make >/dev/null 2>&1 || true
+  elif [ -f build.ninja ]; then
+    compiledb -n ninja >/dev/null 2>&1 || true
   fi
 fi
 

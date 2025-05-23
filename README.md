@@ -100,7 +100,9 @@ cmake --build build
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators along with standard build utilities such as build-essential,
 GCC, clang, llvm, m4, CMake, Ninja and Meson.  BSD make (`bmake`) and the optional `mk-configure` framework are installed as well.  The script also sets up debugging and profiling tools, installs the pre-commit hooks and generates a
-`compile_commands.json` database for clang tooling.  Run `pre-commit run -a`
+`compile_commands.json` database for clang tooling.  If CMake fails to create
+this file, the script runs the Python `compiledb` package as a fallback.
+Run `pre-commit run -a`
 after editing sources to keep formatting consistent.  The script installs `pre-commit` via pip when missing and ensures a `.pre-commit-config.yaml` file exists.  It also verifies
 that `yacc` (via `byacc` or `bison`) and the Swift toolchain
 are available, falling back to additional package installs if necessary.
@@ -109,11 +111,14 @@ so the remainder of the setup can continue.  The script requires root
 privileges and network access.
 
 You can also invoke `scripts/run-precommit.sh` which automatically installs
-`pre-commit` via pip when missing.
+`pre-commit` via pip when missing.  When network access is unavailable the
+script suggests running `setup.sh` to complete the installation.
 
 The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
 clang-tidy can analyse the sources even before the project has been built.
+If CMake generation fails, the script falls back to `compiledb` when
+available.
 
 Additional notes are kept in [`docs/`](docs/).
 
