@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-# log file for any package installation failures
+# general log capturing all output
+SETUP_LOG=/tmp/setup.log
 FAIL_LOG=/tmp/setup_failures.log
+: > "$SETUP_LOG"
 : > "$FAIL_LOG"
+# tee all stdout/stderr to the log as well
+exec > >(tee -a "$SETUP_LOG") 2>&1
 
 #— helper to pin to the repo’s exact version if it exists
 apt_pin_install(){
@@ -49,7 +53,7 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  pre-commit configuredb \
+  configuredb \
   sqlite3 \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
@@ -66,7 +70,7 @@ for pkg in \
 done
 
 for pip_pkg in \
-  pre-commit cmake ninja meson configuredb \
+  pre-commit cmake ninja meson configuredb compiledb \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools; do
   if ! pip3 install --no-cache-dir "$pip_pkg"; then
@@ -85,6 +89,10 @@ if ! command -v pre-commit >/dev/null 2>&1; then
 fi
 
 if command -v pre-commit >/dev/null 2>&1; then
+  # verify installation came from pip
+  if ! pip3 show pre-commit >/dev/null 2>&1; then
+    echo "pre-commit installed but pip show failed" >> "$FAIL_LOG"
+  fi
   # ensure configuration exists
   if [ ! -f .pre-commit-config.yaml ]; then
     cat > .pre-commit-config.yaml <<'EOF'
@@ -101,15 +109,37 @@ EOF
   pre-commit --version || true
 fi
 
+# Ensure compiledb is installed and operational
+if ! command -v compiledb >/dev/null 2>&1; then
+  echo "compiledb not found, installing via pip..." >&2
+  if ! pip3 install --no-cache-dir compiledb; then
+    echo "pip:compiledb" >> "$FAIL_LOG"
+  fi
+fi
+
+# Display version if available and ensure pip package exists
+if command -v compiledb >/dev/null 2>&1; then
+  pip3 show compiledb >/dev/null 2>&1 || {
+    echo "compiledb installed but pip show failed" >> "$FAIL_LOG"
+  }
+  compiledb --version || true
+fi
+
 # Ensure configuredb is available
 if ! command -v configuredb >/dev/null 2>&1; then
-  # install local helper if package is missing
-  ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
+  echo "configuredb not found, installing via pip..." >&2
+  if ! pip3 install --no-cache-dir configuredb; then
+    echo "pip:configuredb" >> "$FAIL_LOG"
+    echo "configuredb not available from pip, using fallback" >&2
+    ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
+  fi
 fi
 
 if command -v configuredb >/dev/null 2>&1; then
+  pip3 show configuredb >/dev/null 2>&1 || true
   # initialize configuration and database
   configuredb >/dev/null 2>&1 || true
+  configuredb --version >/dev/null 2>&1 || true
 fi
 
 # Provide a yacc alias when only bison or byacc are installed
