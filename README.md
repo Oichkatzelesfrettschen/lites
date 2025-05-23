@@ -4,6 +4,10 @@ Lites is a 4.4BSD based Unix server that runs on top of the Mach
 microkernel.  This repository collects several historical releases and
 patch sets.
 
+When cloning the repository use
+`git clone --recurse-submodules <repo-url>` to automatically fetch the
+OpenMach kernel source tree required by the modern build system.
+
 The tree is preserved mainly for reference.  Should a directory named
 `lites-1.1-2025` (or similarly named) appear, it represents an ongoing
 modernization effort and is not part of the original snapshots.

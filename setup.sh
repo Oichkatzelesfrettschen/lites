@@ -58,7 +58,7 @@ done
 #— Python & deep-learning / MLOps
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
-  python3-numpy python3-scipy python3-pandas \
+  python3-numpy python3-scipy python3-pandas python3-yaml \
   python3-matplotlib python3-scikit-learn \
   python3-torch python3-torchvision python3-torchaudio \
   python3-onnx python3-onnxruntime; do
@@ -66,7 +66,7 @@ for pkg in \
 done
 
 for pip_pkg in \
-  pre-commit cmake ninja meson configuredb \
+  pre-commit cmake ninja meson configuredb pyyaml \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
   pyyaml; do
