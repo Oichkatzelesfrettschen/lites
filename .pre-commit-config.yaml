@@ -16,12 +16,12 @@ repos:
         files: \.(c|h|cpp|hpp|cc)$
       - id: clang-tidy-c
         name: clang-tidy C
-        entry: clang-tidy --extra-arg=-std=c23
+        entry: scripts/run-clang-tidy.sh --extra-arg=-std=c23
         language: system
         types: [c]
       - id: clang-tidy-cpp
         name: clang-tidy C++
-        entry: clang-tidy --extra-arg=-std=c++17
+        entry: scripts/run-clang-tidy.sh --extra-arg=-std=c++17
         language: system
         types: [c++,cpp]
 
