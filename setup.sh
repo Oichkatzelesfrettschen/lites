@@ -66,7 +66,9 @@ for pkg in \
 done
 
 for pip_pkg in \
-  pre-commit cmake ninja meson configuredb pyyaml \
+
+  pre-commit cmake ninja meson configuredb compiledb pyyaml \
+
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
   pyyaml; do
@@ -234,6 +236,13 @@ if ! cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1; the
 fi
 if [ -f build/compile_commands.json ]; then
   ln -sf build/compile_commands.json compile_commands.json
+elif command -v compiledb >/dev/null 2>&1; then
+  echo "Running compiledb as fallback" >&2
+  if [ -f Makefile ]; then
+    compiledb -n make >/dev/null 2>&1 || true
+  elif [ -f build.ninja ]; then
+    compiledb -n ninja >/dev/null 2>&1 || true
+  fi
 fi
 
 # verify links from the README
