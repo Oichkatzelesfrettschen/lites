@@ -35,9 +35,8 @@ already been completed and what is still planned.
 
 ### Mach-specific TODOs
 
-- `mach3/drivers/xec596/xec596.c` and
-  `mach4/drivers/xec596/xec596.c` mention a TODO to "Go native" for
-  the 82596 driver implementation.
+- `mach3/drivers/xec596/xec596.c` – TODO: "Go native" for the Intel 82596 driver implementation.
+- `mach4/drivers/xec596/xec596.c` – same TODO as above.
 - `mach4/pxk/time.c` uses placeholder values for
   `xGetTime()` marked as "FAKE! TODO! PNR" and needs a proper Mach
   time source.
