@@ -141,3 +141,10 @@ root and require the corresponding `qemu-system` binary in `PATH`.
 
 Additional notes are kept in [`docs/`](docs/).
 
+
+A simple user-level pager is provided in `src-lites-1.1-2025/bin/user_pager`.
+Build it with:
+```sh
+make -C src-lites-1.1-2025/bin/user_pager
+```
+Run the resulting `user_pager` alongside `lites_server` to service page faults.
