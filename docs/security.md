@@ -4,18 +4,22 @@ This document describes the keystore and enclave interfaces added to the moderni
 
 ## Keystore
 
-The trivial keystore lives in `crypto/keystore.c`.
+The keystore lives in `crypto/keystore.c` and now uses AES-256 from OpenSSL.
 
 ```c
-int ks_generate_key(const char *path, size_t len);
-int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len,
+typedef struct ks_key ks_key_t;
+int ks_generate_key(const char *path);
+ks_key_t *ks_open(const char *path);
+void ks_close(ks_key_t *key);
+int ks_encrypt(ks_key_t *key, const unsigned char *in, size_t in_len,
                unsigned char *out, size_t *out_len);
-int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len,
+int ks_decrypt(ks_key_t *key, const unsigned char *in, size_t in_len,
                unsigned char *out, size_t *out_len);
 ```
 
-`ks_generate_key` creates a random symmetric key and writes it to the specified file.
-`ks_encrypt` and `ks_decrypt` perform a simple XOR based transformation using the stored key.
+`ks_generate_key` creates a random AES-256 key and writes it to the specified file.
+Keys are loaded with `ks_open` and freed with `ks_close`.
+`ks_encrypt` and `ks_decrypt` use AES-256-CTR with a random IV prepended to the ciphertext.
 
 ## Enclave
 
@@ -23,11 +27,11 @@ int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len,
 
 ```c
 int enclave_create(const char *name);
-int enclave_attest(int handle);
+int enclave_attest(int handle, unsigned char *hash);
 ```
 
-The current implementation merely prints diagnostic messages but serves as a
-placeholder for a real secure enclave backend.
+`enclave_create` stores metadata about the enclave and `enclave_attest` returns
+a fake SHA-256 hash of its name.
 
 ## Command-line utilities
 
@@ -39,6 +43,8 @@ Two small utilities under `bin/` demonstrate the APIs:
 They can be compiled manually, for example:
 
 ```sh
-cc -I src-lites-1.1-2025/include crypto/keystore.c bin/keystore-demo.c -o keystore-demo
-cc -I src-lites-1.1-2025/include src-lites-1.1-2025/liblites/enclave.c bin/enclave-demo.c -o enclave-demo
+cc -I src-lites-1.1-2025/include -lcrypto \
+   crypto/keystore.c bin/keystore-demo.c -o keystore-demo
+cc -I src-lites-1.1-2025/include -lcrypto \
+   src-lites-1.1-2025/liblites/enclave.c bin/enclave-demo.c -o enclave-demo
 ```
