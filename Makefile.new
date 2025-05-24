@@ -49,6 +49,14 @@ CFLAGS += -fsanitize=address
 LDFLAGS += -fsanitize=address
 endif
 
+# Multicore scheduler support
+MULTICORE_SCHED ?= 0
+ifeq ($(MULTICORE_SCHED),1)
+CFLAGS += -DCONFIG_SCHED_MULTICORE=1
+else
+CFLAGS += -DCONFIG_SCHED_MULTICORE=0
+endif
+
 
 # Translate ARCH into compiler options and cross-compilers
 ifeq ($(ARCH),i686)
@@ -85,6 +93,8 @@ SERVER_COMMON_DIRS := \
 SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
+KERN_SRC := $(wildcard kern/*.c)
+KERN_INCDIRS := -Ikern
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')
@@ -105,12 +115,12 @@ prepare:
 	  ln -s $$arch_dir $(SRCDIR)/include/machine; \
 	fi
 
-lites_server: $(SERVER_SRC)
-        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_server: $(SERVER_SRC) $(KERN_SRC)
+        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
-lites_emulator: $(EMULATOR_SRC)
-        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_emulator: $(EMULATOR_SRC) $(KERN_SRC)
+        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 endif
 	
 clean:

@@ -7,6 +7,7 @@ set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
 set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
 set(LDFLAGS "$ENV{LDFLAGS}" CACHE STRING "Additional linker flags")
 set(SANITIZE "$ENV{SANITIZE}" CACHE STRING "Enable address sanitizer (1/0)")
+set(MULTICORE_SCHED "$ENV{MULTICORE_SCHED}" CACHE STRING "Enable multicore scheduler (1/0)")
 set(LITES_MACH_LIB_DIR "$ENV{LITES_MACH_LIB_DIR}" CACHE PATH "Directory containing Mach static libraries")
 set(LITES_MACH_DIR "$ENV{LITES_MACH_DIR}" CACHE PATH "Mach kernel source directory")
 if(NOT LITES_MACH_DIR AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/openmach")
@@ -36,6 +37,12 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
 if(SANITIZE STREQUAL "1")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+endif()
+
+if(MULTICORE_SCHED STREQUAL "1")
+    add_compile_definitions(CONFIG_SCHED_MULTICORE=1)
+else()
+    add_compile_definitions(CONFIG_SCHED_MULTICORE=0)
 endif()
 
 if(ARCH STREQUAL "i686")
@@ -98,6 +105,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.S")
         list(APPEND SERVER_SRC ${_dir_src})
     endforeach()
+    file(GLOB _kern_src "${CMAKE_CURRENT_SOURCE_DIR}/kern/*.c")
+    list(APPEND SERVER_SRC ${_kern_src})
 
     if(EXISTS "${LITES_SRC_DIR}/emulator")
         file(GLOB EMULATOR_SUBDIRS RELATIVE "${LITES_SRC_DIR}/emulator" "${LITES_SRC_DIR}/emulator/*")
@@ -116,13 +125,15 @@ if(EXISTS "${LITES_SRC_DIR}")
             file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.S")
             list(APPEND EMULATOR_SRC ${_dir_src})
         endforeach()
+        list(APPEND EMULATOR_SRC ${_kern_src})
     endif()
 
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
-        "${MACH_INCLUDE_DIR}")
+        "${MACH_INCLUDE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/kern")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
@@ -142,7 +153,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator"
-            "${MACH_INCLUDE_DIR}")
+            "${MACH_INCLUDE_DIR}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/kern")
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")
