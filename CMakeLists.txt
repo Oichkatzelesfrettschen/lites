@@ -134,9 +134,10 @@ if(EXISTS "${LITES_SRC_DIR}")
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
+        "${LITES_SRC_DIR}/iommu")
         "${MACH_INCLUDE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/kern"
-        "${LITES_SRC_DIR}/iommu")
+        "${CMAKE_CURRENT_SOURCE_DIR}/include")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
@@ -159,6 +160,8 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
             "${LITES_SRC_DIR}/iommu")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")
