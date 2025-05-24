@@ -42,6 +42,7 @@
 #include <sys/param.h>
 #include <sys/proc.h>
 #include <sys/types.h>
+#include "sched.h"
 
 #if OSFMACH3
 
@@ -93,6 +94,7 @@ void ux_server_init(void) {
                           &ux_server_port_set);
 
   cthread_set_kernel_limit(ux_server_max_kernel_threads);
+  scheduler_init(ux_server_max_kernel_threads);
 }
 
 void ux_server_add_port(mach_port_t port) {
@@ -128,6 +130,9 @@ void *ux_thread_bootstrap(cthread_fn_t real_routine) {
   pk->condition = 0;
 
   cthread_set_data(cthread_self(), pk);
+#ifdef CONFIG_SCHED_MULTICORE
+  schedule_enqueue(cthread_self());
+#endif
 #ifdef USEACTIVATIONS
   cthread_wire();
 #endif
@@ -138,6 +143,9 @@ void *ux_thread_bootstrap(cthread_fn_t real_routine) {
       pk->k_reply_msg) {
     panic("ux_thread_bootstrap");
   }
+#ifdef CONFIG_SCHED_MULTICORE
+  schedule_dequeue(cthread_self());
+#endif
   return ret;
 }
 
