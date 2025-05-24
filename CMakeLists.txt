@@ -17,9 +17,16 @@ if(NOT LITES_MACH_LIB_DIR AND MACH_DIR AND EXISTS "${MACH_DIR}/lib")
     set(LITES_MACH_LIB_DIR "${MACH_DIR}/lib")
 endif()
 set(MACH_LIB_DIR "${LITES_MACH_LIB_DIR}")
-if(NOT MACH_DIR OR NOT EXISTS "${MACH_DIR}/include")
-    message(FATAL_ERROR "Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule")
+
+set(MACH_INCLUDE_DIR "")
+if(MACH_DIR AND EXISTS "${MACH_DIR}/include")
+    set(MACH_INCLUDE_DIR "${MACH_DIR}/include")
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/localmach/include")
+    set(MACH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/localmach/include")
+else()
+    message(FATAL_ERROR "Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule or run scripts/extract-xmach-headers.sh")
 endif()
+
 if(MACH_LIB_DIR AND EXISTS "${MACH_LIB_DIR}")
     file(GLOB MACH_LIBS "${MACH_LIB_DIR}/*.a")
 endif()
@@ -115,7 +122,7 @@ if(EXISTS "${LITES_SRC_DIR}")
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
-        $<$<BOOL:${MACH_DIR}>:${MACH_DIR}/include>)
+        "${MACH_INCLUDE_DIR}")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
@@ -135,7 +142,7 @@ if(EXISTS "${LITES_SRC_DIR}")
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator"
-            $<$<BOOL:${MACH_DIR}>:${MACH_DIR}/include>)
+            "${MACH_INCLUDE_DIR}")
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")

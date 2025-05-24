@@ -19,3 +19,6 @@ already been completed and what is still planned.
 - Modernise the emulator support and verify cross‑builds.
 - Expand documentation for cross‑compiling and runtime testing.
 - Audit remaining TODO comments in the source tree.
+- Provide a helper script to extract Mach headers from the xkernel
+  sources into `localmach/include` for systems without an external
+  Mach tree.
