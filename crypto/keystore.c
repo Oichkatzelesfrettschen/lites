@@ -1,0 +1,87 @@
+#include "keystore.h"
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+static int read_key(const char *path, unsigned char **key, size_t *len) {
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) {
+        return -1;
+    }
+    off_t sz = lseek(fd, 0, SEEK_END);
+    if (sz <= 0) {
+        close(fd);
+        return -1;
+    }
+    if (lseek(fd, 0, SEEK_SET) < 0) {
+        close(fd);
+        return -1;
+    }
+    *key = malloc(sz);
+    if (!*key) {
+        close(fd);
+        return -1;
+    }
+    if (read(fd, *key, sz) != sz) {
+        free(*key);
+        close(fd);
+        return -1;
+    }
+    close(fd);
+    *len = sz;
+    return 0;
+}
+
+int ks_generate_key(const char *path, size_t len) {
+    unsigned char *buf = malloc(len);
+    if (!buf) {
+        return -1;
+    }
+    int fd = open("/dev/urandom", O_RDONLY);
+    if (fd < 0) {
+        free(buf);
+        return -1;
+    }
+    if (read(fd, buf, len) != (ssize_t)len) {
+        close(fd);
+        free(buf);
+        return -1;
+    }
+    close(fd);
+    fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+    if (fd < 0) {
+        free(buf);
+        return -1;
+    }
+    if (write(fd, buf, len) != (ssize_t)len) {
+        close(fd);
+        free(buf);
+        return -1;
+    }
+    close(fd);
+    free(buf);
+    return 0;
+}
+
+int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len, unsigned char *out,
+               size_t *out_len) {
+    unsigned char *key;
+    size_t key_len;
+    if (read_key(key_path, &key, &key_len) < 0) {
+        return -1;
+    }
+    for (size_t i = 0; i < in_len; i++) {
+        out[i] = in[i] ^ key[i % key_len];
+    }
+    *out_len = in_len;
+    free(key);
+    return 0;
+}
+
+int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len, unsigned char *out,
+               size_t *out_len) {
+    return ks_encrypt(key_path, in, in_len, out, out_len);
+}
