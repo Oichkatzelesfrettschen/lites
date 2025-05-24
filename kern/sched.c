@@ -1,6 +1,7 @@
 #include "sched.h"
 #include <mach/cthreads.h>
 #include <mach/mach.h>
+#include <time.h>
 #include <sys/queue.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -13,6 +14,35 @@
 #define MAX_CPUS 8
 #endif
 
+/* ---------------------------------------------------------------------
+ * MCS lock implementation
+ * --------------------------------------------------------------------- */
+
+void mcs_lock_init(mcs_lock_t *lock) { lock->tail = NULL; }
+
+void mcs_lock_acquire(mcs_lock_t *lock, mcs_lock_node_t *node) {
+    node->next = NULL;
+    node->locked = 0;
+    mcs_lock_node_t *pred = __sync_lock_test_and_set(&lock->tail, node);
+    if (pred) {
+        node->locked = 1;
+        __sync_synchronize();
+        pred->next = node;
+        while (node->locked)
+            cthread_yield();
+    }
+}
+
+void mcs_lock_release(mcs_lock_t *lock, mcs_lock_node_t *node) {
+    if (!node->next) {
+        if (__sync_bool_compare_and_swap(&lock->tail, node, NULL))
+            return;
+        while (!node->next)
+            cthread_yield();
+    }
+    node->next->locked = 0;
+}
+
 struct thread_entry {
     cthread_t thread;
     TAILQ_ENTRY(thread_entry) link;
@@ -20,7 +50,7 @@ struct thread_entry {
 
 struct run_queue {
     TAILQ_HEAD(, thread_entry) queue;
-    mutex_t lock;
+    mcs_lock_t lock;
 };
 
 static struct run_queue run_queues[MAX_CPUS];
@@ -37,7 +67,7 @@ void scheduler_init(int num_cores) {
     sched_num_cpus = num_cores;
     for (int i = 0; i < sched_num_cpus; ++i) {
         TAILQ_INIT(&run_queues[i].queue);
-        mutex_init(&run_queues[i].lock);
+        mcs_lock_init(&run_queues[i].lock);
     }
 #if CONFIG_SCHED_MULTICORE
     for (int i = 0; i < sched_num_cpus; ++i) {
@@ -55,24 +85,26 @@ void schedule_enqueue(cthread_t thread) {
 #if CONFIG_SCHED_MULTICORE
     cpu = __sync_fetch_and_add(&next_cpu, 1) % sched_num_cpus;
 #endif
-    mutex_lock(&run_queues[cpu].lock);
+    mcs_lock_node_t node;
+    mcs_lock_acquire(&run_queues[cpu].lock, &node);
     TAILQ_INSERT_TAIL(&run_queues[cpu].queue, te, link);
-    mutex_unlock(&run_queues[cpu].lock);
+    mcs_lock_release(&run_queues[cpu].lock, &node);
 }
 
 void schedule_dequeue(cthread_t thread) {
     for (int cpu = 0; cpu < sched_num_cpus; ++cpu) {
-        mutex_lock(&run_queues[cpu].lock);
+        mcs_lock_node_t node;
+        mcs_lock_acquire(&run_queues[cpu].lock, &node);
         struct thread_entry *it;
         TAILQ_FOREACH(it, &run_queues[cpu].queue, link) {
             if (it->thread == thread) {
                 TAILQ_REMOVE(&run_queues[cpu].queue, it, link);
-                mutex_unlock(&run_queues[cpu].lock);
+                mcs_lock_release(&run_queues[cpu].lock, &node);
                 free(it);
                 return;
             }
         }
-        mutex_unlock(&run_queues[cpu].lock);
+        mcs_lock_release(&run_queues[cpu].lock, &node);
     }
 }
 
@@ -80,14 +112,15 @@ static struct thread_entry *attempt_work_steal(int cpu) {
     for (int i = 0; i < sched_num_cpus; ++i) {
         if (i == cpu)
             continue;
-        mutex_lock(&run_queues[i].lock);
+        mcs_lock_node_t node;
+        mcs_lock_acquire(&run_queues[i].lock, &node);
         struct thread_entry *it = TAILQ_FIRST(&run_queues[i].queue);
         if (it) {
             TAILQ_REMOVE(&run_queues[i].queue, it, link);
-            mutex_unlock(&run_queues[i].lock);
+            mcs_lock_release(&run_queues[i].lock, &node);
             return it;
         }
-        mutex_unlock(&run_queues[i].lock);
+        mcs_lock_release(&run_queues[i].lock, &node);
     }
     return NULL;
 }
@@ -96,16 +129,18 @@ void *scheduler_loop(void *arg) {
     int cpu = (int)(long)arg;
     while (1) {
         struct thread_entry *te = NULL;
-        mutex_lock(&run_queues[cpu].lock);
+        mcs_lock_node_t node;
+        mcs_lock_acquire(&run_queues[cpu].lock, &node);
         te = TAILQ_FIRST(&run_queues[cpu].queue);
         if (te)
             TAILQ_REMOVE(&run_queues[cpu].queue, te, link);
-        mutex_unlock(&run_queues[cpu].lock);
+        mcs_lock_release(&run_queues[cpu].lock, &node);
 
         if (!te) {
             te = attempt_work_steal(cpu);
             if (!te) {
-                usleep(1000);
+                struct timespec idle = {0, 1000000};
+                nanosleep(&idle, NULL);
                 continue;
             }
         }
@@ -117,7 +152,8 @@ void *scheduler_loop(void *arg) {
          */
         free(te);
         /* timer based preemption */
-        usleep(10000);
+        struct timespec slice = {0, 10000000};
+        nanosleep(&slice, NULL);
         cthread_yield();
     }
     return NULL;

@@ -1,14 +1,20 @@
 #include "../../src-lites-1.1-2025/include/cap.h"
 #include <assert.h>
 #include <stdlib.h>
+#include "../../src-lites-1.1-2025/include/cap.h"
+#include "../../include/auth.h"
+
 
 static void test_refine_basic(void) {
     struct cap root = {0};
     root.rights = 0xff;
     root.epoch = 1;
 
+    acl_add(&root, CAP_OP_REFINE, 0x0f);
+    acl_add(&root, CAP_OP_REVOKE, 0);
     struct cap *child = cap_refine(&root, 0x0f, 0);
     assert(child);
+    acl_add(child, CAP_OP_REVOKE, 0);
     assert(child->parent == &root);
     assert(child->rights == 0x0f);
     assert(child->epoch == root.epoch);

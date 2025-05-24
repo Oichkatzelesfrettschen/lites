@@ -1,6 +1,12 @@
+/**
+ * Lites repository license applies to this file; see the LICENSE file
+ * in the project root for details.
+ */
+
 #include "keystore.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 int main(int argc, char *argv[]) {
@@ -14,9 +20,21 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    unsigned char enc[256];
+    size_t msg_len = strlen(argv[2]);
+    unsigned char *enc = malloc(msg_len);
+    unsigned char *dec = malloc(msg_len + 1);
+    if (!enc || !dec) {
+        fprintf(stderr, "Memory allocation failure\n");
+        free(enc);
+        free(dec);
+        return 1;
+    }
+
     size_t enc_len;
-    ks_encrypt(argv[1], (const unsigned char *)argv[2], strlen(argv[2]), enc, &enc_len);
+    if (ks_encrypt(argv[1], (const unsigned char *)argv[2], strlen(argv[2]), enc, &enc_len) != 0) {
+        perror("ks_encrypt");
+        return 1;
+    }
 
     printf("ciphertext: ");
     for (size_t i = 0; i < enc_len; i++) {
@@ -24,10 +42,15 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
 
-    unsigned char dec[256];
     size_t dec_len;
-    ks_decrypt(argv[1], enc, enc_len, dec, &dec_len);
+    if (ks_decrypt(argv[1], enc, enc_len, dec, &dec_len) != 0) {
+        perror("ks_decrypt");
+        return 1;
+    }
     dec[dec_len] = '\0';
     printf("decrypted: %s\n", dec);
+
+    free(enc);
+    free(dec);
     return 0;
 }
