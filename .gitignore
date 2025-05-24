@@ -16,7 +16,8 @@ a.out
 
 # Ignore generated build directories
 /build/
-/bin/
+/bin/*
+!/bin/*.c
 /obj/
 /dist/
 /release/
