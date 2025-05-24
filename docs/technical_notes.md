@@ -20,3 +20,10 @@ C23 support. GCC 13 or Clang 17 (or newer) are known to work.
 Source files are formatted with `clang-format` using the settings in `.clang-format`. The `scripts/format-code.sh` helper applies the formatter to all tracked C and C++ files.
 
 A repository-wide `.editorconfig` enforces UTF‑8 encoding, LF line endings and four-space indentation.
+
+## User-level pager
+
+`src-lites-1.1-2025/bin/user_pager` implements a trivial pager used by the unit
+tests.  It reads `pf_info_t` structures from a UNIX domain socket and simply
+acknowledges each request, leaving the kernel side to map zero-filled pages.
+The VM tests spawn the pager automatically.
