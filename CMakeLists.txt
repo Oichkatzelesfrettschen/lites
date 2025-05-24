@@ -107,6 +107,8 @@ if(EXISTS "${LITES_SRC_DIR}")
     endforeach()
     file(GLOB _kern_src "${CMAKE_CURRENT_SOURCE_DIR}/kern/*.c")
     list(APPEND SERVER_SRC ${_kern_src})
+    file(GLOB _iommu_src "${LITES_SRC_DIR}/iommu/*.c")
+    list(APPEND SERVER_SRC ${_iommu_src})
 
     if(EXISTS "${LITES_SRC_DIR}/emulator")
         file(GLOB EMULATOR_SUBDIRS RELATIVE "${LITES_SRC_DIR}/emulator" "${LITES_SRC_DIR}/emulator/*")
@@ -125,13 +127,14 @@ if(EXISTS "${LITES_SRC_DIR}")
             file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.S")
             list(APPEND EMULATOR_SRC ${_dir_src})
         endforeach()
-        list(APPEND EMULATOR_SRC ${_kern_src})
+        list(APPEND EMULATOR_SRC ${_kern_src} ${_iommu_src})
     endif()
 
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
+        "${LITES_SRC_DIR}/iommu")
         "${MACH_INCLUDE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/kern"
         "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -156,7 +159,9 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${LITES_SRC_DIR}/emulator"
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
+            "${LITES_SRC_DIR}/iommu")
             "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")
