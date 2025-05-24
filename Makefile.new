@@ -94,7 +94,7 @@ SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
 KERN_SRC := $(wildcard kern/*.c)
-KERN_INCDIRS := -Ikern
+KERN_INCDIRS := -Ikern -Iinclude
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')

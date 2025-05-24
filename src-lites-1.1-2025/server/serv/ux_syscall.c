@@ -44,6 +44,7 @@
 #include <serv/syscalltrace.h>
 #include <serv/server_defs.h>
 #include <serv/syscall_subr.h>
+#include "auth.h"
 
 extern struct sysent	sysent[];
 int			nsysent;
@@ -143,6 +144,14 @@ ux_generic_server(mach_msg_header_t *InHeadP, mach_msg_header_t *OutHeadP)
 	assert(p);		/* XXX remove. debug only */
 	if (!p)
 	    return FALSE;
+
+	static struct cap ipc_cap = {0};
+	ipc_cap.rights = 0xffffffff;
+	ipc_cap.epoch = 1;
+	if (!authorize(&ipc_cap, syscode, 0)) {
+	    rep->retcode = EPERM;
+	    return TRUE;
+	}
 
 	/* attach process state to invocation state */
 	pk->k_p = p;

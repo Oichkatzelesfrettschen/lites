@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "../../include/cap.h"
+#include "auth.h"
 
 static int cap_check_node(const struct cap *c)
 {
@@ -34,6 +35,9 @@ cap_refine(struct cap *parent, unsigned long rights, unsigned int flags)
     if ((rights & parent->rights) != rights)
         return NULL;
 
+    if (!authorize(parent, CAP_OP_REFINE, rights))
+        return NULL;
+
     c = malloc(sizeof(*c));
     if (!c)
         return NULL;
@@ -66,6 +70,8 @@ void
 revoke_capability(struct cap *cap)
 {
     struct cap *child;
+    if (!authorize(cap, CAP_OP_REVOKE, 0))
+        return;
     cap->epoch++;
     for (child = cap->children; child; child = child->next_sibling)
         revoke_capability(child);
