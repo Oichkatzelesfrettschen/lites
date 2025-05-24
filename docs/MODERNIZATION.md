@@ -41,3 +41,6 @@ already been completed and what is still planned.
 - `mach4/pxk/time.c` uses placeholder values for
   `xGetTime()` marked as "FAKE! TODO! PNR" and needs a proper Mach
   time source.
+- Provide a helper script to extract Mach headers from the xkernel
+  sources into `localmach/include` for systems without an external
+

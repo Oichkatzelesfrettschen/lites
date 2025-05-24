@@ -13,7 +13,14 @@ ifneq ($(wildcard openmach/include),)
 MACHDIR := openmach
 endif
 endif
-ifneq ($(MACHDIR),)
+
+ifeq ($(MACHDIR),)
+ifneq ($(wildcard localmach/include),)
+MACH_INCDIR := -Ilocalmach/include
+else
+$(error Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule or run scripts/extract-xmach-headers.sh)
+endif
+else
 MACH_INCDIR := -I$(MACHDIR)/include
 endif
 MACHLIBDIR ?= $(LITES_MACH_LIB_DIR)
@@ -26,9 +33,6 @@ endif
 endif
 ifneq ($(MACHLIBDIR),)
 MACH_LIBS := $(wildcard $(MACHLIBDIR)/*.a)
-endif
-ifeq ($(MACHDIR),)
-$(error Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule)
 endif
 
 # Target architecture (x86_64 or i686). Determines -m32/-m64 flags.
