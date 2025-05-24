@@ -1,3 +1,8 @@
+/**
+ * Lites repository license applies to this file; see the LICENSE file
+ * in the project root for details.
+ */
+
 #include "keystore.h"
 
 #include <errno.h>
