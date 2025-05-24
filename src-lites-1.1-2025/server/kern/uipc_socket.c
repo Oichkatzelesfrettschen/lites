@@ -48,6 +48,8 @@
 #include <sys/socketvar.h>
 #include <sys/resourcevar.h>
 #include <sys/synch.h>
+#include <sys/auth.h>
+#include <sys/audit.h>
 
 /*
  * Socket operation routines.
@@ -314,6 +316,10 @@ sosend(so, addr, uio, top, control, flags)
 	int flags;
 {
 	struct proc *p = get_proc();		/* XXX */
+	int allowed = authorize(p, "sosend");
+	audit_record(p, "sosend", allowed);
+	if (!allowed)
+		return (EPERM);
 	struct mbuf **mp;
 	register struct mbuf *m;
 	register long space, len, resid;
@@ -489,6 +495,10 @@ soreceive(so, paddr, uio, mp0, controlp, flagsp)
 	int *flagsp;
 {
 	register struct mbuf *m, **mp;
+	int allowed = authorize(get_proc(), "soreceive");
+	audit_record(get_proc(), "soreceive", allowed);
+	if (!allowed)
+		return (EPERM);
 	register int flags, len, error, s, offset;
 	struct protosw *pr = so->so_proto;
 	struct mbuf *nextrecord;
