@@ -25,10 +25,25 @@ static int read_key(const char *path, unsigned char **key, size_t *len) {
         close(fd);
         return -1;
     }
-    if (read(fd, *key, sz) != sz) {
-        free(*key);
-        close(fd);
-        return -1;
+    size_t off = 0;
+    while (off < (size_t)sz) {
+        ssize_t r = read(fd, *key + off, (size_t)sz - off);
+        if (r < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            free(*key);
+            close(fd);
+            return -1;
+        }
+        if (r == 0) {
+            /* unexpected EOF */
+            free(*key);
+            close(fd);
+            errno = EIO;
+            return -1;
+        }
+        off += (size_t)r;
     }
     close(fd);
     *len = sz;
@@ -45,10 +60,25 @@ int ks_generate_key(const char *path, size_t len) {
         free(buf);
         return -1;
     }
-    if (read(fd, buf, len) != (ssize_t)len) {
-        close(fd);
-        free(buf);
-        return -1;
+    size_t off = 0;
+    while (off < len) {
+        ssize_t r = read(fd, buf + off, len - off);
+        if (r < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            close(fd);
+            free(buf);
+            return -1;
+        }
+        if (r == 0) {
+            /* unexpected EOF */
+            close(fd);
+            free(buf);
+            errno = EIO;
+            return -1;
+        }
+        off += (size_t)r;
     }
     close(fd);
     fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
@@ -56,10 +86,25 @@ int ks_generate_key(const char *path, size_t len) {
         free(buf);
         return -1;
     }
-    if (write(fd, buf, len) != (ssize_t)len) {
-        close(fd);
-        free(buf);
-        return -1;
+    off = 0;
+    while (off < len) {
+        ssize_t w = write(fd, buf + off, len - off);
+        if (w < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            close(fd);
+            free(buf);
+            return -1;
+        }
+        if (w == 0) {
+            /* unexpected short write */
+            close(fd);
+            free(buf);
+            errno = EIO;
+            return -1;
+        }
+        off += (size_t)w;
     }
     close(fd);
     free(buf);
