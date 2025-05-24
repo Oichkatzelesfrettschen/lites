@@ -55,6 +55,10 @@ If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
 location (for example `openmach/lib`).  When the variable is not set and
 `openmach/lib` exists, it will be used automatically.
 
+When neither `LITES_MACH_DIR` nor an `openmach` directory are available, run
+`scripts/import-mach-headers.sh` to populate `localmach/include` from either a
+checked out OpenMach tree or the xkernel sources bundled with this repository.
+
 Example using the makefile:
 
 ```sh

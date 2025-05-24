@@ -67,31 +67,18 @@ typedef struct Event {
 
 
 
-typedef	void	(* EvFunc)(
-#ifdef __STDC__
-			   Event,
-			   void *
-#endif
-			   );
+typedef void (*EvFunc)(Event, void *);
 
 /* schedule an event that executes f w/ argument a after delay t usec; */
 /* t may equal 0, which implies createprocess */
-Event evSchedule(
-#ifdef __STDC__
-		 EvFunc f, void *a, unsigned t
-#endif
-		 );
+Event evSchedule(EvFunc f, void *a, unsigned t);
 
 
 /*
  * releases a handle to an event; as soon f completes, the resources
  * associated with the event are freed
  */
-void evDetach(
-#ifdef __STDC__
-	      Event e
-#endif
-	      );
+void evDetach(Event e);
 
 /* cancel event e:
  *  returns EVENT_FINISHED if it knows that the event has already executed
@@ -99,42 +86,26 @@ void evDetach(
  *  returns EVENT_RUNNING if the event is currently running
  *  returns EVENT_CANCELLED if the event has been successfully cancelled
  */
-EvCancelReturn evCancel(
-#ifdef __STDC__
-	     Event e
-#endif
-	     );
+EvCancelReturn evCancel(Event e);
 
 
 /* 
  * returns true (non-zero) if an 'evCancel' has been performed on the event
  */
-int evIsCancelled(
-#ifdef __STDC__		  
-		  Event e
-#endif
-		  );
+int evIsCancelled(Event e);
 
 
 /* 
  * Displays a 'ps'-style listing of x-kernel threads
  */
-void evDump(
-#ifdef __STDC__		  
-		  void
-#endif
-		  );
+void evDump(void);
 
 
 /* 
  * Platform-specific check to see if this event is in danger of
  * overrunning the stack, triggering warning/error messages if so. 
  */
-void evCheckStack(
-#ifdef __STDC__
-		  char *
-#endif
-		  );
+void evCheckStack(char *);
 
 
 #endif
