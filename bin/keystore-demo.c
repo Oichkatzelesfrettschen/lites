@@ -1,3 +1,8 @@
+/**
+ * Lites repository license applies to this file; see the LICENSE file
+ * in the project root for details.
+ */
+
 #include "keystore.h"
 
 #include <stdio.h>
@@ -26,7 +31,10 @@ int main(int argc, char *argv[]) {
     }
 
     size_t enc_len;
-    ks_encrypt(argv[1], (const unsigned char *)argv[2], msg_len, enc, &enc_len);
+    if (ks_encrypt(argv[1], (const unsigned char *)argv[2], strlen(argv[2]), enc, &enc_len) != 0) {
+        perror("ks_encrypt");
+        return 1;
+    }
 
     printf("ciphertext: ");
     for (size_t i = 0; i < enc_len; i++) {
@@ -35,7 +43,10 @@ int main(int argc, char *argv[]) {
     printf("\n");
 
     size_t dec_len;
-    ks_decrypt(argv[1], enc, enc_len, dec, &dec_len);
+    if (ks_decrypt(argv[1], enc, enc_len, dec, &dec_len) != 0) {
+        perror("ks_decrypt");
+        return 1;
+    }
     dec[dec_len] = '\0';
     printf("decrypted: %s\n", dec);
 
