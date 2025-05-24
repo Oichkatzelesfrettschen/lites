@@ -22,6 +22,8 @@ a.out
 /dist/
 /release/
 compile_commands.json
+# Generated Mach headers
+localmach/
 
 # Ignore archived source tarballs
 *.tar.gz

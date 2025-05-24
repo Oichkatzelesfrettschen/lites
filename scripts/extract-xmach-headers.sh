@@ -12,7 +12,9 @@ for MACH in mach4 mach3; do
     [ -d "$SRC" ] || continue
     while IFS= read -r -d '' FILE; do
         REL="${FILE#${SRC}/}"
-        REL="${REL/\/include\//\/}"
+        if [[ $REL == include/* ]]; then
+            REL=${REL#include/}
+        fi
         TARGET="$DEST/$REL"
         mkdir -p "$(dirname "$TARGET")"
         cp "$FILE" "$TARGET"

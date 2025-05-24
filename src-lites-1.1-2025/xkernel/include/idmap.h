@@ -28,21 +28,12 @@ typedef struct mapelement {
 
 typedef struct map	*Map;
 
-#ifdef __STDC__
 
 typedef xkern_return_t (* XMapResolveFunc)( Map, void *, void ** );
 typedef Bind 	       (* XMapBindFunc)( Map, void *, void * );
 typedef xkern_return_t (* XMapRemoveFunc)( Map, Bind );
 typedef xkern_return_t (* XMapUnbindFunc)( Map, void * );
 
-#else
-
-typedef xkern_return_t (* XMapResolveFunc)();
-typedef Bind 	       (* XMapBindFunc)();
-typedef xkern_return_t (* XMapRemoveFunc)();
-typedef xkern_return_t (* XMapUnbindFunc)();
-
-#endif __STDC__
 
 
 struct map {
@@ -70,7 +61,6 @@ struct map {
 #define MFE_CONTINUE	1
 #define MFE_REMOVE	2
 
-#ifdef __STDC__
 
 typedef	int (*MapForEachFun)( void *key, void *value, void *arg );
 
@@ -86,19 +76,6 @@ extern Bind	mapVarBind(Map, VOID *, int, VOID *);
  */
 extern void	map_init( void );
 
-#else
-
-typedef	int (*MapForEachFun)();
-
-extern void 	mapClose();
-extern Map 	mapCreate();
-extern void	mapForEach();
-extern xkern_return_t mapVarResolve();
-extern Bind	mapVarBind();
-
-extern void	map_init();
-
-#endif __STDC__
 
 
 #endif /* idmap_h */

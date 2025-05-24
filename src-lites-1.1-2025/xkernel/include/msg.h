@@ -30,17 +30,13 @@ typedef struct {
   /* copy from a buffer into the contig at offset; 			*/
   /* return the number of bytes copied					*/
   long (*copyIn)(
-#ifdef __STDC__		
 		 char* from, long offset, long size
-#endif
 		 );
 
   /* copy from the contig at offset to a buffer; 			*/
   /* return the number of bytes copied					*/
   long (*copyOut)(
-#ifdef __STDC__
 		  char* to, long offset, long size
-#endif
 		  );
 
 } MContig;
@@ -51,16 +47,9 @@ typedef struct {
 /* 
  * types of user functions called in ForEach()
  */
-#if defined(__STDC__) || defined(__GNUC__)
 typedef bool (*XCharFun)( char *ptr, long len, void *arg );
 typedef bool (*MContigFun)(MContig *contig, long offset, long len, void *arg); 
 
-#else
-
-typedef bool (*XCharFun)();
-typedef bool (*MContigFun)();
-
-#endif
 /*
  * types of load and store functions for headers
  */
@@ -71,9 +60,7 @@ typedef bool (*MContigFun)();
  * argument passed through msgPush
  */
 typedef void (*MStoreFun)(
-#if defined(__STDC__) || defined(__GNUC__)
 			  void *hdr, char *des, long len, void *arg
-#endif
 			  );
 
 /* function to load the header from a potentially unaligned buffer, 	
@@ -82,12 +69,9 @@ typedef void (*MStoreFun)(
  * argument passed through msgPop
  */
 typedef long (*MLoadFun)(
-#if defined(__STDC__) || defined(__GNUC__)
 			 void *hdr, char *src, long len, void *arg
-#endif
 			 );
 
-#if defined(__STDC__) || defined(__GNUC__)
 
 /* Msg operations */
 
@@ -173,16 +157,13 @@ void msgCleanUp(Msg *this);
 /* long enough */
 void msg2buf( Msg *this, char *buf );
 
-#endif __STDC__
 
 
 /*
  * associate an attribute with a message
  */
 xkern_return_t	msgSetAttr(
-#if defined(__STDC__) || defined(__GNUC__)
 			   Msg *this, int name, VOID *attr, int len
-#endif
 			   );
 
 
@@ -190,9 +171,7 @@ xkern_return_t	msgSetAttr(
  * retrieve an attribute associated with a message
  */
 VOID *		msgGetAttr(
-#if defined(__STDC__) || defined(__GNUC__)
 			  Msg *this, int name
-#endif
 			  );
 
 
@@ -202,9 +181,7 @@ VOID *		msgGetAttr(
 /* (=length of contig), and void *arg (=user-supplied argument), */  
 /* while f returns TRUE */
 void msgForEach(
-#if defined(__STDC__) || defined(__GNUC__)
 		Msg *this, XCharFun f, void *arg
-#endif
 		);
 
 /* for every contig in this Msg, invoke the function f with  */
@@ -213,14 +190,11 @@ void msgForEach(
 /* while f returns TRUE */
 /* the memory described by contig may not be accessible!! */
 void msgForEachContig(
-#if defined(__STDC__) || defined(__GNUC__)
 		      Msg *this, MContigFun f, void *arg
-#endif
 		      );
 
 
 
-#if defined(__STDC__) || defined(__GNUC__)
 
 /************* virtual memory funniness **************/
 /* import a Msg from a different address space */
@@ -248,6 +222,5 @@ void msgShow( Msg *this );
  */
 void msgStats( void );
 
-#endif __STDC__
 
 #endif msg_h
