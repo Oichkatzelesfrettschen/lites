@@ -14,8 +14,11 @@ int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len,
                unsigned char *out, size_t *out_len);
 ```
 
-`ks_generate_key` creates a random symmetric key and writes it to the specified file.
-`ks_encrypt` and `ks_decrypt` perform a simple XOR based transformation using the stored key.
+`ks_generate_key` creates a random symmetric key and writes it to the specified
+file.  `ks_encrypt` and `ks_decrypt` perform a simple XOR-based transformation
+with that key.  **This method provides no real security and is intended purely
+for demonstration.**  Future work may replace the implementation with a
+standard cipher such as AES, potentially using the OpenSSL library.
 
 ## Enclave
 
