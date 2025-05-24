@@ -42,6 +42,21 @@ jobs:
           CC=${{ matrix.cc }} cmake -B build -DARCH=${{ matrix.arch }} -DSANITIZE=${{ matrix.sanitize || 0 }}
           cmake --build build
 
+      - name: Build tests
+        run: |
+          make -C src-lites-1.1-2025/bin/user_pager CC=${{ matrix.cc }}
+          make -C tests/audit CC=${{ matrix.cc }}
+          make -C tests/cap CC=${{ matrix.cc }}
+          make -C tests/iommu CC=${{ matrix.cc }}
+          make -C tests/vm_fault CC=${{ matrix.cc }}
+
+      - name: Run tests
+        run: |
+          ./tests/audit/test_audit
+          ./tests/cap/test_cap
+          ./tests/iommu/test_iommu
+          ./tests/vm_fault/test_vm_fault
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
