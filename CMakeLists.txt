@@ -133,7 +133,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
         "${MACH_INCLUDE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/kern")
+        "${CMAKE_CURRENT_SOURCE_DIR}/kern"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/x86_64")
@@ -154,7 +155,8 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator"
             "${MACH_INCLUDE_DIR}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/kern")
+            "${CMAKE_CURRENT_SOURCE_DIR}/kern"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include")
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/x86_64")
