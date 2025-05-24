@@ -85,6 +85,7 @@ SERVER_COMMON_DIRS := \
 SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
+IOMMU_SRC := $(wildcard $(SRCDIR)/iommu/*.c)
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')
@@ -105,8 +106,8 @@ prepare:
 	  ln -s $$arch_dir $(SRCDIR)/include/machine; \
 	fi
 
-lites_server: $(SERVER_SRC)
-        $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_server: $(SERVER_SRC) $(IOMMU_SRC)
+       $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC)

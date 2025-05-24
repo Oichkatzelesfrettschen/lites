@@ -98,6 +98,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.S")
         list(APPEND SERVER_SRC ${_dir_src})
     endforeach()
+    file(GLOB _iommu_src "${LITES_SRC_DIR}/iommu/*.c")
+    list(APPEND SERVER_SRC ${_iommu_src})
 
     if(EXISTS "${LITES_SRC_DIR}/emulator")
         file(GLOB EMULATOR_SUBDIRS RELATIVE "${LITES_SRC_DIR}/emulator" "${LITES_SRC_DIR}/emulator/*")
@@ -121,6 +123,7 @@ if(EXISTS "${LITES_SRC_DIR}")
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
+        "${LITES_SRC_DIR}/iommu"
         "${LITES_SRC_DIR}/server"
         "${MACH_INCLUDE_DIR}")
     if(ARCH STREQUAL "x86_64")
