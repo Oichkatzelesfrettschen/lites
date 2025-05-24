@@ -177,3 +177,6 @@ if(EXISTS "${LITES_SRC_DIR}")
     endif()
 endif()
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    add_subdirectory(tests)
+endif()

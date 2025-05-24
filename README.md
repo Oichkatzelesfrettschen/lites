@@ -166,6 +166,6 @@ Run the resulting `user_pager` alongside `lites_server` to service page faults.
 The VM test in `tests/vm_fault` demonstrates this interaction.
 Build and run it with:
 ```sh
-make -C tests/vm_fault
+make -f Makefile.new test
 ./tests/vm_fault/test_vm_fault
 ```

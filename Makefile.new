@@ -107,6 +107,8 @@ ifneq ($(EMULATOR_SRC),)
 TARGETS += lites_emulator
 endif
 
+TEST_SUBDIRS := $(sort $(dir $(wildcard tests/*/Makefile)))
+
 all: prepare $(TARGETS)
 
 prepare:
@@ -123,7 +125,14 @@ ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC) $(KERN_SRC)
         $(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 endif
-	
+
 clean:
-	rm -f lites_server lites_emulator
+        rm -f lites_server lites_emulator
+
+test: all
+       @for d in $(TEST_SUBDIRS); do \
+               $(MAKE) -C $$d; \
+       done
+
+.PHONY: all prepare clean test
 
