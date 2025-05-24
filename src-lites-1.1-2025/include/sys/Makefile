@@ -37,10 +37,10 @@ INCLUDES = acct.h gprof.h parallel.h synch.h uio.h buf.h ioctl.h \
 	shared_lock.h domain.h \
 	errno.h mbuf.h signal.h tty.h vnode.h exec.h \
 	mman.h signalvar.h ttychars.h fcntl.h mount.h socket.h \
-	ttydefaults.h msgbuf.h socketvar.h ttydev.h \
-	wait.h file.h mtio.h types.h zalloc.h filedesc.h \
-	namei.h stat.h ucred.h dirent.h ttycom.h ioccom.h filio.h sockio.h \
-	select.h som.h coff.h
+        ttydefaults.h msgbuf.h socketvar.h ttydev.h \
+        wait.h file.h mtio.h types.h zalloc.h filedesc.h \
+        namei.h stat.h ucred.h dirent.h ttycom.h ioccom.h filio.h sockio.h \
+        select.h som.h coff.h auth.h audit.h
 
 
 ILIST		= ${INCLUDES}

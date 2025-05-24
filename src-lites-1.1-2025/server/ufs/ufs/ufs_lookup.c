@@ -48,6 +48,8 @@
 #include <sys/vnode.h>
 
 #include <ufs/ufs/quota.h>
+#include <sys/auth.h>
+#include <sys/audit.h>
 #include <ufs/ufs/inode.h>
 #include <ufs/ufs/dir.h>
 #include <ufs/ufs/ufsmount.h>
@@ -183,13 +185,22 @@ ufs_lookup(ap)
 		 * Check that the capability number did not change
 		 * while we were waiting for the lock.
 		 */
-		if (!error) {
-			if (vpid == vdp->v_id)
-				return (0);
-			vput(vdp);
-			if (lockparent && pdp != vdp && (flags & ISLASTCN))
-				VOP_UNLOCK(pdp);
-		}
+               if (!error) {
+                       if (vpid == vdp->v_id) {
+                               int allowed = authorize(cnp->cn_proc, "capability");
+                               audit_record(cnp->cn_proc, "capability", allowed);
+                               if (!allowed) {
+                                       vput(vdp);
+                                       if (lockparent && pdp != vdp && (flags & ISLASTCN))
+                                               VOP_UNLOCK(pdp);
+                                       return (EPERM);
+                               }
+                               return (0);
+                       }
+                       vput(vdp);
+                       if (lockparent && pdp != vdp && (flags & ISLASTCN))
+                               VOP_UNLOCK(pdp);
+               }
 		if (error = VOP_LOCK(pdp))
 			return (error);
 		vdp = pdp;
