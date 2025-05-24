@@ -26,11 +26,7 @@ typedef int	xmsg_handle_t;
 #define XMSG_ERR_HANDLE		-1
 #define XMSG_ERR_WOULDBLOCK	-2
 
-#if defined(__STDC__) || defined(__GNUC__)
-#   define VOID		void
-#else
-#   define VOID		char
-#endif
+#define VOID         void
 
 typedef	xkern_return_t (*Pfk) ();
 typedef	int (*Pfi) ();
@@ -41,4 +37,4 @@ typedef xmsg_handle_t (*Pfh)();
 
 #define XK_MAX_HOST_LEN		6
 
-#endif ! xtype_h
+#endif /* xtype_h */

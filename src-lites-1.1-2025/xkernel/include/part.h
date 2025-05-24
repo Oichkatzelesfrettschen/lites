@@ -15,7 +15,6 @@
 
 #ifndef xtype_h
 #include "xtype.h"
-#endif
 
 /* 
  * Participant library
@@ -38,17 +37,9 @@ typedef struct {
     PartStack	stack;	/* A stack of void* pointers */
 } Part;
 
-#ifdef __STDC__
 
 void	partStackPush( PartStack *s, void *data, int );
 void *	partStackPop( PartStack *s );
-
-#else
-
-void		partStackPush();
-VOID		*partStackPop();
-
-#endif __STDC__
 
 /********************  public declarations ****************/
 
@@ -58,9 +49,7 @@ VOID		*partStackPop();
 /* 
  * Initialize a vector of N participants
  */
-#ifdef __STDC__
 void	partInit( Part *p, int N );
-#endif
 
 /* 
  * push 'data' onto the stack of participant 'p'.  
@@ -76,23 +65,17 @@ void	partInit( Part *p, int N );
 #define partLen( partPtr ) (partPtr->len)
 
 xkern_return_t	partExternalize(
-#ifdef __STDC__
 				Part *, VOID *, int *
-#endif
 				);
 
 void partInternalize(
-#ifdef __STDC__
 				Part *, VOID *
-#endif
 				);
 
 #define partExtLen( _bufPtr )	( *(int *)(_bufPtr) )
 
 int partStackTopByteLen(
-#ifdef __STDC__
 			Part
-#endif
 			);
 
 
