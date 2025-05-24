@@ -30,6 +30,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-i686-linux-gnu g++-i686-linux-gnu
 
+      - name: Install pre-commit
+        run: |
+          python3 -m pip install --upgrade pre-commit
+          pre-commit --version
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
+
       - name: Check for K&R style functions
         run: scripts/check-kr.sh
 
@@ -38,22 +46,71 @@ jobs:
           mkdir -p build
           tar -xzf "Historical Archives/lites-1.1.u3.tar.gz" -C build
 
-      - name: Build for ${{ matrix.arch }}
-        run: |
-          suffix=""
-          if [ "${{ matrix.sanitize }}" = "1" ]; then
-            suffix="-asan"
-          fi
-          make -f Makefile.new clean
-          make -f Makefile.new CC=${{ matrix.cc }} SANITIZE=${{ matrix.sanitize }}
-          mv lites_server lites_server-${{ matrix.arch }}$suffix
-          mv lites_emulator lites_emulator-${{ matrix.arch }}$suffix
+      - name: Build for ${
+    {
+        matrix.arch
+    }
+}
+run : | suffix = "" if["${{ matrix.sanitize }}" = "1"];
+then suffix = "-asan" fi make - f Makefile.new clean make - f Makefile.new CC = $ {
+    {
+        matrix.cc
+    }
+}
+SANITIZE = $ {
+    {
+        matrix.sanitize
+    }
+}
+mv lites_server lites_server - $ {
+    {
+        matrix.arch
+    }
+}
+$suffix mv lites_emulator lites_emulator - $ {
+    {
+        matrix.arch
+    }
+}
+$suffix
 
-      - name: Upload ${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }} artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: lites-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
-          path: |
-            lites_server-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
-            lites_emulator-${{ matrix.arch }}${{ matrix.sanitize == 1 && '-asan' || '' }}
-
+    - name : Upload $ {
+    {
+        matrix.arch
+    }
+}
+$ {
+    {
+        matrix.sanitize == 1 && '-asan' || ''
+    }
+}
+artifacts uses : actions / upload - artifact @v3 with : name : lites - $ {
+    {
+        matrix.arch
+    }
+}
+$ {
+    {
+        matrix.sanitize == 1 && '-asan' || ''
+    }
+}
+path : | lites_server - $ {
+    {
+        matrix.arch
+    }
+}
+$ {
+    {
+        matrix.sanitize == 1 && '-asan' || ''
+    }
+}
+lites_emulator - $ {
+    {
+        matrix.arch
+    }
+}
+$ {
+    {
+        matrix.sanitize == 1 && '-asan' || ''
+    }
+}
