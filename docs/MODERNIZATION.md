@@ -19,3 +19,25 @@ already been completed and what is still planned.
 - Modernise the emulator support and verify cross‑builds.
 - Expand documentation for cross‑compiling and runtime testing.
 - Audit remaining TODO comments in the source tree.
+- Convert header prototypes still guarded by `__STDC__` or using
+  the legacy `__P()` macro. Examples include
+  `xkernel/include/event.h`, `xkernel/include/msg.h` and numerous
+  Mach headers.
+- Replace use of `bzero`, `bcopy` and `bcmp` with their modern
+  `memset`, `memcpy` and `memcmp` equivalents. More than eighty
+  occurrences remain across files such as
+  `protocols/join/join.c`, `protocols/chan/chan.c`,
+  `protocols/udp/udp.c` and several Mach drivers.
+- Remove `register` qualifiers and update old style function
+  declarations.  `protocols/tcp-tahoe/tcp_output.c`,
+  `protocols/tcp-tahoe/tcp_subr.c` and `protocols/pmap/xkpm.c`
+  still require modern prototypes.
+
+### Mach-specific TODOs
+
+- `mach3/drivers/xec596/xec596.c` and
+  `mach4/drivers/xec596/xec596.c` mention a TODO to "Go native" for
+  the 82596 driver implementation.
+- `mach4/pxk/time.c` uses placeholder values for
+  `xGetTime()` marked as "FAKE! TODO! PNR" and needs a proper Mach
+  time source.
