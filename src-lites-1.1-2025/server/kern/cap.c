@@ -1,9 +1,14 @@
-#include <stdlib.h>
 #include "../../include/cap.h"
+#include <stdlib.h>
 #include "auth.h"
 
-static int cap_check_node(const struct cap *c)
-{
+
+/*
+ * Recursively verify invariants for capability @c and its subtree.  Children
+ * must reference @c as their parent, may only have a subset of @c's rights and
+ * must share the same epoch value.
+ */
+static int cap_check_node(const struct cap *c) {
     const struct cap *child;
     for (child = c->children; child; child = child->next_sibling) {
         if (child->parent != c)
@@ -18,16 +23,18 @@ static int cap_check_node(const struct cap *c)
     return 1;
 }
 
-int cap_check(const struct cap *cap)
-{
+/* Public wrapper that validates a capability tree starting at @cap. */
+int cap_check(const struct cap *cap) {
     if (!cap)
         return 0;
     return cap_check_node(cap);
 }
 
-struct cap *
-cap_refine(struct cap *parent, unsigned long rights, unsigned int flags)
-{
+/*
+ * Derive a new capability from @parent with a restricted rights mask.
+ * Returns the newly allocated capability or NULL on error.
+ */
+struct cap *cap_refine(struct cap *parent, unsigned long rights, unsigned int flags) {
     struct cap *c;
 
     if (!parent)
@@ -54,9 +61,8 @@ cap_refine(struct cap *parent, unsigned long rights, unsigned int flags)
     return c;
 }
 
-void
-delete_subtree(struct cap *cap)
-{
+/* Recursively free a capability subtree. */
+void delete_subtree(struct cap *cap) {
     struct cap *child = cap->children;
     while (child) {
         struct cap *next = child->next_sibling;
@@ -66,9 +72,12 @@ delete_subtree(struct cap *cap)
     free(cap);
 }
 
-void
-revoke_capability(struct cap *cap)
-{
+/*
+ * Revoke a capability subtree by incrementing its epoch counter.  All
+ * descendants receive the new epoch value which invalidates references
+ * obtained prior to revocation.
+ */
+void revoke_capability(struct cap *cap) {
     struct cap *child;
     if (!authorize(cap, CAP_OP_REVOKE, 0))
         return;
