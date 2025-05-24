@@ -141,6 +141,21 @@ root and require the corresponding `qemu-system` binary in `PATH`.
 
 Additional notes are kept in [`docs/`](docs/).
 
+## Tests
+
+Build all unit tests with:
+```sh
+make -f Makefile.new test
+```
+Or using CMake:
+```sh
+cmake --build build --target test
+```
+Each test binary is located in its own subdirectory under `tests/` and can be
+executed directly.  For example:
+```sh
+./tests/vm_fault/test_vm_fault
+```
 
 A simple user-level pager is provided in `src-lites-1.1-2025/bin/user_pager`.
 Build it with:
