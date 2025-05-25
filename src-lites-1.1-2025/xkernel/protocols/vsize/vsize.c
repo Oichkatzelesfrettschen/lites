@@ -46,8 +46,7 @@ static XObjRomOpt	vsizeOpts[] = {
 
 
 void
-vsize_init(self)
-    XObj self;
+vsize_init(XObj self)
 {
     PSTATE	*pstate;
     int		i;
@@ -77,9 +76,7 @@ vsize_init(self)
 
 
 static XObj
-vsizeOpen(self, hlpRcv, hlpType, p)
-    XObj self, hlpRcv, hlpType;
-    Part *p;
+vsizeOpen(XObj self, XObj hlpRcv, XObj hlpType, Part *p)
 {
     XObj	s;
     XObj	lls[VSIZEMAXDOWN];
@@ -135,9 +132,7 @@ vsizeOpen(self, hlpRcv, hlpType, p)
  * Assumes no session already exists corresponding to the lls's in the array
  */
 static XObj
-vsizeCreateSessn(self, hlpRcv, hlpType, lls)
-    XObj self, hlpRcv, hlpType;
-    XObj *lls;
+vsizeCreateSessn(XObj self, XObj hlpRcv, XObj hlpType, XObj *lls)
 {
     XObj	s;
     SSTATE	*sstate;
@@ -194,11 +189,7 @@ vsizeCreateSessn(self, hlpRcv, hlpType, lls)
 
 
 static int
-vsizeControlSessn(s, opcode, buf, len)
-    XObj s;
-    int opcode;
-    char *buf;
-    int len;
+vsizeControlSessn(XObj s, int opcode, char *buf, int len)
 {
     SSTATE	*sstate = (SSTATE *)s->state;
     xTrace0(vsizep, TR_EVENTS, "VSIZE controlsessn");
@@ -216,11 +207,7 @@ vsizeControlSessn(s, opcode, buf, len)
 
 
 static int
-vsizeControlProtl(self, opcode, buf, len)
-    XObj self;
-    int opcode;
-    char *buf;
-    int len;
+vsizeControlProtl(XObj self, int opcode, char *buf, int len)
 {
     PSTATE	*pstate = (PSTATE *)self->state;
     /*
@@ -231,9 +218,7 @@ vsizeControlProtl(self, opcode, buf, len)
 
 
 static xkern_return_t
-vsizeOpenEnable( self, hlpRcv, hlpType, p )
-    XObj self, hlpRcv, hlpType;
-    Part *p;
+vsizeOpenEnable(XObj self, XObj hlpRcv, XObj hlpType, Part *p)
 {
     PSTATE	*ps = (PSTATE *)self->state;
     
@@ -244,9 +229,7 @@ vsizeOpenEnable( self, hlpRcv, hlpType, p )
 
 
 static xkern_return_t
-vsizeOpenDisable(self, hlpRcv, hlpType, p)
-    XObj self, hlpRcv, hlpType;
-    Part *p;
+vsizeOpenDisable(XObj self, XObj hlpRcv, XObj hlpType, Part *p)
 {
     PSTATE	*ps = (PSTATE *)self->state;
 
@@ -256,8 +239,7 @@ vsizeOpenDisable(self, hlpRcv, hlpType, p)
 
 
 static xkern_return_t
-vsizeClose(s)
-    XObj s;
+vsizeClose(XObj s)
 {
     PSTATE		*pstate;
     xkern_return_t	res;
@@ -280,9 +262,7 @@ vsizeClose(s)
 
 
 static xmsg_handle_t
-vsizePush(s, msg)
-    XObj s;
-    Msg *msg;
+vsizePush(XObj s, Msg *msg)
 {
     SSTATE	*sstate;
     int i;
@@ -305,8 +285,7 @@ vsizePush(s, msg)
 
 
 static xkern_return_t
-vsizeOpenDone(self, lls, llp, hlpType)
-    XObj self, lls, llp, hlpType;
+vsizeOpenDone(XObj self, XObj lls, XObj llp, XObj hlpType)
 {
     XObj	s;
     Part 	p[2];
@@ -387,9 +366,7 @@ vsizeOpenDone(self, lls, llp, hlpType)
 
 
 static xkern_return_t
-vsizeProtlDemux( self, lls, m )
-    XObj	self, lls;
-    Msg		*m;
+vsizeProtlDemux(XObj self, XObj lls, Msg *m)
 {
     xTrace0(vsizep, TR_ERRORS, "vsizeProtlDemux called!!");
     return XK_SUCCESS;
@@ -401,11 +378,7 @@ vsizeProtlDemux( self, lls, m )
  * bypassed) for the UPI reference count mechanism to work properly. 
  */
 static xkern_return_t
-vsizePop(self, lls, msg, h)
-    XObj self;
-    XObj lls;
-    Msg *msg;
-    VOID *h;
+vsizePop(XObj self, XObj lls, Msg *msg, VOID *h)
 {
     xTrace0(vsizep, TR_EVENTS, "vsize Pop");
     return xDemux(self, msg);
@@ -413,10 +386,7 @@ vsizePop(self, lls, msg, h)
 
 
 static xkern_return_t
-vsizeSessnDemux(self, lls, msg)
-    XObj self;
-    XObj lls;
-    Msg *msg;
+vsizeSessnDemux(XObj self, XObj lls, Msg *msg)
 {
     xTrace0(vsizep, TR_EVENTS, "vsize Session Demux");
     return xPop(self, lls, msg, 0);
@@ -424,8 +394,7 @@ vsizeSessnDemux(self, lls, msg)
 
 
 static void
-sessnInit(s)
-    XObj s;
+sessnInit(XObj s)
 {
     xAssert(xIsSession(s));
     
@@ -442,8 +411,7 @@ sessnInit(s)
 
 
 static void
-protlFuncInit(p)
-    XObj p;
+protlFuncInit(XObj p)
 {
     xAssert(xIsProtocol(p));
 
@@ -457,11 +425,7 @@ protlFuncInit(p)
 
 
 static xkern_return_t
-readCutoff( self, str, nFields, line, arg )
-    XObj	self;
-    char	**str;
-    int		nFields, line;
-    VOID	*arg;
+readCutoff(XObj self, char **str, int nFields, int line, VOID *arg)
 {
     PSTATE	*ps = (PSTATE *)self->state;
     int i,val;
