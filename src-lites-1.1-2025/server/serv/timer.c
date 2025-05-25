@@ -171,7 +171,7 @@ unsigned int timer_wakeups = 0;	/* for debugging only */
  * The timer thread blocks until a timeout expires and then calls
  * ws_signal_with_locking on the wstate.
  */
-noreturn timer_thread()
+_Noreturn void timer_thread(void)
 {
 	struct timeval now, diff;
 	timer_element_t telt;
