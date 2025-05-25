@@ -47,7 +47,7 @@ ns532_OBJFILES = misc_asm.o memcmp.o in_cksum.o bcmp.o
 mips_OBJFILES = ntoh.o memcmp.o bcmp.o
 alpha_OBJFILES = ntoh.o bcmp.o memcmp.o
 
-OBJFILES = ${${TARGET_MACHINE}_OBJFILES} exec_file.o
+OBJFILES = ${${TARGET_MACHINE}_OBJFILES} exec_file.o posix.o
 OFILES_P = $(patsubst %.o,%_p.o,${OBJFILES})
 
 # XXX ar may require different flags on different platforms. Move to autoconf.
