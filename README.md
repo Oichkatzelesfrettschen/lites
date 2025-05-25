@@ -82,6 +82,11 @@ Their paths are listed in [headers_inventory.csv](headers_inventory.csv) for
 easy reference. Each row in the CSV shows the path to a header relative to the
 repository root.
 
+To gather all these headers into a single directory run
+`scripts/flatten-headers.sh`. The script copies every header into the
+`flattened_include/` directory and automatically renames duplicates by
+embedding the original path in the filename.
+
 ## Building
 
 Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  Each
