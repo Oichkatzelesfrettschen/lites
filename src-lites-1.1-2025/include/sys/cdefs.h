@@ -20,6 +20,15 @@
 #define __dead2
 #define __pure2
 #endif
+#ifndef _Noreturn
+# if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+/* _Noreturn is a keyword */
+# elif defined(__GNUC__)
+#  define _Noreturn __attribute__((__noreturn__))
+# else
+#  define _Noreturn
+# endif
+#endif
 #define __dead
 #define __unused       __attribute__((__unused__))
 
