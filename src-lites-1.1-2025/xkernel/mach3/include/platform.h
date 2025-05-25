@@ -38,19 +38,11 @@
 #include "msg_s.h"
 
 
-#ifdef __STDC__
 
 extern	char *	xMalloc( unsigned );
 extern  void 	xFree( char * );
 extern  void	xMallocInit( void );
 
-#else
-
-extern	char *	xMalloc(  );
-extern  void 	xFree(  );
-extern  void	xMallocInit();
-
-#endif __STDC__
 
 
 extern char *strcpy();
@@ -64,19 +56,11 @@ extern char *strcpy();
 #endif
 
 
-#ifdef __STDC__
 
 void	evInit( int );
 u_short inCkSum( Msg *m, u_short *buf, int len );
 u_short ocsum( u_short *buf, int count );
 
-#else
-
-void	evInit();
-u_short inCkSum( );
-u_short ocsum(  );
-
-#endif __STDC__
 
 
 typedef long *Unspec;

@@ -30,10 +30,8 @@ typedef struct {
     unsigned int timeout;
 } chan_info_t; 
     
-#ifdef __STDC__
 
 void	chan_init( XObj );
 
-#endif
 
 #endif chan_h

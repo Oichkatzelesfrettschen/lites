@@ -115,7 +115,6 @@ extern int	tracebidctlp;
 #define BIDCTL_BCAST_QUERY_DELAY	3 * 1000	/* 3 seconds */
 
 
-#ifdef __STDC__
 
 void	bidctlBcastBoot( XObj );
 xkern_return_t	bidctlDestroy( BidctlState * );
@@ -134,24 +133,5 @@ void	bidctlTimer( Event, VOID * );
 void	bidctlTimeout( Event, VOID * );
 void	bidctlTransition( BidctlState *, BidctlHdr * );
 
-#else
-
-void	bidctlBcastBoot();
-xkern_return_t	bidctlDestroy();
-void	bidctlDispState();
-char *	bidctlFsmStr();
-void	bidctlHdrDump();
-void	bidctlHdrStore();
-BootId	bidctlNewId();
-void	bidctlOutput();
-void	bidctlReleaseWaiters();
-BootId	bidctlReqTag();
-void	bidctlSemWait();
-void	bidctlStartQuery();
-void	bidctlTimer();
-void	bidctlTimeout();
-void	bidctlTransition();
-
-#endif
 
 #endif  ! bootid_i_h

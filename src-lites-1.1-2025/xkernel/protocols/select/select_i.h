@@ -41,7 +41,6 @@ typedef long PassiveKey;
 
 extern int	traceselectp;
 
-#ifdef __STDC__
 
 void		selectCommonInit( XObj );
 XObj		selectCommonOpen( XObj, XObj, XObj, Part *, long );
@@ -52,18 +51,6 @@ int		selectCommonControlSessn( XObj, int, char *, int );
 xkern_return_t	selectCallDemux( XObj, XObj, Msg *, Msg * );
 xkern_return_t	selectDemux( XObj, XObj, Msg * );
 
-#else
-
-void		selectCommonInit();
-XObj		selectCommonOpen();
-xkern_return_t	selectCommonOpenDisable();
-xkern_return_t 	selectCommonOpenEnable();
-int		selectControlProtl();
-int		selectCommonControlSessn();
-xkern_return_t	selectDemux();
-xkern_return_t	selectCallDemux();
-
-#endif __STDC__
 
 
 #endif	! select_i_h

@@ -39,7 +39,6 @@ typedef	struct list_entry	*list_entry_t;
 #define	delist(list)		delist_head(list)
 
 
-#ifdef __STDC__
 
 list_entry_t	delist_head( list_t );
 list_entry_t	delist_head_strong( list_t );
@@ -49,15 +48,5 @@ void 		enlist_tail( list_t, list_entry_t );
 void		list_init( list_t );
 
 
-#else
-
-list_entry_t	delist_head();
-list_entry_t	delist_head_strong();
-list_entry_t	delist_tail();
-void 		enlist_head();
-void 		enlist_tail();
-void		list_init();
-
-#endif __STDC__
 
 #endif list_h

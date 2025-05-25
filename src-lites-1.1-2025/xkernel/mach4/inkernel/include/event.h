@@ -68,18 +68,14 @@ typedef struct Event {
 
 
 typedef	void	(* EvFunc)(
-#ifdef __STDC__
 			   Event,
 			   void *
-#endif
 			   );
 
 /* schedule an event that executes f w/ argument a after delay t usec; */
 /* t may equal 0, which implies createprocess */
 Event evSchedule(
-#ifdef __STDC__
 		 EvFunc f, void *a, unsigned t
-#endif
 		 );
 
 
@@ -88,9 +84,7 @@ Event evSchedule(
  * associated with the event are freed
  */
 void evDetach(
-#ifdef __STDC__
 	      Event e
-#endif
 	      );
 
 /* cancel event e:
@@ -100,9 +94,7 @@ void evDetach(
  *  returns EVENT_CANCELLED if the event has been successfully cancelled
  */
 EvCancelReturn evCancel(
-#ifdef __STDC__
 	     Event e
-#endif
 	     );
 
 
@@ -110,9 +102,7 @@ EvCancelReturn evCancel(
  * returns true (non-zero) if an 'evCancel' has been performed on the event
  */
 int evIsCancelled(
-#ifdef __STDC__		  
 		  Event e
-#endif
 		  );
 
 
@@ -120,9 +110,7 @@ int evIsCancelled(
  * Displays a 'ps'-style listing of x-kernel threads
  */
 void evDump(
-#ifdef __STDC__		  
 		  void
-#endif
 		  );
 
 
@@ -131,9 +119,7 @@ void evDump(
  * overrunning the stack, triggering warning/error messages if so. 
  */
 void evCheckStack(
-#ifdef __STDC__
 		  char *
-#endif
 		  );
 
 

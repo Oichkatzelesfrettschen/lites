@@ -16,10 +16,8 @@
 #define BLAST_SETOUTSTANDINGMSGS (BLAST_CTL*MAXOPS + 0)
 #define BLAST_GETOUTSTANDINGMSGS (BLAST_CTL*MAXOPS + 1)
 
-#  ifdef __STDC__
 
 void		blast_init( XObj );
 
-#  endif
 
 #endif blast_h

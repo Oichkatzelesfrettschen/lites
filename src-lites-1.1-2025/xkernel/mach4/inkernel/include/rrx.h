@@ -20,7 +20,6 @@
 #ifndef rrx_h
 #define rrx_h
 
-#ifdef __STDC__
 
 void		rrx_init( XObj );
 
@@ -38,13 +37,5 @@ xkern_return_t	rrxMoveReceiveRights( IPhost h, MsgId id, mnetport **np );
 void		rrxTransferComplete( IPhost , MsgId );
 
 
-#else
-
-void		rrx_init();
-xkern_return_t	rrxMoveReceiveRights();
-void		rrxTransferComplete();
-
-
-#endif __STDC__
 
 #endif  ! rrx_h

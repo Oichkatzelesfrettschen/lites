@@ -76,10 +76,8 @@ typedef union {
  */
 
 
-#  ifdef __STDC__
 
 void	vnet_init( XObj );
 
-#  endif
 
 #endif ! vnet_h

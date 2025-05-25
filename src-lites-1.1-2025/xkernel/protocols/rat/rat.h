@@ -9,11 +9,9 @@
 #include "ip.h"
 #endif
 
-#  ifdef __STDC__
 
 void    rat_init( XObj );
 
-#  endif
 
 
 #endif

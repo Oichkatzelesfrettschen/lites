@@ -11,11 +11,9 @@
 #ifndef vtap_h
 #define vtap_h
    
-#  ifdef __STDC__
 
 void	vtap_init( XObj );
 
-#  endif
 #define VTAP_ENABLETAP       (VTAP_CTL * MAXOPS + 0)
 #define VTAP_DISABLETAP      (VTAP_CTL * MAXOPS + 1)
 #define VTAP_PRINTCHARS      (VTAP_CTL * MAXOPS + 2)

@@ -18,9 +18,7 @@ typedef struct arpent	*ArpTbl;
  * Returns 0 if the lookup was successful and -1 if it was not.
  */
 int	arpLookup(
-#ifdef __STDC__
 		  XObj, IPhost *, ETHhost *
-#endif
 		  );
 
 /*
@@ -29,9 +27,7 @@ int	arpLookup(
  * Returns 0 if the lookup was successful and -1 if it was not.
  */
 int	arpRevLookup(
-#ifdef __STDC__
 		     XObj, IPhost *, ETHhost *
-#endif
 		     );
 
 /*
@@ -40,18 +36,14 @@ int	arpRevLookup(
  * Returns 0 if the lookup was successful and -1 if it was not.
  */
 int	arpRevLookupTable(
-#ifdef __STDC__
 			  XObj, IPhost *, ETHhost *
-#endif
 			  );
 
 /*
  * Initialize the arp table.
  */
 ArpTbl	arpTableInit(
-#ifdef __STDC__
 		     void
-#endif
 		     );
 
 /*
@@ -62,9 +54,7 @@ ArpTbl	arpTableInit(
  * the address could not be resolved
  */
 void 	arpSaveBinding(
-#ifdef __STDC__
 		       ArpTbl, IPhost *ip, ETHhost *eth
-#endif
 		       );
 
 
@@ -75,9 +65,7 @@ void 	arpSaveBinding(
  */
 void
 arpTblPurge(
-#ifdef __STDC__
 	    ArpTbl, IPhost *
-#endif
 	    );
 
 
@@ -86,9 +74,7 @@ arpTblPurge(
  * remains in the cache.
  */
 void	arpLock(
-#ifdef __STDC__
 		ArpTbl, IPhost *h
-#endif
 		);
 
 
@@ -98,7 +84,5 @@ void	arpLock(
  */
 void
 arpForEach( 
-#ifdef __STDC__
     ArpTbl, ArpForEach *
-#endif
 	   );

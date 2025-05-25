@@ -42,13 +42,8 @@ extern int xsi_cid;
 
 #if defined(XK_DEBUG) || defined(lint)
 
-#ifdef __STDC__
 # define XPASTE(X,Y) X##Y
 # define PASTE(X,Y) XPASTE(X,Y)
-#else
-# define XPASTE(X,Y) X/**/Y
-# define PASTE(X,Y) XPASTE(X,Y)
-#endif
 
 #ifdef TRACE_SYSLOG
 

@@ -13,10 +13,8 @@
 #ifndef select_h
 #define select_h
    
-#  ifdef __STDC__
 
 void	select_init( XObj );
 
-#  endif
 
 #endif  ! select_h

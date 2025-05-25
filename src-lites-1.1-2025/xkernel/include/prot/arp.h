@@ -23,11 +23,9 @@
 #include "ip.h"
 #endif
 
-#ifdef __STDC__
 
 void		arp_init( XObj );
 
-#endif
 
 #define ARP_INSTALL 		( ARP_CTL * MAXOPS + 0 )
 #define ARP_GETMYBINDING	( ARP_CTL * MAXOPS + 1 )
@@ -42,11 +40,7 @@ typedef struct {
  * kludge to let the sunos simulator's ethernet driver simulate broadcast
  */
 
-#ifdef __STDC__
 typedef int	(ArpForEachFunc)( ArpBinding *, VOID * );
-#else
-typedef int	(ArpForEachFunc)();
-#endif __STDC__
 
 typedef struct {
     VOID		*v;

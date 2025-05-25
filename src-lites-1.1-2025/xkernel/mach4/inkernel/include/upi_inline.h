@@ -30,17 +30,10 @@
 #else
 #  define FUNC_TYPE xkern_return_t
 
-#  ifdef __STDC__
 
 FUNC_TYPE	xPop( XObj, XObj, Msg *, void * );
 FUNC_TYPE	xCallPop( XObj, XObj, Msg *, void *, Msg * );
 
-#  else 
-
-FUNC_TYPE	xPop();
-FUNC_TYPE	xCallPop();
-
-#  endif __STDC__
 #endif XK_USE_INLINE
 
 

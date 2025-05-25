@@ -56,36 +56,20 @@ typedef struct {
  */
 extern ETHhost ethBcastHost;
 
-#ifdef __STDC__
 
 void	ethCtlrInit( ETHhost host );
 void	getLocalEthHost( ETHhost *host );
 int	SetPromiscuous( void );
 void	ethCtlrXmit( Msg *msg, ETHhost *dst, int type );
 
-#else
-
-void	ethCtlrInit();
-void	getLocalEthHost();
-int	SetPromiscuous();
-void	ethCtlrXmit();
-
-#endif
 
 /*
  * Interface presented to driver from protocol
  */
 
-#ifdef __STDC__
 
 xkern_return_t	eth_demux( Msg, int, ETHhost, ETHhost );
 void		ethSendUp( Msg *, ETHhost *, int );
 
-#else
-
-xkern_return_t	eth_demux();
-void		ethSendUp();
-
-#endif
 
 #endif  ! eth_i_h

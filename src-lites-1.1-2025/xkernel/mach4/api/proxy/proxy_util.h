@@ -15,9 +15,7 @@
 
 
 typedef 	void	(* DeallocFunc)(
-#ifdef __STDC__
 					VOID *, int
-#endif
 					);
 typedef struct {
     bool		valid;
@@ -28,7 +26,6 @@ typedef struct {
 
 
 
-#ifdef __STDC__
 
 void		lingeringMsgClear( void );
 void		lingeringMsgSave( DeallocFunc, VOID *, int );
@@ -42,37 +39,7 @@ void		oolToMsg( char *, int, Msg * );
 void	oolFreeIncoming( VOID *, int );
 void	oolFreeOutgoing( VOID *, int );
 
-#  else
 
-/* 
- * Deallocate the virtual memory region containing 'p'.  
- */
-void	oolFree( VOID *, int );
-
-#  endif  /* XKMACHKERNEL */
-
-#else	/* ! __STDC__ */
-
-void	lingeringMsgClear();
-void	lingeringMsgSave();
-bool	msgIsContiguous();
-bool	msgIsOkToMangle();
-
-#  ifdef XKMACHKERNEL
-
-void	oolFreeIncoming();
-void	oolFreeOutgoing();
-
-#  else
-
-/* 
- * Deallocate the virtual memory region containing 'p'.  
- */
-void	oolFree();
-
-#  endif  /* XKMACHKERNEL */
-
-#endif /* __STDC__ */
 
 
 #endif /* ! proxy_util_h */

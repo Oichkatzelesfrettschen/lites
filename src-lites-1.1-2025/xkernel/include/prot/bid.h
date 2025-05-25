@@ -13,10 +13,8 @@
 #ifndef bid_h
 #define bid_h
    
-#  ifdef __STDC__
 
 void	bid_init( XObj );
 
-#  endif
 
 #endif  ! bid_h

@@ -123,15 +123,9 @@ typedef struct sSemaphore {
 #define semWait(S) { if (--(S)->count < 0) realP(S); }
 #define semSignal(S) { if (++(S)->count <= 0) realV(S); }
 
-#ifdef __STDC__
 extern void semInit( Semaphore *, unsigned int );
 extern void realP( Semaphore * );
 extern void realV( Semaphore * );
-#else
-extern void semInit( );
-extern void realP( );
-extern void realV( );
-#endif
 
 extern Process *Active;
 extern int	SignalsPossible;
@@ -205,7 +199,6 @@ extern int tracexklock;
 #endif XKLOCKDEBUG
 
 
-#ifdef __STDC__
 
 void	CreateKernelProcess( Pfi, int, int, int, int );
 bool	CreateProcess();
@@ -220,7 +213,6 @@ void	xkThreadDumpStats( void );
 #  ifndef XKMACHKERNEL
 void	VAll( Semaphore * );
 void	max_cthread_priority( void );
-#  endif
 
 #endif
 

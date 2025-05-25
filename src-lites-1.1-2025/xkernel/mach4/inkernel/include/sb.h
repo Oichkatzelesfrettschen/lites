@@ -46,7 +46,6 @@ extern struct sb_i *sbifreelist;
 #define sbinew(s) { if ((s) = sbifreelist) sbifreelist = (s)->next; else (s) = (struct sb_i *)xMalloc(sizeof(struct sb_i)); }
 #define sbifree(s) { (s)->next = sbifreelist; sbifreelist = (s); }
 
-#ifdef __STDC__
 
 extern void	sbappend( struct sb *, Msg * );
 extern void 	sbcollect( struct sb *, Msg *, int off, int len, int delete );
@@ -54,14 +53,5 @@ extern void 	sbflush( struct sb * );
 extern void 	sbdrop( struct sb * , int len );
 extern void 	sbdelete( struct sb * );
 
-#else
-
-extern void	sbappend();
-extern void 	sbcollect();
-extern void 	sbflush();
-extern void 	sbdrop();
-extern void 	sbdelete();
-
-#endif __STDC__
 
 #endif

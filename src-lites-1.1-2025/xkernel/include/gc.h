@@ -32,9 +32,7 @@
  */
 
 void	initSessionCollector(
-#ifdef __STDC__
 			     Map m, int interval, Pfv destructor, char *msg
-#endif
 			     );
 
 

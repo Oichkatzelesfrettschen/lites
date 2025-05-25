@@ -73,21 +73,12 @@ typedef struct ARPprotlstate {
 } PSTATE;
 
 
-#ifdef __STDC__
 
 void		arpPlatformInit( XObj );
 void		arpSendRequest( ArpWait * );
 void		newArpWait( ArpWait *, XObj, IPhost *, ArpStatus * );
 void		newRarpWait( ArpWait *, XObj, ETHhost *, ArpStatus * );
 
-#else
-
-void		arpPlatformInit();
-void		arpSendRequest();
-void		newArpWait();
-void		newRarpWait();
-
-#endif
 
 
 extern int	tracearpp;

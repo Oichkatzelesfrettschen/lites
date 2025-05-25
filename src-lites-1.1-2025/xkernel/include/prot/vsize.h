@@ -13,10 +13,8 @@
 #ifndef vsize_h
 #define vsize_h
    
-#  ifdef __STDC__
 
 void	vsize_init( XObj );
 
-#  endif
 
 #endif  ! vsize_h

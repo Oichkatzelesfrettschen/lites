@@ -18,18 +18,9 @@ typedef struct stack {
 } *Stack;
 
 
-#ifdef __STDC__
 
 Stack	stackCreate( int size );
 VOID *	stackPop( Stack );
 int	stackPush( Stack, VOID *);
 void	stackDestroy( Stack );
 
-#else 
-
-Stack	stackCreate();
-VOID * 	stackPop();
-int	stackPush();
-void	stackDestroy();
-
-#endif

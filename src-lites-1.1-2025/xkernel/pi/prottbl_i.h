@@ -41,7 +41,6 @@ typedef struct {
 
 
 
-#ifdef __STDC__
 
 /* 
  * protTblAddProt -- Create an entry in the protocol map binding 'name'
@@ -82,7 +81,6 @@ void		protTblInitMaps( void );
 char *	protIdToStr( long );
 
 
-#endif __STDC__
 
 
 #endif !prottbl_i_h

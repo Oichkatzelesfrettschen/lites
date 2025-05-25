@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 
-#ifdef __STDC__
 
 int	fclose( FILE * );
 int	fflush( FILE * );
@@ -27,17 +26,6 @@ int	printf( char *, ... );
 int	sscanf( char *, char *, ... );
 void	setbuf( FILE *, char * );
 
-#else 
-
-int	fclose();
-int	fflush();
-int	fprintf();
-int	fscanf();
-int	printf();
-int	sscanf();
-void	setbuf();
-
-#endif
 
 int	_flsbuf();
 int	_filbuf();

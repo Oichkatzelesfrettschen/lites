@@ -21,11 +21,7 @@
  * non-ANSI compilers gripe about the _n##U usage while GCC gives
  * warning messages about the u_long cast.
  */
-#ifdef __STDC__
 #   define UNSIGNED(_n)	_n##U
-#else
-#   define UNSIGNED(_n)	((u_long)(_n))
-#endif
 
 typedef u_long	BlastMask;
 #define BLAST_MASK_PROTOTYPE	BlastMask

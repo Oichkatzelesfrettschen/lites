@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#ifdef __STDC__
 
 extern void     bcopy( char *, char *, int );
 extern int	bcmp( char *, char *, int );
@@ -28,12 +27,5 @@ extern int	qsort( char *, int, int, int(*)());
 
 extern int	lwp_self();
 
-#else
-
-extern void     bcopy();
-extern int	bcmp();
-extern void     bzero();
-
-#endif  __STDC__
 
 #endif  ! x_libc_h

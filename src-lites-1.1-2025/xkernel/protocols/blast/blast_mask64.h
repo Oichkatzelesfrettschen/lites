@@ -29,11 +29,7 @@ typedef struct {
  * non-ANSI compilers gripe about the _n##U usage while GCC gives
  * warning messages about the u_long cast.
  */
-#ifdef __STDC__
 #   define UNSIGNED(_n)	_n##U
-#else
-#   define UNSIGNED(_n)	((u_long)(_n))
-#endif
 
 #define BLAST_MAX_FRAGS	64
 #define BLAST_FULL_MASK(_m, _n)				\
@@ -86,12 +82,10 @@ extern int	abs();
 #      define FUNCTYPE	static 
 #  endif /* GNUC */
 
-#  ifdef __STDC__
 
 FUNCTYPE int	BLAST_MASK_IS_BIT_SET( BlastMask *, int );
 FUNCTYPE void	BLAST_MASK_SET_BIT( BlastMask *, int );
 
-#  endif __STDC__
 
 FUNCTYPE int
 BLAST_MASK_IS_BIT_SET( m, n )

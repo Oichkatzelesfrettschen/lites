@@ -18,11 +18,7 @@
 #endif
 
 #if !defined(XKMACHKERNEL) && !defined(XKMACH4)
-#  ifdef __STDC__
 extern void abort(void);
-#  else
-extern void abort();
-#  endif __STDC__
 #  define ABORT abort
 #  define PRINT(A,B,C) fprintf(stderr, (A), (B), (C))
 #else

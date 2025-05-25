@@ -10,7 +10,6 @@
  * $Date: 1993/09/21 00:23:23 $
  */
 
-#ifdef __STDC__
 
 kern_return_t	do_uproxy_abort( PORT_TYPE,
 				PORT_TYPE);
@@ -96,4 +95,3 @@ kern_return_t	do_uproxy_xCall( PORT_TYPE,
 				xk_msg_attr_t,
 				mach_msg_type_number_t );
 
-#endif

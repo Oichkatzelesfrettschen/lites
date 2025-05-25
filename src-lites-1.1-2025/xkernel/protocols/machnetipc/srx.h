@@ -19,7 +19,6 @@
 #define srx_h
 
 
-#ifdef __STDC__
 
 /* 
  * Used to notify SRX that a message with ports transferred by SRX has
@@ -33,11 +32,5 @@ void		srxTransferComplete( IPhost , MsgId );
  */
 xkern_return_t	srxMoveSendRights( IPhost h, MsgId id, mnetport **np );
 
-#else
-
-void		srxTransferComplete();
-xkern_return_t	srxMoveSendRights();
-
-#endif __STDC__
 
 #endif  ! srx_h

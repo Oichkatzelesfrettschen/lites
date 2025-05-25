@@ -42,7 +42,6 @@ typedef struct {
 
 #include "ip_i.h"
 
-#ifdef __STDC__
 
 /* 
  * Initialize the routing tables and set the default router to be the
@@ -56,14 +55,5 @@ xkern_return_t	rt_add_def( PState *, IPhost * );
 xkern_return_t	rt_get( RouteTable *, IPhost *, route * );
 void		rt_delete( RouteTable *, IPhost *, IPhost * );
 
-#else
-
-xkern_return_t 	rt_init();
-xkern_return_t 	rt_add();
-xkern_return_t	rt_add_def();
-xkern_return_t	rt_get();
-void		rt_delete();
-
-#endif __STDC__
 
 #endif  ! route_h

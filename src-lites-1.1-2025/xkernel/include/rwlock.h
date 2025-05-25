@@ -24,22 +24,17 @@ typedef struct rwlock {
 	Semaphore	readersSem, writersSem;
 	int		flags;
 	void		(* destroyFunc)(
-#ifdef __STDC__
 			      struct rwlock *, void *
-#endif
 			      );
 	VOID		*destFuncArg;
 } ReadWriteLock;
 
 
 typedef	void	(*RwlDestroyFunc)(
-#if defined(__STDC__)
 					   ReadWriteLock *, void *
-#endif
 					   );
 
 
-#ifdef __STDC__
 
 xkern_return_t	readerLock( ReadWriteLock * );
 void		readerUnlock( ReadWriteLock * );
@@ -49,16 +44,5 @@ void		rwLockInit( ReadWriteLock * );
 xkern_return_t	writerLock( ReadWriteLock * );
 void		writerUnlock( ReadWriteLock * );
 
-#else
-
-xkern_return_t	readerLock();
-void		readerUnlock();
-void		rwLockDestroy();
-void		rwLockDump();
-void		rwLockInit();
-xkern_return_t	writerLock();
-void		writerUnlock();
-
-#endif __STDC__
 
 #endif rwlock_h

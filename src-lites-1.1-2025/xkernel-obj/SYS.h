@@ -22,13 +22,8 @@
 
 #include <mach/machine/asm.h>
 
-#ifdef __STDC__
 #define	SYSCALL(x)	ENTRY(x); movl	$(SYS_ ## x), %eax; SVC; jb LCL(cerror)
 #define	PSEUDO(x,y)	ENTRY(x); movl	$(SYS_ ## y), %eax; SVC
-#else __STDC__
-#define	SYSCALL(x)	ENTRY(x); movl	$SYS_/**/x, %eax; SVC; jb LCL(cerror)
-#define	PSEUDO(x,y)	ENTRY(x); movl	$SYS_/**/y, %eax; SVC
-#endif __STDC__
 #define	CALL(x,y)	calls $x, EXT(y)
 
 	.globl	LCL(cerror)

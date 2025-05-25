@@ -32,14 +32,12 @@
 #include "xtype.h"
 
 
-#ifdef __STDC__
 
 u_short ocsum( u_short *buf, int count );
 u_short ocsum_simple( u_short *buf, int count );
 u_short inCkSum( Msg *m, u_short *buf, int len );
 #ifndef X_NETBSD
 int	atoi( char * );
-#endif
 char *	inet_ntoa( struct in_addr );
 
 extern	char *	xMalloc( unsigned );

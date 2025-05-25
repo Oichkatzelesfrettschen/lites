@@ -18,7 +18,6 @@
 #define DIRENT direct
 #include <sys/stat.h>
 
-#ifdef __STDC__
 
 int 	lstat( char *path, struct stat *buf );
 char	toupper( char );
@@ -36,5 +35,4 @@ void	exit( int );
 int	fclose( FILE * );
 int	fprintf( FILE *, char *, ... );
 
-#endif __STDC__
 

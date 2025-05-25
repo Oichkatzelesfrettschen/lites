@@ -19,10 +19,8 @@
 #endif
 
 typedef xkern_return_t	(* XObjRomOptFunc)(
-#ifdef __STDC__
 				       XObj, char **, int numFields,
 				        int line, void *
-#endif
 				       );
 
 typedef struct {
@@ -33,10 +31,8 @@ typedef struct {
 
 
 typedef xkern_return_t	(* RomOptFunc)(
-#ifdef __STDC__
 				       char **, int numFields,
 				       int line, void *
-#endif
 				       );
 
 typedef struct {
@@ -67,17 +63,13 @@ typedef struct {
  * RomOpt array.
  */
 xkern_return_t	findXObjRomOpts(
-#ifdef __STDC__
 			    XObj, XObjRomOpt *, int numOpts, VOID *arg
-#endif
 			    );
 
 
 
 xkern_return_t	findRomOpts(
-#ifdef __STDC__
 			    char *, RomOpt *, int numOpts, VOID *arg
-#endif
 			    );
 
 

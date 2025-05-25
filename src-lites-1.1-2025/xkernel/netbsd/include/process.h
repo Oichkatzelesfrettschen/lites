@@ -79,7 +79,6 @@ typedef struct sSemaphore {
 } Semaphore;
 
 
-#ifdef __STDC__
 
 extern void LWP_Init( void );
 
@@ -89,7 +88,6 @@ extern realV( Semaphore * );
 
 #ifdef X_NETBSD
 typedef int mon_t;
-#endif
 
 extern mon_t	master_monitor;
 #define xk_master_lock() 	mon_enter( master_monitor )
@@ -103,7 +101,6 @@ int	CreateProcess4( Pfi, short, int, int, int, int );
 int	CreateProcess5( Pfi, short, int, int, int, int, int );
 int	CreateProcess6( Pfi, short, int, int, int, int, int, int );
 
-#endif __STDC__
 
 #define semWait(S) { if (--(S)->count < 0) realP(S); }
 #define semSignal(S) { if (++(S)->count <= 0) realV(S); }

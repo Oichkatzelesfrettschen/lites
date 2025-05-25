@@ -45,11 +45,9 @@
 #define SUNRPC_GETPORT		(SUNRPC_CTL*MAXOPS+21)
 
 
-#  ifdef __STDC__
 
 void	sunrpc_init( XObj );
 
-#  endif
 
 #endif
 

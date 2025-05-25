@@ -15,11 +15,9 @@
 
 #include <stdio.h>
 
-#ifdef __STDC__
 
 #ifndef X_NETBSD
 extern int fprintf(FILE *, char *, ...);
-#endif
 extern void abort(void);
 
 #else
