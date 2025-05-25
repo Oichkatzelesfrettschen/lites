@@ -49,6 +49,8 @@ jobs:
           make -C tests/cap CC=${{ matrix.cc }}
           make -C tests/iommu CC=${{ matrix.cc }}
           make -C tests/vm_fault CC=${{ matrix.cc }}
+          make -C tests/pipe CC=${{ matrix.cc }}
+          make -C tests/spawn_wait CC=${{ matrix.cc }}
 
       - name: Run tests
         run: |
@@ -56,6 +58,8 @@ jobs:
           ./tests/cap/test_cap
           ./tests/iommu/test_iommu
           ./tests/vm_fault/test_vm_fault
+          ./tests/pipe/test_pipe
+          ./tests/spawn_wait/test_spawn_wait
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

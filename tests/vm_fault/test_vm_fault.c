@@ -1,17 +1,17 @@
+#include "../../include/posix.h"
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "../../src-lites-1.1-2025/include/vm.h"
 
 extern kern_return_t vm_fault_entry(aspace_t *, vm_offset_t, vm_prot_t);
 extern kern_return_t unmap_frame(aspace_t *, vm_offset_t);
 
-int main(void)
-{
+int main(void) {
     int sv[2];
     assert(socketpair(AF_UNIX, SOCK_STREAM, 0, sv) == 0);
 
@@ -27,7 +27,7 @@ int main(void)
     }
 
     close(sv[1]);
-    aspace_t as = { .pml_root = 0, .pager_cap = sv[0] };
+    aspace_t as = {.pml_root = 0, .pager_cap = sv[0]};
 
     vm_offset_t addr = 0x1000000;
     assert(vm_fault_entry(&as, addr, VM_PROT_READ | VM_PROT_WRITE) == KERN_SUCCESS);
@@ -39,7 +39,6 @@ int main(void)
     assert(unmap_frame(&as, addr) == KERN_SUCCESS);
 
     close(sv[0]);
-    waitpid(pid, NULL, 0);
+    posix_waitpid(pid, NULL, 0);
     return 0;
 }
-
