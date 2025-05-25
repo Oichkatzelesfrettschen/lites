@@ -1,3 +1,4 @@
+#pragma once
 /* 
  * Copyright (c) 1994, The University of Utah and
  * the Center for Software Science at the University of Utah (CSS).

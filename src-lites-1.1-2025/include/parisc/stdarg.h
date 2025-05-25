@@ -1,3 +1,4 @@
+#pragma once
 /*-
  * Copyright (c) 1991, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -33,8 +34,6 @@
  *	@(#)stdarg.h	8.1 (Berkeley) 6/10/93
  */
 
-#ifndef _STDARG_H_
-#define	_STDARG_H_
 
 typedef double *va_list;
 
@@ -53,5 +52,3 @@ typedef double *va_list;
 	     (*((type *) (void *) ((char *)ap + ((8 - sizeof(type)) % 4))))))
 
 #define	va_end(ap)
-
-#endif /* !_STDARG_H */

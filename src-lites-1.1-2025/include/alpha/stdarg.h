@@ -1,3 +1,4 @@
+#pragma once
 /* stdarg.h for GNU.
    Note that the type used in va_arg is supposed to match the
    actual type **after default promotions**.

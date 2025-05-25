@@ -1,3 +1,4 @@
+#pragma once
 /*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
