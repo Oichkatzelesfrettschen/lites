@@ -1,3 +1,4 @@
+#pragma once
 /*-
  * Copyright (c) 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -94,4 +95,3 @@
 
 /* Trap's coming from user mode */
 #define	T_USER	0x100
-

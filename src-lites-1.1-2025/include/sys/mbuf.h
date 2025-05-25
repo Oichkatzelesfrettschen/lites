@@ -1,3 +1,4 @@
+#pragma once
 /* 
  * Mach Operating System
  * Copyright (c) 1994 Johannes Helander
