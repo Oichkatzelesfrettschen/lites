@@ -36,6 +36,7 @@
 #pragma once
 
 #include <mach/machine/vm_types.h>
+#include <stdint.h>
 
 #if !defined(_ANSI_SOURCE) && !defined(_POSIX_SOURCE)
 typedef struct _physadr {
@@ -66,18 +67,4 @@ typedef	float			f4byte_t;
 typedef	double			f8byte_t;
 #endif
 
-/*
- * Basic integral types.  Omit the typedef if
- * not possible for a machine/compiler combination.
- */
-typedef	signed char		   int8_t;
-typedef	unsigned char		 u_int8_t;
-typedef	short			  int16_t;
-typedef	unsigned short		u_int16_t;
-typedef	int			  int32_t;
-typedef	unsigned int		u_int32_t;
-#ifdef __GNUC__
-typedef	long long		  int64_t;
-typedef	unsigned long long	u_int64_t;
-#endif
 

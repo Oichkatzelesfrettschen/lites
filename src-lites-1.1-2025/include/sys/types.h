@@ -44,26 +44,21 @@
 #include <machine/endian.h>
 #include <machine/ansi.h>
 #include <machine/types.h>
+#include <stdint.h>
 
 #ifndef _POSIX_SOURCE
-typedef	unsigned char	u_char;
-typedef	unsigned short	u_short;
-typedef	unsigned int	u_int;
-typedef	unsigned long	u_long;
-typedef	unsigned short	ushort;		/* Sys V compatibility */
-typedef	unsigned int	uint;		/* Sys V compatibility */
 #endif
 
-typedef	u_int64_t	u_quad_t;	/* quads */
+typedef	uint64_t	u_quad_t;	/* quads */
 typedef	int64_t		quad_t;
 typedef	quad_t *	qaddr_t;
 
 typedef	char *		caddr_t;	/* core address */
 typedef	int32_t		daddr_t;	/* disk address */
-typedef	u_int32_t	dev_t;		/* device number */
+typedef	uint32_t	dev_t;		/* device number */
 typedef unsigned long	fixpt_t;	/* fixed point number */
-typedef	u_int32_t	gid_t;		/* group id */
-typedef	u_int32_t	ino_t;		/* inode number */
+typedef	uint32_t	gid_t;		/* group id */
+typedef	uint32_t	ino_t;		/* inode number */
 #ifdef alpha
 typedef	unsigned int	mode_t;		/* permissions */
 #else
@@ -74,7 +69,7 @@ typedef	quad_t		off_t;		/* file offset */
 typedef	int32_t		pid_t;		/* process id */
 typedef	long		segsz_t;	/* segment size */
 typedef	long		swblk_t;	/* swap offset */
-typedef	u_int32_t	uid_t;		/* user id */
+typedef	uint32_t	uid_t;		/* user id */
 
 /*
  * This belongs in unistd.h, but is placed here to ensure that programs
@@ -91,11 +86,11 @@ __END_DECLS
 
 #ifndef _POSIX_SOURCE
 #ifdef alpha
-#define major(x)	((u_int)(((dev_t)(x) >> 20)&0xfff))
-#define minor(x)	((u_int)((x)&0xfffff))
+#define major(x)	((uint32_t)(((dev_t)(x) >> 20)&0xfff))
+#define minor(x)	((uint32_t)((x)&0xfffff))
 #define makedev(x,y)	((dev_t)(((x)<<20) | (y)))
 #else
-#define	major(x)	((int)(((u_int)(x) >> 8)&0xff))	/* major number */
+#define	major(x)	((int)(((uint32_t)(x) >> 8)&0xff))	/* major number */
 #ifdef 	DISKSLICE
 /*
  * minor() gives a cookie instead of an index since we don't want to
