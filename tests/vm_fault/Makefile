@@ -1,5 +1,7 @@
-CC ?= gcc
-CFLAGS ?= -std=c2x -Wall -Wextra
+ifeq ($(origin CC),default)
+CC := $(shell command -v clang >/dev/null 2>&1 && echo clang || echo gcc)
+endif
+CFLAGS ?= -std=c23 -Wall -Werror
 
 all: test_vm_fault
 

@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
+
+if(NOT DEFINED ENV{CC})
+    find_program(_clang clang)
+    if(_clang)
+        set(CMAKE_C_COMPILER ${_clang} CACHE STRING "C compiler" FORCE)
+    endif()
+endif()
+
 project(lites LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
 
