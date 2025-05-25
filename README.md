@@ -135,6 +135,38 @@ cmake -B build -DARCH=ia16
 cmake --build build
 ```
 
+### Building with Ninja
+
+Use the Ninja generator for faster incremental builds:
+
+```sh
+cmake -G Ninja -B build -DARCH=x86_64
+ninja -C build
+```
+
+### Meson example
+
+Meson can also drive the build when a `meson.build` file is present:
+
+```sh
+meson setup build
+meson compile -C build
+```
+
+### Optional dependencies
+
+The root `CMakeLists.txt` detects certain tools only when available.  For
+instance Bison is located via `find_package(BISON)`.  A typical snippet
+looks like:
+
+```cmake
+find_package(BISON)
+if(BISON_FOUND)
+    BISON_TARGET(MyParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.c)
+    target_sources(lites_server PRIVATE ${BISON_MyParser_OUTPUTS})
+endif()
+```
+
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators along with standard build utilities such as build-essential,
 GCC, clang, llvm, m4, CMake, Ninja and Meson.  BSD make (`bmake`) and the optional `mk-configure` framework are installed as well.  The script also sets up debugging and profiling tools, installs the pre-commit hooks and generates a
