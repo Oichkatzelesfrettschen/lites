@@ -27,3 +27,11 @@ A repository-wide `.editorconfig` enforces UTF‑8 encoding, LF line endings and
 tests.  It reads `pf_info_t` structures from a UNIX domain socket and simply
 acknowledges each request, leaving the kernel side to map zero-filled pages.
 The VM tests spawn the pager automatically.
+
+## Timer tracking
+
+`kern/timer.c` implements a simple wrapper around `nanosleep(2)` that
+records how long each process has slept. Include `timer.h` and call
+`timer_init()` once before using `k_nanosleep()`. The accumulated
+sleep time for a process can be queried with `timer_get_total_ns()` and
+reset with `timer_reset()`.
