@@ -104,9 +104,13 @@ For the modernized build system in this repository you can also use
 `Makefile.new` or the provided CMake files.  Both automatically build from
 the `src-lites-1.1-2025` directory when it is present.  Set the `SRCDIR` or
 `LITES_SRC_DIR` variables to override this behaviour.  The tools recognise an
-optional `ARCH` variable, selecting between 64‑bit (`ARCH=x86_64`, default) and
-32‑bit (`ARCH=i686`) builds.  Other architectures were supported in historical
-releases but are not handled by the modern build system.
+`ARCH` variable which selects the target CPU.  Supported values include the
+64‑bit `x86_64` and `riscv64`, 32‑bit `i686`, `arm` and `powerpc`, and the
+16‑bit `ia16`.  The default is `ARCH=x86_64`.
+
+Use `ARCH=ia16` for 16‑bit builds.  Choose `ARCH=i686`, `ARCH=arm` or
+`ARCH=powerpc` for 32‑bit binaries, and `ARCH=x86_64` or `ARCH=riscv64` for
+64‑bit targets.
 Set `SANITIZE=1` to compile with address sanitizer support, which appends
 `-fsanitize=address` to `CFLAGS` and `LDFLAGS`.
 Examples:
@@ -115,11 +119,19 @@ Examples:
 # Using the makefile
 make -f Makefile.new ARCH=i686
 make -f Makefile.new ARCH=x86_64
+make -f Makefile.new ARCH=arm
+make -f Makefile.new ARCH=riscv64
+make -f Makefile.new ARCH=powerpc
+make -f Makefile.new ARCH=ia16
 make -f Makefile.new ARCH=x86_64 SANITIZE=1
 
 # Using CMake (optionally override the source directory)
 cmake -B build -DARCH=i686
 cmake -B build -DARCH=x86_64 -DLITES_SRC_DIR=src-lites-1.1-2025
+cmake -B build -DARCH=arm
+cmake -B build -DARCH=riscv64
+cmake -B build -DARCH=powerpc
+cmake -B build -DARCH=ia16
 cmake --build build
 ```
 

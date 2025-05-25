@@ -51,6 +51,16 @@ if(ARCH STREQUAL "i686")
 elseif(ARCH STREQUAL "x86_64")
     add_compile_options(-m64)
     add_link_options(-m64)
+elseif(ARCH STREQUAL "arm")
+    add_compile_options(-marm)
+elseif(ARCH STREQUAL "riscv64")
+    add_compile_options(-march=rv64imac -mabi=lp64)
+elseif(ARCH STREQUAL "powerpc")
+    add_compile_options(-m32)
+    add_link_options(-m32)
+elseif(ARCH STREQUAL "ia16")
+    add_compile_options(-m16)
+    add_link_options(-m16)
 endif()
 
 include(CheckCCompilerFlag)
@@ -134,7 +144,7 @@ if(EXISTS "${LITES_SRC_DIR}")
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
-        "${LITES_SRC_DIR}/iommu")
+        "${LITES_SRC_DIR}/iommu"
         "${MACH_INCLUDE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/kern"
         "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -144,6 +154,18 @@ if(EXISTS "${LITES_SRC_DIR}")
     elseif(ARCH STREQUAL "i686")
         target_include_directories(lites_server PRIVATE
             "${LITES_SRC_DIR}/include/i386")
+    elseif(ARCH STREQUAL "arm")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/arm")
+    elseif(ARCH STREQUAL "riscv64")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/riscv64")
+    elseif(ARCH STREQUAL "powerpc")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/powerpc")
+    elseif(ARCH STREQUAL "ia16")
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include/ia16")
     endif()
     target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
@@ -159,7 +181,7 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${LITES_SRC_DIR}/emulator"
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
-            "${LITES_SRC_DIR}/iommu")
+            "${LITES_SRC_DIR}/iommu"
             "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
         if(ARCH STREQUAL "x86_64")
@@ -168,6 +190,18 @@ if(EXISTS "${LITES_SRC_DIR}")
         elseif(ARCH STREQUAL "i686")
             target_include_directories(lites_emulator PRIVATE
                 "${LITES_SRC_DIR}/include/i386")
+        elseif(ARCH STREQUAL "arm")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/arm")
+        elseif(ARCH STREQUAL "riscv64")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/riscv64")
+        elseif(ARCH STREQUAL "powerpc")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/powerpc")
+        elseif(ARCH STREQUAL "ia16")
+            target_include_directories(lites_emulator PRIVATE
+                "${LITES_SRC_DIR}/include/ia16")
         endif()
         target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
