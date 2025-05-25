@@ -3,6 +3,7 @@
 
 #include <cthreads.h>
 #include "spinlock.h"
+#include "runqueue.h"
 
 /* Simple MCS lock implementation used by the scheduler. */
 typedef struct mcs_lock_node {

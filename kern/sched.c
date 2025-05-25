@@ -1,5 +1,6 @@
 #include "sched.h"
 #include "spinlock.h"
+#include "runqueue.h"
 #include <mach/cthreads.h>
 #include <mach/mach.h>
 #include <time.h>
@@ -68,6 +69,7 @@ void scheduler_init(int num_cores) {
         num_cores = MAX_CPUS;
     sched_num_cpus = num_cores;
     spin_lock_init(&sched_lock);
+    runqueue_init();
     for (int i = 0; i < sched_num_cpus; ++i) {
         TAILQ_INIT(&run_queues[i].queue);
         spin_lock_init(&run_queues[i].lock);
