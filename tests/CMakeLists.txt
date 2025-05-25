@@ -23,3 +23,8 @@ add_executable(test_vm_fault
     ../src-lites-1.1-2025/server/vm/vm_handlers.c)
 target_compile_options(test_vm_fault PRIVATE -std=c23 -Wall -Wextra -Werror)
 
+add_executable(test_fifo
+    fifo_test/test_fifo.c
+    ../src-lites-1.1-2025/libposix/posix.c)
+target_include_directories(test_fifo PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src-lites-1.1-2025/include)
+target_compile_options(test_fifo PRIVATE -std=c23 -Wall -Wextra -Werror)
