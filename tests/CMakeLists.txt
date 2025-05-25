@@ -23,3 +23,9 @@ add_executable(test_vm_fault
     ../src-lites-1.1-2025/server/vm/vm_handlers.c)
 target_compile_options(test_vm_fault PRIVATE -std=c23 -Wall -Wextra -Werror)
 
+add_executable(dirlist
+    posix/dirlist.c
+    ../src-lites-1.1-2025/liblites/memfs.c)
+target_include_directories(dirlist PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+target_compile_options(dirlist PRIVATE -std=c23 -Wall -Wextra -Werror)
+
