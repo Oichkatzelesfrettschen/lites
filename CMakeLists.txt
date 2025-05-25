@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
+find_package(BISON)
 
 # Allow selecting the build architecture with -DARCH=i686 or ARCH=x86_64
 set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
@@ -120,6 +121,18 @@ if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB _iommu_src "${LITES_SRC_DIR}/iommu/*.c")
     list(APPEND SERVER_SRC ${_iommu_src})
 
+    if(BISON_FOUND)
+        file(GLOB_RECURSE _y_src
+            "${CMAKE_CURRENT_SOURCE_DIR}/*.y"
+            "${LITES_SRC_DIR}/server/*.y")
+        foreach(yfile ${_y_src})
+            get_filename_component(_y_name "${yfile}" NAME_WE)
+            set(_y_out "${CMAKE_CURRENT_BINARY_DIR}/${_y_name}.c")
+            BISON_TARGET(${_y_name} ${yfile} ${_y_out} COMPILE_FLAGS -d)
+            list(APPEND SERVER_SRC ${BISON_${_y_name}_OUTPUTS})
+        endforeach()
+    endif()
+
     if(EXISTS "${LITES_SRC_DIR}/emulator")
         file(GLOB EMULATOR_SUBDIRS RELATIVE "${LITES_SRC_DIR}/emulator" "${LITES_SRC_DIR}/emulator/*")
         set(EMULATOR_DIRS "${LITES_SRC_DIR}/emulator/${ARCH}")
@@ -138,6 +151,12 @@ if(EXISTS "${LITES_SRC_DIR}")
             list(APPEND EMULATOR_SRC ${_dir_src})
         endforeach()
         list(APPEND EMULATOR_SRC ${_kern_src} ${_iommu_src})
+        if(BISON_FOUND)
+            foreach(yfile ${_y_src})
+                get_filename_component(_y_name "${yfile}" NAME_WE)
+                list(APPEND EMULATOR_SRC ${BISON_${_y_name}_OUTPUTS})
+            endforeach()
+        endif()
     endif()
 
     add_executable(lites_server ${SERVER_SRC})
