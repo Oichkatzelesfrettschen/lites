@@ -204,7 +204,7 @@ scripts/run-qemu.sh i686
 The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
 
-Additional notes are kept in [`docs/`](docs/).  The mailbox-based IPC
+Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  The mailbox-based IPC
 wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers
 for common POSIX operations are documented in
 [docs/POSIX.md](docs/POSIX.md).
