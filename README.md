@@ -75,6 +75,13 @@ cmake -B build -DLITES_MACH_DIR=openmach \
 cmake --build build
 ```
 
+## Header inventory
+
+The repository contains many header files spread across historical trees.
+Their paths are listed in [headers_inventory.csv](headers_inventory.csv) for
+easy reference. Each row in the CSV shows the path to a header relative to the
+repository root.
+
 ## Building
 
 Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  Each
