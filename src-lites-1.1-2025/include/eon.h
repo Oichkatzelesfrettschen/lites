@@ -1,4 +1,2 @@
-#ifndef _EON_H_
-#define _EON_H_
+#pragma once
 #include <netiso/eonvar.h>
-#endif

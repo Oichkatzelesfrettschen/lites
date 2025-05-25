@@ -41,8 +41,7 @@
 /*
  * System wide defaults for terminal state.
  */
-#ifndef _SYS_TTYDEFAULTS_H_
-#define	_SYS_TTYDEFAULTS_H_
+#pragma once
 
 /*
  * Defaults on "first" open.
@@ -81,7 +80,6 @@
 #define	CFLUSH		CDISCARD
 
 /* PROTECTED INCLUSION ENDS HERE */
-#endif /* !_SYS_TTYDEFAULTS_H_ */
 
 /*
  * #define TTYDEFCHARS to include an array of default control characters.

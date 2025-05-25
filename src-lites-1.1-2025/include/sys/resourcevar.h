@@ -33,8 +33,7 @@
  *	@(#)resourcevar.h	8.3 (Berkeley) 2/22/94
  */
 
-#ifndef	_SYS_RESOURCEVAR_H_
-#define	_SYS_RESOURCEVAR_H_
+#pragma once
 
 /*
  * Kernel per-process accounting / statistics
@@ -87,4 +86,3 @@ void	 addupc_task (struct proc *p, u_long pc, u_int ticks);
 struct plimit
 	*limcopy (struct plimit *lim);
 #endif
-#endif	/* !_SYS_RESOURCEVAR_H_ */

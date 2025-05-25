@@ -59,8 +59,7 @@
  *	@(#)malloc.h	8.3 (Berkeley) 1/12/94
  */
 
-#ifndef _SYS_MALLOC_H_
-#define	_SYS_MALLOC_H_
+#pragma once
 
 #include <sys/zalloc.h>
 
@@ -272,4 +271,3 @@ extern zone_t		zone_M_LAST;
 #define	bsd_malloc(size, type, flags) malloc(size)
 #define bsd_free(addr, type) free((void *)(addr))
 #endif
-#endif /* !_SYS_MALLOC_H_ */

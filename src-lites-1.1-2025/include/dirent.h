@@ -33,8 +33,7 @@
  *	@(#)dirent.h	8.1 (Berkeley) 6/8/93
  */
 
-#ifndef _DIRENT_H_
-#define _DIRENT_H_
+#pragma once
 
 /*
  * The kernel defines the format of directory entries returned by 
@@ -91,4 +90,3 @@ __END_DECLS
 
 #endif /* !KERNEL */
 
-#endif /* !_DIRENT_H_ */

@@ -38,8 +38,7 @@
  *	@(#)fcntl.h	8.3 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_FCNTL_H_
-#define	_SYS_FCNTL_H_
+#pragma once
 
 /*
  * This file includes the definitions for open and fcntl
@@ -192,4 +191,3 @@ int	flock (int, int);
 __END_DECLS
 #endif
 
-#endif /* !_SYS_FCNTL_H_ */

@@ -59,8 +59,7 @@
  *	@(#)vnode.h	8.7 (Berkeley) 2/4/94
  */
 
-#ifndef _SYS_VNODE_H_
-#define _SYS_VNODE_H_
+#pragma once
 
 #ifdef KERNEL
 #include "nfs.h"
@@ -453,4 +452,3 @@ void 	vref (struct vnode *vp);
 void 	vrele (struct vnode *vp);
 #endif /* KERNEL */
 
-#endif /* !_SYS_VNODE_H_ */

@@ -39,8 +39,7 @@
  *
  */
 
-#ifndef	_SYS_TABLE_H_
-#define _SYS_TABLE_H_
+#pragma once
 
 #define TBL_TTYLOC		0	/* index by device number */
 #define TBL_U_TTYD		1	/* index by process ID */
@@ -225,4 +224,3 @@ struct tbl_ttyinfo {
         long	ti_rawcc;
 };
 
-#endif	_SYS_TABLE_H_

@@ -33,8 +33,7 @@
  *	@(#)types.h	8.3 (Berkeley) 1/5/94
  */
 
-#ifndef	_MACHTYPES_H_
-#define	_MACHTYPES_H_
+#pragma once
 
 #include <mach/machine/vm_types.h>
 
@@ -82,4 +81,3 @@ typedef	long long		  int64_t;
 typedef	unsigned long long	u_int64_t;
 #endif
 
-#endif	/* _MACHTYPES_H_ */

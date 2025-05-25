@@ -21,10 +21,8 @@
  *
  */
 
-#ifndef	_SYS_MACRO_HELP_H_
-#define _SYS_MACRO_HELP_H_
+#pragma once
 
 #define		MACRO_BEGIN	do {
 #define		MACRO_END	} while (0)
 
-#endif	/* !_SYS_MACRO_HELP_H_ */

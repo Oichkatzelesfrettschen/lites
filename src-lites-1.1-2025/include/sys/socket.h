@@ -33,8 +33,7 @@
  *	@(#)socket.h	8.4 (Berkeley) 2/21/94
  */
 
-#ifndef _SYS_SOCKET_H_
-#define	_SYS_SOCKET_H_
+#pragma once
 
 /*
  * Definitions related to sockets: types, address families, options.
@@ -336,4 +335,3 @@ int	socketpair (int, int, int, int *);
 __END_DECLS
 
 #endif /* !KERNEL */
-#endif /* !_SYS_SOCKET_H_ */

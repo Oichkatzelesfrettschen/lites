@@ -1,5 +1,4 @@
-#ifndef LITES_C23_ARCH_H
-#define LITES_C23_ARCH_H
+#pragma once
 
 #if defined(__x86_64__) || defined(_M_X64)
 #  define LITES_ARCH_X86_64 1
@@ -12,4 +11,3 @@
 static_assert(sizeof(void*) == 8 || sizeof(void*) == 4,
               "Pointer size must be 32 or 64 bits");
 
-#endif /* LITES_C23_ARCH_H */

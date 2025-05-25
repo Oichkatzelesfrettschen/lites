@@ -1,4 +1,2 @@
-#ifndef _GATEWAY_H_
-#define _GATEWAY_H_
+#pragma once
 /* Stub gateway header */
-#endif

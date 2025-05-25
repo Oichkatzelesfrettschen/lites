@@ -38,8 +38,7 @@
  *	@(#)exec.h	8.3 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_EXEC_H_
-#define _SYS_EXEC_H_
+#pragma once
 
 #include <machine/exec.h>
 
@@ -73,4 +72,3 @@ struct execve_args {
 	char	**envp;
 };
 
-#endif /* !_SYS_EXEC_H_ */

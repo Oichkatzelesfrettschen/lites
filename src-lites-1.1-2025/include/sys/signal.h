@@ -38,8 +38,7 @@
  *	@(#)signal.h	8.2 (Berkeley) 1/21/94
  */
 
-#ifndef	_SYS_SIGNAL_H_
-#define	_SYS_SIGNAL_H_
+#pragma once
 
 #define NSIG	32		/* counting 0; could be 33 (mask is 1-32) */
 
@@ -189,4 +188,3 @@ struct	sigstack {
 __BEGIN_DECLS
 void	(*signal(int, void (*)(int)))(int);
 __END_DECLS
-#endif	/* !_SYS_SIGNAL_H_ */

@@ -68,8 +68,7 @@
  * 
  */ 
 
-#ifndef	_ALPHA_VMPARAM_H_
-#define	_ALPHA_VMPARAM_H_
+#pragma once
 
 /*
  * Machine dependent constants for ALPHA
@@ -266,4 +265,3 @@
 #define VM_MIN_ADDRESS	((vm_offset_t) 0x0)
 #define VM_MAX_ADDRESS	((vm_offset_t) 0x000003fe00000000)
 
-#endif	_ALPHA_VMPARAM_H_

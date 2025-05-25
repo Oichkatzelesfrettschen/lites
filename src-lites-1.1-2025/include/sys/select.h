@@ -33,8 +33,7 @@
  *	@(#)select.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_SELECT_H_
-#define	_SYS_SELECT_H_
+#pragma once
 
 /*
  * Used to maintain information about processes that wish to be
@@ -55,4 +54,3 @@ void	selrecord (struct proc *selector, struct selinfo *);
 void	selwakeup (struct selinfo *);
 #endif
 
-#endif /* !_SYS_SELECT_H_ */

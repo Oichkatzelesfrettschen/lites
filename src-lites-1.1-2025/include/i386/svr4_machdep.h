@@ -29,8 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _I386_SVR4_MACHDEP_H_
-#define _I386_SVR4_MACHDEP_H_
+#pragma once
 
 #include <compat/svr4/svr4_types.h>
 
@@ -123,4 +122,3 @@ struct svr4_ssd {
 
 void svr4_syscall_intern(struct proc *);
 
-#endif /* !_I386_SVR4_MACHDEP_H_ */

@@ -65,8 +65,7 @@
  *	@(#)conf.h	8.3 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_CONF_H_
-#define _SYS_CONF_H_
+#pragma once
 
 #ifdef LITES
 #include <serv/import_mach.h>
@@ -204,4 +203,3 @@ int nodev_start(struct tty *);
 int nodev_modem(struct tty *, int);
 #endif
 
-#endif /* !_SYS_CONF_H_ */

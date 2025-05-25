@@ -35,8 +35,7 @@
  *
  */
 
-#ifndef	_SYS_UX_EXCEPTION_H_
-#define	_SYS_UX_EXCEPTION_H_
+#pragma once
 
 /*
  *	Codes for Unix software exceptions under EXC_SOFTWARE.
@@ -60,4 +59,3 @@ struct mutex		ux_handler_init_lock;
 mach_port_t		ux_exception_port;
 
 #endif	KERNEL
-#endif	_SYS_UX_EXCEPTION_H_

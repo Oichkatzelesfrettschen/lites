@@ -39,8 +39,7 @@
  *
  */
 
-#ifndef	_SYS_SIGNALVAR_H_		/* tmp for user.h */
-#define	_SYS_SIGNALVAR_H_
+#pragma once
 
 /*
  * Kernel signal definitions and data structures,
@@ -178,4 +177,3 @@ void	trapsignal (struct proc *p, int sig, unsigned code);
  */
 boolean_t sendsig (struct proc *, thread_t thread, sig_t action, int sig, unsigned code, int returnmask);
 #endif	/* KERNEL */
-#endif	/* !_SYS_SIGNALVAR_H_ */

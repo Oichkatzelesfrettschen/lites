@@ -25,8 +25,7 @@
  *
  */
 
-#ifndef _SYS_ELF_H_
-#define _SYS_ELF_H_
+#pragma once
 
 /* Just enough ELF information so we can exec files.  */
 
@@ -86,4 +85,3 @@ typedef struct {
   Elf32_Phdr phdrs[MAX_PHDRS];
 } elf_exec;
 
-#endif /* !_SYS_ELF_H_ */

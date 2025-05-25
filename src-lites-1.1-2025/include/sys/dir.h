@@ -38,8 +38,7 @@
  * and is provided solely (and temporarily) for backward compatibility.
  */
 
-#ifndef _SYS_DIR_H_
-#define	_SYS_DIR_H_
+#pragma once
 
 #include <dirent.h>
 
@@ -58,4 +57,3 @@
 #define DIRSIZ(dp) \
     ((sizeof (struct direct) - (MAXNAMLEN+1)) + (((dp)->d_namlen+1 + 3) &~ 3))
 
-#endif /* !_SYS_DIR_H_ */

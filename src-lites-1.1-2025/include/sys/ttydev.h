@@ -35,8 +35,7 @@
 
 /* COMPATABILITY HEADER FILE */
 
-#ifndef _SYS_TTYDEV_H_
-#define	_SYS_TTYDEV_H_
+#pragma once
 
 #ifdef USE_OLD_TTY
 #define B0	0
@@ -57,4 +56,3 @@
 #define EXTB	15
 #endif /* USE_OLD_TTY */
 
-#endif /* !_SYS_TTYDEV_H_ */

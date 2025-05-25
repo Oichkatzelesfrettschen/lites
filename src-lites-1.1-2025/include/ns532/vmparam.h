@@ -36,8 +36,7 @@
  *	@(#)vmparam.h	8.2 (Berkeley) 4/22/94
  */
 
-#ifndef _NS532_BSD_VMPARAM_H_
-#define _NS532_BSD_VMPARAM_H_
+#pragma once
 /*
  * Machine dependent constants for 532.
  */
@@ -202,4 +201,3 @@
 #define VM_KMEM_SIZE		(NKMEMCLUSTERS*CLBYTES)
 #define VM_PHYS_SIZE		(USRIOSIZE*CLBYTES)
 
-#endif /* _NS532_BSD_VMPARAM_H_ */

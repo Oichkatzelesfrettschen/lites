@@ -33,8 +33,7 @@
  *	@(#)queue.h	8.4 (Berkeley) 1/4/94
  */
 
-#ifndef	_SYS_QUEUE_H_
-#define	_SYS_QUEUE_H_
+#pragma once
 
 /*
  * This file defines three types of data structures: lists, tail queues,
@@ -242,4 +241,3 @@ struct {								\
 		(elm)->field.cqe_prev->field.cqe_next =			\
 		    (elm)->field.cqe_next;				\
 }
-#endif	/* !_SYS_QUEUE_H_ */

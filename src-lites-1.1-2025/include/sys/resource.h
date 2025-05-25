@@ -33,8 +33,7 @@
  *	@(#)resource.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_RESOURCE_H_
-#define	_SYS_RESOURCE_H_
+#pragma once
 
 #include <sys/types.h>
 
@@ -124,4 +123,3 @@ int	setrlimit (int, const struct rlimit *);
 __END_DECLS
 
 #endif	/* KERNEL */
-#endif	/* !_SYS_RESOURCE_H_ */

@@ -24,8 +24,7 @@
  * the rights to redistribute these changes.
  */
 
-#ifndef	_SYS_USHARED_H_
-#define	_SYS_USHARED_H_
+#pragma once
 
 #ifdef	KERNEL
 #include <serv/import_mach.h>
@@ -59,4 +58,3 @@ struct ushared_rw {
 	int		us_sigignore;
 };
 
-#endif	_SYS_USHARED_H_

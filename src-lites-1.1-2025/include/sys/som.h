@@ -25,8 +25,7 @@
  *
  */
 
-#ifndef	_SYS_SOM_H_
-#define	_SYS_SOM_H_
+#pragma once
 
 /*
  * Simplified SOM header structure for use by kern_exec code.
@@ -110,4 +109,3 @@ struct bsd_exechdr {
 #define	SOM_N_TXTOFF(x) \
 	((x).fhdr.tfile)
 
-#endif	/* _SYS_SOM_H_ */

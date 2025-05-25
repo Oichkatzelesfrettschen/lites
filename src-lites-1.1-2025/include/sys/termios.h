@@ -33,8 +33,7 @@
  *	@(#)termios.h	8.3 (Berkeley) 3/28/94
  */
 
-#ifndef _SYS_TERMIOS_H_
-#define _SYS_TERMIOS_H_
+#pragma once
 
 /* 
  * Special Control Characters 
@@ -271,7 +270,6 @@ __END_DECLS
 /*
  * END OF PROTECTED INCLUDE.
  */
-#endif /* !_SYS_TERMIOS_H_ */
 
 #ifndef _POSIX_SOURCE
 #include <sys/ttydefaults.h>

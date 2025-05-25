@@ -7,14 +7,12 @@
 
 /* Define __gnuc_va_list.  */
 
-#ifndef __GNUC_VA_LIST
-#define __GNUC_VA_LIST
+#pragma once
 
 typedef struct {
   char *__base;			/* Pointer to first integer register. */
   long __offset;		/* Byte offset of args so far. */
 } __gnuc_va_list;
-#endif /* not __GNUC_VA_LIST */
 
 /* If this is for internal libc use, don't define anything but
    __gnuc_va_list.  */

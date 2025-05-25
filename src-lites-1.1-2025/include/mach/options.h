@@ -1,5 +1,4 @@
-#ifndef MACH_OPTIONS_H
-#define MACH_OPTIONS_H
+#pragma once
 /*
  * Mach Operating System
  * Copyright (c) 1991,1990,1989 Carnegie Mellon University
@@ -95,4 +94,3 @@
 #define WAIT_DEBUG
 #define CTHREAD_SIGNAL
 
-#endif /* MACH_OPTIONS_H */

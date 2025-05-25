@@ -38,8 +38,7 @@
  *	@(#)varargs.h	8.2 (Berkeley) 3/22/94
  */
 
-#ifndef _VARARGS_H_
-#define	_VARARGS_H_
+#pragma once
 
 typedef char *va_list;
 
@@ -59,4 +58,3 @@ typedef char *va_list;
 
 #define	va_end(ap)
 
-#endif /* !_VARARGS_H_ */

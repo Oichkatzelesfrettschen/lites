@@ -33,8 +33,7 @@
  *	@(#)namei.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_NAMEI_H_
-#define	_SYS_NAMEI_H_
+#pragma once
 
 /*
  * Encapsulation of namei parameters.
@@ -185,4 +184,3 @@ struct	nchstats {
 	long	ncs_pass2;		/* names found with passes == 2 */
 	long	ncs_2passes;		/* number of times we attempt it */
 };
-#endif /* !_SYS_NAMEI_H_ */

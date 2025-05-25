@@ -35,8 +35,7 @@
 
 /* Modified for the Alpha AXP by Jukka Virtanen <jtv@hut.fi> 1995 */
 
-#ifndef _ENDIAN_H_
-#define	_ENDIAN_H_
+#pragma once
 
 /*
  * Define _NOQUAD if the compiler does NOT support 64-bit integers.
@@ -76,4 +75,3 @@ __END_DECLS
 #define	HTONL(x)	(x) = htonl((u_int)x)
 #define	HTONS(x)	(x) = htons((u_short)x)
 
-#endif /* !_ENDIAN_H_ */

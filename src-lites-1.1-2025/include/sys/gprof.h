@@ -50,8 +50,7 @@
  *
  */
 
-#ifndef	_GPROF_H_
-#define _GPROF_H_
+#pragma once
 /*
  * The profiler keeps two datastructures, a pc histogram and a call graph.
  */
@@ -124,4 +123,3 @@ struct gprof_call {
 typedef char *char_array;
 
 
-#endif	/* _GPROF_H_ */

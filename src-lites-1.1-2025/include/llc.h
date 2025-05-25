@@ -1,4 +1,2 @@
-#ifndef _LLC_H_
-#define _LLC_H_
+#pragma once
 /* Stub LLC header */
-#endif

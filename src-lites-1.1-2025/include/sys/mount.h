@@ -33,8 +33,7 @@
  *	@(#)mount.h	8.13 (Berkeley) 3/27/94
  */
 
-#ifndef _SYS_MOUNT_H_
-#define _SYS_MOUNT_H_
+#pragma once
 
 #ifdef KERNEL
 #include "nfs.h"
@@ -451,4 +450,3 @@ int	unmount (const char *, int);
 __END_DECLS
 
 #endif /* KERNEL */
-#endif /* !_SYS_MOUNT_H_ */

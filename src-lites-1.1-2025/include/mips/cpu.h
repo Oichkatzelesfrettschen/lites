@@ -38,8 +38,7 @@
 
 /* Cleaned up for LITES -- jvh 11/94 */
 
-#ifndef _CPU_H_
-#define _CPU_H_
+#pragma once
 
 /*
  * Exported definitions unique to pmax/mips cpu support.
@@ -94,4 +93,3 @@ union cpuprid {
 #define	MIPS_R6010	0x04
 #define	MIPS_R4010	0x05
 
-#endif /* _CPU_H_ */

@@ -1,5 +1,4 @@
-#ifndef LITES_AUDIT_H
-#define LITES_AUDIT_H
+#pragma once
 
 #include <stdint.h>
 
@@ -15,4 +14,3 @@ extern audit_entry_t audit_log[AUDIT_LOG_SIZE];
 
 void audit_record(uint32_t op, uint64_t obj, int result);
 
-#endif /* LITES_AUDIT_H */

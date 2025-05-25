@@ -46,8 +46,7 @@
 /*
  * SVID compatible ipc.h file
  */
-#ifndef _SYS_IPC_H_
-#define _SYS_IPC_H_
+#pragma once
 
 typedef	int32_t	key_t;	/* XXX should be in types.h */
 
@@ -76,4 +75,3 @@ struct ipc_perm {
 #define	IPC_SET		1	/* set options */
 #define	IPC_STAT	2	/* get options */
 
-#endif /* !_SYS_IPC_H_ */

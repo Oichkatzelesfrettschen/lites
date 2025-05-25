@@ -33,8 +33,7 @@
  *	@(#)ioccom.h	8.2 (Berkeley) 3/28/94
  */
 
-#ifndef	_SYS_IOCCOM_H_
-#define	_SYS_IOCCOM_H_
+#pragma once
 
 /*
  * Ioctl's have the command encoded in the lower word, and the size of
@@ -61,4 +60,3 @@
 /* this should be _IORW, but stdio got there first */
 #define	_IOWR(g,n,t)	_IOC(IOC_INOUT,	(g), (n), sizeof(t))
 
-#endif /* !_SYS_IOCCOM_H_ */

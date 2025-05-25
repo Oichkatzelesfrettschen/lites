@@ -38,8 +38,7 @@
  *	@(#)filio.h	8.1 (Berkeley) 3/28/94
  */
 
-#ifndef	_SYS_FILIO_H_
-#define	_SYS_FILIO_H_
+#pragma once
 
 #include <sys/ioccom.h>
 
@@ -52,4 +51,3 @@
 #define	FIOSETOWN	_IOW('f', 124, int)	/* set owner */
 #define	FIOGETOWN	_IOR('f', 123, int)	/* get owner */
 
-#endif /* !_SYS_FILIO_H_ */

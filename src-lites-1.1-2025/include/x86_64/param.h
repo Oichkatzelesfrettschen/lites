@@ -40,8 +40,7 @@
  * Machine dependent constants for Intel 386.
  */
 
-#ifndef _X86_64_PARAM_H_
-#define _X86_64_PARAM_H_
+#pragma once
 
 #define MACHINE "x86_64"
 
@@ -177,4 +176,3 @@
 #define PAGE_SIZE 4096
 #endif
 
-#endif /* _X86_64_PARAM_H_ */

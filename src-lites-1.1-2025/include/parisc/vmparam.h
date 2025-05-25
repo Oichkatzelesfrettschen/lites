@@ -25,8 +25,7 @@
  *
  */
 
-#ifndef _PARISC_BSD_VMPARAM_H_
-#define _PARISC_BSD_VMPARAM_H_
+#pragma once
 
 /*
  * Machine dependent constants for HP800
@@ -202,4 +201,3 @@
  */
 #define	GWPGADDR	0xC0000000
 
-#endif	/* _PARISC_BSD_VMPARAM_H_ */

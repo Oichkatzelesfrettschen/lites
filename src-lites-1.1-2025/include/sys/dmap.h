@@ -33,8 +33,7 @@
  *	@(#)dmap.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_DMAP_H_
-#define	_SYS_DMAP_H_
+#pragma once
 
 /*
  * Definitions for the mapping of vitual swap space to the physical swap
@@ -57,4 +56,3 @@ struct dblock {
 	swblk_t db_base;	/* base of physical contig drum block */
 	swblk_t db_size;	/* size of block */
 };
-#endif	/* !_SYS_DMAP_H_ */
