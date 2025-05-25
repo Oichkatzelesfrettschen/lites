@@ -132,6 +132,7 @@ SOFTWARE.
 #include <netinet/in.h>
 #endif /* IN_CLASSA_NET */
 
+#include <string.h>
 
 
 /* The following looks like a sockaddr
@@ -157,7 +158,7 @@ struct sockaddr_iso {
 #define TSEL(s) ((caddr_t)((s)->siso_data + (s)->siso_nlen))
 
 #define SAME_ISOADDR(a, b) \
-	(bcmp((a)->siso_data, (b)->siso_data, (unsigned)(a)->siso_nlen)==0)
+	(memcmp((a)->siso_data, (b)->siso_data, (unsigned)(a)->siso_nlen)==0)
 /*
  * The following are specific values for siso->siso_data[0],
  * otherwise known as the AFI:

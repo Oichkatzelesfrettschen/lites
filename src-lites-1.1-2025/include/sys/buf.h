@@ -44,6 +44,7 @@
 #include <serv/import_mach.h>
 #endif
 #include <sys/queue.h>
+#include <string.h>
 
 #define NOLIST ((struct buf *)0x87654321)
 
@@ -180,7 +181,7 @@ TAILQ_HEAD(bqueues, buf) bufqueues[BUFFER_QUEUES];	  /* XXX extern! */
  * Zero out the buffer's data area.
  */
 #define	clrbuf(bp) {							\
-	bzero((bp)->b_data, (u_int)(bp)->b_bcount);			\
+	memset((bp)->b_data, 0, (u_int)(bp)->b_bcount);			\
 	(bp)->b_resid = 0;						\
 }
 

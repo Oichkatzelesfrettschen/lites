@@ -76,6 +76,7 @@ SOFTWARE.
 #include <sys/socket.h>
 #include <sys/socketvar.h>
 #include <sys/errno.h>
+#include <string.h>
 
 #include <netiso/argo_debug.h>
 #include <netiso/iso.h>
@@ -101,7 +102,7 @@ struct	iso_addr zeroiso_addr = {
 
 
 #ifdef LITES
-#define ovbcopy bcopy
+#define ovbcopy memmove
 #endif
 
 /*

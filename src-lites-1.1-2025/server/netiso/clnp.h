@@ -31,6 +31,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)clnp.h	8.2 (Berkeley) 4/16/94
+#include <string.h>
  */
 
 /***********************************************************
@@ -412,7 +413,7 @@ extern float troll_random;
 			(isoa.isoa_len > 20) || (isoa.isoa_len == 0)) {\
 			hoff = (caddr_t)0;\
 		} else {\
-			(void) bcopy(hoff, (caddr_t)isoa.isoa_genaddr, isoa.isoa_len);\
+			(void) memcpy((caddr_t)isoa.isoa_genaddr, hoff, isoa.isoa_len);\
 			hoff += isoa.isoa_len;\
 		}\
 	}
@@ -422,7 +423,7 @@ extern float troll_random;
  */
 #define CLNP_INSERT_ADDR(hoff, isoa)\
 	*hoff++ = (isoa).isoa_len;\
-	(void) bcopy((caddr_t)((isoa).isoa_genaddr), hoff, (isoa).isoa_len);\
+	(void) memcpy(hoff, (caddr_t)((isoa).isoa_genaddr), (isoa).isoa_len);\
 	hoff += (isoa).isoa_len;
 
 /*

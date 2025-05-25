@@ -43,6 +43,7 @@
 #include <sys/types.h>
 #include <sys/exec_file.h>
 #include <sys/errno.h>
+#include <string.h>
 
 #define CPU_TYPE_UNKNOWN ((cpu_type_t) 0)
 
@@ -327,7 +328,7 @@ mach_error_t parse_exec_file(
 /* Initialize a section to reasonable defaults */
 void exec_section_clear(struct exec_section *sec)
 {
-	bzero((void *) sec, sizeof(*sec));
+       memset((void *) sec, 0, sizeof(*sec));
 
 	sec->how = EXEC_M_MAP;
 	sec->prot = VM_PROT_ALL;
@@ -340,7 +341,7 @@ void exec_section_clear(struct exec_section *sec)
 
 void exec_load_info_clear(struct exec_load_info *li)
 {
-	bzero((void *) li, sizeof(*li));	
+       memset((void *) li, 0, sizeof(*li));
 }
 
 /* 

@@ -32,6 +32,7 @@
  *
  *	@(#)radix.h	8.1 (Berkeley) 6/10/93
  */
+#include <string.h>
 
 #ifndef _RADIX_H_
 #define	_RADIX_H_
@@ -122,14 +123,14 @@ struct radix_node_head {
 
 
 #ifndef KERNEL
-#define Bcmp(a, b, n) bcmp(((char *)(a)), ((char *)(b)), (n))
-#define Bzero(p, n) bzero((char *)(p), (int)(n));
+#define Bcmp(a, b, n) memcmp((char *)(a), (char *)(b), (n))
+#define Bzero(p, n) memset((char *)(p), 0, (int)(n));
 #define R_Malloc(p, t, n) (p = (t) malloc((unsigned int)(n)))
 #define Free(p) free((char *)p);
 #else
-#define Bcmp(a, b, n) bcmp(((caddr_t)(a)), ((caddr_t)(b)), (unsigned)(n))
-#define Bcopy(a, b, n) bcopy(((caddr_t)(a)), ((caddr_t)(b)), (unsigned)(n))
-#define Bzero(p, n) bzero((caddr_t)(p), (unsigned)(n));
+#define Bcmp(a, b, n) memcmp((caddr_t)(a), (caddr_t)(b), (unsigned)(n))
+#define Bcopy(a, b, n) memcpy((caddr_t)(b), (caddr_t)(a), (unsigned)(n))
+#define Bzero(p, n) memset((caddr_t)(p), 0, (unsigned)(n));
 #define R_Malloc(p, t, n) (p = (t) malloc((unsigned long)(n), M_RTABLE, M_DONTWAIT))
 #define Free(p) free((caddr_t)p, M_RTABLE);
 

@@ -159,3 +159,4 @@ void	stopprofclock (struct proc *);
 void	setstatclockrate (int hzrate);
 
 #include <libkern/libkern.h>
+#include <string.h>
