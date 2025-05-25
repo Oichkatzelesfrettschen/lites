@@ -39,10 +39,16 @@ static void test_revoke_epoch_propagation(void) {
     root.rights = 0xff;
     root.epoch = 10;
 
+    acl_add(&root, CAP_OP_REFINE, 0x0f);
+    acl_add(&root, CAP_OP_REVOKE, 0);
+
     struct cap *child = cap_refine(&root, 0x0f, 0);
     assert(child);
+    acl_add(child, CAP_OP_REFINE, 0x01);
+    acl_add(child, CAP_OP_REVOKE, 0);
     struct cap *grand = cap_refine(child, 0x01, 0);
     assert(grand);
+    acl_add(grand, CAP_OP_REVOKE, 0);
 
     revoke_capability(&root);
     assert(root.epoch == 11);

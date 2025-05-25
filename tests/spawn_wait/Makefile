@@ -1,5 +1,5 @@
-CC ?= gcc
-CFLAGS += -std=c23 -Wall -Wextra -Werror
+CC ?= clang
+CFLAGS += -std=gnu23 -Wall -Wextra -Werror
 CPPFLAGS += -I../../include
 
 all: test_spawn_wait child
