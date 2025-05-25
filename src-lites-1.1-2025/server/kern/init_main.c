@@ -144,7 +144,7 @@ int	boothowto = RB_KDB;	/* XXX should be ifdeffed */
  * hard work is done in the lower-level initialization routines including
  * startup(), which does memory initialization and autoconfiguration.
  */
-noreturn system_setup()
+_Noreturn void system_setup(void)
 {
 	register struct proc *p;
 	register struct filedesc0 *fdp;

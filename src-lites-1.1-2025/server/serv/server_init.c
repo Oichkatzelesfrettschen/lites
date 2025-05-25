@@ -72,7 +72,7 @@ extern int msgbufmapped;
 extern struct proc *newproc();
 extern void ux_create_thread();
 extern void proc_set_condition_names(struct proc *p); /* in kern_fork.c */
-cthread_fn_t	system_setup();	/* forward */
+_Noreturn void system_setup(void); /* forward */
 
 struct mutex allproc_lock = MUTEX_NAMED_INITIALIZER("allproc_lock");
 int system_procs = 2; /*XXX governed by allproc_lock also.  Start at -3
