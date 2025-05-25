@@ -1,6 +1,6 @@
-CC ?= gcc
+CC ?= clang
 # Additional compile flags from the top-level build system are appended.
-CFLAGS += -std=c23 -Wall -Wextra -Werror
+CFLAGS += -std=gnu23 -Wall -Wextra -Werror
 CPPFLAGS += -I../../include
 
 all: test_cap
