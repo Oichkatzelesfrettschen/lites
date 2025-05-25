@@ -1,5 +1,4 @@
-#ifndef _CAP_H_
-#define _CAP_H_
+#pragma once
 
 /*
  * Basic capability descriptor.  Capabilities form a tree where each child
@@ -26,4 +25,3 @@ struct cap *cap_refine(struct cap *parent, unsigned long rights, unsigned int fl
 void revoke_capability(struct cap *cap);
 int cap_check(const struct cap *cap);
 
-#endif /* _CAP_H_ */

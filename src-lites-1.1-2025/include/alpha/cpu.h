@@ -39,8 +39,7 @@
 /* Cleaned up for Lites  -- jvh 5/94 */
 /* Polished up for Lites -- jtv 2/95 */
 
-#ifndef _CPU_H_
-#define _CPU_H_
+#pragma once
 
 /*
  * CTL_MACHDEP definitions.
@@ -53,4 +52,3 @@
 	{ "console_device", CTLTYPE_STRUCT }, \
 }
 
-#endif /* _CPU_H_ */

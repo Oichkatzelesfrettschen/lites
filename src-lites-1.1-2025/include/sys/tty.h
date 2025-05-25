@@ -38,8 +38,7 @@
  *	@(#)tty.h	8.6 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_TTY_H_
-#define _SYS_TTY_H_
+#pragma once
 
 #ifdef LITES
 #include <serv/import_mach.h>
@@ -232,4 +231,3 @@ int	 ttywait (struct tty *tp);
 int	 ttywflush (struct tty *tp);
 #endif
 
-#endif /* !_SYS_TTY_H_ */

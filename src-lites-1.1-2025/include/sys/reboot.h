@@ -33,8 +33,7 @@
  *	@(#)reboot.h	8.1 (Berkeley) 6/2/93
  */
 
-#ifndef _SYS_REBOOT_H_
-#define _SYS_REBOOT_H_
+#pragma once
 
 /*
  * Arguments to reboot system call.
@@ -95,4 +94,3 @@
 #ifdef KERNEL
 void boot (boolean_t, int);
 #endif
-#endif /* _SYS_REBOOT_H_ */

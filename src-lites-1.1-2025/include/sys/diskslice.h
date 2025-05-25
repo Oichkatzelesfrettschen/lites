@@ -26,8 +26,7 @@
  *	$Id: diskslice.h,v 1.1 1996/02/17 01:07:01 sclawson Exp $
  */
 
-#ifndef _SYS_DISKSLICE_H_
-#define	_SYS_DISKSLICE_H_
+#pragma once
 
 #include <sys/ioccom.h>
 
@@ -189,4 +188,3 @@ int	dssize (dev_t dev, struct diskslices **sspp, d_open_t dopen,
 
 #endif /* 0 */
 
-#endif /* !_SYS_DISKSLICE_H_ */

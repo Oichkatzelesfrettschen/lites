@@ -42,8 +42,7 @@
  *	@(#)device.h	8.2 (Berkeley) 2/17/94
  */
 
-#ifndef _SYS_DEVICE_H_
-#define	_SYS_DEVICE_H_
+#pragma once
 
 /*
  * Minimal device structures.
@@ -140,4 +139,3 @@ int config_found (struct device *, void *, cfprint_t);
 int config_rootfound (char *, void *);
 void config_attach (struct device *, struct cfdata *, void *, cfprint_t);
 void evcnt_attach (struct device *, const char *, struct evcnt *);
-#endif /* !_SYS_DEVICE_H_ */

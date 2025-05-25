@@ -18,8 +18,7 @@
 /*
  * Machine-dependent signal definitions
  */
-#ifndef _ALPHA__SIGNAL_H_
-#define _ALPHA_SIGNAL_H_
+#pragma once
 
 struct  sigcontext {
   	integer_t sc_onstack;
@@ -90,4 +89,3 @@ struct  sigcontext {
 /* Stack must be allocated in 16 byte multiplies == rouding */
 #define	SC_ALLOC	(((SC_SIZE+6*8)+0xff) &~(0xff))
 
-#endif /* _ALPHA_SIGNAL_H_ */

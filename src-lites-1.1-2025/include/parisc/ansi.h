@@ -33,8 +33,7 @@
  *	@(#)ansi.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef	_ANSI_H_
-#define	_ANSI_H_
+#pragma once
 
 /*
  * Types which are fundamental to the implementation and may appear in
@@ -69,4 +68,3 @@
 #define	_BSD_WCHAR_T_	int			/* wchar_t */
 #define	_BSD_RUNE_T_	int			/* rune_t */
 
-#endif	/* _ANSI_H_ */

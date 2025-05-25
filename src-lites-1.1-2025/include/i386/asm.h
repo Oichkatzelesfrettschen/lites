@@ -1,5 +1,4 @@
-#ifndef _I386_ASM_H_
-#define _I386_ASM_H_
+#pragma once
 
 /* Generic assembly macros modelled after the 4.4BSD i386 header. */
 
@@ -18,4 +17,3 @@
 /* System call instruction */
 #define SVC             int $0x80
 
-#endif /* _I386_ASM_H_ */

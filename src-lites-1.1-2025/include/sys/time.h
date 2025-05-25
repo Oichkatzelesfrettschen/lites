@@ -33,8 +33,7 @@
  *	@(#)time.h	8.1 (Berkeley) 6/2/93
  */
 
-#ifndef _SYS_TIME_H_
-#define _SYS_TIME_H_
+#pragma once
 
 #include <sys/types.h>
 
@@ -132,4 +131,3 @@ __END_DECLS
 
 #endif /* !KERNEL */
 
-#endif /* !_SYS_TIME_H_ */

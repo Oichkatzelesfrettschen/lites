@@ -39,8 +39,7 @@
  * $Id: buf.h,v 1.1.1.2 1995/03/23 01:15:54 law Exp $
  */
 
-#ifndef _SYS_BUF_H_
-#define	_SYS_BUF_H_
+#pragma once
 #ifdef LITES
 #include <serv/import_mach.h>
 #endif
@@ -232,4 +231,3 @@ void	bgetvp (struct vnode *, struct buf *);
 void	reassignbuf (struct buf *, struct vnode *);
 __END_DECLS
 #endif
-#endif /* !_SYS_BUF_H_ */

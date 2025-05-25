@@ -33,8 +33,7 @@
  *	@(#)stdarg.h	8.1 (Berkeley) 6/10/93
  */
 
-#ifndef _STDARG_H_
-#define	_STDARG_H_
+#pragma once
 
 typedef char *va_list;
 
@@ -57,4 +56,3 @@ typedef char *va_list;
 
 #define	va_end(ap)
 
-#endif /* !_STDARG_H_ */

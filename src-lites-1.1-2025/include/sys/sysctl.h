@@ -36,8 +36,7 @@
  *	@(#)sysctl.h	8.1 (Berkeley) 6/2/93
  */
 
-#ifndef _SYS_SYSCTL_H_
-#define	_SYS_SYSCTL_H_
+#pragma once
 
 /*
  * These are for the eproc structure defined below.
@@ -343,4 +342,3 @@ __BEGIN_DECLS
 int	sysctl (int *, u_int, void *, size_t *, void *, size_t);
 __END_DECLS
 #endif	/* KERNEL */
-#endif	/* !_SYS_SYSCTL_H_ */

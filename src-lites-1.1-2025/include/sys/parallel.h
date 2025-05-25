@@ -31,8 +31,7 @@
  *	Master lock serialization for threads within the server.
  */
 
-#ifndef SYS_PARALLEL_H
-#define SYS_PARALLEL_H
+#pragma once
 
 #include "data_synch.h"
 
@@ -77,4 +76,3 @@ MACRO_BEGIN \
 MACRO_END
 #endif /* DATA_SYNCH */
 
-#endif /* SYS_PARALLEL_H */

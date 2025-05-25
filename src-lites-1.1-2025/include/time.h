@@ -38,8 +38,7 @@
  *	@(#)time.h	8.3 (Berkeley) 1/21/94
  */
 
-#ifndef _TIME_H_
-#define	_TIME_H_
+#pragma once
 
 #include <machine/ansi.h>
 
@@ -101,4 +100,3 @@ void tzsetwall (void);
 #endif /* neither ANSI nor POSIX */
 __END_DECLS
 
-#endif /* !_TIME_H_ */

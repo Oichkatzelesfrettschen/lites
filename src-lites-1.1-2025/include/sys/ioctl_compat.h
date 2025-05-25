@@ -38,8 +38,7 @@
  *	@(#)ioctl_compat.h	8.4 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_IOCTL_COMPAT_H_
-#define	_SYS_IOCTL_COMPAT_H_
+#pragma once
 
 #include <sys/ttychars.h>
 #include <sys/ttydev.h>
@@ -164,4 +163,3 @@ struct sgttyb {
 #define	NETLDISC	1
 #define	NTTYDISC	2
 
-#endif /* !_SYS_IOCTL_COMPAT_H_ */

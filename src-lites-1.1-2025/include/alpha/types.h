@@ -38,8 +38,7 @@
 /*
  * Modified for Alpha AXP by Jukka Virtanen <jtv@hut.fi> 1995
  */
-#ifndef	_MACHTYPES_H_
-#define	_MACHTYPES_H_
+#pragma once
 
 #include <mach/alpha/vm_types.h>
 
@@ -56,4 +55,3 @@ typedef	unsigned int		u_int32_t;
 typedef	long			  int64_t;
 typedef	unsigned long		u_int64_t;
 
-#endif	/* _MACHTYPES_H_ */

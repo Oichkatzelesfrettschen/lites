@@ -38,8 +38,7 @@
  *	@(#)types.h	8.4 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_TYPES_H_
-#define	_SYS_TYPES_H_
+#pragma once
 
 /* Machine type dependent parameters. */
 #include <machine/endian.h>
@@ -180,4 +179,3 @@ typedef unsigned int ioctl_cmd_t;
 #endif
 
 #endif /* !_POSIX_SOURCE */
-#endif /* !_SYS_TYPES_H_ */

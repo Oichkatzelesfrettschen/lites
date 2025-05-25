@@ -28,8 +28,7 @@
  *	assert macro for the Lites server
  */
 
-#ifndef _SYS_ASSERT_H_
-#define _SYS_ASSERT_H_
+#pragma once
 
 #include "assertions.h"
 
@@ -43,4 +42,3 @@
 #define assert(expr)
 #endif /* ASSERTIONS */
 
-#endif /* !_SYS_ASSERT_H_ */

@@ -54,8 +54,7 @@
  * Machine dependent constants for Alpha AXP.
  */
 
-#ifndef _ALPHA_PARAM_H_
-#define _ALPHA_PARAM_H_
+#pragma once
 
 #define	MACHINE	"alpha"
 
@@ -173,4 +172,3 @@
 
 #define PAGE_SIZE ALPHA_PGBYTES
 
-#endif /* _ALPHA_PARAM_H_ */

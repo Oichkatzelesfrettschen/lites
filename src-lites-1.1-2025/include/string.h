@@ -33,8 +33,7 @@
  *	@(#)string.h	8.1 (Berkeley) 6/2/93
  */
 
-#ifndef _STRING_H_
-#define	_STRING_H_
+#pragma once
 #include <machine/ansi.h>
 
 #ifdef	_BSD_SIZE_T_
@@ -90,4 +89,3 @@ void	 swab (const void *, void *, size_t);
 #endif 
 __END_DECLS
 
-#endif /* _STRING_H_ */

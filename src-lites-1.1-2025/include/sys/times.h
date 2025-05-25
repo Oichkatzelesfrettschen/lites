@@ -38,8 +38,7 @@
  *	@(#)times.h	8.4 (Berkeley) 1/21/94
  */
 
-#ifndef	_SYS_TIMES_H_
-#define	_SYS_TIMES_H_
+#pragma once
 
 #include <machine/ansi.h>
 
@@ -62,4 +61,3 @@ __BEGIN_DECLS
 clock_t	times (struct tms *);
 __END_DECLS
 #endif
-#endif /* !_SYS_TIMES_H_ */

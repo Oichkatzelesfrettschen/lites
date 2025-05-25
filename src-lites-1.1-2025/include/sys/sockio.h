@@ -33,8 +33,7 @@
  *	@(#)sockio.h	8.1 (Berkeley) 3/28/94
  */
 
-#ifndef	_SYS_SOCKIO_H_
-#define	_SYS_SOCKIO_H_
+#pragma once
 
 #include <sys/ioccom.h>
 
@@ -82,4 +81,3 @@
 #define	SIOCSIFASYNCMAP  _IOW('i', 125, struct ifreq)   /* set ppp asyncmap */
 #define	SIOCGIFASYNCMAP _IOWR('i', 124, struct ifreq)   /* get ppp asyncmap */
 
-#endif /* !_SYS_SOCKIO_H_ */

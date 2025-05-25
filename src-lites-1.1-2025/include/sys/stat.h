@@ -38,8 +38,7 @@
  *	@(#)stat.h	8.6 (Berkeley) 3/8/94
  */
 
-#ifndef _SYS_STAT_H_
-#define	_SYS_STAT_H_
+#pragma once
 
 #include <sys/time.h>
 
@@ -194,4 +193,3 @@ int	lstat (const char *, struct stat *);
 #endif
 __END_DECLS
 #endif
-#endif /* !_SYS_STAT_H_ */

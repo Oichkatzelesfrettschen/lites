@@ -65,8 +65,7 @@
  *	Structure definitions for COFF headers
  */
 
-#ifndef _SYS_COFF_H_
-#define _SYS_COFF_H_
+#pragma once
 
 struct filehdr {
 	unsigned short	f_magic;	/* magic number */
@@ -153,4 +152,3 @@ struct exechdr {
    ((sizeof(struct filehdr) + sizeof(struct aouthdr) + \
      (f).f_nscns * sizeof(struct scnhdr) + 15) & ~15)))
 
-#endif /* !_SYS_COFF_H_ */

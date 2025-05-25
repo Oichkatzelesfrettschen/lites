@@ -33,8 +33,7 @@
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
  */
 
-#ifndef _SYS_UIO_H_
-#define	_SYS_UIO_H_
+#pragma once
 
 /*
  * XXX
@@ -80,4 +79,3 @@ ssize_t	readv (int, const struct iovec *, int);
 ssize_t	writev (int, const struct iovec *, int);
 __END_DECLS
 #endif /* !KERNEL */
-#endif /* !_SYS_UIO_H_ */

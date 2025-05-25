@@ -1,4 +1,2 @@
-#ifndef _DIAGNOSTIC_H_
-#define _DIAGNOSTIC_H_
+#pragma once
 #define DIAGNOSTIC 0
-#endif

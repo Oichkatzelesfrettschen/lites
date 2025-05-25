@@ -33,8 +33,7 @@
  *	@(#)endian.h	8.1 (Berkeley) 6/11/93
  */
 
-#ifndef _ENDIAN_H_
-#define	_ENDIAN_H_
+#pragma once
 
 /*
  * Define _NOQUAD if the compiler does NOT support 64-bit integers.
@@ -89,4 +88,3 @@ __END_DECLS
 #define	HTONS(x)	(x) = htons((u_short)x)
 #endif
 #endif /* ! _POSIX_SOURCE */
-#endif /* !_ENDIAN_H_ */

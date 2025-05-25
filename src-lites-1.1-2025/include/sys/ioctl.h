@@ -38,8 +38,7 @@
  *	@(#)ioctl.h	8.6 (Berkeley) 3/28/94
  */
 
-#ifndef	_SYS_IOCTL_H_
-#define	_SYS_IOCTL_H_
+#pragma once
 
 #include <sys/ttycom.h>
 
@@ -71,7 +70,6 @@ __BEGIN_DECLS
 int	ioctl (int, unsigned int, ...);
 __END_DECLS
 #endif /* KERNEL */
-#endif /* !_SYS_IOCTL_H_ */
 
 /*
  * Keep outside _SYS_IOCTL_H_

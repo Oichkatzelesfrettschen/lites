@@ -33,8 +33,7 @@
  *	@(#)unistd.h	8.2 (Berkeley) 1/7/94
  */
 
-#ifndef _SYS_UNISTD_H_
-#define	_SYS_UNISTD_H_
+#pragma once
 
 /* compile-time symbolic constants */
 #define	_POSIX_JOB_CONTROL	/* implementation supports job control */
@@ -121,4 +120,3 @@
 /* configurable system strings */
 #define	_CS_PATH		 1
 
-#endif /* !_SYS_UNISTD_H_ */

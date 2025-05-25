@@ -1,5 +1,4 @@
-#ifndef _CDEFS_H_
-#define _CDEFS_H_
+#pragma once
 
 #if defined(__cplusplus)
 #define __BEGIN_DECLS   extern "C" {
@@ -32,4 +31,3 @@
 #define __dead
 #define __unused       __attribute__((__unused__))
 
-#endif /* _CDEFS_H_ */

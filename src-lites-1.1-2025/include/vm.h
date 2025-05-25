@@ -1,5 +1,4 @@
-#ifndef LITES_VM_H
-#define LITES_VM_H
+#pragma once
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -43,4 +42,3 @@ typedef struct pf_info {
     int         flags; /* future use */
 } pf_info_t;
 
-#endif /* LITES_VM_H */

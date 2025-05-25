@@ -1,4 +1,2 @@
-#ifndef _INET_H_
-#define _INET_H_
+#pragma once
 /* Basic network stubs */
-#endif

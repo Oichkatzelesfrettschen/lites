@@ -40,8 +40,7 @@
  *
  */
 
-#ifndef	_QUEUE_H_
-#define	_QUEUE_H_
+#pragma once
 
 #ifdef KERNEL
 #include "queue_assertions.h"
@@ -399,4 +398,3 @@ MACRO_END
 #define queue_assert_member(_head, _elem, _type, _chain)
 #endif /* QUEUE_ASSERTIONS */
 
-#endif	_QUEUE_H_

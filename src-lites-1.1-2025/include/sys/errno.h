@@ -67,8 +67,7 @@
  *	@(#)errno.h	8.5 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_ERRNO_H_
-#define _SYS_ERRNO_H_
+#pragma once
 
 #ifndef _POSIX_SOURCE
 typedef int errno_t;
@@ -476,4 +475,3 @@ extern int errno;			/* global error number */
 #endif /* _POSIX_SOURCE */
 #endif /* !defined(KERNEL) */
 
-#endif /* !_SYS_ERRNO_H_ */

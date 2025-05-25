@@ -38,8 +38,7 @@
  *	@(#)ttycom.h	8.1 (Berkeley) 3/28/94
  */
 
-#ifndef	_SYS_TTYCOM_H_
-#define	_SYS_TTYCOM_H_
+#pragma once
 
 #include <sys/ioccom.h>
 
@@ -126,4 +125,3 @@ struct winsize {
 #define	SLIPDISC	4		/* serial IP discipline */
 #define	PPPDISC		5		/* ppp discipline */
 
-#endif /* !_SYS_TTYCOM_H_ */

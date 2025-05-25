@@ -33,8 +33,7 @@
  *	@(#)gmon.h	8.2 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_GMON_H_
-#define _SYS_GMON_H_
+#pragma once
 
 #include <machine/profile.h>
 
@@ -156,4 +155,3 @@ extern struct gmonparam _gmonparam;
 #define	GPROF_FROMS	2	/* struct: from location hash bucket */
 #define	GPROF_TOS	3	/* struct: destination/count structure */
 #define	GPROF_GMONPARAM	4	/* struct: profiling parameters (see above) */
-#endif /* !_SYS_GMON_H_ */

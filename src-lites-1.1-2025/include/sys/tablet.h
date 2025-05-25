@@ -33,8 +33,7 @@
  *	@(#)tablet.h	8.3 (Berkeley) 1/4/94
  */
 
-#ifndef _SYS_TABLET_H_
-#define	_SYS_TABLET_H_
+#pragma once
 
 /*
  * Tablet line discipline.
@@ -91,4 +90,3 @@ struct	polpos {
 #define BIOSTYPE	_IOW('b', 3, int)	/* set tablet type */
 #define BIOGTYPE	_IOR('b', 4, int)	/* get tablet type*/
 
-#endif /* !_SYS_TABLET_H_ */

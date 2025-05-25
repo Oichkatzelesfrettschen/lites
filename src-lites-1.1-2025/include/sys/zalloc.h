@@ -38,8 +38,7 @@
  *
  */
 
-#ifndef	_ZALLOC_
-#define	_ZALLOC_
+#pragma once
 
 #include <serv/import_mach.h>
 
@@ -129,4 +128,3 @@ void		zchange(zone_t zone, boolean_t pageable, boolean_t sleepable,
 void		zcram(zone_t zone, vm_offset_t newmem, vm_size_t size);
 void		zone_init(void);
 
-#endif	_ZALLOC_

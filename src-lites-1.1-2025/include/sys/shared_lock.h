@@ -37,8 +37,7 @@
  *
  */
 
-#ifndef	_SYS_SHARED_LOCK_H_
-#define	_SYS_SHARED_LOCK_H_
+#pragma once
 
 #include <sys/proc.h>		/* for struct proc */
 
@@ -60,4 +59,3 @@ extern int		share_lock_solid(struct shared_lock *, struct proc *);
 extern void		share_unlock(struct shared_lock *, struct proc *);
 extern boolean_t	share_try_lock(struct shared_lock *, struct proc *);
 
-#endif	_SYS_SHARED_LOCK_H_

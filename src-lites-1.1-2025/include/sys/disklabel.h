@@ -33,8 +33,7 @@
  *	@(#)disklabel.h	8.1 (Berkeley) 6/2/93
  */
 
-#ifndef _SYS_DISKLABEL_H_
-#define _SYS_DISKLABEL_H_
+#pragma once
 
 /*
  * Disk description table, see disktab(5)
@@ -334,4 +333,3 @@ __END_DECLS
 
 #endif
 
-#endif /* !_SYS_DISKLABEL_H_ */

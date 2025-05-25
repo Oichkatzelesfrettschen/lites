@@ -64,8 +64,7 @@
  *	@(#)kernel.h	8.3 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_KERNEL_H_
-#define _SYS_KERNEL_H_
+#pragma once
 
 /* Global variables for the kernel. */
 
@@ -104,4 +103,3 @@ extern int stathz;			/* statistics clock's frequency */
 extern int profhz;			/* profiling clock's frequency */
 extern vm_offset_t lbolt;		/* once a second sleep address */
 
-#endif /* !_SYS_KERNEL_H_ */

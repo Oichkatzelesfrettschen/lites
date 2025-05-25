@@ -1,5 +1,4 @@
-#ifndef MACH_CTHREAD_INTERNALS_H
-#define MACH_CTHREAD_INTERNALS_H
+#pragma once
 /*
  * Mach Operating System
  * Copyright (c) 1992,1991,1990,1989 Carnegie Mellon University
@@ -206,7 +205,6 @@ extern void cproc_prepare(cproc_t _child, natural_t *_child_context,
                           vm_offset_t _stackp);
 extern void cproc_setup(cproc_t _child, thread_t _mach_thread,
                         void (*_routine)(cproc_t));
-#endif /* MACH_CTHREAD_INTERNALS_H */
 
 #define yield()		\
 	(void) thread_switch(MACH_PORT_NULL, SWITCH_OPTION_DEPRESS, 10)

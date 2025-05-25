@@ -64,8 +64,7 @@
  *	@(#)proc.h	8.8 (Berkeley) 1/21/94
  */
 
-#ifndef _SYS_PROC_H_
-#define	_SYS_PROC_H_
+#pragma once
 
 #ifdef KERNEL
 #include "map_uarea.h"
@@ -368,4 +367,3 @@ int	tsleep (void *chan, int pri, char *wmesg, int timo);
 void	unsleep (struct proc *);
 void	wakeup (void *chan);
 #endif	/* KERNEL */
-#endif	/* !_SYS_PROC_H_ */

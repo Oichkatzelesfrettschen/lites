@@ -1,5 +1,4 @@
-#ifndef LITES_AUTH_H
-#define LITES_AUTH_H
+#pragma once
 
 #include <stdint.h>
 #include "../src-lites-1.1-2025/include/cap.h"
@@ -18,4 +17,3 @@ int authorize(const cap_t *subject, uint32_t op, uint64_t obj);
 #define CAP_OP_REFINE 1
 #define CAP_OP_REVOKE 2
 
-#endif /* LITES_AUTH_H */
