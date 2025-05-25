@@ -200,7 +200,8 @@ The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
 
 Additional notes are kept in [`docs/`](docs/).  The mailbox-based IPC
-wrappers are described in [docs/IPC.md](docs/IPC.md).
+wrappers are described in [docs/IPC.md](docs/IPC.md).  Signal helper
+functions are documented in [docs/signals.md](docs/signals.md).
 
 ## Tests
 

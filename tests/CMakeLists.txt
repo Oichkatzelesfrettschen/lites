@@ -23,3 +23,8 @@ add_executable(test_vm_fault
     ../src-lites-1.1-2025/server/vm/vm_handlers.c)
 target_compile_options(test_vm_fault PRIVATE -std=c23 -Wall -Wextra -Werror)
 
+add_executable(test_signal
+    signal/test_signal.c
+    ../src-lites-1.1-2025/liblites/signal_helpers.c)
+target_compile_options(test_signal PRIVATE -std=c23 -Wall -Wextra -Werror)
+
