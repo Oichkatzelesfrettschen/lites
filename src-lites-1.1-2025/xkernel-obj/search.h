@@ -16,14 +16,14 @@ typedef	_BSD_SIZE_T_	size_t;
 #endif
 
 __BEGIN_DECLS
-extern void	*bsearch __P((const void *, const void *, size_t, size_t,
-			      int (*)(const void *, const void *)));
-extern void	*lfind __P((const void *, const void *, size_t *, size_t,
-			      int (*)(const void *, const void *)));
-extern void	*lsearch __P((const void *, const void *, size_t *, size_t,
-			      int (*)(const void *, const void *)));
-extern void	 insque __P((void *, void *));
-extern void	 remque __P((void *));
+extern void	*bsearch (const void *, const void *, size_t, size_t,
+			      int (*)(const void *, const void *));
+extern void	*lfind (const void *, const void *, size_t *, size_t,
+			      int (*)(const void *, const void *));
+extern void	*lsearch (const void *, const void *, size_t *, size_t,
+			      int (*)(const void *, const void *));
+extern void	 insque (void *, void *);
+extern void	 remque (void *);
 __END_DECLS
 
 #endif

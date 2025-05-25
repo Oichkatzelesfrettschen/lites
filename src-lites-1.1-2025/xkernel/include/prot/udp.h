@@ -22,11 +22,9 @@
 #define UDP_GETFREEPROTNUM	(UDP_CTL * MAXOPS + 2)
 #define UDP_RELEASEPROTNUM	(UDP_CTL * MAXOPS + 3)
 
-#  ifdef __STDC__
 
 void	udp_init( XObj );
 
-#  endif
 
 
 #endif

@@ -88,7 +88,6 @@ typedef struct {
 } mapId;
 
 
-#ifdef __STDC__
 
 int 	icmpSendEchoReq(XObj s, int msgLength);
 void 	icmpPopEchoRep(XObj p, Msg *m);
@@ -96,15 +95,6 @@ void 	icmpHdrStore(void *hdr, char *netHdr, long len, void *);
 void 	icmpEchoStore(void *hdr, char *netHdr, long len, void *);
 long 	icmpEchoLoad(void *hdr, char *netHdr, long len, void *);
 
-#else
-
-int 	icmpSendEchoReq();
-void 	icmpPopEchoRep();
-void 	icmpHdrStore();
-void 	icmpEchoStore();
-long 	icmpEchoLoad();
-
-#endif
 
 
 extern int traceicmpp;

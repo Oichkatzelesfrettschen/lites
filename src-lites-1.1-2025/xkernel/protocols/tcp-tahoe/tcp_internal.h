@@ -251,7 +251,6 @@ typedef struct {
 extern char *tcpstates[];
 extern long	tcpIpProtocolNum;
 
-#if defined(__STDC__) || defined(__GNUC__)
 
 /*
  * in_hacks.c
@@ -341,95 +340,5 @@ int	tcp_reass( struct tcpcb *, struct tcphdr *, XObj, Msg *, Msg * );
 void	tcp_trace(int, int, struct tcpcb *, struct tcpiphdr *, int );
 char *	tcpFlagStr( int );
 
-#else
-
-/*
- * in_hacks.c
- */
-int	in_pcballoc();
-void	in_pcbdisconnect();
-void 	in_pcbdetach();
-bool	in_broadcast();
-u_short	in_cksum();
-
-/*
- * tcp_subr.c
- */
-struct tcpiphdr *	tcp_template();
-struct tcpcb *	tcp_newtcpcb();
-struct tcpcb *	tcp_drop();
-struct tcpcb * 	tcp_destroy();
-void	tcp_notify();
-void	tcp_quench();
-void	tcp_respond();
- 
-/*
- * tcp_hdr.c
- */
-void 	tcpHdrStore();
-void 	tcpOptionsStore();
-long	tcpOptionsLoad();
-long 	tcpHdrLoad();
-
-/*
- * tcp_timer.c
- */
-void	tcp_fasttimo();
-void	tcp_slowtimo();
-void	tcp_canceltimers();
-struct tcpcb *	tcp_timers();
-
-/*
- * tcp_x.c
- */
-void	delete_tcpstate();
-struct tcpstate	*	new_tcpstate();
-void	sorwakeup();
-void	sowwakeup();
-void	soabort();
-void	socantsendmore();
-void	socantrcvmore();
-void	sohasoutofband();
-void	soisdisconnected();
-void	soisdisconnecting();
-void	soisconnected();
-void	soisconnecting();
-int	soreserve();
-XObj	sonewconn();
-void	tcpSemWait();
-void	tcpSemSignal();
-void	tcpSemInit();
-void	tcpVAll();
-
-/* 
- * tcp_output.c
- */
-int	tcp_output();
-void	tcp_setpersist();
-
-/* 
- * tcp_usrreq.c
- */
-int	tcp_attach();
-int	tcp_usrreq();
-struct tcpcb *tcp_disconnect();
-struct tcpcb *tcp_usrclosed();
-
-/* 
- * tcp_input.c
- */
-void	print_reass();
-xkern_return_t	tcp_input();
-int	tcp_mss();
-xkern_return_t	tcpPop();
-int	tcp_reass();
-
-/* 
- * tcp_debug.c
- */
-void	tcp_trace();
-char *	tcpFlagStr();
-
-#endif __STDC__
 
 #include "insque.h"

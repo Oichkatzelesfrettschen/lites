@@ -41,11 +41,9 @@
 #define TCP_SETRCVACKALWAYS	(TCP_CTL*MAXOPS + 14)	
 	/* Implicitly does a SETRCVBUFSPACE on each xPop */
 
-#  ifdef __STDC__
 
 void	tcp_init( XObj );
 
-#  endif
 
 
 #endif

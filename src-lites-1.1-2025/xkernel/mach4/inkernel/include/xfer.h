@@ -72,7 +72,6 @@ typedef int	SendCount;
 #define SENDCOUNT_NETLEN	4
 
 
-#ifdef __STDC__
 
 
 /* 
@@ -143,21 +142,5 @@ void		xferTransferMapRemove( Map, IPhost *h, MsgId id );
 char *		xferHostStr( XferHost * );
 
 
-#else
-
-typedef 	void	(* XferRemFunc)();
-typedef 	void	(* LockRemFunc)();
-
-XObj		xferOpen();
-int		xferConfirmBid();
-void		xferCreateMaps();
-char *		xferHostStr();
-void		xferLockedMapAdd();
-void		xferLockedMapRemove();
-void		xferPeerRebooted();
-void		xferTransferMapAdd();
-void		xferTransferMapRemove();
-
-#endif __STDC__
 
 #endif  ! xfer_h

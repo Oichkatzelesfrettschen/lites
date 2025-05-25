@@ -107,22 +107,12 @@ typedef enum {
 extern	XferHost	srxMyXferHost;
 extern	int		tracesrxp;
 
-#ifdef __STDC__
 
 xkern_return_t	srxLoadReply( SrxRepMsg *, Msg * );
 xkern_return_t	srxLoadRequest( SrxReqMsg *, Msg * );
 void		srxStoreReply( SrxRepMsg *, Msg * );
 void		srxStoreRequest( SrxReqOutgoing *, Msg * );
 
-#else
-
-xkern_return_t	srxLoadReply();
-xkern_return_t	srxLoadRequest();
-void		srxStoreReply();
-void		srxStoreRequest();
-
-
-#endif
 
 
 #endif  ! srx_i_h

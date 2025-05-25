@@ -22,9 +22,7 @@
  * netMaskAdd -- add 'mask' to the table as the netmask for 'net'
  */
 int	netMaskAdd(
-#ifdef __STDC__
 		   IPhost *net, IPhost *mask
-#endif
 		   );
 
 
@@ -33,9 +31,7 @@ int	netMaskAdd(
  * any other netmask routines.
  */
 void	netMaskInit(
-#ifdef __STDC__
 		    void
-#endif
 		    );
 
 /* 
@@ -44,9 +40,7 @@ void	netMaskInit(
  * the address class is used.
  */
 void	netMaskFind(
-#ifdef __STDC__
 		    IPhost *mask, IPhost *host
-#endif
 		    );
 
 
@@ -56,9 +50,7 @@ void	netMaskFind(
  * being used.
  */
 void	netMaskDefault(
-#ifdef __STDC__
 		    IPhost *mask, IPhost *host
-#endif
 		    );
 
 
@@ -67,9 +59,7 @@ void	netMaskDefault(
  * same subnet
  */
 int	netMaskSubnetsEqual(
-#ifdef __STDC__
 			 IPhost *, IPhost *
-#endif
 			 );
 
 
@@ -78,9 +68,7 @@ int	netMaskSubnetsEqual(
  * same net
  */
 int	netMaskNetsEqual(
-#ifdef __STDC__
 			 IPhost *, IPhost *
-#endif
 			 );
 
 
@@ -95,9 +83,7 @@ int	netMaskNetsEqual(
  *  or	3) having ones in the entire address
  */
 int	netMaskIsBroadcast(
-#ifdef __STDC__
 			   IPhost *
-#endif
 			   );
 
 extern IPhost	IP_LOCAL_BCAST;

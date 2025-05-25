@@ -13,12 +13,10 @@
 #ifndef machine_h
 #define machine_h
 
-#ifdef __STDC__
 
 void	cancelSignalHandler( int );
 void	init_clock( Pfv, long );
 void	installSignalHandler( int, Pfi, VOID * );
 
-#endif
 
 #endif machine_h

@@ -32,7 +32,6 @@
 #include "xtype.h"
 
 
-#ifdef __STDC__
 
 u_short ocsum( u_short *buf, int count );
 u_short ocsum_simple( u_short *buf, int count );
@@ -44,13 +43,6 @@ extern	char *	xMalloc( unsigned );
 extern	void	xFree( char * );
 extern	void	xMallocInit( void );
 
-#else
-
-extern	char *	xMalloc( );
-extern	void	xFree();
-extern	void	xMallocInit();
-
-#endif
 
 
 typedef long *Unspec;

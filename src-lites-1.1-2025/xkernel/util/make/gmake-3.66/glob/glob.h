@@ -25,17 +25,9 @@ extern "C"
 #endif
 
 #undef	__ptr_t
-#if defined (__cplusplus) || (defined (__STDC__) && __STDC__)
 #undef	__P
 #define	__P(args)	args
 #define	__ptr_t	void *
-#else /* Not C++ or ANSI C.  */
-#undef	__P
-#define	__P(args)	()
-#undef	const
-#define	const
-#define	__ptr_t	char *
-#endif /* C++ or ANSI C.  */
 
 /* Bits set in the FLAGS argument to `glob'.  */
 #define	GLOB_ERR	(1 << 0)/* Return on read errors.  */
@@ -76,18 +68,18 @@ typedef struct
    If memory cannot be allocated for PGLOB, GLOB_NOSPACE is returned.
    Otherwise, `glob' returns zero.  */
 extern int glob __P ((const char *__pattern, int __flags,
-		      int (*__errfunc) __P ((const char *, int)),
-		      glob_t *__pglob));
+		      int (*__errfunc) __P ((const char *, int),
+		      glob_t *__pglob);
 
 /* Free storage allocated in PGLOB by a previous `glob' call.  */
-extern void globfree __P ((glob_t *__pglob));
+extern void globfree __P ((glob_t *__pglob);
 
 
 #if !defined (_POSIX_C_SOURCE) || _POSIX_C_SOURCE < 2 || defined (_GNU_SOURCE)
 /* If they are not NULL, `glob' uses these functions to read directories.  */
-extern __ptr_t (*__glob_opendir_hook) __P ((const char *__directory));
-extern const char *(*__glob_readdir_hook) __P ((__ptr_t __stream));
-extern void (*__glob_closedir_hook) __P ((__ptr_t __stream));
+extern __ptr_t (*__glob_opendir_hook) __P ((const char *__directory);
+extern const char *(*__glob_readdir_hook) __P ((__ptr_t __stream);
+extern void (*__glob_closedir_hook) __P ((__ptr_t __stream);
 #endif
 
 #ifdef	__cplusplus

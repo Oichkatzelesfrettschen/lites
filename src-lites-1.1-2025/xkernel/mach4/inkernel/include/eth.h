@@ -45,10 +45,8 @@
 
 #define	MAX_IEEE802_3_DATA_SZ	1500
 
-#  ifdef __STDC__
 
 void	eth_init( XObj );
 
-#  endif
 
 #endif eth_h

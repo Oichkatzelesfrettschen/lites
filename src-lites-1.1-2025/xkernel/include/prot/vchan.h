@@ -20,10 +20,8 @@
 #define VCHAN_DECCONCURRENCY (VCHAN_CTL*MAXOPS + 1)
 
 
-#  ifdef __STDC__
 
 void	vchan_init( XObj );
 
-#  endif
 
 #endif

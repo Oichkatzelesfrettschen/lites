@@ -25,7 +25,6 @@
 
 #ifdef XK_THREAD_TRACE
 
-#  ifdef __STDC__
 
 /* 
  * evMarkBlocked -- mark the current thread as blocked on the given
@@ -41,7 +40,6 @@ void	evMarkBlocked( Semaphore * );
  */
 void	evMarkRunning( void );
 
-#  endif
 
 /* 
  * localEventMap -- contains all x-kernel event structures.  Event
@@ -52,10 +50,8 @@ extern Map	localEventMap;
 
 #endif
 
-#ifdef __STDC__
 
 void	evInit( int );
 
-#endif
 
 #endif

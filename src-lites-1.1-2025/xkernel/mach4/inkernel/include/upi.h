@@ -42,7 +42,6 @@ typedef	struct xobj {
   int   rcnt;
   int	id;
   int	*traceVar;
-#if __STDC__
   struct xobj *
     (* open)( struct xobj *, struct xobj *, struct xobj *, Part * );
   enum xkret	(* close)( struct xobj * );
@@ -63,24 +62,6 @@ typedef	struct xobj {
   int		(* control)( struct xobj *, int, char *, int );
   enum xkret	(* duplicate)( struct xobj * );
   enum xkret	(* shutdown)( struct xobj * );
-#else
-  Pfo	open;
-  Pfk 	close;
-  Pfk   closedone;
-  Pfk	openenable;
-  Pfk	opendisable;
-  Pfk	opendisableall;
-  Pfk	opendone;
-  Pfk 	demux;
-  Pfk 	calldemux;
-  Pfk 	pop;
-  Pfk 	callpop;
-  Pfh 	push;
-  Pfk 	call;
-  Pfi 	control; 
-  Pfk	duplicate;
-  Pfk	shutdown;
-#endif  
   int 	numdown;
   int	downlistsz;
   unsigned char	idle;
@@ -122,7 +103,6 @@ extern char **globalArgv;
 
 /* protocol and session operations */
 
-#ifdef __STDC__
 
 extern	XObj xOpen( XObj hlpRcv, XObj hlpType, XObj llp, Part *p );
 extern	xkern_return_t
@@ -156,34 +136,9 @@ xkern_return_t	defaultVirtualOpenDisable( XObj, Map, XObj, XObj, XObj *,
 xkern_return_t	defaultVirtualOpenEnable( XObj, Map, XObj, XObj, XObj *,
 					  Part *);
 
-#else
-
-extern	XObj xOpen();
-extern	xkern_return_t  xOpenEnable();
-extern	xkern_return_t  xOpenDisable();
-extern	xkern_return_t  xOpenDone();
-extern	xkern_return_t  xCloseDone();
-extern	xkern_return_t  xClose();
-extern	xkern_return_t  xDemux();
-extern	xkern_return_t  xCallDemux();
-extern	xmsg_handle_t 	xPush();
-extern	xkern_return_t  xCall();
-extern	int  		xControl();
-extern  xkern_return_t  xDuplicate();
-extern  xkern_return_t	xShutDown();
-
-typedef void	(* DisableAllFunc)();
-
-xkern_return_t	defaultOpenDisable();
-xkern_return_t	defaultOpenEnable();
-xkern_return_t	defaultVirtualOpenDisable();
-xkern_return_t	defaultVirtualOpenEnable();
-
-#endif
 
 /* initialization operations */
 
-#ifdef __STDC__
 
 extern	XObj xCreateSessn(Pfv f, XObj hlpRcv, XObj hlpType, XObj llp,
 			  int downc, XObj *downv);
@@ -192,18 +147,9 @@ extern	XObj xCreateProtl(Pfv f, char *nm, char *inst, int *trace,
 extern	xkern_return_t  xDestroy(XObj s);
 extern  void		upiInit( void );
 
-#else
-
-extern XObj 		xCreateSessn();
-extern XObj 		xCreateProtl();
-extern xkern_return_t	xDestroy();
-extern void		upiInit();
-
-#endif
 
 /* utility routines */
 
-#ifdef __STDC__
 
 extern	XObj 	xGetProtlByName(char *name);
 extern  bool	xIsValidXObj( XObj );
@@ -212,16 +158,6 @@ extern	XObj 	xGetDown(XObj self, int i);
 extern	void	xPrintXObj( XObj );
 extern  void	xRapture( void );
 
-#else
-
-extern	XObj 	xGetProtlByName();
-extern  bool	xIsValidXObj();
-extern	xkern_return_t  xSetDown();
-extern	XObj 	xGetDown();
-extern	void	xPrintXObj();
-extern  void	xRapture();
-
-#endif __STDC__
 
 
 /* object macros */
@@ -301,21 +237,12 @@ enum {
 #include "ip_host.h"
 #include "eth_host.h"
 
-#ifdef __STDC__
 
 extern xkern_return_t	str2ipHost( IPhost *, char * );
 extern xkern_return_t	str2ethHost( ETHhost *, char * );
 extern char *	ipHostStr( IPhost * );
 extern char *	ethHostStr( ETHhost * );
 
-#else
-
-extern xkern_return_t	str2ipHost();
-extern xkern_return_t	str2ethHost();
-extern char *	ipHostStr();
-extern char *	ethHostStr();
-
-#endif __STDC__
 
 
 extern XObj	xNullProtl;

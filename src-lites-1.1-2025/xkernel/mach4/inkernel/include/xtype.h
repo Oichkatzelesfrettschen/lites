@@ -27,11 +27,7 @@ typedef int	xmsg_handle_t;
 #define XMSG_ERR_HANDLE		-1
 #define XMSG_ERR_WOULDBLOCK	-2
 
-#if defined(__STDC__) || defined(__GNUC__)
 #   define VOID		void
-#else
-#   define VOID		char
-#endif
 
 typedef	xkern_return_t (*Pfk) ();
 typedef	int (*Pfi) ();

@@ -13,11 +13,9 @@
 #ifndef nns_h
 #define nns_h
 
-#  ifdef __STDC__
 
 void	nns_init( XObj );
 
-#  endif
 
 
 #endif

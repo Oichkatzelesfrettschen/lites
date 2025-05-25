@@ -48,7 +48,6 @@ typedef struct protocol {
 extern int	fileLine;
 extern int	filePosition;
 
-#ifdef __STDC__
 
 void	addInstance( PROTOCOL * );
 void	addProtTbl( char *name );
@@ -71,6 +70,5 @@ void	warnDefaultPtblNotSupported( void );
 void	warnProtNotFound( char * );
 void	warnReassignedTraceValue( char * );
 
-#endif __STDC__
 
 #include ARCH_INCLUDE

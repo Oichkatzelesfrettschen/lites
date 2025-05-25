@@ -20,12 +20,10 @@ typedef struct {
   long usec;
 } XTime;
 
-#ifdef __STDC__
 
 /* set *t to the current time of day */
 void xGetTime(XTime *t);
 
-#endif __STDC__
 
 
 /* 

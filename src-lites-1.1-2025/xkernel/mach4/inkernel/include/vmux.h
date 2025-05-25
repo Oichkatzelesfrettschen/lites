@@ -13,10 +13,8 @@
 #ifndef vmux_h
 #define vmux_h
    
-#  ifdef __STDC__
 
 void	vmux_init( XObj );
 
-#  endif
 
 #endif  ! vmux_h

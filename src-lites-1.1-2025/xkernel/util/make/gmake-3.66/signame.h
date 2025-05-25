@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program; see the file COPYING.  If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
-#if defined (__STDC__) && __STDC__
 
 /* Initialize `sys_siglist'.  */
 void signame_init (void);
@@ -35,7 +34,6 @@ int sig_number (const char *abbrev);
 /* Print to standard error the name of SIGNAL, preceded by MESSAGE and
    a colon, and followed by a newline.  */
 void psignal (int signal, const char *message);
-#endif
 
 #if !defined (HAVE_SYS_SIGLIST)
 /* Names for signals from 0 to NSIG-1.  */

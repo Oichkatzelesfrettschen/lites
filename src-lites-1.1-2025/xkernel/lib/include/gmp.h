@@ -66,11 +66,7 @@ typedef struct
 typedef unsigned long int	mp_limb;
 typedef long int		mp_limb_signed;
 typedef mp_limb *		mp_ptr;
-#ifdef __STDC__
 typedef const mp_limb *		mp_srcptr;
-#else
-typedef mp_limb *		mp_srcptr;
-#endif
 typedef long int		mp_size;
 
 /* Structure for rational numbers.  Zero is represented as 0/any, i.e.
@@ -95,7 +91,6 @@ typedef struct
 #endif
 } MP_RAT;
 
-#ifdef __STDC__
 void mp_set_memory_functions (void *(*) (size_t),
 			      void *(*) (void *, size_t, size_t),
 			      void (*) (void *, size_t));
@@ -163,7 +158,6 @@ void mpz_inp_raw (MP_INT *, FILE *);
 void mpz_inp_str (MP_INT *, FILE *, int);
 void mpz_out_raw (FILE *, const MP_INT *);
 void mpz_out_str (FILE *, int, const MP_INT *);
-#endif
 
 void mpz_array_init (MP_INT [], size_t, mp_size);
 void mpz_random (MP_INT *, mp_size);
@@ -204,106 +198,5 @@ mp_size mpn_rshiftci (mp_ptr, mp_srcptr, mp_size, unsigned int, mp_limb);
 mp_size mpn_sqrt (mp_ptr, mp_ptr, mp_srcptr, mp_size);
 int mpn_cmp (mp_srcptr, mp_srcptr, mp_size);
 
-#else /* ! __STDC__ */
-void mp_set_memory_functions ();
-
-/**************** Integer (i.e. Z) routines.  ****************/
-
-void mpz_init ();
-void mpz_set ();
-void mpz_set_ui ();
-void mpz_set_si ();
-int mpz_set_str ();
-void mpz_init_set ();
-void mpz_init_set_ui ();
-void mpz_init_set_si ();
-int mpz_init_set_str ();
-unsigned long int mpz_get_ui ();
-long int mpz_get_si ();
-char * mpz_get_str ();
-void mpz_clear ();
-void * _mpz_realloc ();
-void mpz_add ();
-void mpz_add_ui ();
-void mpz_sub ();
-void mpz_sub_ui ();
-void mpz_mul ();
-void mpz_mul_ui ();
-void mpz_div ();
-void mpz_div_ui ();
-void mpz_mod ();
-void mpz_mod_ui ();
-void mpz_divmod ();
-void mpz_divmod_ui ();
-void mpz_mdiv ();
-void mpz_mdiv_ui ();
-void mpz_mmod ();
-unsigned long int mpz_mmod_ui ();
-void mpz_mdivmod ();
-unsigned long int mpz_mdivmod_ui ();
-void mpz_sqrt ();
-void mpz_sqrtrem ();
-int mpz_perfect_square_p ();
-int mpz_probab_prime_p ();
-void mpz_powm ();
-void mpz_powm_ui ();
-void mpz_pow_ui ();
-void mpz_fac_ui ();
-void mpz_gcd ();
-void mpz_gcdext ();
-void mpz_neg ();
-void mpz_com ();
-void mpz_abs ();
-int mpz_cmp ();
-int mpz_cmp_ui ();
-int mpz_cmp_si ();
-void mpz_mul_2exp ();
-void mpz_div_2exp ();
-void mpz_mod_2exp ();
-void mpz_and ();
-void mpz_ior ();
-void mpz_xor ();
-
-void mpz_inp_raw ();
-void mpz_inp_str ();
-void mpz_out_raw ();
-void mpz_out_str ();
-
-void mpz_array_init ();
-void mpz_random ();
-void mpz_random2 ();
-size_t mpz_size ();
-size_t mpz_sizeinbase ();
-
-/**************** Rational (i.e. Q) routines.  ****************/
-
-void mpq_init ();
-void mpq_clear ();
-void mpq_set ();
-void mpq_set_ui ();
-void mpq_set_si ();
-void mpq_add ();
-void mpq_sub ();
-void mpq_mul ();
-void mpq_div ();
-void mpq_neg ();
-int mpq_cmp ();
-void mpq_inv ();
-void mpq_set_num ();
-void mpq_set_den ();
-void mpq_get_num ();
-void mpq_get_den ();
-
-/************ Low level positive-integer (i.e. N) routines.  ************/
-
-mp_limb mpn_add ();
-mp_size mpn_sub ();
-mp_size mpn_mul ();
-mp_size mpn_div ();
-mp_limb mpn_lshift ();
-mp_size mpn_rshift ();
-mp_size mpn_rshiftci ();
-int mpn_cmp ();
-#endif /* __STDC__ */
 
 #endif /* __GMP_H__ */

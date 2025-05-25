@@ -35,11 +35,9 @@
 
 
 
-#  ifdef __STDC__
 
 void	crypt_init( XObj );
 
-#  endif
 
 
 #endif

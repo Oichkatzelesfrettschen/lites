@@ -22,11 +22,9 @@
 #define JOINSETCONTROL 		(JOIN_CTL*MAXOPS + 4)
 
 
-#  ifdef __STDC__
 
 void	join_init( XObj );
 
-#  endif
 
 
 #endif

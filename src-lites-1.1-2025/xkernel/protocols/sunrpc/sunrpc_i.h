@@ -103,7 +103,6 @@ typedef struct pstate {
 extern int tracesunrpcp;
 extern struct opaque_auth sunrpcAuthDummy;
 
-#ifdef __STDC__
 
 long		sunrpcHdrLoad( void *, char *, long, void * );
 int		sunrpcEncodeHdr( Msg *, SunrpcHdr * );
@@ -119,22 +118,5 @@ xkern_return_t	sunrpcCall( XObj s, Msg *msg, Msg *reply_ptr );
 void		sunrpcGetProcServer( XObj );
 void		sunrpcSendError( int errorCode, XObj lls, int xid, void *arg );
 
-#else
-
-long		sunrpcHdrLoad();
-int		sunrpcEncodeHdr();
-int		sunrpcControlProtl();
-int 		sunrpcControlSessn();
-void		sunrpcAuthFree();
-u_short		sunrpcGetPort();
-xkern_return_t 	sunrpcClientDemux();
-xkern_return_t	sunrpcServerDemux();
-xkern_return_t	sunrpcPop();
-int		sunrpcPush();
-xkern_return_t	sunrpcCall();
-void		sunrpcGetProcServer();
-void		sunrpcSendError();
-
-#endif __STDC__
 
 #endif sunrpc_i_h

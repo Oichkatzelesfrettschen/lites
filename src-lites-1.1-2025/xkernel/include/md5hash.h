@@ -50,13 +50,7 @@ typedef struct {
 } MD5_CTX;
 
 
-#ifdef __STDC__
 void MD5Init (MD5_CTX *);
 void MD5Update (MD5_CTX *, unsigned char *, unsigned int);
 void MD5Final (MD5_CTX *);
-#else
-void MD5Init ();
-void MD5Update ();
-void MD5Final ();
-#endif __STDC__
 

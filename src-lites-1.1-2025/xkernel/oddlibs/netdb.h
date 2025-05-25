@@ -96,29 +96,29 @@ struct	protoent {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-void		endhostent __P((void));
-void		endnetent __P((void));
-void		endprotoent __P((void));
-void		endservent __P((void));
-struct hostent	*gethostbyaddr __P((const char *, int, int));
-struct hostent	*gethostbyname __P((const char *));
-struct hostent	*gethostent __P((void));
-struct netent	*getnetbyaddr __P((long, int)); /* u_long? */
-struct netent	*getnetbyname __P((const char *));
-struct netent	*getnetent __P((void));
-struct protoent	*getprotobyname __P((const char *));
-struct protoent	*getprotobynumber __P((int));
-struct protoent	*getprotoent __P((void));
-struct servent	*getservbyname __P((const char *, const char *));
-struct servent	*getservbyport __P((int, const char *));
-struct servent	*getservent __P((void));
-void		herror __P((const char *));
-char		*hstrerror __P((int));
-void		sethostent __P((int));
-/* void		sethostfile __P((const char *)); */
-void		setnetent __P((int));
-void		setprotoent __P((int));
-void		setservent __P((int));
+void		endhostent (void);
+void		endnetent (void);
+void		endprotoent (void);
+void		endservent (void);
+struct hostent	*gethostbyaddr (const char *, int, int);
+struct hostent	*gethostbyname (const char *);
+struct hostent	*gethostent (void);
+struct netent	*getnetbyaddr (long, int); /* u_long? */
+struct netent	*getnetbyname (const char *);
+struct netent	*getnetent (void);
+struct protoent	*getprotobyname (const char *);
+struct protoent	*getprotobynumber (int);
+struct protoent	*getprotoent (void);
+struct servent	*getservbyname (const char *, const char *);
+struct servent	*getservbyport (int, const char *);
+struct servent	*getservent (void);
+void		herror (const char *);
+char		*hstrerror (int);
+void		sethostent (int);
+/* void		sethostfile (const char *); */
+void		setnetent (int);
+void		setprotoent (int);
+void		setservent (int);
 __END_DECLS
 
 #endif /* !_NETDB_H_ */

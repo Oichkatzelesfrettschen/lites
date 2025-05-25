@@ -37,11 +37,9 @@ typedef struct ippseudohdr {
 #define IP_LOCAL_BCAST_HOST	{ 255, 255, 255, 255 }
 
 
-#  ifdef __STDC__
 
 void	ip_init( XObj );
 
-#  endif
 
 
 #endif

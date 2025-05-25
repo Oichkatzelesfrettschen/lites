@@ -18,7 +18,6 @@
 #include <sys/stat.h>
 #include <sys/file.h>
 
-#ifdef __STDC__
 
 int	unlink( char * );
 int	access( char *, int );
@@ -35,4 +34,3 @@ void	exit( int );
 int	fclose( FILE * );
 int	fprintf( FILE *, char *, ... );
 
-#endif __STDC__

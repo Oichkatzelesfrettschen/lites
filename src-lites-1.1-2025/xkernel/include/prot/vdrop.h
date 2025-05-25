@@ -13,11 +13,9 @@
 #ifndef vdrop_h
 #define vdrop_h
    
-#  ifdef __STDC__
 
 void	vdrop_init( XObj );
 
-#  endif
 
 #define VDROP_GETINTERVAL	(VDROP_CTL * MAXOPS + 0)
 #define VDROP_SETINTERVAL	(VDROP_CTL * MAXOPS + 1)

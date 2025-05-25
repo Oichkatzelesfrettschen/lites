@@ -51,10 +51,8 @@
 #define ICMP_ECHO_CTL		(ICMP_CTL * MAXOPS + 0)
 
 
-#  ifdef __STDC__
 
 void	icmp_init( XObj );
 
-#  endif
 
 #endif icmp_h

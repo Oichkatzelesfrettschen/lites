@@ -124,7 +124,6 @@ typedef struct {
 
 
 
-#ifdef __STDC__
 
 
 long		rrxLoadReply( VOID *, char *, long, VOID * );
@@ -139,21 +138,6 @@ void		rrxStoreRequest( RrxReqOutgoing *, Msg * );
  */
 void		rrxReqDispose( RrxReqMsg * );
 
-#else
-
-long		rrxLoadReply();
-void		rrxStoreReply();
-xkern_return_t	rrxLoadRequest();
-void		rrxStoreRequest();
-
-/* 
- * Headers loaded with rrxLoadRequest include dynamically allocated
- * storage.  rrxReqDispose should be called for each of these
- * headers. 
- */
-void		rrxReqDispose();
-
-#endif
 
 
 #endif  ! rrx_i_h

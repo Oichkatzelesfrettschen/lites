@@ -146,12 +146,9 @@ typedef unsigned int PassiveID;
 
 
 typedef		int	(* MapChainForEachFun)(
-#ifdef __STDC__
 					       VOID *, VOID *
-#endif					       
 					       );
 
-#ifdef __STDC__
 
 typedef		XObj (ChanOpenFunc)( XObj, XObj, XObj, ActiveID *, int );
 
@@ -194,48 +191,6 @@ void		chanMapChainAddObject( VOID *, Map, IPhost *, long, int );
 int		chanMapChainApply( Map, IPhost *, MapChainForEachFun );
 Map		chanMapChainFollow( Map, IPhost *, long );
 
-#else
-
-typedef		XObj (ChanOpenFunc)();
-
-xkern_return_t	chanAddIdleSessn();
-xkern_return_t	chanBidctlRegister();
-int		chanCheckMsgLen();
-SEQ_STAT 	chanCheckSeq();
-void		chanClientIdleRespond();
-void		chanClientPeerRebooted();
-int		chanControlSessn();
-XObj 		chanCreateSessn();
-void		chanDestroy();
-void		chanDispKey();
-void		chanEventFlush();
-void		chanFreeResources();
-Map 		chanGetChanMap();
-Map 		chanGetMap();
-long		chanGetProtNum();
-void		chanHdrStore();
-void		chanInternalClose();
-int		chanMapRemove();
-xkern_return_t 	chanOpenEnable();
-xkern_return_t 	chanOpenDisable();
-xkern_return_t 	chanOpenDisableAll();
-void		chanRemoveActive();
-int		chanRemoveIdleSessns();
-xmsg_handle_t	chanReply();
-xmsg_handle_t	chanResend();
-char * 		chanStateStr();
-void		chanServerPeerRebooted();
-XObj		chanOpen();
-char * 		chanStatusStr();
-XObj		chanSvcOpen();
-void		chanTimeout();
-void 		pChanHdr();
-
-void		chanMapChainAddObject();
-int		chanMapChainApply();
-Map		chanMapChainFollow();
-
-#endif
 
 
 extern	int	tracechanp;

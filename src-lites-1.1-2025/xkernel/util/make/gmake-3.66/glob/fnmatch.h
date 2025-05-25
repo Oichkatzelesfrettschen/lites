@@ -23,16 +23,8 @@ Cambridge, MA 02139, USA.  */
 extern "C" {
 #endif
 
-#if defined (__cplusplus) || (defined (__STDC__) && __STDC__)
 #undef	__P
 #define	__P(args)	args
-#else /* Not C++ or ANSI C.  */
-#undef	__P
-#define	__P(args)	()
-/* We can get away without defining `const' here only because in this file
-   it is used only inside the prototype for `fnmatch', which is elided in
-   non-ANSI C where `const' is problematical.  */
-#endif /* C++ or ANSI C.  */
 
 /* Bits set in the FLAGS argument to `fnmatch'.  */
 #define	FNM_PATHNAME	(1 << 0) /* No wildcard can ever match `/'.  */
@@ -51,7 +43,7 @@ extern "C" {
 /* Match STRING against the filename pattern PATTERN,
    returning zero if it matches, FNM_NOMATCH if not.  */
 extern int fnmatch __P ((const char *__pattern, const char *__string,
-			 int __flags));
+			 int __flags);
 
 #ifdef	__cplusplus
 }

@@ -10,7 +10,6 @@
  * $Date: 1993/09/16 22:02:19 $
  */
 
-#ifdef __STDC__
 
 kern_return_t	do_lproxy_dumpXObj( mach_port_t,
 				    xkern_return_t *,
@@ -57,5 +56,4 @@ kern_return_t	do_lproxy_xOpenDone( mach_port_t,
 				    xobj_ext_id_t,
 				    xobj_ext_id_t );
 
-#endif
 

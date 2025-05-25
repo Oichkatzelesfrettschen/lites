@@ -18,7 +18,6 @@
  */
 
 
-#ifdef __STDC__
 #define XPASTE(X,Y) X##Y
 #define PASTE(X,Y) XPASTE(X,Y)
 
@@ -51,4 +50,3 @@ int	PASTE(NAME, DuplicatePort) ( void *, long );
  */
 void	PASTE(NAME, ReleasePort) ( void *, long );
 
-#endif

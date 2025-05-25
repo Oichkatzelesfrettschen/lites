@@ -39,18 +39,10 @@ extern short (*unpermute_int16[4])();
 extern float (*unpermute_real32[4])();
 extern mach_msg_type_t (*unpermute_msg_type[4])();
 
-#ifdef __STDC__
 extern int arch_unpermute_index( enum SOURCE_BYTE_ARCH );
 extern long  nop_64(char *);
 extern int   nop_32(char *);
 extern short nop_16(char *);
 extern char  nop_8(char *);
-#else
-extern int arch_unpermute_index( );
-extern long  nop_64();
-extern int   nop_32();
-extern short nop_16();
-extern char  nop_8();
-#endif
 #endif HDRUTILS
 

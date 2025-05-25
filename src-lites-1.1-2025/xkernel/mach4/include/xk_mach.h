@@ -16,7 +16,6 @@
 
 #include <mach/error.h>
 
-#ifdef __STDC__
 
 #ifndef XKMACHKERNEL
 
@@ -36,7 +35,6 @@ int			cthread_kernel_limit( void );
 void			cthread_set_kernel_limit( int );
 void			cthread_wire( void );
 
-#endif ! XKMACHKERNEL
 
 
 #endif

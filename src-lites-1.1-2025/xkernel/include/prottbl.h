@@ -26,9 +26,7 @@
  * If no entry for this protocol exists, -1 is returned.
  */
 extern long	protTblGetId(
-#ifdef __STDC__
 			 char *protocolName
-#endif
 			 );
 
 /* 
@@ -37,9 +35,7 @@ extern long	protTblGetId(
  * should be considered an error.
  */
 extern long	relProtNum(
-#ifdef __STDC__
 			   XObj hlp, XObj llp
-#endif
 			   );
 
 
@@ -53,9 +49,7 @@ extern void	prottbl_init( void );
  */
 void
 protTblDisplayMap(
-#    ifdef __STDC__
 		  void
-#    endif
 		  );
 #  endif  XK_DEBUG
 

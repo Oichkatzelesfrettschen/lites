@@ -157,7 +157,6 @@ typedef struct FragList {
 #define ERR_FRAG ((Fragtable *)-1)
 
 
-#ifdef __STDC__
 
 int		ipControlProtl( XObj, int, char *, int );
 int		ipControlSessn( XObj, int, char *, int );
@@ -184,31 +183,6 @@ xmsg_handle_t	ipSend( XObj s, XObj lls, Msg *msg, IPheader *hdr );
 xkern_return_t	ipStdPop( XObj, XObj, Msg *, VOID * );
 void		scheduleIpFragCollector( PState * );
 
-#else
-
-int		ipControlProtl();
-int		ipControlSessn();
-XObj		ipCreatePassiveSessn();
-xkern_return_t	ipDemux();
-Enable *	ipFindEnable();
-xkern_return_t 	ipForwardPop();
-void		ipFreeFragList();
-void		ipFreeFragtable();
-xkern_return_t 	ipFwdBcastPop();
-int		ipGetHdr();
-void		ipHdrStore();
-int		ipIsMyAddr();
-xkern_return_t	ipMsgComplete();
-void		ipProcessRomFile();
-xkern_return_t	ipReassemble();
-int		ipRemoteNet();
-void		ipRouteChanged();
-int		ipSameNet();
-xmsg_handle_t	ipSend();
-xkern_return_t	ipStdPop();
-void		scheduleIpFragCollector();
-
-#endif
 
 extern int 	traceipp;
 extern IPhost	ipSiteGateway;

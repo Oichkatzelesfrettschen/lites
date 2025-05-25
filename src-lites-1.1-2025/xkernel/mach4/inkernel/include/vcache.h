@@ -13,10 +13,8 @@
 #ifndef vcache_h
 #define vcache_h
    
-#  ifdef __STDC__
 
 void	vcache_init( XObj );
 
-#  endif
 
 #endif  ! vcache_h

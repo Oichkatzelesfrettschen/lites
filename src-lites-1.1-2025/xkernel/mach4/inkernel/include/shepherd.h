@@ -23,11 +23,7 @@ typedef enum xkShepType_e xkShepType_t;
  *
  */
 kern_return_t
-#ifdef __STDC__
 shepInit( int count );
-#else
-shepInit();
-#endif __STDC__
 
 /*
  * Invoke a shepherd thread
@@ -45,9 +41,5 @@ shepInit();
  *
  */
 kern_return_t
-#ifdef __STDC__
 xInvokeShepherd(xkShepType_t type, void (*func)( char * ), char *arg  );
-#else
-xInvokeShepherd();
-#endif __STDC__
 

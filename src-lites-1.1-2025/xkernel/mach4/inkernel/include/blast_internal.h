@@ -126,7 +126,6 @@ typedef int PassiveID;
 extern BlastMask	blastFullMask[];
 extern int 		traceblastp;
 
-#ifdef __STDC__
 
 xmsg_handle_t	blastPush( XObj, Msg * );
 int		blastControlSessn( XObj, int, char *, int );
@@ -151,33 +150,7 @@ void	blastShowMstate( MSG_STATE *m, char *message );
 char *	blastShowMask( BLAST_MASK_PROTOTYPE );
 
 
-#else
 
-xmsg_handle_t	blastPush();
-int		blastControlSessn();
-int		blastControlProtl();
-void		blastDecIrc();
-xkern_return_t	blastPop();
-xkern_return_t	blastDemux();
-XObj		blastCreateSessn();
-void		blast_mapFlush();
-int		blast_freeSendSeq();
-int		blast_Retransmit();
-long		blastHdrLoad();
-void		blastHdrStore();
-MSG_STATE *	blastNewMstate();
-xkern_return_t	blastSenderPop();
-int		blast_mask_to_i();
-
-#ifdef XK_DEBUG
-void	blast_phdr();
-char *	blastOpStr();
-void	blastShowActiveKey();
-void	blastShowMstate();
-char *	blastShowMask();
-#endif XK_DEBUG
-
-#endif __STDC__
 
 #endif
 

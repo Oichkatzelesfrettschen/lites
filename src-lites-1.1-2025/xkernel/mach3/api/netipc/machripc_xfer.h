@@ -23,7 +23,6 @@ typedef int	NetPortNumber;
 					      PORT_NUMBER_NETLEN)
 
 
-#ifdef __STDC__
 
 char *	portNumStr();
 
@@ -103,9 +102,7 @@ extern void		mnetportLoad( char *src, mportNetRep *dst );
  */
 extern void		mnetportStore( mportNetRep *src, char *dst );
 
-#endif
 
-#endif __STDC__
 
 
 #  define mnetportLoad( _src, _dst )				\

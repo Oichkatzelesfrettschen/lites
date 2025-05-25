@@ -13,11 +13,9 @@
 #ifndef vdisorder_h
 #define vdisorder_h
    
-#  ifdef __STDC__
 
 void	vdisorder_init( XObj );
 
-#  endif
 
 #define VDISORDER_CTL	TMP3_CTL
 

@@ -15,17 +15,10 @@
 
 #include <stdio.h>
 
-#ifdef __STDC__
 
 extern int fprintf(FILE *, char *, ...);
 extern void abort(void);
 
-#else
-
-extern int fprintf();
-extern void abort();
-
-#endif
 
 #define PRINT(A,B,C) fprintf(stderr, (A), (B), (C))
 #define assertMessage "Assertion failed: file %s, line %d\n"

@@ -18,11 +18,9 @@
 #ifndef bidctl_h
 #define bidctl_h
    
-#  ifdef __STDC__
 
 void		bidctl_init( XObj );
 
-#  endif
 
 
 typedef	u_int	BootId;

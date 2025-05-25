@@ -43,17 +43,10 @@ extern struct list_head	xkIncomingData;
 extern int		xkIncomingData_lock;
 
 
-#ifdef __STDC__
 
 void			xkBufferPoolInit( void );
 void			xkFillThreadPool( void );
 
-#else
-
-void			xkBufferPoolInit();
-void			xkFillThreadPool();
-
-#endif __STDC__
 
 #endif ! process_msg_h
 
