@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+OFFLINE=0
+if [[ "${1:-}" == "--offline" ]]; then
+  OFFLINE=1
+  shift
+fi
 export DEBIAN_FRONTEND=noninteractive
 # general log capturing all output
 SETUP_LOG=/tmp/setup.log
@@ -22,6 +27,11 @@ apt_pin_install(){
     apt_pkg="$pkg"
   fi
 
+  if [ "$OFFLINE" -eq 1 ]; then
+    echo "offline mode, skipping apt install for $pkg" >&2
+    return
+  fi
+
   if ! apt-get install -y "$apt_pkg"; then
     echo "apt:$pkg" >> "$FAIL_LOG"
     # if this looks like a python package try pip
@@ -39,8 +49,17 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-if ! apt-get update -y; then
-  echo "apt:update" >> "$FAIL_LOG"
+if [ "$OFFLINE" -eq 1 ]; then
+  echo "Offline mode: installing local packages" >&2
+  if compgen -G "offline_packages/*.deb" > /dev/null; then
+    dpkg -i offline_packages/*.deb || true
+  else
+    echo "No .deb files found in offline_packages/" >&2
+  fi
+else
+  if ! apt-get update -y; then
+    echo "apt:update" >> "$FAIL_LOG"
+  fi
 fi
 
 #— core build tools, formatters, analysis, science libs
@@ -69,22 +88,26 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
-for pip_pkg in \
-  pre-commit cmake ninja meson configuredb compiledb \
-  tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools; do
-  if ! pip3 install --no-cache-dir "$pip_pkg"; then
-    echo "pip:$pip_pkg" >> "$FAIL_LOG"
-  fi
-done
+if [ "$OFFLINE" -eq 0 ]; then
+  for pip_pkg in \
+    pre-commit cmake ninja meson configuredb compiledb \
+    tensorflow-cpu jax jaxlib \
+    tensorflow-model-optimization mlflow onnxruntime-tools; do
+    if ! pip3 install --no-cache-dir "$pip_pkg"; then
+      echo "pip:$pip_pkg" >> "$FAIL_LOG"
+    fi
+  done
+fi
 
 # Ensure pre-commit is installed regardless of package source
 if ! command -v pre-commit >/dev/null 2>&1; then
   echo "pre-commit not found, installing via pip..." >&2
-  if ! pip3 install --no-cache-dir pre-commit; then
-    echo "pip:pre-commit" >> "$FAIL_LOG"
-    # Fallback to apt if available
-    apt_pin_install pre-commit || true
+  if [ "$OFFLINE" -eq 0 ]; then
+    if ! pip3 install --no-cache-dir pre-commit; then
+      echo "pip:pre-commit" >> "$FAIL_LOG"
+      # Fallback to apt if available
+      apt_pin_install pre-commit || true
+    fi
   fi
 fi
 
@@ -112,8 +135,10 @@ fi
 # Ensure compiledb is installed and operational
 if ! command -v compiledb >/dev/null 2>&1; then
   echo "compiledb not found, installing via pip..." >&2
-  if ! pip3 install --no-cache-dir compiledb; then
-    echo "pip:compiledb" >> "$FAIL_LOG"
+  if [ "$OFFLINE" -eq 0 ]; then
+    if ! pip3 install --no-cache-dir compiledb; then
+      echo "pip:compiledb" >> "$FAIL_LOG"
+    fi
   fi
 fi
 
@@ -128,9 +153,13 @@ fi
 # Ensure configuredb is available
 if ! command -v configuredb >/dev/null 2>&1; then
   echo "configuredb not found, installing via pip..." >&2
-  if ! pip3 install --no-cache-dir configuredb; then
-    echo "pip:configuredb" >> "$FAIL_LOG"
-    echo "configuredb not available from pip, using fallback" >&2
+  if [ "$OFFLINE" -eq 0 ]; then
+    if ! pip3 install --no-cache-dir configuredb; then
+      echo "pip:configuredb" >> "$FAIL_LOG"
+      echo "configuredb not available from pip, using fallback" >&2
+      ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
+    fi
+  else
     ln -sf "$(pwd)/scripts/configuredb.sh" /usr/local/bin/configuredb
   fi
 fi
@@ -231,23 +260,27 @@ for pkg in \
 done
 
 #— IA-16 (8086/286) cross-compiler
-IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
-           | awk -F\" '/tag_name/{print $4; exit}')
-if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
-  | tar -Jx -C /opt; then
-  echo "ia16-gcc" >> "$FAIL_LOG"
+if [ "$OFFLINE" -eq 0 ]; then
+  IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
+             | awk -F\" '/tag_name/{print $4; exit}')
+  if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
+    | tar -Jx -C /opt; then
+    echo "ia16-gcc" >> "$FAIL_LOG"
+  fi
+  echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
+  export PATH=/opt/ia16-elf-gcc/bin:$PATH
 fi
-echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
-export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
 #— protoc installer (pinned)
 PROTO_VERSION=25.1
-if curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
-  -o /tmp/protoc.zip; then
-  unzip -d /usr/local /tmp/protoc.zip || echo "protoc:unzip" >> "$FAIL_LOG"
-  rm /tmp/protoc.zip
-else
-  echo "protoc" >> "$FAIL_LOG"
+if [ "$OFFLINE" -eq 0 ]; then
+  if curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
+    -o /tmp/protoc.zip; then
+    unzip -d /usr/local /tmp/protoc.zip || echo "protoc:unzip" >> "$FAIL_LOG"
+    rm /tmp/protoc.zip
+  else
+    echo "protoc" >> "$FAIL_LOG"
+  fi
 fi
 
 #— gmake alias
@@ -266,7 +299,7 @@ if [ -f build/compile_commands.json ]; then
 fi
 
 # verify links from the README
-if [ -f README.md ]; then
+if [ "$OFFLINE" -eq 0 ] && [ -f README.md ]; then
   echo "Checking repository links..."
   bad_links=""
   while read -r url; do
@@ -286,7 +319,7 @@ if [ -f README.md ]; then
 fi
 
 # Clone OpenMach headers if not already present
-if [ ! -d openmach ]; then
+if [ "$OFFLINE" -eq 0 ] && [ ! -d openmach ]; then
   echo "Cloning OpenMach repository..." >&2
   if ! git clone --depth=1 https://github.com/mach4/mach4.git openmach; then
     echo "openmach" >> "$FAIL_LOG"

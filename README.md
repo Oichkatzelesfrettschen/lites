@@ -50,7 +50,8 @@ variable.  If that variable is unset and a directory named `openmach`
 exists at the repository root, it will be used automatically (a git
 submodule can conveniently provide it).
 Running `setup.sh` will automatically clone the OpenMach repository when
-network access is available.
+network access is available.  Pass `--offline` to skip the clone and
+install any `.deb` archives found in `offline_packages/` with `dpkg -i`.
 If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
 location (for example `openmach/lib`).  When the variable is not set and
 `openmach/lib` exists, it will be used automatically.
@@ -175,8 +176,10 @@ after editing sources to keep formatting consistent.  The script installs `pre-c
 that `yacc` (via `byacc` or `bison`) and the Swift toolchain
 are available, falling back to additional package installs if necessary.
 Any package failures are recorded in `/tmp/setup_failures.log`
-so the remainder of the setup can continue.  The script requires root
-privileges and network access.
+so the remainder of the setup can continue.  The script normally requires
+root privileges and network access.  When invoked with `--offline` it
+installs all `.deb` files from the `offline_packages/` directory instead of
+using the network.
 
 You can also invoke `scripts/run-precommit.sh` which automatically installs
 `pre-commit` via pip when missing.
@@ -200,7 +203,9 @@ The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
 
 Additional notes are kept in [`docs/`](docs/).  The mailbox-based IPC
-wrappers are described in [docs/IPC.md](docs/IPC.md).
+wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers
+for common POSIX operations are documented in
+[docs/POSIX.md](docs/POSIX.md).
 
 ## Tests
 
