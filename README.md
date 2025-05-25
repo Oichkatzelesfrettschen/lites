@@ -9,6 +9,8 @@ The tree is preserved mainly for reference.  Should a directory named
 modernization effort and is not part of the original snapshots.  A
 summary of the completed work and future plans can be found in
 [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
+[Docs/networking.md](docs/networking.md) describes the POSIX networking helpers
+added during the modernization effort.
 
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
