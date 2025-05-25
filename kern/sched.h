@@ -2,6 +2,7 @@
 #define LITES_SCHED_H
 
 #include <cthreads.h>
+#include "spinlock.h"
 
 /* Simple MCS lock implementation used by the scheduler. */
 typedef struct mcs_lock_node {
@@ -21,5 +22,7 @@ void schedule_enqueue(cthread_t thread);
 void schedule_dequeue(cthread_t thread);
 void *scheduler_loop(void *arg);
 void scheduler_init(int num_cores);
+
+extern spinlock_t sched_lock;
 
 #endif /* LITES_SCHED_H */

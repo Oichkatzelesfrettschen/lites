@@ -1,4 +1,5 @@
 #include "sched.h"
+#include "spinlock.h"
 #include <mach/cthreads.h>
 #include <mach/mach.h>
 #include <time.h>
@@ -50,9 +51,10 @@ struct thread_entry {
 
 struct run_queue {
     TAILQ_HEAD(, thread_entry) queue;
-    mcs_lock_t lock;
+    spinlock_t lock;
 };
 
+spinlock_t sched_lock;
 static struct run_queue run_queues[MAX_CPUS];
 static int sched_num_cpus = 1;
 static int next_cpu = 0;
@@ -65,9 +67,10 @@ void scheduler_init(int num_cores) {
     if (num_cores > MAX_CPUS)
         num_cores = MAX_CPUS;
     sched_num_cpus = num_cores;
+    spin_lock_init(&sched_lock);
     for (int i = 0; i < sched_num_cpus; ++i) {
         TAILQ_INIT(&run_queues[i].queue);
-        mcs_lock_init(&run_queues[i].lock);
+        spin_lock_init(&run_queues[i].lock);
     }
 #if CONFIG_SCHED_MULTICORE
     for (int i = 0; i < sched_num_cpus; ++i) {
@@ -85,26 +88,24 @@ void schedule_enqueue(cthread_t thread) {
 #if CONFIG_SCHED_MULTICORE
     cpu = __sync_fetch_and_add(&next_cpu, 1) % sched_num_cpus;
 #endif
-    mcs_lock_node_t node;
-    mcs_lock_acquire(&run_queues[cpu].lock, &node);
+    spin_lock(&run_queues[cpu].lock);
     TAILQ_INSERT_TAIL(&run_queues[cpu].queue, te, link);
-    mcs_lock_release(&run_queues[cpu].lock, &node);
+    spin_unlock(&run_queues[cpu].lock);
 }
 
 void schedule_dequeue(cthread_t thread) {
     for (int cpu = 0; cpu < sched_num_cpus; ++cpu) {
-        mcs_lock_node_t node;
-        mcs_lock_acquire(&run_queues[cpu].lock, &node);
+        spin_lock(&run_queues[cpu].lock);
         struct thread_entry *it;
         TAILQ_FOREACH(it, &run_queues[cpu].queue, link) {
             if (it->thread == thread) {
                 TAILQ_REMOVE(&run_queues[cpu].queue, it, link);
-                mcs_lock_release(&run_queues[cpu].lock, &node);
+                spin_unlock(&run_queues[cpu].lock);
                 free(it);
                 return;
             }
         }
-        mcs_lock_release(&run_queues[cpu].lock, &node);
+        spin_unlock(&run_queues[cpu].lock);
     }
 }
 
@@ -112,15 +113,14 @@ static struct thread_entry *attempt_work_steal(int cpu) {
     for (int i = 0; i < sched_num_cpus; ++i) {
         if (i == cpu)
             continue;
-        mcs_lock_node_t node;
-        mcs_lock_acquire(&run_queues[i].lock, &node);
+        spin_lock(&run_queues[i].lock);
         struct thread_entry *it = TAILQ_FIRST(&run_queues[i].queue);
         if (it) {
             TAILQ_REMOVE(&run_queues[i].queue, it, link);
-            mcs_lock_release(&run_queues[i].lock, &node);
+            spin_unlock(&run_queues[i].lock);
             return it;
         }
-        mcs_lock_release(&run_queues[i].lock, &node);
+        spin_unlock(&run_queues[i].lock);
     }
     return NULL;
 }
@@ -129,12 +129,11 @@ void *scheduler_loop(void *arg) {
     int cpu = (int)(long)arg;
     while (1) {
         struct thread_entry *te = NULL;
-        mcs_lock_node_t node;
-        mcs_lock_acquire(&run_queues[cpu].lock, &node);
+        spin_lock(&run_queues[cpu].lock);
         te = TAILQ_FIRST(&run_queues[cpu].queue);
         if (te)
             TAILQ_REMOVE(&run_queues[cpu].queue, te, link);
-        mcs_lock_release(&run_queues[cpu].lock, &node);
+        spin_unlock(&run_queues[cpu].lock);
 
         if (!te) {
             te = attempt_work_steal(cpu);
