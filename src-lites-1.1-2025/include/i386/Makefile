@@ -32,8 +32,8 @@
 # machine links in the sources.
 
 DATAFILES               = asm.h endian.h limits.h signal.h param.h stdarg.h \
-			  ansi.h types.h cpu.h ptrace.h vmparam.h exec.h \
-			  trap.h varargs.h
+                         ansi.h types.h cpu.h ptrace.h vmparam.h exec.h \
+                         trap.h varargs.h svr4_machdep.h
 
 INCLUDES		= ${DATAFILES}
 
