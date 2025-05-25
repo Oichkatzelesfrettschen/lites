@@ -46,6 +46,7 @@
 #include <sys/zalloc.h>
 
 #include <sys/cdefs.h>
+#include <stdnoreturn.h>
 #include <sys/errno.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -62,7 +63,6 @@
 #include <sys/vnode.h>
 
 /* TYPES */
-typedef _Noreturn void noreturn;
 
 /* PROTOTYPES */
 
