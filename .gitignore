@@ -25,6 +25,9 @@ compile_commands.json
 # Generated Mach headers
 localmach/
 
+# Ignore offline package archives
+offline_packages/*.deb
+
 # Ignore archived source tarballs
 *.tar.gz
 
