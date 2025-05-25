@@ -1,36 +1,68 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+trap 'echo "Failure at line $LINENO: $BASH_COMMAND" >&2' ERR
+exec > >(tee -a setup.log) 2>&1
+set -x
+
 export DEBIAN_FRONTEND=noninteractive
+
 apt-get update -y
+apt-get dist-upgrade -y
 
-# Base compiler toolchain and build utilities
-apt-get install -y \
-  clang lld llvm llvm-dev libclang-dev \
-  clang-tools clang-tidy clang-format clangd \
-  ccache lldb gdb bolt llvm-bolt \
-  cmake make ninja-build \
+install_pkg() {
+  local pkg="$1"
+  if apt-get install -y "$pkg"; then
+    return 0
+  fi
+  echo "apt-get failed for $pkg" >&2
+  if pip install "$pkg"; then
+    return 0
+  fi
+  echo "pip failed for $pkg" >&2
+  if npm install -g "$pkg"; then
+    return 0
+  fi
+  echo "npm failed for $pkg" >&2
+  if [[ "$pkg" == "shellcheck" ]]; then
+    wget -qO- https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.x86_64.tar.xz | tar xJ
+    install -m 0755 shellcheck-v0.9.0/shellcheck /usr/local/bin/shellcheck
+    rm -rf shellcheck-v0.9.0
+    return 0
+  fi
+  if [[ "$pkg" == "capnproto" ]]; then
+    wget -qO- https://github.com/capnproto/capnproto/archive/refs/tags/v0.9.1.tar.gz | tar xz
+    pushd capnproto-0.9.1
+    ./setup-makefiles.sh
+    ./configure
+    make -j"$(nproc)"
+    make install
+    popd
+    return 0
+  fi
+  echo "could not install $pkg" >&2
+}
+
+packages=(
+  clang lld llvm llvm-dev libclang-dev
+  clang-tools clang-tidy clang-format clangd
+  ccache lldb gdb bolt llvm-bolt
+  cmake make ninja-build
   shellcheck yamllint
-
-# Additional languages and package managers
-apt-get install -y \
-  python3 python3-pip python3-venv python3-setuptools python3-wheel \
+  python3 python3-pip python3-venv python3-setuptools python3-wheel
   nodejs npm yarnpkg
-
-# Formal verification tools
-apt-get install -y \
   coq coqide tla4tools
-
-# Fuzzing frameworks
-apt-get install -y \
   afl++ honggfuzz cargo-fuzz
+)
 
-# Set clang as default C/C++ compiler via ccache
+for pkg in "${packages[@]}"; do
+  install_pkg "$pkg"
+done
+
 export CC="ccache clang"
 export CXX="ccache clang++"
 export CLANG_TIDY=clang-tidy
 export PATH="/usr/lib/ccache:$PATH"
 
-# Recommended compilation and linter flags
 export CFLAGS="-Wall -Wextra -Werror -O2"
 export CXXFLAGS="$CFLAGS"
 export LDFLAGS="-fuse-ld=lld -flto"
