@@ -1,5 +1,7 @@
 CC ?= gcc
-CFLAGS ?= -std=gnu2x -Wall -Wextra
+# Additional compile flags from the top-level build system are appended.
+CFLAGS += -std=c23 -Wall -Wextra -Werror
+CPPFLAGS += -I../../include
 
 all: test_audit
 
@@ -7,7 +9,7 @@ all: test_audit
 .PHONY: all clean
 
 test_audit: test_audit.c ../../kern/auth.c ../../kern/audit.c
-	$(CC) $(CFLAGS) -I../../include $^ -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
-		rm -f test_audit
+	rm -f test_audit
