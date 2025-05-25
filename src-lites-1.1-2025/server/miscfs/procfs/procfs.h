@@ -1,3 +1,4 @@
+#include <string.h>
 /*
  * Copyright (c) 1993 Jan-Simon Pendry
  * Copyright (c) 1993
@@ -78,7 +79,7 @@ struct pfsnode {
 #ifdef KERNEL
 #define CNEQ(cnp, s, len) \
 	 ((cnp)->cn_namelen == (len) && \
-	  (bcmp((s), (cnp)->cn_nameptr, (len)) == 0))
+	  (memcmp((s), (cnp)->cn_nameptr, (len)) == 0))
 
 /*
  * Format of a directory entry in /proc, ...

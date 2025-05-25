@@ -1,3 +1,4 @@
+#include <string.h>
 /*-
  * Copyright (c) 1991, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -309,18 +310,18 @@ struct tp_vbp {
 #define vblen(x) (vbptr(x)->tpv_len)
 
 #define vb_putval(dst,type,src)\
-	bcopy((caddr_t)&(src),(caddr_t)&(((struct tp_vbp *)(dst))->tpv_val),\
-	sizeof(type))
+       memcpy((caddr_t)&(((struct tp_vbp *)(dst))->tpv_val), (caddr_t)&(src),\
+       sizeof(type))
 
 #define vb_getval(src,type,dst)\
-bcopy((caddr_t)&(((struct tp_vbp *)(src))->tpv_val),(caddr_t)&(dst),sizeof(type))
+memcpy((caddr_t)&(dst), (caddr_t)&(((struct tp_vbp *)(src))->tpv_val), sizeof(type))
 
 #define ADDOPTION(type, DU, len, src)\
 {	register caddr_t P;\
 	P = (caddr_t)(DU) + (int)((DU)->tpdu_li);\
 	vbptr(P)->tpv_code = type;\
 	vbptr(P)->tpv_len = len;\
-	bcopy((caddr_t)&src, (caddr_t)&(vbptr(P)->tpv_val), (unsigned)len);\
+       memcpy((caddr_t)&(vbptr(P)->tpv_val), (caddr_t)&src, (unsigned)len);\
 	DU->tpdu_li += len+2;/* 1 for code, 1 for length */\
 }
 /******************************************************

@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include "x_stdio.h"
+#include <string.h>
 #include "xkernel.h"
 #include "eth.h"
 #include "eth_i.h"

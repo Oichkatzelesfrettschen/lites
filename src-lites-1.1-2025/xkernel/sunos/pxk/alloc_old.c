@@ -87,6 +87,7 @@ extern char *xsbrk();
 #ifdef GORP
 #include <stdio.h>
 #endif
+#include <string.h>
 
 /*  An implementation of malloc(3), free(3) using the QuickFit method.
  *  Guy Almes, May 1983.
@@ -646,7 +647,7 @@ int n, size;
   mp += (num + sizeof(long) - 1) / sizeof(long);
   for (i = 0; i < MALLOC_EXTRAS; i++) *mp++ = TAIL_MALLOC_TAG;
 #endif
-  bzero(answer, num);
+  memset(answer, 0, num);
   return answer;
 }
 

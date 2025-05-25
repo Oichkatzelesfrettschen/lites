@@ -44,6 +44,7 @@
 #include "xk_lproxy.h"
 #include "msg_internal.h"
 #include "proxy_util.h"
+#include <string.h>
 
 
 int	traceuproxyp;
@@ -244,7 +245,7 @@ findProxyXObj( lproxyPort, extXObj )
     xTrace2(uproxyp, TR_DETAILED,
 	    "uproxy findProxyXObj, port == %x, extXObj == %x",
 	    (int)lproxyPort, (int)extXObj);
-    bzero((char *)&key, sizeof(key));
+    memset((char *)&key, 0, sizeof(key));
     key.port = lproxyPort;
     key.xobjRef = extXObj;
     xAssert(proxyMap);
@@ -370,7 +371,7 @@ addProxyXObj( obj, port, extXObj )
     ProxyMapKey	key;
     Bind	b;
 
-    bzero((char *)&key, sizeof(key));
+    memset((char *)&key, 0, sizeof(key));
     key.port = port;
     key.xobjRef = extXObj;
     xAssert(proxyMap);
