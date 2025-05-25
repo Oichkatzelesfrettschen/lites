@@ -197,3 +197,10 @@ Build and run it with:
 make -f Makefile.new test
 ./tests/vm_fault/test_vm_fault
 ```
+
+## Header consolidation
+A helper script `scripts/move_all_headers.sh` is provided to move all `*.h` files
+from the repository into `src-lites-1.1-2025/include/all_headers` while
+preserving their original relative paths. This operation is destructive and
+should only be run for analysis purposes.
+
