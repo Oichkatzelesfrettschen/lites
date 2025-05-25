@@ -45,14 +45,6 @@
 #include <machine/ansi.h>
 #include <machine/types.h>
 
-#ifndef _POSIX_SOURCE
-typedef	unsigned char	u_char;
-typedef	unsigned short	u_short;
-typedef	unsigned int	u_int;
-typedef	unsigned long	u_long;
-typedef	unsigned short	ushort;		/* Sys V compatibility */
-typedef	unsigned int	uint;		/* Sys V compatibility */
-#endif
 
 typedef	u_int64_t	u_quad_t;	/* quads */
 typedef	int64_t		quad_t;
@@ -89,23 +81,6 @@ off_t	 lseek (int, off_t, int);
 __END_DECLS
 #endif
 
-#ifndef _POSIX_SOURCE
-#ifdef alpha
-#define major(x)	((u_int)(((dev_t)(x) >> 20)&0xfff))
-#define minor(x)	((u_int)((x)&0xfffff))
-#define makedev(x,y)	((dev_t)(((x)<<20) | (y)))
-#else
-#define	major(x)	((int)(((u_int)(x) >> 8)&0xff))	/* major number */
-#ifdef 	DISKSLICE
-/*
- * minor() gives a cookie instead of an index since we don't want to
- * change the meanings of bits 0-15 or waste time and space shifting
- * bits 16-31 for devices that don't use them.
- */
-#define	minor(x)	((int)((x)&0xffff00ff))		/* minor number */
-#else	/* !DISKSLICE */
-#define	minor(x)	((int)((x)&0xff))		/* minor number */
-#endif	/* !DISKSLICE */
 #define	makedev(x,y)	((dev_t)(((x)<<8) | (y)))	/* create dev_t */
 #endif
 #endif /* alpha */
@@ -130,18 +105,6 @@ typedef	_BSD_TIME_T_	time_t;
 #undef	_BSD_TIME_T_
 #endif
 
-#ifndef _POSIX_SOURCE
-#define	NBBY	8		/* number of bits in a byte */
-
-/*
- * Select uses bit masks of file descriptors in longs.  These macros
- * manipulate such bit fields (the filesystem macros use chars).
- * FD_SETSIZE may be defined by the user, but the default here should
- * be enough for most uses.
- */
-#ifndef	FD_SETSIZE
-#define	FD_SETSIZE	256
-#endif
 
 typedef long	fd_mask;
 #define NFDBITS	(sizeof(fd_mask) * NBBY)	/* bits per mask */
