@@ -915,3 +915,4 @@ path
 ./src-lites-1.1-2025/xkernel/util/make/gmake-3.66/rule.h
 ./src-lites-1.1-2025/xkernel/util/make/gmake-3.66/signame.h
 ./src-lites-1.1-2025/xkernel/util/make/gmake-3.66/variable.h
+./src-lites-1.1-2025/include/posix_fs.h

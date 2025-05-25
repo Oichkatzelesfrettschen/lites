@@ -21,7 +21,11 @@ struct cap {
     unsigned int flags;
 };
 
+/* Rights bits for generic file objects */
+#define CAP_RIGHT_READ 0x1
+#define CAP_RIGHT_WRITE 0x2
+#define CAP_RIGHT_EXEC 0x4
+
 struct cap *cap_refine(struct cap *parent, unsigned long rights, unsigned int flags);
 void revoke_capability(struct cap *cap);
 int cap_check(const struct cap *cap);
-
