@@ -50,3 +50,41 @@ int exo_recv(exo_msg_t *out, unsigned int timeout_ms);
 ## Timeout semantics
 
 The timeout passed to `exo_recv` is interpreted in milliseconds.  A value of zero checks the mailbox without blocking.  Negative values block without a limit.  The function wakes as soon as a message is available or when the timeout expires.
+
+## POSIX IPC wrappers
+
+Capability backed wrappers expose POSIX message queues, semaphores and
+shared memory.  Each resource is associated with a capability object so
+rights can later be refined or revoked.
+
+### Message queues
+
+```c
+cap_mq_t *cap_mq_open(const char *name, int oflag, mode_t mode,
+                      unsigned int maxmsg);
+int cap_mq_send(cap_mq_t *q, const char *msg, size_t len, unsigned int prio);
+ssize_t cap_mq_receive(cap_mq_t *q, char *msg, size_t len, unsigned int *prio);
+int cap_mq_close(cap_mq_t *q);
+```
+
+### Semaphores
+
+```c
+cap_sem_t *cap_sem_open(const char *name, int oflag, mode_t mode,
+                        unsigned int value);
+int cap_sem_wait(cap_sem_t *s);
+int cap_sem_post(cap_sem_t *s);
+int cap_sem_close(cap_sem_t *s);
+```
+
+### Shared memory
+
+```c
+cap_shm_t *cap_shm_open(const char *name, int oflag, mode_t mode, size_t size);
+void *cap_shm_map(cap_shm_t *shm, size_t len, int prot, int flags, off_t off);
+int cap_shm_unmap(void *addr, size_t len);
+int cap_shm_close(cap_shm_t *shm);
+```
+
+The wrappers merely forward to the underlying POSIX functions while
+tracking the capability used to create the object.
