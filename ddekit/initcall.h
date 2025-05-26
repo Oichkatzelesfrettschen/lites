@@ -19,8 +19,8 @@ void __ddekit_add_initcall(struct __ddekit_initcall_s *dis);
 #define DDEKIT_INITCALL(fn)	DDEKIT_CTOR(fn, 1)
 
 #define DDEKIT_CTOR(fn, prio) \
-	 static void __attribute__((used)) __attribute__((constructor))\
-	__ddekit_initcall_##fn() { \
+         static void [[gnu::used]] [[gnu::constructor]] \
+        __ddekit_initcall_##fn() { \
 	static struct __ddekit_initcall_s dis = {(ddekit_initcall_t)fn, prio, 0}; \
 	__ddekit_add_initcall(&dis); }
 

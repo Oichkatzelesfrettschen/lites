@@ -121,7 +121,7 @@ struct pseudo_descriptor
 {
 	unsigned short limit;
 	unsigned long linear_base;
-} __attribute__((packed));
+} [[gnu::packed]];
 
 
 /* Load the processor's IDT, GDT, or LDT pointers.  */
