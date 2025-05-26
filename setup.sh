@@ -21,11 +21,21 @@ for arg in "$@"; do
   esac
 done
 
+# Automatically switch to offline mode if network operations fail
+APT_FAILED=false
+
 if ! apt-get update -y; then
   echo "apt-get update failed" >> "$FAIL_LOG"
+  APT_FAILED=true
 fi
 if ! apt-get dist-upgrade -y; then
   echo "apt-get dist-upgrade failed" >> "$FAIL_LOG"
+  APT_FAILED=true
+fi
+
+if $APT_FAILED && ! $OFFLINE; then
+  echo "Network operations failed; switching to offline mode" | tee -a "$LOG"
+  OFFLINE=true
 fi
 
 OPENMACH_REPO=${OPENMACH_REPO:-https://github.com/machkernel/openmach.git}
@@ -51,31 +61,49 @@ install_pkg() {
   local pkg="$1"
   echo "\n===== Installing $pkg =====" | tee -a "$LOG"
 
-  if apt-get install -y "$pkg"; then
-    echo "$pkg installed via apt" >> "$LOG"
-    return 0
-  fi
-  echo "apt-get failed for $pkg" | tee -a "$FAIL_LOG"
+  if $OFFLINE; then
+    if dpkg -s "$pkg" >/dev/null 2>&1; then
+      echo "$pkg already installed" >> "$LOG"
+      return 0
+    fi
+    local deb=(offline_packages/${pkg}_*.deb)
+    if [[ -f "${deb[0]}" ]]; then
+      if dpkg -i "${deb[@]}"; then
+        echo "$pkg installed from offline package" >> "$LOG"
+        return 0
+      else
+        echo "dpkg offline failed for $pkg" | tee -a "$FAIL_LOG"
+        return 1
+      fi
+    fi
+  else
+    if apt-get install -y "$pkg"; then
+      echo "$pkg installed via apt" >> "$LOG"
+      return 0
+    fi
+    echo "apt-get failed for $pkg" | tee -a "$FAIL_LOG"
 
-  if pip install "$pkg"; then
-    echo "$pkg installed via pip" >> "$LOG"
-    return 0
-  fi
-  echo "pip failed for $pkg" | tee -a "$FAIL_LOG"
+    if pip install "$pkg"; then
+      echo "$pkg installed via pip" >> "$LOG"
+      return 0
+    fi
+    echo "pip failed for $pkg" | tee -a "$FAIL_LOG"
 
-  if npm install -g "$pkg"; then
-    echo "$pkg installed via npm" >> "$LOG"
-    return 0
+    if npm install -g "$pkg"; then
+      echo "$pkg installed via npm" >> "$LOG"
+      return 0
+    fi
+    echo "npm failed for $pkg" | tee -a "$FAIL_LOG"
   fi
-  echo "npm failed for $pkg" | tee -a "$FAIL_LOG"
-  if [[ "$pkg" == "shellcheck" ]]; then
+
+  if [[ "$pkg" == "shellcheck" && ! $OFFLINE ]]; then
     wget -qO- https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.x86_64.tar.xz | tar xJ
     install -m 0755 shellcheck-v0.9.0/shellcheck /usr/local/bin/shellcheck
     rm -rf shellcheck-v0.9.0
     echo "$pkg installed from binary" >> "$LOG"
     return 0
   fi
-  if [[ "$pkg" == "capnproto" ]]; then
+  if [[ "$pkg" == "capnproto" && ! $OFFLINE ]]; then
     wget -qO- https://github.com/capnproto/capnproto/archive/refs/tags/v0.9.1.tar.gz | tar xz
     pushd capnproto-0.9.1
     ./setup-makefiles.sh
@@ -86,7 +114,7 @@ install_pkg() {
     echo "$pkg built from source" >> "$LOG"
     return 0
   fi
-  if [[ "$pkg" == "isabelle" ]]; then
+  if [[ "$pkg" == "isabelle" && ! $OFFLINE ]]; then
     wget -qO- https://isabelle.in.tum.de/dist/Isabelle2023-1_linux.tar.gz | tar xz
     install -d /opt/isabelle
     mv Isabelle2023-1 /opt/isabelle
@@ -94,7 +122,7 @@ install_pkg() {
     echo "$pkg installed from archive" >> "$LOG"
     return 0
   fi
-  if [[ "$pkg" == "asda" ]]; then
+  if [[ "$pkg" == "asda" && ! $OFFLINE ]]; then
     wget -qO /usr/local/bin/asda https://example.com/asda
     chmod +x /usr/local/bin/asda
     echo "$pkg installed from custom source" >> "$LOG"
