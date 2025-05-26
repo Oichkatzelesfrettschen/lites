@@ -179,7 +179,8 @@ Any package failures are recorded in `/tmp/setup_failures.log`
 so the remainder of the setup can continue.  The script normally requires
 root privileges and network access.  When invoked with `--offline` it
 installs all `.deb` files from the `offline_packages/` directory instead of
-using the network.
+using the network.  If the network is unreachable during execution, the
+script automatically falls back to this offline mode.
 Codex CLI can keep `setup.sh` in sync with `.codex/setup.sh` automatically. The `postCreateCommand` in `.devcontainer/devcontainer.json` installs Codex and runs `codex -q 'doctor setup.sh'` after container creation. A sample systemd unit `scripts/codex-setup.service` demonstrates how to do the same early in boot. The repository's `AGENTS.md` instructs Codex to update the script and verify it with shellcheck and BATS.
 
 
