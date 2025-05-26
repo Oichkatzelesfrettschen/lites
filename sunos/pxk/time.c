@@ -12,11 +12,7 @@
 
 #include <sys/time.h>
 
-#ifdef __STDC__
-
-int	gettimeofday( struct timeval *, struct timezone * );
-
-#endif
+int gettimeofday(struct timeval *, struct timezone *);
 
 void
 xGetTime(where)

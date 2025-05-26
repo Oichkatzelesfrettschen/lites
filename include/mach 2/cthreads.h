@@ -32,9 +32,7 @@
  *
  */
 
-
-#ifndef	_CTHREADS_
-#define	_CTHREADS_ 1
+#include <stdlib.h>
 
 #include <mach/machine/cthreads.h>
 #include <mach.h>

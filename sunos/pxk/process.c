@@ -26,15 +26,7 @@
 int SignalsPossible = 0;
 
 
-#ifdef __STDC__
-
-static void	wake_sem( Event, VOID * );
-
-#else
-
-static void	wake_sem();
-
-#endif
+static void wake_sem(Event, VOID *);
 
 
 
