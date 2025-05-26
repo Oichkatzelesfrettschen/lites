@@ -146,7 +146,7 @@ bidHdrLoad( hdr, src, len, arg )
     long	len;
 {
     xAssert( len == sizeof(BidHdr) );
-    bcopy(src, hdr, len);
+    memcpy(hdr, src, len);
     ((BidHdr *)hdr)->hlpNum = ntohl(((BidHdr *)hdr)->hlpNum);
     return len;
 }
@@ -164,7 +164,7 @@ bidHdrStore( hdr, dst, len, arg )
     h.hlpNum = htonl(((BidHdr *)hdr)->hlpNum);
     h.srcBid = ((BidHdr *)hdr)->srcBid;
     h.dstBid = ((BidHdr *)hdr)->dstBid;
-    bcopy((char *)&h, dst, len);
+    memcpy(dst, (char *)&h, len);
 }
 
 

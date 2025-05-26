@@ -63,7 +63,7 @@ join_init( self )
     }
 
     ps = X_NEW(PState);
-    bzero((char *)ps,sizeof(ps));
+    memset((char *)ps, 0, sizeof(ps));
     self->state = (VOID *)ps;
     ps->actMap = mapCreate(JOIN_ACTIVE_MAP_SZ, sizeof(ActiveId));
     ps->tagIdLen = 0;
@@ -182,11 +182,11 @@ joinCreateTagSessn (self, hlpRcv, hlpType, lls, idBuf, idLen)
     }
        
     ts = X_NEW(TState);
-    bzero((char *)ts, sizeof(TState));
+    memset((char *)ts, 0, sizeof(TState));
     semInit(&ts->wait, 1);
-    bcopy(idBuf,(char *)&ts->id,idLen);
+    memcpy((char *)&ts->id, idBuf, idLen);
     ts->numSeg = ps->numSeg;
-    bcopy((char *) &ps->order, (char *)&ts->order, sizeof(ts->order));
+    memcpy((char *)&ts->order, (char *) &ps->order, sizeof(ts->order));
  
 
     s = xCreateSessn(joinTagSessnInit, hlpRcv, hlpType, self, 1, &lls);
@@ -670,13 +670,13 @@ joinTagControlSessn(s, op, buf, len)
       case JOINGETORDER:
         {   
 	    if (len != sizeof(ts->order)) return 0; 
-	    bcopy((char *) &ts->order, buf, sizeof(ts->order));
+	    memcpy(buf, (char *) &ts->order, sizeof(ts->order));
             return(sizeof(ts->order));
         }
       case JOINSETCONTROL:
         {   
 	    if (len != sizeof(ts->controlSessn)) return 0; 
-	    bcopy(buf, (char *) &ts->controlSessn, sizeof(ts->controlSessn));
+	    memcpy((char *) &ts->controlSessn, buf, sizeof(ts->controlSessn));
             return(sizeof(ts->controlSessn));
         }
       case JOINDONE:
@@ -749,7 +749,7 @@ joinControlProtl( self, op, buf, len )
       case JOINGETORDER:
         {   
 	    if (len != sizeof(ps->order)) return 0; 
-	    bcopy((char *) &ps->order, buf, sizeof(ps->order));
+	    memcpy(buf, (char *) &ps->order, sizeof(ps->order));
             return(sizeof(ps->order));
         }
 
@@ -803,7 +803,7 @@ joinHdrStore(hdr, dst, len, arg)
         ((JOINhdr *)hdr)->len[i] = htonl(((JOINhdr *)hdr)->len[i]);
     }
 
-    bcopy((char *)hdr, dst, len);
+    memcpy(dst, (char *)hdr, len);
     xTrace0(joinp, TR_EVENTS, "joinHdrStore - exiting");
 }
 
@@ -816,7 +816,7 @@ joinHdrLoad1(hdr, src, len, arg)
 {
     xTrace0(joinp, TR_EVENTS, "joinHdrLoad1 - entered");
 
-    bcopy(src, (char *)hdr, len);
+    memcpy((char *)hdr, src, len);
     ((JOINhdr *)hdr)->id = ntohl(((JOINhdr *)hdr)->id);
     xTrace1(joinp, TR_EVENTS, "hdr->id = %d", ((JOINhdr *)hdr)->id);
     ((JOINhdr *)hdr)->numSeg = ntohl(((JOINhdr *)hdr)->numSeg);
@@ -837,7 +837,7 @@ joinHdrLoad2(hdr, src, len, arg)
     int i;
     xTrace0(joinp, TR_EVENTS, "joinHdrLoad2 - entered");
 
-    bcopy(src, (char *)&((JOINhdr *)hdr)->len, len);
+    memcpy((char *)&((JOINhdr *)hdr)->len, src, len);
     for (i=0; i<len/4; i++) {
         ((JOINhdr *)hdr)->len[i] = ntohl(((JOINhdr *)hdr)->len[i]);
         xTrace2(joinp, TR_EVENTS, "hdr->len[%d] = %d", i, ((JOINhdr *)hdr)->len[
@@ -867,7 +867,7 @@ partToId(p, buf, maxLen)
     	for (i=p[j].stack.top; i>0; i--)  {
        		len += p[j].stack.arr[i-1].len;
 		if (len > maxLen) return 0;
-        	bcopy((char *)p[j].stack.arr[i-1].ptr,(char *)ptr, p[j].stack.arr[i-1].len);
+        	memcpy((char *)ptr, (char *)p[j].stack.arr[i-1].ptr, p[j].stack.arr[i-1].len);
         	ptr += p[j].stack.arr[i-1].len;
     	}
     }
@@ -899,7 +899,7 @@ part2ToId(p, buf, maxLen)
     for (i=p[0].stack.top; i>0; i--)  {
        	len += p[1].stack.arr[i-1].len;
 	if (len > maxLen) return 0;
-       	bcopy((char *)p[1].stack.arr[i-1].ptr,(char *)ptr, p[1].stack.arr[i-1].len);
+       	memcpy((char *)ptr, (char *)p[1].stack.arr[i-1].ptr, p[1].stack.arr[i-1].len);
        	ptr += p[1].stack.arr[i-1].len;
     }
     xTrace1(joinp, TR_EVENTS, "part2ToLen - exiting len %d",len);

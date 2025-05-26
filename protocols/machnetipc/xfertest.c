@@ -265,7 +265,7 @@ isServerDefault()
     if ( serverParam ) {
 	return TRUE;
     }
-    return ! bcmp((char *)&myHost, (char *)&ServerAddr, sizeof(HOST_TYPE));
+    return ! memcmp((char *)&myHost, (char *)&ServerAddr, sizeof(HOST_TYPE));
 }
 
 
@@ -278,7 +278,7 @@ isClientDefault()
 	ClientAddr = myHost;
 	return TRUE;
     }
-    return ! bcmp((char *)&myHost, (char *)&ClientAddr, sizeof(HOST_TYPE));
+    return ! memcmp((char *)&myHost, (char *)&ClientAddr, sizeof(HOST_TYPE));
 }
 
 

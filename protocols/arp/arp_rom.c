@@ -78,7 +78,7 @@ loadEntry( self, str, nFields, line, arg )
 		xTraceP0(self, TR_ERRORS, "llp couldn't translate rom entry");
 		return XK_FAILURE;
 	    }
-	    bcopy((char *)&buf.ethHost, (char *)&ethHost, sizeof(ETHhost));
+	    memcpy((char *)&ethHost, (char *)&buf.ethHost, sizeof(ETHhost));
 	    nextField = 4;
 	}
     }

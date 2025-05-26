@@ -86,7 +86,7 @@ xrpcStore( hdr, dst, len, arg )
     long	n;
 
     n = htonl(*hdr);
-    bcopy((char *)&n, dst, sizeof(long));
+    memcpy(dst, (char *)&n, sizeof(long));
 }
 
 
@@ -95,7 +95,7 @@ xrpcLoad( hdr, src, len, arg )
     long	*hdr, len;
     VOID	*src, *arg;
 {
-    bcopy((char *)src, (char *)hdr, sizeof(long));
+    memcpy((char *)hdr, (char *)src, sizeof(long));
     *hdr = ntohl(*hdr);
     return sizeof(long);
 }

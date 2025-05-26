@@ -324,7 +324,7 @@ doCallDemux(self, inHdr, inMsg)
      * Send reply
      */
     packet_len    = msgLen(&rmsg); 
-    bzero((char *)&state->info, sizeof(state->info));
+    memset((char *)&state->info, 0, sizeof(state->info));
     msgSetAttr(&rmsg, 0, (void *)&state->info, sizeof(state->info));
     if (xPush(lls, &rmsg) < 0) {
 	xTrace0(chanp, TR_SOFT_ERRORS, "chan_pop: (SVC) can't send message");

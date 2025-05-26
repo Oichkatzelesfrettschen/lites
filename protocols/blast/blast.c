@@ -157,7 +157,7 @@ blastCreateSessn( self, hlpRcv, hlpType, key )
 
     pstate = (PState *)self->state;
     state = (SState *) xMalloc(sizeof(SState));
-    bzero((char *)state, sizeof(SState));
+    memset((char *)state, 0, sizeof(SState));
     state->prot_id = key->prot;
     state->rec_map = mapCreate(BLAST_REC_MAP_SZ, sizeof(BlastSeq));
     /*
@@ -321,7 +321,7 @@ blastNewMstate(s)
 	xTrace0(blastp, TR_MORE_EVENTS, "blast_pop: new_state created ");
 	mstate = X_NEW(MSG_STATE);
     }
-    bzero((char *)mstate, sizeof(MSG_STATE));
+    memset((char *)mstate, 0, sizeof(MSG_STATE));
     mstate->rcnt = 1;
     /* 
      * Add a reference count for this message state

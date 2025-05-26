@@ -423,7 +423,7 @@ INIT_FUNC( self )
     }
     xControl(xGetDown(self, 0), GETMYHOST, (char *)&myHost, sizeof(HOST_TYPE));
     ps = X_NEW(PState);
-    bzero((char *)ps, sizeof(PState));
+    memset((char *)ps, 0, sizeof(PState));
     self->state = (VOID *)ps;
     /* 
      * Call the per-test initialization function which gives the test
@@ -457,7 +457,7 @@ isServerDefault( self )
     if ( ! strcmp(self->instName, "server") ) {
 	return TRUE;
     }
-    return ! bcmp((char *)&myHost, (char *)&ServerAddr, sizeof(HOST_TYPE));
+    return ! memcmp((char *)&myHost, (char *)&ServerAddr, sizeof(HOST_TYPE));
 }
 
 
@@ -473,7 +473,7 @@ isClientDefault( self )
 	ClientAddr = myHost;
 	return TRUE;
     }
-    return ! bcmp((char *)&myHost, (char *)&ClientAddr, sizeof(HOST_TYPE));
+    return ! memcmp((char *)&myHost, (char *)&ClientAddr, sizeof(HOST_TYPE));
 }
 
 

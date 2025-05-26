@@ -56,13 +56,13 @@ typedef struct {
 #define XFERHOST_NETLEN	(sizeof(IPhost) + sizeof(BootId))
 #define xferHostLoad(_xh, _src) 				\
 	{							\
-	    bcopy((_src), (char *)&(_xh)->h, sizeof(IPhost));	\
+	    memcpy((char *)&(_xh)->h, (_src), sizeof(IPhost));	\
 	    bcopy((_src) + sizeof(IPhost), (char *)&(_xh)->bid,	\
 		  sizeof(BootId));				\
 	}
 #define xferHostStore(_xh, _dst) 				\
 	{							\
-	    bcopy((char *)&(_xh)->h, (_dst), sizeof(IPhost));	\
+	    memcpy((_dst), (char *)&(_xh)->h, sizeof(IPhost));	\
 	    bcopy((char *)&(_xh)->bid, (_dst) + sizeof(IPhost),	\
 		  sizeof(BootId));				\
 	}

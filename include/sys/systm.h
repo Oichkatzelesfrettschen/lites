@@ -122,9 +122,7 @@ void	printf (const char *, ...);
 int	sprintf (char *buf, const char *, ...);
 void	ttyprintf (struct tty *, const char *, ...);
 
-void	bcopy (const void *from, void *to, size_t len);
 void	ovbcopy (const void *from, void *to, u_int len);
-void	bzero (void *buf, size_t len);
 
 int	copystr (void *kfaddr, void *kdaddr, u_int len, u_int *done);
 int	copyinstr (void *udaddr, void *kaddr, u_int len, u_int *done);

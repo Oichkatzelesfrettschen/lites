@@ -329,7 +329,7 @@ XObj self, s; Msg *msg, *msgr;
   /* the old way: extract procedure from SState structure */
   /* det_proc =  ((SState *) s->state)->s_proc; */
   /* the new way: sunrpc sticks it on the front of the message, sans xdring */
-  bcopy(buf,(char *)&det_proc,sizeof(long));
+  memcpy((char *)&det_proc, buf, sizeof(long));
   xTrace1(pmapsrvp,TR_FULL_TRACE,
 	  "det_calldemux: extracted procedure.   proc: %d", det_proc);
   if ( det_proc < 0 || 3 < det_proc )

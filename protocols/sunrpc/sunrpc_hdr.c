@@ -23,7 +23,7 @@ sunrpcHdrStore(hdr, dst, len, arg)
     long int len;
     VOID *arg;
 {
-    bcopy(hdr, dst, len);
+    memcpy(dst, hdr, len);
 }
 
 
@@ -77,7 +77,7 @@ sunrpcHdrLoad(hdr, src, len, arg)
     if (LONG_ALIGNED(src)) {
 	xdrmem_create(&xdrs, src, len, XDR_DECODE);
     } else {
-	bcopy(src, (char *)alignedSrc, len);
+	memcpy((char *)alignedSrc, src, len);
 	xdrmem_create(&xdrs, (char *)alignedSrc, len, XDR_DECODE);
     }
     if (!xdr_callmsg(&xdrs, (struct rpc_msg *)hdr)) {

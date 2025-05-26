@@ -540,7 +540,7 @@ ethControlSessn(s, op, buf, len)
 	
       case GETPEERHOST:
 	checkLen(len, sizeof(ETHhost));
-	bcopy((char *) &ss->hdr.dst, buf, sizeof(ETHhost));
+	memcpy(buf, (char *) &ss->hdr.dst, sizeof(ETHhost));
 	return (sizeof(ETHhost));
 	
       case GETMYHOSTCOUNT:
@@ -605,7 +605,7 @@ ethControlProtl( self, op, buf, len )
 	
       case GETMYHOST:
 	checkLen(len, sizeof(ETHhost));
-	bcopy((char *) &ps->myHost, buf, sizeof(ETHhost));
+	memcpy(buf, (char *) &ps->myHost, sizeof(ETHhost));
 	return (sizeof(ETHhost));
 
       default:

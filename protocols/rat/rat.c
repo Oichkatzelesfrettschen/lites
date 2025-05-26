@@ -676,13 +676,13 @@ long ratHdrLoad(dest, src, len, ignore)
   xTrace4(ratp,TR_FULL_TRACE,"ratcopy args: %x %x %x %x",
 	  dest,src,len,ignore);
   
-  bcopy(src, (char*)hdr, len);
+  memcpy((char*)hdr, src, len);
   
   hdr->prot_num = ntohl(hdr->prot_num);
   hdr->record_length = ntohl(hdr->record_length);
-  bcopy((char *)&hdr->senderAddr,(char *)&host, sizeof(host));
+  memcpy((char *)&host, (char *)&hdr->senderAddr, sizeof(host));
   host = ntohl(host);
-  bcopy((char *)&host, (char *)&hdr->senderAddr,sizeof(host));
+  memcpy((char *)&hdr->senderAddr, (char *)&host, sizeof(host));
 
   return len;
 }
@@ -699,13 +699,13 @@ long ratDemuxHdrLoad(dest, src, len, ignore)
   xTrace4(ratp,TR_FULL_TRACE,"ratcopy args: %x %x %x %x",
           dest,src,len,ignore);
 
-  bcopy(src, (char*)hdr, len);
+  memcpy((char*)hdr, src, len);
 
   hdr->prot_num = ntohl(hdr->prot_num);
   hdr->record_length = ntohl(hdr->record_length);
-  bcopy((char *)&hdr->senderAddr,(char *)&host, sizeof(host));
+  memcpy((char *)&host, (char *)&hdr->senderAddr, sizeof(host));
   host = ntohl(host);
-  bcopy((char *)&host, (char *)&hdr->senderAddr,sizeof(host));
+  memcpy((char *)&hdr->senderAddr, (char *)&host, sizeof(host));
 
   return 0;
 }
@@ -724,10 +724,10 @@ void ratHdrStore(src, dest, len, ignore)
 
   hdr->prot_num = htonl(hdr->prot_num);
   hdr->record_length = htonl(hdr->record_length);
-  bcopy((char *)&hdr->senderAddr,(char *)&host, sizeof(host));
+  memcpy((char *)&host, (char *)&hdr->senderAddr, sizeof(host));
   host = htonl(host);
-  bcopy((char *)&host, (char *)&hdr->senderAddr,sizeof(host));
-  bcopy((char*)hdr, dest, len);
+  memcpy((char *)&hdr->senderAddr, (char *)&host, sizeof(host));
+  memcpy(dest, (char*)hdr, len);
 }
 
 

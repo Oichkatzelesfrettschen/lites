@@ -79,7 +79,7 @@ arpTableInit()
     int 	i;
 
     tbl = (ArpTbl)xMalloc(ARP_TAB * sizeof(ArpEnt));
-    bzero((char *)tbl, ARP_TAB * sizeof(ArpEnt));
+    memset((char *)tbl, 0, ARP_TAB * sizeof(ArpEnt));
     for (i=0; i < ARP_TAB; i++) {
 	e = &tbl[i];
 	e->status = ARP_FREE;
@@ -300,7 +300,7 @@ arpSaveBinding( tbl, ip, eth )
 	 */
 	ArpEnt	*t = &tbl[ipPos];
 
-	if ( bcmp((char *)&t->arp_Ead, (char *)eth, sizeof(ETHhost)) == 0 ) {
+	if ( memcmp((char *)&t->arp_Ead, (char *)eth, sizeof(ETHhost)) == 0 ) {
 	    if ( t->status == ARP_RSLVD ) {
 		xTrace0(arpp, 3, "arpSaveBinding: already had this binding");
 		return;
@@ -412,7 +412,7 @@ ipToIndex( tbl, h )
 
     for (i=0; i<ARP_TAB; i++) {
 	if (tbl[i].status != ARP_FREE &&
-	    ! bcmp((char *)h, (char *)&tbl[i].arp_Iad, sizeof(IPhost))) {
+	    ! memcmp((char *)h, (char *)&tbl[i].arp_Iad, sizeof(IPhost))) {
 	    return(i);
 	}
     }
@@ -433,7 +433,7 @@ ethToIndex( tbl, h )
     
     for (i=0; i<ARP_TAB; i++) {
 	if (tbl[i].status != ARP_FREE &&
-	    ! bcmp((char *)h, (char *)&tbl[i].arp_Ead,
+	    ! memcmp((char *)h, (char *)&tbl[i].arp_Ead,
 		   sizeof(ETHhost))) {
 	    return(i);
 	}

@@ -204,7 +204,7 @@ chanCall(self, msg, rmsg)
      * Send message
      */
     packet_len    = msgLen(msg);
-    bzero((char *)&state->info, sizeof(state->info));
+    memset((char *)&state->info, 0, sizeof(state->info));
     msgSetAttr(msg, 0, (void *)&state->info, sizeof(state->info));
     if (xPush(lls, msg) <0) {
 	xTrace0(chanp, TR_SOFT_ERRORS, "chan_call: can't send message");

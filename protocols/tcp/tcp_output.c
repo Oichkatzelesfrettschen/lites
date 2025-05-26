@@ -294,7 +294,7 @@ send:
 			mss = htons(mss);
 			opt = tcp_initopt;
 			optlen = sizeof (tcp_initopt);
-			bcopy((char *)&mss, (char *)opt+2, sizeof(short));
+			memcpy((char *)opt+2, (char *)&mss, sizeof(short));
 		}
 	}
 	if (opt) {

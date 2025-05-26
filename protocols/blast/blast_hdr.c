@@ -22,7 +22,7 @@ blastHdrLoad(hdr, src, len, arg)
     VOID *arg;
 {
     xAssert( len == sizeof(BLAST_HDR) );
-    bcopy( src, hdr, len );
+    memcpy(hdr, src, len );
     HDR->prot_id = ntohl(HDR->prot_id);
     HDR->seq = ntohl(HDR->seq);
     HDR->num_frag = ntohs(HDR->num_frag);
@@ -48,5 +48,5 @@ blastHdrStore(hdr, dst, len, arg)
     h.num_frag = htons(h.num_frag);
     BLAST_MASK_HTON(h.mask, h.mask);
     h.len = htonl(h.len);
-    bcopy( (char *)&h, dst, len );
+    memcpy(dst, (char *)&h, len );
 }

@@ -142,7 +142,7 @@ createServerSessn( self, aKey, lls, hdr )
     xDuplicate(lls);
     state = X_NEW(SState);
     s->state = (VOID *)state;
-    bzero((char *)state, sizeof(SState));
+    memset((char *)state, 0, sizeof(SState));
     state->s_vers = aKey->p.vers;
     state->s_prog = aKey->p.prog;
     /*

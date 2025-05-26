@@ -124,7 +124,7 @@ udpHdrStore(hdr, dst, len, arg)
     ((HDR *)hdr)->sport = htons(((HDR *)hdr)->sport);
     ((HDR *)hdr)->dport = htons(((HDR *)hdr)->dport);
     ((HDR *)hdr)->sum = 0;
-    bcopy((char *)hdr, dst, sizeof(HDR));
+    memcpy(dst, (char *)hdr, sizeof(HDR));
     sstate = (SSTATE *)((storeInfo *)arg)->s->state;
     if (sstate->useCkSum) {
 	u_short sum = 0;
@@ -136,7 +136,7 @@ udpHdrStore(hdr, dst, len, arg)
 	}
 	sum = inCkSum(((storeInfo *)arg)->m, (u_short *)&sstate->pHdr,
 		       sizeof(IPpseudoHdr));
-	bcopy((char *)&sum, (char *)&((HDR *)dst)->sum, sizeof(u_short));
+	memcpy((char *)&((HDR *)dst)->sum, (char *)&sum, sizeof(u_short));
 	xAssert(! inCkSum(((storeInfo *)arg)->m, (u_short *)&sstate->pHdr,
 			  sizeof(IPpseudoHdr)));
     }
@@ -158,7 +158,7 @@ udpHdrLoad(hdr, src, len, arg)
   /*
    * 0 in the checksum field indicates checksum disabled
    */
-  bcopy(src, (char *)hdr, sizeof(HDR));
+  memcpy((char *)hdr, src, sizeof(HDR));
   if (((HDR *)hdr)->sum) {
     IPpseudoHdr *pHdr = (IPpseudoHdr *)msgGetAttr((Msg *)arg, 0);
 
@@ -194,7 +194,7 @@ udp_init(self)
     
     getproc_protl(self);
     pstate = X_NEW(PSTATE);
-    bzero((char *)pstate, sizeof(PSTATE));
+    memset((char *)pstate, 0, sizeof(PSTATE));
     self->state = (VOID *)pstate;
     pstate->activemap = mapCreate(ACTIVE_MAP_SIZE, sizeof(ActiveId));
     pstate->passivemap = mapCreate(PASSIVE_MAP_SIZE, sizeof(PassiveId)); 

@@ -131,7 +131,7 @@ void pmap_init(self) XObj self;
 
 
 long yabcopy (to,from,len,xarg)  char *to,*from; long len; VOID *xarg;
-{ bcopy(from,to,len); return len; }
+{ memcpy(to, from, len); return len; }
 
 
 static xkern_return_t pmap_calldemux(self,s,msg,msgr)

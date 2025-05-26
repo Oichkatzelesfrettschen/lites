@@ -180,7 +180,7 @@ tcp_newtcpcb(inp)
 	register struct tcpcb *tp;
 
 	tp = (struct tcpcb *)xMalloc(sizeof *tp);
-	bzero((char*)tp, sizeof *tp);
+	memset((char*)tp, 0, sizeof *tp);
 	tp->seg_next = tp->seg_prev = (struct reass *)tp;
 	tp->t_maxseg = TCP_MSS;
 	tp->t_flags = 0;		/* sends options! */

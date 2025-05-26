@@ -34,7 +34,7 @@ sunrpcSendError(errorCode, lls, xid, arg)
     Msg 	errMsg;
 
     xTrace0(sunrpcp, 4, "sunrpc send error");
-    bzero((char *)&errHdr, sizeof(struct rpc_msg));
+    memset((char *)&errHdr, 0, sizeof(struct rpc_msg));
     errHdr.rm_xid = xid;
     errHdr.rm_direction = REPLY;
     switch( errorCode ) {

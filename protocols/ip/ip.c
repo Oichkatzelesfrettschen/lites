@@ -348,7 +348,7 @@ ipCreateSessn( self, hlpRcv, hlpType, f, dst )
     s = xCreateSessn(f, hlpRcv, hlpType, self, 0, 0);
     ss = X_NEW(SState);
     s->state = (VOID *)ss;
-    bzero((char *)ss, sizeof(SState));
+    memset((char *)ss, 0, sizeof(SState));
     ss->hdr.dest = *dst;
     if ( ipHandleRedirect(s) ) {
 	xTrace0(ipp, 3, "IP open fails");
