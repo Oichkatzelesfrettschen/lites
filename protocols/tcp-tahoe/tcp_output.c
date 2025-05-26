@@ -39,10 +39,9 @@ u_char	tcp_initopt[4] = { TCPOPT_MAXSEG, 4, 0x0, 0x0, };
 
 
 void
-tcp_setpersist(tp)
-	register struct tcpcb *tp;
+tcp_setpersist(struct tcpcb *tp)
 {
-	register t = ((tp->t_srtt >> 2) + tp->t_rttvar) >> 1;
+        int t = ((tp->t_srtt >> 2) + tp->t_rttvar) >> 1;
 
 	if (tp->t_timer[TCPT_REXMT])
 		Kabort("tcp_output REXMT");
@@ -61,12 +60,11 @@ tcp_setpersist(tp)
  * Tcp output routine: figure out what should be sent and send it.
  */
 int
-tcp_output(tp)
-	register struct tcpcb *tp;
+tcp_output(struct tcpcb *tp)
 {
-	register XObj so = tp->t_inpcb->inp_session;
-	register struct tcpstate *tcpst = sototcpst(so);
-	register int len, win;
+	XObj so = tp->t_inpcb->inp_session;
+	struct tcpstate *tcpst = sototcpst(so);
+	int len, win;
 	int off, flags, error;
 	struct tcphdr	tHdr;
 	u_char *opt;

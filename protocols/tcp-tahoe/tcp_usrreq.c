@@ -50,9 +50,9 @@ tcp_usrreq(so, req, m, nam)
 	int req;
 	Msg *m, *nam;
 {
-	register struct inpcb *inp;
-	register struct tcpcb *tp = 0;
-	register struct tcpstate *tcpst = (struct tcpstate*)so->state;
+	struct inpcb *inp;
+	struct tcpcb *tp = 0;
+	struct tcpstate *tcpst = (struct tcpstate*)so->state;
 	/* int s; */
 	int error = 0;
 	int ostate;
@@ -254,7 +254,7 @@ int
 tcp_attach(so)
 	XObj so;
 {
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 	struct inpcb *inp;
 	int error;
 
@@ -280,7 +280,7 @@ tcp_attach(so)
  */
 struct tcpcb *
 tcp_disconnect(tp)
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 {
 	XObj so = tp->t_inpcb->inp_session;
 	xTrace1(tcpp, 3, "tcp_disconnect: tp %X", tp);
@@ -307,7 +307,7 @@ tcp_disconnect(tp)
  */
 struct tcpcb *
 tcp_usrclosed(tp)
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 {
 
 	switch (tp->t_state) {

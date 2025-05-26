@@ -406,11 +406,10 @@ tcpOpenDisable(self, hlpRcv, hlpType, p)
  * We can let the user exit from the close as soon as the FIN is acked.
  */
 static xkern_return_t
-tcpClose(so)
-    XObj	so;
+tcpClose(XObj so)
 {
-    register struct tcpcb *tp;
-    register struct tcpstate *tcpst;
+    struct tcpcb *tp;
+    struct tcpstate *tcpst;
     
     xTrace1(tcpp, TR_FUNCTIONAL_TRACE, "tcpClose(so=%08x)", so);
 
@@ -438,15 +437,13 @@ tcpClose(so)
 
 /*************************************************************************/
 static xmsg_handle_t
-tcpPush(so, msg)
-     XObj so;
-     Msg *msg;
+tcpPush(XObj so, Msg *msg)
 {
     int error;
     int space;
     Msg pushMsg;
-    register struct tcpstate *tcpst = sototcpst(so);
-    register struct tcpcb *tp = sototcpcb(so);
+    struct tcpstate *tcpst = sototcpst(so);
+    struct tcpcb *tp = sototcpcb(so);
 
     xTrace2(tcpp, TR_MAJOR_EVENTS, "tcpPush: session %X, msg %d bytes",
 	    so, msgLen(msg));
