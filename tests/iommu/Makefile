@@ -6,7 +6,10 @@ all: test_iommu
 
 .PHONY: all clean
 
-SRC_DIR ?= ../../src-lites-1.1-2025
+ifndef LITES_SRC_DIR
+$(error LITES_SRC_DIR must be set)
+endif
+SRC_DIR := $(LITES_SRC_DIR)
 IOMMU_SRC := $(SRC_DIR)/iommu/iommu.c
 ifneq ($(wildcard $(IOMMU_SRC)),)
 IOMMU_PATH := $(IOMMU_SRC)

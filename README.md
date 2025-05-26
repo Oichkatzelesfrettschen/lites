@@ -93,9 +93,9 @@ make
 ```
 
 For the modernized build system in this repository you can also use
-`Makefile.new` or the provided CMake files.  Both automatically build from
-the directory pointed to by `SRCDIR`/`LITES_SRC_DIR` when it is present.
-Set these variables to override the default location.  The tools recognise an
+`Makefile.new` or the provided CMake files.  Both build from the directory
+specified by `SRCDIR`/`LITES_SRC_DIR`.  Set this variable to point at the
+legacy source tree.  The tools recognise an
 `ARCH` variable which selects the target CPU.  Supported values include the
 64‑bit `x86_64` and `riscv64`, 32‑bit `i686`, `arm` and `powerpc`, and the
 16‑bit `ia16`.  The default is `ARCH=x86_64`.

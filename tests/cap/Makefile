@@ -2,7 +2,10 @@ CC ?= clang
 # Additional compile flags from the top-level build system are appended.
 CFLAGS += -std=gnu23 -Wall -Wextra -Werror
 CPPFLAGS += -I../../include
-SRC_DIR ?= ../../src-lites-1.1-2025
+ifndef LITES_SRC_DIR
+$(error LITES_SRC_DIR must be set)
+endif
+SRC_DIR := $(LITES_SRC_DIR)
 ifneq ($(wildcard $(SRC_DIR)/include),)
 CPPFLAGS += -I$(SRC_DIR)/include
 endif
