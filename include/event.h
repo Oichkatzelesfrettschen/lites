@@ -49,11 +49,14 @@ typedef enum {
 #  define EV_CHECK_STACK(_str)	do {} while(0)
 #endif
 
+struct Event;
+typedef struct Event *Event;
+typedef void (*EvFunc)(Event, void *);
 
 typedef struct Event {
-    struct Event *next, *prev;
+    Event next, prev;
     unsigned 	deltat;
-    void	(* func)();
+    EvFunc func;
     VOID	*arg;
     EvState	state;
     unsigned 	flags;
@@ -63,11 +66,10 @@ typedef struct Event {
     Bind	bind;
     VOID	*earlyStack;
 #endif
-} *Event;
+};
 
 
 
-typedef void (*EvFunc)(Event, void *);
 
 /* schedule an event that executes f w/ argument a after delay t usec; */
 /* t may equal 0, which implies createprocess */
