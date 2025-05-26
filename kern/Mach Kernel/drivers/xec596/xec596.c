@@ -4,8 +4,10 @@
  *
  * Derived from the Mach Intel 82586 driver for the PC.
  *
- * TODO:
- *	Go native
+ *
+ * Access to the Intel 82596 is now performed via direct
+ * memory-mapped register reads and writes.
+ *
  */
 /*
  * HISTORY
@@ -201,6 +203,17 @@ WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include	<hpsgc/if_i596var.h>
 
 #define LAN_BUFF_SIZE	(0x4000 + 16)
+/* Accessor helpers for native 82596 mode */
+
+
+static inline uint32_t xec596_read32(volatile void *base, unsigned off)
+{
+    return *((volatile uint32_t *)((volatile char *)base + off));
+}
+static inline void xec596_write32(volatile void *base, unsigned off, uint32_t val)
+{
+    *((volatile uint32_t *)((volatile char *)base + off)) = val;
+}
 
 #define pc586chatt(unit)  pc_softc[unit].hwaddr->attn = 0
 #define pc586inton(unit)  aspitab(INT_LAN, SPLLAN, pc586intr, unit, 0)
