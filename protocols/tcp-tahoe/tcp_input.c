@@ -31,6 +31,7 @@
 #include "tcp_var.h"
 #include "tcpip.h"
 #include "tcp_debug.h"
+#include <profile.h>
 
 #define CANTRCVMORE(so) (sototcpst(so)->closed & 2)
 
@@ -1255,7 +1256,6 @@ dropwithreset:
 drop:
 	xTrace1(tcpp, 4, "tcp_input:  drop on %X", tp);
 	if (options) {
-		xFree(options);
 		options = 0;
 	}
 	/*
@@ -1278,6 +1278,8 @@ tcp_dooptions(tp, options, option_len, tHdr)
 	int	      option_len;
 	struct tcphdr *tHdr;
 {
+        PROFILE_DECLARE(tcp_dooptions);
+        PROFILE_START(tcp_dooptions);
 	register u_char *cp;
 	int opt, optlen, cnt;
 
@@ -1310,6 +1312,7 @@ tcp_dooptions(tp, options, option_len, tHdr)
 			break;
 		}
 	}
+        PROFILE_END(tcp_dooptions);
 	xFree(options);
 }
 

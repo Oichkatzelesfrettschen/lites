@@ -78,6 +78,7 @@ SOFTWARE.
 #include <netiso/clnp_stat.h>
 #include <netiso/argo_debug.h>
 #include "simd.h"
+#include <profile.h>
 
 #ifdef	ARGO_DEBUG
 
@@ -142,6 +143,8 @@ static char letters[] = "0123456789abcdef";
 char *
 clnp_hexp(char *src, int len, char *where)
 {
+    PROFILE_DECLARE(clnp_hexp);
+    PROFILE_START(clnp_hexp);
 #if LITES_HAVE_SSE
     static const char lut[16] = "0123456789abcdef";
     while (len >= 16) {
@@ -181,6 +184,7 @@ clnp_hexp(char *src, int len, char *where)
         *where++ = letters[j >> 4];
         *where++ = letters[j & 0x0f];
     }
+    PROFILE_END(clnp_hexp);
     return where;
 }
 

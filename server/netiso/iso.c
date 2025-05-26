@@ -83,6 +83,8 @@ SOFTWARE.
 #include <net/route.h>
 
 #include <netiso/iso.h>
+#include <simd_utils.h>
+#include <profile.h>
 #include <netiso/iso_var.h>
 #include <netiso/iso_snpac.h>
 #include <netiso/iso_pcb.h>
@@ -113,6 +115,8 @@ void	llc_rtrequest();
 iso_addrmatch1(isoaa, isoab)
 register struct iso_addr *isoaa, *isoab;		/* addresses to check */
 {
+    PROFILE_DECLARE(iso_addrmatch1);
+    PROFILE_START(iso_addrmatch1);
 	u_int	compare_len;
 
 	IFDEBUG(D_ROUTE)
@@ -128,7 +132,8 @@ register struct iso_addr *isoaa, *isoab;		/* addresses to check */
 		IFDEBUG(D_ROUTE)
 			printf("iso_addrmatch1: returning false because of lengths\n");
 		ENDDEBUG
-		return 0;
+               PROFILE_END(iso_addrmatch1);
+               return 0;
 	}
 	
 #ifdef notdef
@@ -152,14 +157,18 @@ register struct iso_addr *isoaa, *isoab;		/* addresses to check */
 			printf("<%x=%x>", a[i]&0xff, b[i]&0xff);
 			if (a[i] != b[i]) {
 				printf("\naddrs are not equal at byte %d\n", i);
-				return(0);
+                                PROFILE_END(iso_addrmatch1);
+                                return(0);
 			}
 		}
 		printf("\n");
 		printf("addrs are equal\n");
-		return (1);
+                PROFILE_END(iso_addrmatch1);
+                return (1);
 	ENDDEBUG
-	return (!bcmp(isoaa->isoa_genaddr, isoab->isoa_genaddr, compare_len));
+       int res = simd_bcmp(isoaa->isoa_genaddr, isoab->isoa_genaddr, compare_len);
+       PROFILE_END(iso_addrmatch1);
+       return (!res);
 }
 
 /*

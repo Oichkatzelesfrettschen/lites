@@ -28,6 +28,8 @@
 #include "tcp_timer.h"
 #include "tcp_var.h"
 #include "tcpip.h"
+#include <unroll.h>
+#include <profile.h>
 
 
 char *prurequests[] = {
@@ -898,14 +900,18 @@ tcpSemSignal( ts )
 
 void
 tcpVAll( ts )
-    TcpSem	*ts;
+    TcpSem      *ts;
 {
-    int i, n;
+    PROFILE_DECLARE(tcpVAll);
+    PROFILE_START(tcpVAll);
+    int i = 0, n;
 
-    n=ts->waitCount;
-    for ( i=0; i < n; i++ ) {
-	semSignal(&ts->s);
-    }
+    n = ts->waitCount;
+    /* Unroll signals four at a time to reduce loop overhead while
+       keeping register usage modest. */
+    UNROLL4_LOOP(i, n, semSignal(&ts->s));
+    PROFILE_END(tcpVAll);
+}
 }
 
 
