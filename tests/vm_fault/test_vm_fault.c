@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "../../src-lites-1.1-2025/include/vm.h"
+#include "vm.h"
 
 extern kern_return_t vm_fault_entry(aspace_t *, vm_offset_t, vm_prot_t);
 extern kern_return_t unmap_frame(aspace_t *, vm_offset_t);
@@ -21,7 +21,14 @@ int main(void) {
         close(sv[0]);
         char fdstr[16];
         snprintf(fdstr, sizeof(fdstr), "%d", sv[1]);
-        execl("./src-lites-1.1-2025/bin/user_pager/user_pager", "user_pager", fdstr, NULL);
+        const char *src = getenv("LITES_SRC_DIR");
+        char path[256];
+        if (src) {
+            snprintf(path, sizeof(path), "%s/bin/user_pager/user_pager", src);
+        } else {
+            snprintf(path, sizeof(path), "bin/user_pager/user_pager");
+        }
+        execl(path, "user_pager", fdstr, NULL);
         perror("execl");
         _exit(1);
     }

@@ -4,8 +4,10 @@ ARCH ?= x86_64
 # Disable glibc fortify since we override libc functions
 CFLAGS += -std=gnu23 -Wall -Wextra -Werror -U_FORTIFY_SOURCE
 # Include the common and architecture specific headers from the modernised tree
-CPPFLAGS += -I../../src-lites-1.1-2025/include \
-           -I../../src-lites-1.1-2025/include/$(ARCH)
+SRC_DIR ?= ../../src-lites-1.1-2025
+ifneq ($(wildcard $(SRC_DIR)/include),)
+CPPFLAGS += -I$(SRC_DIR)/include -I$(SRC_DIR)/include/$(ARCH)
+endif
 
 all:
 @echo "fifo test disabled"

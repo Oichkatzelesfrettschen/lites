@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SRC_DIR="${LITES_SRC_DIR:-src-lites-1.1-2025}"
+
 found=0
 while IFS= read -r file; do
   while IFS=: read -r num line; do
@@ -12,6 +14,6 @@ while IFS= read -r file; do
       fi
     fi
   done < <(grep -nE '^[A-Za-z_].*\)\s*$' "$file")
-done < <(find src-lites-1.1-2025/xkernel/util -type f -name '*.c' -not -path '*/gmake-3.66/*')
+done < <(find "$SRC_DIR/xkernel/util" -type f -name '*.c' -not -path '*/gmake-3.66/*' 2>/dev/null)
 
 exit $found

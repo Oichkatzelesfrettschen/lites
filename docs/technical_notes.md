@@ -13,7 +13,7 @@ To experiment with cross compilation or multiple architectures, see the
 `setup.sh` script in the repository root. It installs a full toolchain and
 qemu-based emulation targets.
 
-The modernized sources in `src-lites-1.1-2025` require a compiler with full
+The modernized sources require a compiler with full
 C23 support. GCC 13 or Clang 17 (or newer) are known to work.
 
 
@@ -23,7 +23,7 @@ A repository-wide `.editorconfig` enforces UTF‑8 encoding, LF line endings and
 
 ## User-level pager
 
-`src-lites-1.1-2025/bin/user_pager` implements a trivial pager used by the unit
+`bin/user_pager` in the source tree implements a trivial pager used by the unit
 tests.  It reads `pf_info_t` structures from a UNIX domain socket and simply
 acknowledges each request, leaving the kernel side to map zero-filled pages.
 The VM tests spawn the pager automatically.

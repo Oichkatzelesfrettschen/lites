@@ -1,6 +1,6 @@
 # Modernization Status
 
-The `src-lites-1.1-2025` tree contains ongoing work to bring the
+The modernised tree (`$LITES_SRC_DIR` by default) contains ongoing work to bring the
 original Lites sources forward.  This document summarises what has
 already been completed and what is still planned.
 
