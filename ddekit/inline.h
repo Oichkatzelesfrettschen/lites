@@ -1,2 +1,2 @@
-#define DDEKIT_INLINE __inline__ __attribute__((always_inline))
+#define DDEKIT_INLINE __inline__ [[gnu::always_inline]]
 

@@ -32,13 +32,13 @@
 # define NORET_AND     /**/
 #else
 # define NORET_TYPE    /**/
-# define ATTRIB_NORET  __attribute__((noreturn))
+# define ATTRIB_NORET  [[noreturn]]
 # define NORET_AND     noreturn,
 #endif
 
 extern void math_error(void);
-NORET_TYPE void panic(const char * fmt, ...)
-	__attribute__ ((NORET_AND format (printf, 1, 2)));
+NORET_TYPE [[noreturn]] void panic(const char * fmt, ...)
+        [[gnu::format(printf, 1, 2)]];
 NORET_TYPE void do_exit(long error_code)
 	ATTRIB_NORET;
 extern unsigned long simple_strtoul(const char *,char **,unsigned int);
@@ -56,7 +56,7 @@ extern int kill_pg(int pgrp, int sig, int priv);
 extern int kill_sl(int sess, int sig, int priv);
 
 asmlinkage int printk(const char * fmt, ...)
-	__attribute__ ((format (printf, 1, 2)));
+        [[gnu::format(printf, 1, 2)]];
 
 /*
  * This is defined as a macro, but at some point this might become a

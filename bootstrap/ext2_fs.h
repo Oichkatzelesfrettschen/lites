@@ -337,7 +337,7 @@ struct ext2_dir_entry {
 # define NORET_AND     /**/
 #else
 # define NORET_TYPE    /**/
-# define ATTRIB_NORET  __attribute__((noreturn))
+# define ATTRIB_NORET  [[noreturn]]
 # define NORET_AND     noreturn,
 #endif
 
@@ -418,12 +418,12 @@ extern int ext2_rename (struct inode *, const char *, int,
 
 /* super.c */
 extern void ext2_error (struct super_block *, const char *, const char *, ...)
-	__attribute__ ((format (printf, 3, 4)));
+        [[gnu::format(printf, 3, 4)]];
 extern NORET_TYPE void ext2_panic (struct super_block *, const char *,
-				   const char *, ...)
-	__attribute__ ((NORET_AND format (printf, 3, 4)));
+                                   const char *, ...)
+        [[noreturn]] [[gnu::format(printf, 3, 4)]];
 extern void ext2_warning (struct super_block *, const char *, const char *, ...)
-	__attribute__ ((format (printf, 3, 4)));
+        [[gnu::format(printf, 3, 4)]];
 extern void ext2_put_super (struct super_block *);
 extern void ext2_write_super (struct super_block *);
 extern int ext2_remount (struct super_block *, int *, char *);

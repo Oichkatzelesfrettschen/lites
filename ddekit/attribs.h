@@ -6,8 +6,8 @@
 
 #else
 
-#define DDEKIT_USED        __attribute__((used))
-#define DDEKIT_CONSTRUCTOR __attribute__((constructor))
+#define DDEKIT_USED        [[gnu::used]]
+#define DDEKIT_CONSTRUCTOR [[gnu::constructor]]
 
 
 #define DDEKIT_PUBLIC PUBLIC
