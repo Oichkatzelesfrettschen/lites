@@ -235,3 +235,8 @@ from the repository into `$LITES_SRC_DIR/include/all_headers` while
 preserving their original relative paths. This operation is destructive and
 should only be run for analysis purposes.
 
+
+## License map
+The script `scripts/gen-license-map.sh` scans all source files and produces `LICENSE_MAP`.
+Each line contains the path, detected license type, origin and last modification timestamp.
+New files contain a short header referring to this map instead of duplicating the full license text.
