@@ -1,6 +1,6 @@
 # IOMMU helpers
 
-A minimal IOMMU abstraction lives in `src-lites-1.1-2025/iommu`.
+A minimal IOMMU abstraction lives in `iommu/` within the source tree.
 
 ```c
 struct iommu_dom {

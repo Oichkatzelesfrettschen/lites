@@ -1,8 +1,11 @@
 CC ?= clang
 ARCH ?= x86_64
 CFLAGS += -std=gnu23 -Wall -Wextra -Werror
-CPPFLAGS += -I../../src-lites-1.1-2025/include \
-           -I../../src-lites-1.1-2025/include/$(ARCH)
+SRC_DIR ?= ../../src-lites-1.1-2025
+CPPFLAGS += -I../../include
+ifneq ($(wildcard $(SRC_DIR)/include),)
+CPPFLAGS += -I$(SRC_DIR)/include -I$(SRC_DIR)/include/$(ARCH)
+endif
 
 all:
 @echo "posix test disabled"

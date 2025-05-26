@@ -1,8 +1,8 @@
 # POSIX helpers
 
 A small collection of convenience wrappers lives in
-`src-lites-1.1-2025/liblites/posix_wrap.c` and the associated header
-`src-lites-1.1-2025/include/posix_wrap.h`.
+`liblites/posix_wrap.c` and the associated header
+`include/posix_wrap.h` within the project source tree.
 
 ```c
 int lx_link(const char *oldpath, const char *newpath);
@@ -50,6 +50,6 @@ int main(void) {
 Compile manually with:
 
 ```sh
-cc -I src-lites-1.1-2025/include \
-    src-lites-1.1-2025/liblites/posix_wrap.c bin/posix-demo.c -o posix-demo
+cc -I "$LITES_SRC_DIR/include" \
+    "$LITES_SRC_DIR/liblites/posix_wrap.c" bin/posix-demo.c -o posix-demo
 ```

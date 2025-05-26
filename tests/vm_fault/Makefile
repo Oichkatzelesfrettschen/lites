@@ -6,8 +6,16 @@ all: test_vm_fault
 
 .PHONY: all clean
 
-test_vm_fault: test_vm_fault.c ../../src-lites-1.1-2025/server/vm/vm_handlers.c ../../posix.c
-	    $(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+SRC_DIR ?= ../../src-lites-1.1-2025
+VM_SRC := $(SRC_DIR)/server/vm/vm_handlers.c
+ifneq ($(wildcard $(VM_SRC)),)
+VM_PATH := $(VM_SRC)
+else
+VM_PATH := ../../server/vm/vm_handlers.c
+endif
+
+test_vm_fault: test_vm_fault.c $(VM_PATH) ../../posix.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
 	rm -f test_vm_fault

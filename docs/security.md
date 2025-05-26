@@ -22,7 +22,7 @@ standard cipher such as AES, potentially using the OpenSSL library.
 
 ## Enclave
 
-`src-lites-1.1-2025/liblites/enclave.c` provides example enclave hooks.
+`liblites/enclave.c` in the source tree provides example enclave hooks.
 
 ```c
 int enclave_create(const char *name);
@@ -42,6 +42,6 @@ Two small utilities under `bin/` demonstrate the APIs:
 They can be compiled manually, for example:
 
 ```sh
-cc -I src-lites-1.1-2025/include crypto/keystore.c bin/keystore-demo.c -o keystore-demo
-cc -I src-lites-1.1-2025/include src-lites-1.1-2025/liblites/enclave.c bin/enclave-demo.c -o enclave-demo
+cc -I "$LITES_SRC_DIR/include" crypto/keystore.c bin/keystore-demo.c -o keystore-demo
+cc -I "$LITES_SRC_DIR/include" "$LITES_SRC_DIR/liblites/enclave.c" bin/enclave-demo.c -o enclave-demo
 ```

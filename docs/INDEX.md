@@ -4,7 +4,7 @@ The `docs/` directory contains notes and background information for the project.
 
 - **HISTORY.md** - Overview of available Lites releases and helper script for generating diffs between them.
 - **IPC.md** - Describes the mailbox-based interprocess communication helpers.
-- **MODERNIZATION.md** - Summarises the modernization progress in `src-lites-1.1-2025`.
+- **MODERNIZATION.md** - Summarises the modernization progress in the project source tree.
 - **POSIX.md** - Documents small convenience wrappers for POSIX operations.
 - **POSIX_ROADMAP.md** - Roadmap for staged implementation of POSIX compatibility.
 - **iommu.md** - Notes on the minimal IOMMU abstraction present in the source tree.

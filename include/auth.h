@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "../src-lites-1.1-2025/include/cap.h"
+#include "cap.h"
 #include "id128.h"
 
 typedef struct cap cap_t;
