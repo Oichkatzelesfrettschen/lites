@@ -1,4 +1,4 @@
-Checks: '-*,clang-analyzer-*'
+Checks: '-*,clang-analyzer-*,modernize-use-nodiscard'
 WarningsAsErrors: ''
 ExtraArgs: ['-std=c23']
 ExtraArgsCC: ['-std=c++17']

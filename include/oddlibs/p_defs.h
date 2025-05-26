@@ -74,18 +74,14 @@
  * these work for GNU C++ (modulo a slight glitch in the C++ grammar
  * in the distribution version of 2.5.5).
  */
-#if !defined(__GNUC__) || __GNUC__ < 2
-#define	__attribute__(x)	/* delete __attribute__ if non-gcc or gcc1 */
-#if defined(__GNUC__) && !defined(__STRICT_ANSI__)
-#define	__dead		__volatile
-#define	__pure		__const
-#endif
-#endif
-
-/* Delete pseudo-keywords wherever they are not available or needed. */
-#ifndef __dead
-#define	__dead
-#define	__pure
+#if defined(__cplusplus) && __cplusplus >= 201103L
+#define __dead [[noreturn]]
+#define __pure [[nodiscard]]
+#define __maybe_unused [[maybe_unused]]
+#else
+#define __dead
+#define __pure
+#define __maybe_unused
 #endif
 
 #endif /* !_CDEFS_H_ */
