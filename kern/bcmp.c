@@ -41,11 +41,9 @@ static char *rcsid = "$Id: bcmp.c,v 1.3 1993/08/26 00:51:35 jtc Exp $";
 /*
  * bcmp -- vax cmpc3 instruction
  */
-bcmp(b1, b2, length)
-	const void *b1, *b2;
-	register size_t length;
+int bcmp(const void *b1, const void *b2, size_t length)
 {
-	register char *p1, *p2;
+        char *p1, *p2;
 
 	if (length == 0)
 		return(0);
