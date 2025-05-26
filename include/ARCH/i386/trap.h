@@ -1,4 +1,8 @@
 #pragma once
+
+/* Hardware trap vector definitions from the Mach kernel */
+#include "mach/machine/trap.h"
+
 /*-
  * Copyright (c) 1990, 1993
  *	The Regents of the University of California.  All rights reserved.

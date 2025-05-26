@@ -78,21 +78,22 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
     set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
 else()
-    set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3")
+    # Default to the repository root for the Lites sources
+    set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
 
 # Ensure an include/machine symlink exists before collecting sources.
-if(EXISTS "${LITES_SRC_DIR}/include")
-    if(NOT EXISTS "${LITES_SRC_DIR}/include/machine")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/machine")
         set(_machine_arch "${ARCH}")
         if(_machine_arch STREQUAL "i686")
             set(_machine_arch "i386")
         endif()
-        if(EXISTS "${LITES_SRC_DIR}/include/ARCH/${_machine_arch}")
+        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/${_machine_arch}")
             execute_process(
                 COMMAND "${CMAKE_COMMAND}" -E create_symlink "ARCH/${_machine_arch}" "machine"
-                WORKING_DIRECTORY "${LITES_SRC_DIR}/include")
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
         endif()
     endif()
 endif()
@@ -162,8 +163,8 @@ if(EXISTS "${LITES_SRC_DIR}")
 
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
-        "${LITES_SRC_DIR}/include"
-        "${LITES_SRC_DIR}/include/ARCH"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH"
         "${LITES_SRC_DIR}/server"
         "${LITES_SRC_DIR}/iommu"
         "${MACH_INCLUDE_DIR}"
@@ -172,22 +173,22 @@ if(EXISTS "${LITES_SRC_DIR}")
         "${CMAKE_CURRENT_SOURCE_DIR}/include")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/x86_64")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/x86_64")
     elseif(ARCH STREQUAL "i686")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/i386")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/i386")
     elseif(ARCH STREQUAL "arm")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/arm")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/arm")
     elseif(ARCH STREQUAL "riscv64")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/riscv64")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/riscv64")
     elseif(ARCH STREQUAL "powerpc")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/powerpc")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/powerpc")
     elseif(ARCH STREQUAL "ia16")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ARCH/ia16")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/ia16")
     endif()
     target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
@@ -199,8 +200,8 @@ if(EXISTS "${LITES_SRC_DIR}")
     if(EMULATOR_SRC)
         add_executable(lites_emulator ${EMULATOR_SRC})
         target_include_directories(lites_emulator PRIVATE
-            "${LITES_SRC_DIR}/include"
-            "${LITES_SRC_DIR}/include/ARCH"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH"
             "${LITES_SRC_DIR}/emulator"
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
@@ -210,22 +211,22 @@ if(EXISTS "${LITES_SRC_DIR}")
 
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/x86_64")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/x86_64")
         elseif(ARCH STREQUAL "i686")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/i386")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/i386")
         elseif(ARCH STREQUAL "arm")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/arm")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/arm")
         elseif(ARCH STREQUAL "riscv64")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/riscv64")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/riscv64")
         elseif(ARCH STREQUAL "powerpc")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/powerpc")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/powerpc")
         elseif(ARCH STREQUAL "ia16")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ARCH/ia16")
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/ARCH/ia16")
         endif()
         target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
