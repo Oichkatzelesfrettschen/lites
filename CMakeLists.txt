@@ -89,9 +89,9 @@ if(EXISTS "${LITES_SRC_DIR}/include")
         if(_machine_arch STREQUAL "i686")
             set(_machine_arch "i386")
         endif()
-        if(EXISTS "${LITES_SRC_DIR}/include/${_machine_arch}")
+        if(EXISTS "${LITES_SRC_DIR}/include/ARCH/${_machine_arch}")
             execute_process(
-                COMMAND "${CMAKE_COMMAND}" -E create_symlink "${_machine_arch}" "machine"
+                COMMAND "${CMAKE_COMMAND}" -E create_symlink "ARCH/${_machine_arch}" "machine"
                 WORKING_DIRECTORY "${LITES_SRC_DIR}/include")
         endif()
     endif()
@@ -163,6 +163,7 @@ if(EXISTS "${LITES_SRC_DIR}")
     add_executable(lites_server ${SERVER_SRC})
     target_include_directories(lites_server PRIVATE
         "${LITES_SRC_DIR}/include"
+        "${LITES_SRC_DIR}/include/ARCH"
         "${LITES_SRC_DIR}/server"
         "${LITES_SRC_DIR}/iommu"
         "${MACH_INCLUDE_DIR}"
@@ -171,22 +172,22 @@ if(EXISTS "${LITES_SRC_DIR}")
         "${CMAKE_CURRENT_SOURCE_DIR}/include")
     if(ARCH STREQUAL "x86_64")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/x86_64")
+            "${LITES_SRC_DIR}/include/ARCH/x86_64")
     elseif(ARCH STREQUAL "i686")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/i386")
+            "${LITES_SRC_DIR}/include/ARCH/i386")
     elseif(ARCH STREQUAL "arm")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/arm")
+            "${LITES_SRC_DIR}/include/ARCH/arm")
     elseif(ARCH STREQUAL "riscv64")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/riscv64")
+            "${LITES_SRC_DIR}/include/ARCH/riscv64")
     elseif(ARCH STREQUAL "powerpc")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/powerpc")
+            "${LITES_SRC_DIR}/include/ARCH/powerpc")
     elseif(ARCH STREQUAL "ia16")
         target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ia16")
+            "${LITES_SRC_DIR}/include/ARCH/ia16")
     endif()
     target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
     target_link_options(lites_server PRIVATE ${LDFLAGS})
@@ -199,6 +200,7 @@ if(EXISTS "${LITES_SRC_DIR}")
         add_executable(lites_emulator ${EMULATOR_SRC})
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
+            "${LITES_SRC_DIR}/include/ARCH"
             "${LITES_SRC_DIR}/emulator"
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
@@ -208,22 +210,22 @@ if(EXISTS "${LITES_SRC_DIR}")
 
         if(ARCH STREQUAL "x86_64")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/x86_64")
+                "${LITES_SRC_DIR}/include/ARCH/x86_64")
         elseif(ARCH STREQUAL "i686")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/i386")
+                "${LITES_SRC_DIR}/include/ARCH/i386")
         elseif(ARCH STREQUAL "arm")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/arm")
+                "${LITES_SRC_DIR}/include/ARCH/arm")
         elseif(ARCH STREQUAL "riscv64")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/riscv64")
+                "${LITES_SRC_DIR}/include/ARCH/riscv64")
         elseif(ARCH STREQUAL "powerpc")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/powerpc")
+                "${LITES_SRC_DIR}/include/ARCH/powerpc")
         elseif(ARCH STREQUAL "ia16")
             target_include_directories(lites_emulator PRIVATE
-                "${LITES_SRC_DIR}/include/ia16")
+                "${LITES_SRC_DIR}/include/ARCH/ia16")
         endif()
         target_compile_options(lites_emulator PRIVATE ${C23_FLAG} ${CFLAGS})
         target_link_options(lites_emulator PRIVATE ${LDFLAGS})
