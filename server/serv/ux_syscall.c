@@ -45,6 +45,7 @@
 #include <serv/server_defs.h>
 #include <serv/syscall_subr.h>
 #include "auth.h"
+#include "id128.h"
 
 extern struct sysent	sysent[];
 int			nsysent;
@@ -148,7 +149,7 @@ ux_generic_server(mach_msg_header_t *InHeadP, mach_msg_header_t *OutHeadP)
 	static struct cap ipc_cap = {0};
 	ipc_cap.rights = 0xffffffff;
 	ipc_cap.epoch = 1;
-	if (!authorize(&ipc_cap, syscode, 0)) {
+        if (!authorize(&ipc_cap, syscode, id128_from_u64(0))) {
 	    rep->retcode = EPERM;
 	    return TRUE;
 	}

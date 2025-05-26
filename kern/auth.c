@@ -6,7 +6,7 @@
 static acl_entry_t acl_table[MAX_ACL];
 static int acl_count;
 
-void acl_add(const cap_t *subject, uint32_t op, uint64_t obj)
+void acl_add(const cap_t *subject, uint32_t op, id128_t obj)
 {
     if (acl_count < MAX_ACL) {
         acl_table[acl_count].subject = subject;
@@ -16,7 +16,7 @@ void acl_add(const cap_t *subject, uint32_t op, uint64_t obj)
     }
 }
 
-int authorize(const cap_t *subject, uint32_t op, uint64_t obj)
+int authorize(const cap_t *subject, uint32_t op, id128_t obj)
 {
     for (int i = 0; i < acl_count; ++i) {
         if (acl_table[i].subject == subject &&

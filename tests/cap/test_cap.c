@@ -1,8 +1,8 @@
 #include "../../src-lites-1.1-2025/include/cap.h"
 #include <assert.h>
 #include <stdlib.h>
-#include "../../src-lites-1.1-2025/include/cap.h"
 #include "../../include/auth.h"
+#include "../../include/id128.h"
 
 
 static void test_refine_basic(void) {
@@ -10,11 +10,11 @@ static void test_refine_basic(void) {
     root.rights = 0xff;
     root.epoch = 1;
 
-    acl_add(&root, CAP_OP_REFINE, 0x0f);
-    acl_add(&root, CAP_OP_REVOKE, 0);
+    acl_add(&root, CAP_OP_REFINE, id128_from_u64(0x0f));
+    acl_add(&root, CAP_OP_REVOKE, id128_from_u64(0));
     struct cap *child = cap_refine(&root, 0x0f, 0);
     assert(child);
-    acl_add(child, CAP_OP_REVOKE, 0);
+    acl_add(child, CAP_OP_REVOKE, id128_from_u64(0));
     assert(child->parent == &root);
     assert(child->rights == 0x0f);
     assert(child->epoch == root.epoch);
@@ -39,16 +39,16 @@ static void test_revoke_epoch_propagation(void) {
     root.rights = 0xff;
     root.epoch = 10;
 
-    acl_add(&root, CAP_OP_REFINE, 0x0f);
-    acl_add(&root, CAP_OP_REVOKE, 0);
+    acl_add(&root, CAP_OP_REFINE, id128_from_u64(0x0f));
+    acl_add(&root, CAP_OP_REVOKE, id128_from_u64(0));
 
     struct cap *child = cap_refine(&root, 0x0f, 0);
     assert(child);
-    acl_add(child, CAP_OP_REFINE, 0x01);
-    acl_add(child, CAP_OP_REVOKE, 0);
+    acl_add(child, CAP_OP_REFINE, id128_from_u64(0x01));
+    acl_add(child, CAP_OP_REVOKE, id128_from_u64(0));
     struct cap *grand = cap_refine(child, 0x01, 0);
     assert(grand);
-    acl_add(grand, CAP_OP_REVOKE, 0);
+    acl_add(grand, CAP_OP_REVOKE, id128_from_u64(0));
 
     revoke_capability(&root);
     assert(root.epoch == 11);
