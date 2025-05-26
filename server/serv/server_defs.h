@@ -1,14 +1,14 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1994 Johannes Helander
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * JOHANNES HELANDER ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  JOHANNES HELANDER DISCLAIMS ANY LIABILITY OF ANY KIND
  * FOR ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
@@ -20,7 +20,7 @@
  * lites-950323 from jvh.
  *
  */
-/* 
+/*
  *	File:	server_defs.h
  *	Author:	Johannes Helander, Helsinki University of Technology, 1994.
  *	Date:	February 1994
@@ -45,21 +45,19 @@
 #include <sys/cmu_queue.h>
 #include <sys/zalloc.h>
 
+#include <serv/port_object.h>
+#include <serv/timer.h>
 #include <sys/cdefs.h>
-#include <stdnoreturn.h>
 #include <sys/errno.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <sys/types.h>
+#include <sys/parallel.h>
 #include <sys/param.h>
+#include <sys/proc.h>
+#include <sys/resource.h>
+#include <sys/resourcevar.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <sys/ucred.h>
 #include <sys/uio.h>
-#include <sys/ucred.h>
-#include <sys/resourcevar.h>
-#include <sys/proc.h>
-#include <serv/timer.h>
-#include <serv/port_object.h>
-#include <sys/parallel.h>
 #include <sys/vnode.h>
 
 /* TYPES */
@@ -67,7 +65,7 @@
 /* PROTOTYPES */
 
 /* serv_fork.c */
-struct proc * newproc(struct proc *, boolean_t, boolean_t);
+struct proc *newproc(struct proc *, boolean_t, boolean_t);
 
 /* proc_to_task.c */
 mach_port_t task_to_proc_enter(task_t, struct proc *);
@@ -89,26 +87,21 @@ void thread_remove_reverse(struct proc *p, mach_port_t port);
 
 /* server_exec.c */
 int machid_register_process(struct proc *);
-mach_error_t secure_execve(struct proc *, char *, vm_address_t, vm_size_t,
-			   int, int);
-mach_error_t after_exec(struct proc *, vm_address_t *, vm_size_t *, int *,
-			int *, char *, mach_msg_type_number_t *, char *,
-			mach_msg_type_number_t *, char *,
-			mach_msg_type_number_t *, char *,
-			mach_msg_type_number_t *, mach_port_t *);
-
+mach_error_t secure_execve(struct proc *, char *, vm_address_t, vm_size_t, int, int);
+mach_error_t after_exec(struct proc *, vm_address_t *, vm_size_t *, int *, int *, char *,
+                        mach_msg_type_number_t *, char *, mach_msg_type_number_t *, char *,
+                        mach_msg_type_number_t *, char *, mach_msg_type_number_t *, mach_port_t *);
 
 void *malloc(size_t);
 void free(void *);
 
 /* vm_syscalls.c */
-kern_return_t mmap_vm_map(struct proc *, vm_address_t, vm_size_t, boolean_t,
-			  mach_port_t, vm_offset_t, boolean_t, vm_prot_t,
-			  vm_prot_t, vm_inherit_t, vm_address_t *);
+kern_return_t mmap_vm_map(struct proc *, vm_address_t, vm_size_t, boolean_t, mach_port_t,
+                          vm_offset_t, boolean_t, vm_prot_t, vm_prot_t, vm_inherit_t,
+                          vm_address_t *);
 
-mach_error_t file_vm_map(struct proc *, vm_address_t *, vm_size_t,
-			 vm_address_t, boolean_t, struct file *, vm_offset_t,
-			 boolean_t, vm_prot_t, vm_prot_t, vm_inherit_t);
+mach_error_t file_vm_map(struct proc *, vm_address_t *, vm_size_t, vm_address_t, boolean_t,
+                         struct file *, vm_offset_t, boolean_t, vm_prot_t, vm_prot_t, vm_inherit_t);
 
 /* GLOBALS */
 extern mach_port_t default_pager_port;
