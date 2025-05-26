@@ -11,11 +11,40 @@ set -x
 
 export DEBIAN_FRONTEND=noninteractive
 
+# Parse command line options
+OFFLINE=false
+for arg in "$@"; do
+  case "$arg" in
+    --offline)
+      OFFLINE=true
+      ;;
+  esac
+done
+
 if ! apt-get update -y; then
   echo "apt-get update failed" >> "$FAIL_LOG"
 fi
 if ! apt-get dist-upgrade -y; then
   echo "apt-get dist-upgrade failed" >> "$FAIL_LOG"
+fi
+
+OPENMACH_REPO=${OPENMACH_REPO:-https://github.com/machkernel/openmach.git}
+
+if $OFFLINE; then
+  echo "Running in offline mode" >> "$LOG"
+  if ls offline_packages/*.deb >/dev/null 2>&1; then
+    dpkg -i offline_packages/*.deb || echo "dpkg install failed" >> "$FAIL_LOG"
+  else
+    echo "No offline packages to install" >> "$LOG"
+  fi
+else
+  if [[ ! -d openmach ]]; then
+    if git clone "$OPENMACH_REPO" openmach; then
+      echo "Cloned OpenMach from $OPENMACH_REPO" >> "$LOG"
+    else
+      echo "Failed to clone OpenMach from $OPENMACH_REPO" >> "$FAIL_LOG"
+    fi
+  fi
 fi
 
 install_pkg() {
