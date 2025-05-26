@@ -15,7 +15,6 @@
 #include "join_i.h"
 
 
-#ifdef __STDC__
 
 static XObj		joinCreateSessn( XObj, XObj, XObj, XObj);
 static XObj 		joinCreateTagSessn (XObj, XObj, XObj, XObj, char *, int);
@@ -43,35 +42,7 @@ static void 		joinHdrStore(VOID *, char *, long int, VOID *);
 static int 		isOrderValid( int *, int);
 static void 		processRomFile(XObj);
 
-#else
 
-static XObj		joinCreateSessn();
-static XObj 		joinCreateTagSessn ();
-static void		joinSessnInit();
-static void		joinTagSessnInit();
-static int		joinControlProtl();
-static xkern_return_t	joinDemux();
-static XObj		joinOpen();
-static xkern_return_t	joinOpenEnable();
-static xkern_return_t	joinOpenDisable();
-static xkern_return_t	joinOpenDone();
-static xkern_return_t	joinClose();
-static xkern_return_t	joinTagClose();
-static xmsg_handle_t	joinPush();
-static xmsg_handle_t	joinTagPush();
-static xkern_return_t	joinPop();
-static xkern_return_t	joinTagPop();
-static int		joinControlSessn();
-static int		joinTagControlSessn();
-static int 		part2ToId();
-static int 		partToId();
-static long 		joinHdrLoad1();
-static long 		joinHdrLoad2();
-static void 		joinHdrStore();
-static int 		isOrderValid( int *, int);
-static void 		processRomFile();
-
-#endif __STDC__
 
 int tracejoinp;
 

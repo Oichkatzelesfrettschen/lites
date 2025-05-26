@@ -4,18 +4,8 @@
  * terms of the GNU General Public License, see the file COPYING.
  */
 
-#if defined(__STDC__) || defined(PROTO)
-#  define OF(args)  args
-#else
-#  define OF(args)  ()
-#endif
-
-#ifdef __STDC__
-   typedef void *voidp;
-#else
-   typedef char *voidp;
-#endif
-
+#define OF(args) args
+typedef void *voidp;
 /* I don't like nested includes, but the string functions are used too often */
 #if defined(HAVE_STRING_H) || defined(STDC_HEADERS)
 #  include <string.h>
