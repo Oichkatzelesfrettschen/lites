@@ -75,18 +75,9 @@ cmake -B build -DLITES_MACH_DIR=openmach \
       -DLITES_MACH_LIB_DIR=openmach/lib
 cmake --build build
 ```
-
 ## Header inventory
 
-The repository contains many header files spread across historical trees.
-Their paths are listed in [headers_inventory.csv](headers_inventory.csv) for
-easy reference. Each row in the CSV shows the path to a header relative to the
-repository root.
-
-To gather all these headers into a single directory run
-`scripts/flatten-headers.sh`. The script copies every header into the
-`flattened_include/` directory and automatically renames duplicates by
-embedding the original path in the filename.
+Use `scripts/flatten-headers.sh` to gather all header files from across the repository. The script copies each header into the `flattened_include/` directory and automatically renames duplicates by embedding the original path in the filename.
 
 ## Building
 

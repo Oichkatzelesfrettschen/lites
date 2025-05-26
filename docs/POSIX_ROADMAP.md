@@ -12,10 +12,8 @@ missing pieces.
   `Makefile.new` and CMake support for the `src-lites-1.1-2025` tree.
   Additional tooling such as Meson is planned but not yet present.
   Cross‑compilation helpers live in `setup.sh`.
-* **Header consolidation** – The `headers_inventory.csv` file and the
-  `scripts/flatten-headers.sh` script aid in gathering headers from the
-  historical sources.  Modernisation tasks include re‑enabling
-  architectures beyond x86 and cleaning up obsolete prototypes.
+* **Header consolidation** – The `scripts/flatten-headers.sh` script gathers headers from the historical sources.
+  Modernisation tasks include re‑enabling architectures beyond x86 and cleaning up obsolete prototypes.
 * **Documentation pipeline** – Existing documentation resides under
   `docs/` with topics such as [`MODERNIZATION.md`](MODERNIZATION.md)
   and [`POSIX.md`](POSIX.md).
