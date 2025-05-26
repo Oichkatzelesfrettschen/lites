@@ -40,12 +40,10 @@ int	tcp_ttl = TCP_TTL;
  * in a skeletal tcp/ip header, minimizing the amount of work
  * necessary when the connection is used.
  */
-struct tcpiphdr *
-tcp_template(tp)
-	struct tcpcb *tp;
+struct tcpiphdr *tcp_template(struct tcpcb *tp)
 {
-	register struct inpcb *inp = tp->t_inpcb;
-	register struct tcpiphdr *n;
+        struct inpcb *inp = tp->t_inpcb;
+	struct tcpiphdr *n;
 
 	if ((n = tp->t_template) == 0) {
 		n = (struct tcpiphdr *)xMalloc(sizeof *n);
@@ -89,13 +87,8 @@ tcp_template(tp)
  * In any case the ack and sequence number of the transmitted
  * segment are as specified by the parameters.
  */
-void
-tcp_respond(tp, th, pHdr, ack, seq, flags)
-	struct tcpcb *tp;
-    	register struct tcphdr *th;
-    	register IPpseudoHdr *pHdr;
-	tcp_seq ack, seq;
-	int flags;
+void tcp_respond(struct tcpcb *tp, struct tcphdr *th, IPpseudoHdr *pHdr,
+                 tcp_seq ack, tcp_seq seq, int flags)
 {
 	int win = 0, tlen;
 	Msg m;
@@ -162,11 +155,9 @@ tcp_respond(tp, th, pHdr, ack, seq, flags)
  * protocol control block.  Assumes that the ip control block and associated
  * tcp session already exist.
  */
-struct tcpcb *
-tcp_newtcpcb(inp)
-	struct inpcb *inp;
+struct tcpcb *tcp_newtcpcb(struct inpcb *inp)
 {
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 
 	tp = (struct tcpcb *)xMalloc(sizeof *tp);
 	memset((char*)tp, 0, sizeof *tp);
@@ -195,10 +186,7 @@ tcp_newtcpcb(inp)
  * the specified error.  If connection is synchronized,
  * then send a RST to peer.
  */
-struct tcpcb *
-tcp_drop(tp, errnum)
-	register struct tcpcb *tp;
-	int errnum;
+struct tcpcb *tcp_drop(struct tcpcb *tp, int errnum)
 {
 	XObj so = tp->t_inpcb->inp_session;
 
@@ -224,11 +212,9 @@ tcp_drop(tp, errnum)
  *	discard internet protocol block
  *	wake up any sleepers
  */
-struct tcpcb *
-tcp_destroy(tp)
-	register struct tcpcb *tp;
+struct tcpcb *tcp_destroy(struct tcpcb *tp)
 {
-	register struct reass *this, *next;
+	struct reass *this, *next;
 	struct inpcb *inp;
 	XObj so;
 	PSTATE *pstate;
@@ -278,9 +264,7 @@ tcp_destroy(tp)
  * Notify a tcp user of an asynchronous error;
  * just wake up so that he can collect error status.
  */
-void
-tcp_notify(inp)
-	register struct inpcb *inp;
+void tcp_notify(struct inpcb *inp)
 {
 
 	sorwakeup(inp->inp_session);
@@ -290,10 +274,9 @@ tcp_notify(inp)
 
 #if BSD<43
 /* XXX fake routine */
-tcp_abort(inp)
-	struct inpcb *inp;
+void tcp_abort(struct inpcb *inp)
 {
-	return;
+        return;
 }
 #endif
 
@@ -301,9 +284,7 @@ tcp_abort(inp)
  * When a source quench is received, close congestion window
  * to one segment.  We will gradually open it again as we proceed.
  */
-void
-tcp_quench(inp)
-	struct inpcb *inp;
+void tcp_quench(struct inpcb *inp)
 {
 	struct tcpcb *tp = intotcpcb(inp);
 

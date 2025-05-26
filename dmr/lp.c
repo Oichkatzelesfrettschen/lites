@@ -43,7 +43,7 @@ struct  {
 
 #define	FORM	014
 
-lpopen(dev, flag)
+void lpopen(int dev, int flag)
 {
 
 	if(lp11.flag & OPEN || LPADDR->lpsr < 0) {
@@ -55,23 +55,23 @@ lpopen(dev, flag)
 	lpcanon(FORM);
 }
 
-lpclose(dev, flag)
+void lpclose(int dev, int flag)
 {
 	lpcanon(FORM);
 	lp11.flag = 0;
 }
 
-lpwrite()
+void lpwrite(void)
 {
-	register int c;
+	int c;
 
 	while ((c=cpass())>=0)
 		lpcanon(c);
 }
 
-lpcanon(c)
+void lpcanon(int c)
 {
-	register c1, c2;
+	c1, c2;
 
 	c1 = c;
 	if(lp11.flag&CAP) {
@@ -156,24 +156,24 @@ lpcanon(c)
 	}
 }
 
-lpstart()
+void lpstart(void)
 {
-	register int c;
+	int c;
 
 	while (LPADDR->lpsr&DONE && (c = getc(&lp11)) >= 0)
 		LPADDR->lpbuf = c;
 }
 
-lpint()
+void lpint(void)
 {
-	register int c;
+	int c;
 
 	lpstart();
 	if (lp11.cc == LPLWAT || lp11.cc == 0)
 		wakeup(&lp11);
 }
 
-lpoutput(c)
+void lpoutput(int c)
 {
 	if (lp11.cc >= LPHWAT)
 		sleep(&lp11, LPPRI);
