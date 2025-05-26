@@ -3,7 +3,7 @@
 audit_entry_t audit_log[AUDIT_LOG_SIZE];
 static int audit_pos;
 
-void audit_record(uint32_t op, uint64_t obj, int result)
+void audit_record(uint32_t op, id128_t obj, int result)
 {
     audit_log[audit_pos].op = op;
     audit_log[audit_pos].obj = obj;
