@@ -27,7 +27,7 @@ static xkern_return_t addnametotable(str, nfields, line, arg )
   char hn[MAX_XKHOST_NAMELENGTH];
   int i;
 
-  bzero(hn, MAX_XKHOST_NAMELENGTH);
+  memset(hn, 0, MAX_XKHOST_NAMELENGTH);
   strncpy(hn, str[1], min(strlen(str[1]), MAX_XKHOST_NAMELENGTH));
   for (i=0; i<DNS_MAP_SIZE; i++) {
     if (!strcmp(hostnametable[i].h_name, hn))
@@ -69,12 +69,12 @@ xk_gethostbyname(namestr, addr)
   RomOpt options[] = { {"", 3, addnametotable} };
 
   if (!initialized) {
-    bzero((char *)hostnametable, sizeof(hostnametable));
+    memset((char *)hostnametable, 0, sizeof(hostnametable));
     findRomOpts("dns", options, 1, 0);
     initialized = 1;
   }
   
-  bzero(hn, MAX_XKHOST_NAMELENGTH);
+  memset(hn, 0, MAX_XKHOST_NAMELENGTH);
   strncpy(hn, namestr, min(strlen(namestr), MAX_XKHOST_NAMELENGTH));
   return xknameresolve(hn, addr);
 }

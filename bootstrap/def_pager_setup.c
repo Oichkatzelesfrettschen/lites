@@ -44,14 +44,14 @@ add_paging_file(master_device_port, file_name)
 	struct file     	pfile;
 	boolean_t		isa_file;
 
-	bzero((char *) &pfile, sizeof(struct file));
+	memset((char *) &pfile, 0, sizeof(struct file));
 
 	result = open_file(master_device_port, file_name, &pfile);
 	if (result != KERN_SUCCESS)
 		return result;
 
 	fdp = (struct file_direct *) kalloc(sizeof *fdp);
-	bzero((char *) fdp, sizeof *fdp);
+	memset((char *) fdp, 0, sizeof *fdp);
 
 	isa_file = file_is_structured(&pfile);
 
@@ -123,7 +123,7 @@ default_pager_setup(master_device_port, server_dir_name)
 		   paging_file_name, 
 		   result);
 
-	    bzero(paging_file_name, sizeof(paging_file_name));
+	    memset(paging_file_name, 0, sizeof(paging_file_name));
 	    printf("Paging file name ? ");
 	    safe_gets(paging_file_name, sizeof(paging_file_name));
 

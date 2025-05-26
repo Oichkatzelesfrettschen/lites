@@ -281,7 +281,7 @@ send:
 			opt[0] = TCPOPT_MAXSEG;
 			opt[1] = 4;
 			mss = htons((u_short) tcp_mss(tp, 0));
-			bcopy((caddr_t)&mss, (caddr_t)(opt + 2), sizeof(mss));
+			memcpy((caddr_t)(opt + 2), (caddr_t)&mss, sizeof(mss));
 			optlen = 4;
 	 
 			if ((tp->t_flags & TF_REQ_SCALE) &&
@@ -406,7 +406,7 @@ send:
 	ti = mtod(m, struct tcpiphdr *);
 	if (tp->t_template == 0)
 		panic("tcp_output");
-	bcopy((caddr_t)tp->t_template, (caddr_t)ti, sizeof (struct tcpiphdr));
+	memcpy((caddr_t)ti, (caddr_t)tp->t_template, sizeof (struct tcpiphdr));
 
 	/*
 	 * Fill in fields, remembering maximum advertised
@@ -435,7 +435,7 @@ send:
 		ti->ti_seq = htonl(tp->snd_max);
 	ti->ti_ack = htonl(tp->rcv_nxt);
 	if (optlen) {
-		bcopy((caddr_t)opt, (caddr_t)(ti + 1), optlen);
+		memcpy((caddr_t)(ti + 1), (caddr_t)opt, optlen);
 		ti->ti_off = (sizeof (struct tcphdr) + optlen) >> 2;
 	}
 	ti->ti_flags = flags;

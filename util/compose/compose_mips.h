@@ -27,7 +27,6 @@ int	access( char *, int );
  */
 void	perror( char * );
 int	printf();
-int	bzero( char *, int );
 int	_flsbuf();
 int	_filbuf();
 void	exit( int );

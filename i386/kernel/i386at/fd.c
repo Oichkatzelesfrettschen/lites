@@ -1011,7 +1011,7 @@ rwend:		outb(0x0a, 0x06);
 		}
 		/* clear retry count */
 		if (cip->usebuf) {
-			bcopy(cip->b_vbuf, cip->b_xferaddr, cip->b_xferdma);
+			memcpy(cip->b_xferaddr, cip->b_vbuf, cip->b_xferdma);
 			DD(printf("R(%x, %x, %x)\n",
 				cip->b_vbuf, cip->b_xferaddr, cip->b_xferdma));
 		}
@@ -1554,7 +1554,7 @@ struct unit_info *uip;
 			cip->usebuf = 1;
 			address = (long)cip->b_pbuf;
 			if (cmdp->c_rwdata[0] == WTM || cmdp->c_rwdata[0] == FMTM) {
-				bcopy(cip->b_xferaddr, cip->b_vbuf, dmalen);
+				memcpy(cip->b_vbuf, cip->b_xferaddr, dmalen);
 				DD(printf("W(%x, %x, %x)\n",
 					cip->b_xferaddr, cip->b_vbuf, dmalen));
 			}

@@ -474,7 +474,7 @@ xCreateXObj(downc, downv)
     xTrace0(protocol, TR_ERRORS, "xCreateObj malloc failure(1)");
     return ERR_XOBJ;
   }
-  bzero((char *)s, sizeof(struct xobj));
+  memset((char *)s, 0, sizeof(struct xobj));
   s->numdown = downc;
   if (downc > STD_DOWN) {
     s->downlistsz = (((downc - STD_DOWN) / STD_DOWN) + 1) * STD_DOWN;
@@ -618,8 +618,7 @@ xSetDown( s, i, obj )
 	    newsz = ((n / STD_DOWN) + 1) * STD_DOWN;
 	    newdl = (XObj *) xMalloc(newsz * sizeof(XObj));
 	    if ( s->downlist ) {
-		bcopy((char *)s->downlist, (char *)newdl,
-		      s->downlistsz * sizeof(XObj));
+		memcpy((char *)newdl, (char *)s->downlist, s->downlistsz * sizeof(XObj));
 		xFree((char *)s->downlist);
 	    }
 	    s->downlist = newdl;

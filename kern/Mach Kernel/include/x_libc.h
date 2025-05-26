@@ -22,9 +22,6 @@
 #include <string.h>
 #include <stdio.h>
 
-extern void     bcopy( char *, char *, int );
-extern int	bcmp( char *, char *, int );
-extern void     bzero( char *, int );
 extern int	qsort( char *, int, int, int(*)());
 
 #endif ! XKMACHKERNEL

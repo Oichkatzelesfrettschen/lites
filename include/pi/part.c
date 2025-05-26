@@ -143,7 +143,7 @@ partExternalize( p, dstBuf, bufLen )
 	    buf += sizeof(int);
 	    if ( len ) {
 		CHECK_BUF_LEN(len);
-		bcopy((char *)p->stack.arr[j].ptr, buf, len);
+		memcpy(buf, (char *)p->stack.arr[j].ptr, len);
 		buf += len;
 	    } else {
 		/* 
@@ -160,7 +160,7 @@ partExternalize( p, dstBuf, bufLen )
 	}
     }
     *bufLen = buf - bufStart;
-    bcopy(bufStart, dstBuf, *bufLen);
+    memcpy(dstBuf, bufStart, *bufLen);
     xFree(bufStart);
     return XK_SUCCESS;
 }

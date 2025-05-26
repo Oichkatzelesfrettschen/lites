@@ -217,9 +217,7 @@ i386_set_ldt(thread, first_selector, desc_list, count, desc_list_inline)
 	     * Have new LDT.  Copy descriptors from current to new.
 	     */
 	    if (cur_ldt)
-		bcopy((char *) &cur_ldt->ldt[0],
-		      (char *) &new_ldt->ldt[0],
-		      cur_ldt->desc.limit_low + 1);
+		memcpy((char *) &new_ldt->ldt[0], (char *) &cur_ldt->ldt[0], cur_ldt->desc.limit_low + 1);
 
 	    old_ldt = cur_ldt;	/* discard old LDT */
 	    cur_ldt = new_ldt;	/* use new LDT from now on */
@@ -231,9 +229,7 @@ i386_set_ldt(thread, first_selector, desc_list, count, desc_list_inline)
 	/*
 	 * Install new descriptors.
 	 */
-	bcopy((char *) desc_list,
-	      (char *) &cur_ldt->ldt[first_desc],
-	      count * sizeof(struct real_descriptor));
+	memcpy((char *) &cur_ldt->ldt[first_desc], (char *) desc_list, count * sizeof(struct real_descriptor));
 
 	simple_unlock(&pcb->lock);
 
@@ -344,9 +340,7 @@ i386_get_ldt(thread, first_selector, selector_count, desc_list, count)
 	/*
 	 * copy out the descriptors
 	 */
-	bcopy((char *)&user_ldt[first_desc],
-	      (char *)*desc_list,
-	      ldt_size);
+	memcpy((char *)*desc_list, (char *)&user_ldt[first_desc], ldt_size);
 	*count = ldt_count;
 	simple_unlock(&pcb->lock);
 
@@ -367,7 +361,7 @@ i386_get_ldt(thread, first_selector, selector_count, desc_list, count)
 	     */
 	    size_left = size_used - ldt_size;
 	    if (size_left > 0)
-		bzero((char *)addr + ldt_size, size_left);
+		memset((char *)addr + ldt_size, 0, size_left);
 
 	    /*
 	     * Make memory into copyin form - this unwires it.

@@ -161,9 +161,9 @@ partition_init()
  * add it to the list of all such.
  * size is in BYTES.
  */
-void
-create_paging_partition(name, size, p_read, p_write, p_private, isa_file)
-	char		*name;
+	memset((char *)part->bitmap, 0, bmsize);
+			memset(new_list, 0, n*sizeof(partition_t));
+			    memcpy(new_list, old_list, i*sizeof(partition_t));
 	vm_size_t	size;
 	int		(*p_read)();
 	int		(*p_write)();
@@ -1319,7 +1319,7 @@ default_read(ds, addr, size, offset, out_addr, deallocate)
 	/*
 	 * Read it, trying for the entire page.
 	 */
-	offset = ptoa(block.block.p_offset);
+	    memcpy((char *)addr, (char *)raddr, rsize);
 	part   = partition_of(block.block.p_index);
 	first_time = TRUE;
 	*out_addr = addr;
@@ -1803,7 +1803,7 @@ mach_port_t default_pager_default_set;	/* Port set for "default" thread. */
 
 typedef struct default_pager_thread {
 	cthread_t	dpt_thread;	/* Server thread. */
-	vm_offset_t	dpt_buffer;	/* Read buffer. */
+	memset((char *) ds, 0, sizeof *ds);
 	boolean_t	dpt_internal;	/* Do we handle internal objects? */
 } default_pager_thread_t;
 

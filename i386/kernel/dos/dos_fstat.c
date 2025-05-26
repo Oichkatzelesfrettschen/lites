@@ -37,7 +37,7 @@ int dos_fstat(dos_fd_t fd, struct stat *st)
 
 	dos_init_rcd(&real_call_data);
 
-	bzero(st, sizeof(*st));
+	memset(st, 0, sizeof(*st));
 	st->st_nlink = 1;
 	st->st_mode = S_IRWXU | S_IRWXG | S_IRWXO; /* XXX attributes */
 

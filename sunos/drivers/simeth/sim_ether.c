@@ -100,7 +100,7 @@ simEth2sock(ethAddr, sockAddr)
     ETHhost ethAddr;
     struct sockaddr_in *sockAddr;
 {
-  bzero((char *)sockAddr, sizeof (struct sockaddr_in));
+  memset((char *)sockAddr, 0, sizeof (struct sockaddr_in));
   sockAddr->sin_family = AF_INET;
   /* 
    * IP address is in the first 4 bytes of the ethernet address
@@ -317,7 +317,7 @@ simeth_init( self )
 	Kabort("simeth -- too many instances");
     }
     ps = X_NEW(PState);
-    bzero((char *)ps, sizeof(PState));
+    memset((char *)ps, 0, sizeof(PState));
     self->state = (VOID *)ps;
     ps->port = -1;
     findXObjRomOpts(self, xobjOpts, sizeof(xobjOpts)/sizeof(XObjRomOpt), 0);
@@ -367,7 +367,7 @@ static void
 ethMsgStore( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
-    bcopy(hdr, netHdr, sizeof(ETHhdr));
+    memcpy(netHdr, hdr, sizeof(ETHhdr));
 }
 
 
@@ -375,7 +375,7 @@ static long
 ethMsgLoad( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
-    bcopy(netHdr, (char *)hdr, sizeof(ETHhdr));
+    memcpy((char *)hdr, netHdr, sizeof(ETHhdr));
     return sizeof(ETHhdr);
 }
 
@@ -484,7 +484,7 @@ init_eth_blocks()
 	    numShepherdThreads);
     pool.total_blocks = numShepherdThreads;
     pool.blocks = (block *)xMalloc(numShepherdThreads * sizeof(block));
-    bzero((char *)pool.blocks, numShepherdThreads * sizeof(block));
+    memset((char *)pool.blocks, 0, numShepherdThreads * sizeof(block));
     pool.next_block = 0;
     
     bp = pool.blocks;
@@ -608,7 +608,7 @@ readether2demux( arg )
 static bool
 msg2Buf(char *msgPtr, long len, void *bufPtr)
 {
-  bcopy(msgPtr, *(char **)bufPtr, len);
+  memcpy(*(char **)bufPtr, msgPtr, len);
   *(char **)bufPtr += len;
   return TRUE;
 }
@@ -659,7 +659,7 @@ simethControl( s, op, buf, len )
 
       case GETMYHOST:
 	checkLen(len, sizeof(ETHhost));
-	bcopy((char *) &ps->myHost, buf, sizeof(ETHhost));
+	memcpy(buf, (char *) &ps->myHost, sizeof(ETHhost));
 	return (sizeof(ETHhost));
 
       case SIM_SOCK2ADDR:

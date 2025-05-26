@@ -327,7 +327,7 @@ void pcb_init(thread)
 	/*
 	 *	We can't let random values leak out to the user.
 	 */
-	bzero((char *) pcb, sizeof *pcb);
+	memset((char *) pcb, 0, sizeof *pcb);
 	simple_lock_init(&pcb->lock);
 
 	/*
@@ -526,9 +526,7 @@ kern_return_t thread_setstatus(thread, flavor, tstate, count)
 			thread->pcb->ims.io_tss = tss;
 		}
 
-		bcopy((char *) state->pm,
-		      (char *) tss->bitmap,
-		      sizeof state->pm);
+		memcpy((char *) tss->bitmap, (char *) state->pm, sizeof state->pm);
 #endif
 		break;
 	    }
@@ -687,9 +685,7 @@ kern_return_t thread_getstatus(thread, flavor, tstate, count)
 		     *	The thread has its own ktss.
 		     */
 
-		    bcopy((char *) tss->bitmap,
-			  (char *) state->pm,
-			  sizeof state->pm);
+		    memcpy((char *) state->pm, (char *) tss->bitmap, sizeof state->pm);
 		}
 
 		*count = i386_ISA_PORT_MAP_STATE_COUNT;

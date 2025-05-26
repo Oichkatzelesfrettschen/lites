@@ -35,16 +35,6 @@
 #include <mach/message.h>
 #include <mach/mach_types.h>
 
-#if	defined(MACH_KERNEL)
-
-#if	defined(bcopy)
-#else	/* not defined(bcopy) */
-extern void	bcopy(const void *, void *, vm_size_t);
-#define	memcpy(_dst,_src,_len)	bcopy((_src),(_dst),(_len))
-#endif	/* defined(bcopy) */
-
-#endif	/* defined(MACH_KERNEL) */
-
 extern void		mig_init(void *_first);
 
 extern void		mig_allocate(vm_address_t *_addr_p, vm_size_t _size);
