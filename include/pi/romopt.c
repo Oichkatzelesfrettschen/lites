@@ -25,13 +25,7 @@ typedef struct {
     xkern_return_t	(* func)();
 } GenericRomOpt;
 
-
-#ifdef __STDC__
-static xkern_return_t	findOptions( char *, char *, GenericRomOpt *,
-				     int, void *, XObj );
-#endif __STDC__
-
-
+static xkern_return_t   findOptions(char *, char *, GenericRomOpt *, int, void *, XObj);
 static xkern_return_t
 findOptions( name, fullName, opts, numOpts, arg, obj )
     char		*name, *fullName;

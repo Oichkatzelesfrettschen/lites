@@ -34,37 +34,14 @@ int	traceptbl;
 #define PTBL_NAME_MAP_SIZE	101
 #define PTBL_ID_MAP_SIZE	101
 
-#ifdef __STDC__
-
-static int	backPatchBinding( void *, void * , void * );
-static int	checkEntry( void *, void *, void * );
-static void	error( char * );
-static void	mkKey( char *, char * );
-
-#  ifdef XK_DEBUG
-
-static int	dispHlp( void *, void *, void * );
-static int	dispEntry( void *, void *, void * );
-
-#  endif /* XK_DEBUG */
-
-#else
-
-char *	protIdToStr();
-
-static int	backPatchBinding();
-static int	checkEntry();
-static void	error();
-static void	mkKey();
-
-#  ifdef XK_DEBUG
-
-static int	dispHlp();
-static int	dispEntry();
-
-#  endif /* XK_DEBUG */
-
-#endif __STDC__
+static int      backPatchBinding(void *, void *, void *);
+static int      checkEntry(void *, void *, void *);
+static void     error(char *);
+static void     mkKey(char *, char *);
+#ifdef XK_DEBUG
+static int      dispHlp(void *, void *, void *);
+static int      dispEntry(void *, void *, void *);
+#endif /* XK_DEBUG */
 
 
 Map	ptblNameMap = 0;	/* strings to Entry structures */

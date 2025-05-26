@@ -40,15 +40,7 @@ static IPhost	ipNull = { 0, 0, 0, 0 };
 static	Map	netMaskMap;
 
 
-#ifdef __STDC__
-
-static int	bcastHost( IPhost *, IPhost * );
-
-#else
-
-static int	bcastHost();
-
-#endif
+static int      bcastHost(IPhost *, IPhost *);
 
 
 int

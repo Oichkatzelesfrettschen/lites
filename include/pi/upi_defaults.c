@@ -36,15 +36,7 @@ int	traceprotdef = 0;
 	}
 
 
-#ifdef __STDC__
-
-static xkern_return_t	llpOpenDisable(XObj, XObj, XObj, Part *, XObj *, int);
-
-#else
-
-static xkern_return_t  llpOpenDisable();
-
-#endif
+static xkern_return_t   llpOpenDisable(XObj, XObj, XObj, Part *, XObj *, int);
 
 
 xkern_return_t

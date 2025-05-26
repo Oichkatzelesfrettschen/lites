@@ -22,36 +22,21 @@ int             tracevchanp;
 static	IPhost	defaultHost = { 0, 0, 0, 0 };
 
 
-#ifdef __STDC__
-
-static void 		addSessn( XObj, XObj );
-static int 		buildKey( ActiveKey *, Part *, XObj );
-static int 		decreaseConcurrency( XObj, int );
-static void 		dispStack( SessnStack * );
-static void		getProcProtl( XObj );
-static void 		getProcSessn( XObj );
-static XObj 		getSessn( XObj );
-static int 		increaseConcurrency( XObj, int );
-static xkern_return_t 	vchanCall( XObj, Msg *, Msg * );
-static xkern_return_t 	vchanCloseSessn( XObj );
-static int		vchanControlProtl( XObj, int, char *, int );
-static int		vchanControlSessn( XObj, int, char *, int );
-static XObj 		vchanOpen( XObj, XObj, XObj, Part * );
-static xkern_return_t 	vchanOpenDisable( XObj, XObj, XObj, Part *p );	
-static xkern_return_t 	vchanOpenEnable( XObj, XObj, XObj, Part *p );	
-
-#else 
-
-static void 		addSessn();
-static int 		buildKey();
-static int 		decreaseConcurrency();
-static void 		dispStack();
-static void		getProcProtl();
-static void 		getProcSessn();
-static XObj 		getSessn();
-static int 		increaseConcurrency();
-
-#endif	__STDC__
+static void             addSessn(XObj, XObj);
+static int              buildKey(ActiveKey *, Part *, XObj);
+static int              decreaseConcurrency(XObj, int);
+static void             dispStack(SessnStack *);
+static void             getProcProtl(XObj);
+static void             getProcSessn(XObj);
+static XObj             getSessn(XObj);
+static int              increaseConcurrency(XObj, int);
+static xkern_return_t   vchanCall(XObj, Msg *, Msg *);
+static xkern_return_t   vchanCloseSessn(XObj);
+static int              vchanControlProtl(XObj, int, char *, int);
+static int              vchanControlSessn(XObj, int, char *, int);
+static XObj             vchanOpen(XObj, XObj, XObj, Part *);
+static xkern_return_t   vchanOpenDisable(XObj, XObj, XObj, Part *p);
+static xkern_return_t   vchanOpenEnable(XObj, XObj, XObj, Part *p);
 
 
 /*

@@ -40,31 +40,16 @@
 
 #ifndef XKMACH4
 
-#ifdef __STDC__
-
-static void	entry( void );
-static void	error( ErrorCode );
-static int	forceChar( int );
-static void	get( void );
-static long	id( void );
-static int	list( char * );
-static char *	name( char * );
-static void	optionalList( char * );
-static xkern_return_t	ptblRomOpt( char **, int, int, VOID * );
-static void	skipWhite( void );
-
-#else
-
-static void	entry();
-static void	error();
-static void	get();
-static long	id();
-static int	list();
-static char *	name();
-static void	optionalList();
-static xkern_return_t	ptblRomOpt();
-
-#endif __STDC__
+static void     entry(void);
+static void     error(ErrorCode);
+static int      forceChar(int);
+static void     get(void);
+static long     id(void);
+static int      list(char *);
+static char *   name(char *);
+static void     optionalList(char *);
+static xkern_return_t   ptblRomOpt(char **, int, int, VOID *);
+static void     skipWhite(void);
 
 
 static int	line = 1;

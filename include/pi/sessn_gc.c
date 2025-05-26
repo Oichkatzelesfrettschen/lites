@@ -29,19 +29,9 @@ typedef struct {
 } CollectInfo;
 
 
-#ifdef __STDC__
-
-static int	markIdle( void *, void *, void * );
-static void	schedule( CollectInfo * );
-static void	sessnCollect( Event, void * );
-
-#else
-
-static int	markIdle();
-static void	schedule();
-static void	sessnCollect();
-
-#endif __STDC__
+static int      markIdle(void *, void *, void *);
+static void     schedule(CollectInfo *);
+static void     sessnCollect(Event, void *);
 
 
 
