@@ -79,7 +79,7 @@ ns_output(m0, ro, flags)
 	 */
 	if (ro == 0) {
 		ro = &idproute;
-		bzero((caddr_t)ro, sizeof (*ro));
+		memset((caddr_t)ro, 0, sizeof (*ro));
 	}
 	dst = (struct sockaddr_ns *)&ro->ro_dst;
 	if (ro->ro_rt == 0) {

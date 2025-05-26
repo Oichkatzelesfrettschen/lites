@@ -158,9 +158,8 @@ ether_output(ifp, m0, dst, rt0)
 #if NS
 	case AF_NS:
 		type = ETHERTYPE_NS;
- 		bcopy((caddr_t)&(((struct sockaddr_ns *)dst)->sns_addr.x_host),
-		    (caddr_t)edst, sizeof (edst));
-		if (!bcmp((caddr_t)edst, (caddr_t)&ns_thishost, sizeof(edst)))
+ 		memcpy((caddr_t)edst, (caddr_t)&(((struct sockaddr_ns *)dst)->sns_addr.x_host), sizeof (edst));
+		if (!memcmp((caddr_t)edst, (caddr_t)&ns_thishost, sizeof(edst)))
 			return (looutput(ifp, m, dst, rt));
 		/* If broadcasting on a simplex interface, loopback a copy */
 		if ((m->m_flags & M_BCAST) && (ifp->if_flags & IFF_SIMPLEX))
@@ -175,7 +174,7 @@ ether_output(ifp, m0, dst, rt0)
 
 		if (rt && (sdl = (struct sockaddr_dl *)rt->rt_gateway) &&
 		    sdl->sdl_family == AF_LINK && sdl->sdl_alen > 0) {
-			bcopy(LLADDR(sdl), (caddr_t)edst, sizeof(edst));
+			memcpy((caddr_t)edst, LLADDR(sdl), sizeof(edst));
 		} else if (error =
 			    iso_snparesolve(ifp, (struct sockaddr_iso *)dst,
 					    (char *)edst, &snpalen))
@@ -188,10 +187,8 @@ ether_output(ifp, m0, dst, rt0)
 			M_PREPEND(mcopy, sizeof (*eh), M_DONTWAIT);
 			if (mcopy) {
 				eh = mtod(mcopy, struct ether_header *);
-				bcopy((caddr_t)edst,
-				      (caddr_t)eh->ether_dhost, sizeof (edst));
-				bcopy((caddr_t)ac->ac_enaddr,
-				      (caddr_t)eh->ether_shost, sizeof (edst));
+				memcpy((caddr_t)eh->ether_dhost, (caddr_t)edst, sizeof (edst));
+				memcpy((caddr_t)eh->ether_shost, (caddr_t)ac->ac_enaddr, sizeof (edst));
 			}
 		}
 		M_PREPEND(m, 3, M_DONTWAIT);
@@ -219,18 +216,15 @@ ether_output(ifp, m0, dst, rt0)
 
 		if (sdl && sdl->sdl_family == AF_LINK
 		    && sdl->sdl_alen > 0) {
-			bcopy(LLADDR(sdl), (char *)edst,
-				sizeof(edst));
+			memcpy((char *)edst, LLADDR(sdl), sizeof(edst));
 		} else goto bad; /* Not a link interface ? Funny ... */
 		if ((ifp->if_flags & IFF_SIMPLEX) && (*edst & 1) &&
 		    (mcopy = m_copy(m, 0, (int)M_COPYALL))) {
 			M_PREPEND(mcopy, sizeof (*eh), M_DONTWAIT);
 			if (mcopy) {
 				eh = mtod(mcopy, struct ether_header *);
-				bcopy((caddr_t)edst,
-				      (caddr_t)eh->ether_dhost, sizeof (edst));
-				bcopy((caddr_t)ac->ac_enaddr,
-				      (caddr_t)eh->ether_shost, sizeof (edst));
+				memcpy((caddr_t)eh->ether_dhost, (caddr_t)edst, sizeof (edst));
+				memcpy((caddr_t)eh->ether_shost, (caddr_t)ac->ac_enaddr, sizeof (edst));
 			}
 		}
 		type = m->m_pkthdr.len;
@@ -253,7 +247,7 @@ ether_output(ifp, m0, dst, rt0)
 
 	case AF_UNSPEC:
 		eh = (struct ether_header *)dst->sa_data;
- 		bcopy((caddr_t)eh->ether_dhost, (caddr_t)edst, sizeof (edst));
+ 		memcpy((caddr_t)edst, (caddr_t)eh->ether_dhost, sizeof (edst));
 		type = eh->ether_type;
 		break;
 
@@ -275,11 +269,9 @@ ether_output(ifp, m0, dst, rt0)
 		senderr(ENOBUFS);
 	eh = mtod(m, struct ether_header *);
 	type = htons((u_short)type);
-	bcopy((caddr_t)&type,(caddr_t)&eh->ether_type,
-		sizeof(eh->ether_type));
- 	bcopy((caddr_t)edst, (caddr_t)eh->ether_dhost, sizeof (edst));
- 	bcopy((caddr_t)ac->ac_enaddr, (caddr_t)eh->ether_shost,
-	    sizeof(eh->ether_shost));
+	memcpy((caddr_t)&eh->ether_type, (caddr_t)&type, sizeof(eh->ether_type));
+ 	memcpy((caddr_t)eh->ether_dhost, (caddr_t)edst, sizeof (edst));
+ 	memcpy((caddr_t)eh->ether_shost, (caddr_t)ac->ac_enaddr, sizeof(eh->ether_shost));
 	s = splimp();
 	/*
 	 * Queue message on interface, and start output if interface
@@ -327,7 +319,7 @@ ether_input(ifp, eh, m)
 	}
 	get_time(&ifp->if_lastchange);
 	ifp->if_ibytes += m->m_pkthdr.len + sizeof (*eh);
-	if (bcmp((caddr_t)etherbroadcastaddr, (caddr_t)eh->ether_dhost,
+	if (memcmp((caddr_t)etherbroadcastaddr, (caddr_t)eh->ether_dhost,
 	    sizeof(etherbroadcastaddr)) == 0)
 		m->m_flags |= M_BCAST;
 	else if (eh->ether_dhost[0] & 1)
@@ -414,8 +406,7 @@ ether_input(ifp, eh, m)
 				l->llc_dsap = l->llc_ssap;
 				l->llc_ssap = c;
 				if (m->m_flags & (M_BCAST | M_MCAST))
-					bcopy((caddr_t)ac->ac_enaddr,
-					      (caddr_t)eh->ether_dhost, 6);
+					memcpy((caddr_t)eh->ether_dhost, (caddr_t)ac->ac_enaddr, 6);
 				sa.sa_family = AF_UNSPEC;
 				sa.sa_len = sizeof(sa);
 				eh2 = (struct ether_header *)sa.sa_data;
@@ -517,8 +508,7 @@ ether_ifattach(ifp)
 		    sdl->sdl_family == AF_LINK) {
 			sdl->sdl_type = IFT_ETHER;
 			sdl->sdl_alen = ifp->if_addrlen;
-			bcopy((caddr_t)((struct arpcom *)ifp)->ac_enaddr,
-			      LLADDR(sdl), ifp->if_addrlen);
+			memcpy(LLADDR(sdl), (caddr_t)((struct arpcom *)ifp)->ac_enaddr, ifp->if_addrlen);
 			break;
 		}
 }
@@ -543,8 +533,8 @@ ether_addmulti(ifr, ac)
 	switch (ifr->ifr_addr.sa_family) {
 
 	case AF_UNSPEC:
-		bcopy(ifr->ifr_addr.sa_data, addrlo, 6);
-		bcopy(addrlo, addrhi, 6);
+		memcpy(addrlo, ifr->ifr_addr.sa_data, 6);
+		memcpy(addrhi, addrlo, 6);
 		break;
 
 #if INET
@@ -556,12 +546,12 @@ ether_addmulti(ifr, ac)
 			 * of the Ethernet multicast addresses used for IP.
 			 * (This is for the sake of IP multicast routers.)
 			 */
-			bcopy(ether_ipmulticast_min, addrlo, 6);
-			bcopy(ether_ipmulticast_max, addrhi, 6);
+			memcpy(addrlo, ether_ipmulticast_min, 6);
+			memcpy(addrhi, ether_ipmulticast_max, 6);
 		}
 		else {
 			ETHER_MAP_IP_MULTICAST(&sin->sin_addr, addrlo);
-			bcopy(addrlo, addrhi, 6);
+			memcpy(addrhi, addrlo, 6);
 		}
 		break;
 #endif
@@ -599,8 +589,8 @@ ether_addmulti(ifr, ac)
 		splx(s);
 		return (ENOBUFS);
 	}
-	bcopy(addrlo, enm->enm_addrlo, 6);
-	bcopy(addrhi, enm->enm_addrhi, 6);
+	memcpy(enm->enm_addrlo, addrlo, 6);
+	memcpy(enm->enm_addrhi, addrhi, 6);
 	enm->enm_ac = ac;
 	enm->enm_refcount = 1;
 	enm->enm_next = ac->ac_multiaddrs;
@@ -632,8 +622,8 @@ ether_delmulti(ifr, ac)
 	switch (ifr->ifr_addr.sa_family) {
 
 	case AF_UNSPEC:
-		bcopy(ifr->ifr_addr.sa_data, addrlo, 6);
-		bcopy(addrlo, addrhi, 6);
+		memcpy(addrlo, ifr->ifr_addr.sa_data, 6);
+		memcpy(addrhi, addrlo, 6);
 		break;
 
 #if INET
@@ -645,12 +635,12 @@ ether_delmulti(ifr, ac)
 			 * to the range of Ethernet multicast addresses used
 			 * for IP.
 			 */
-			bcopy(ether_ipmulticast_min, addrlo, 6);
-			bcopy(ether_ipmulticast_max, addrhi, 6);
+			memcpy(addrlo, ether_ipmulticast_min, 6);
+			memcpy(addrhi, ether_ipmulticast_max, 6);
 		}
 		else {
 			ETHER_MAP_IP_MULTICAST(&sin->sin_addr, addrlo);
-			bcopy(addrlo, addrhi, 6);
+			memcpy(addrhi, addrlo, 6);
 		}
 		break;
 #endif

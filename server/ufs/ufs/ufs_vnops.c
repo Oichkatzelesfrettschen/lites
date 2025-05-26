@@ -1584,7 +1584,7 @@ ufs_symlink(ap)
 	len = strlen(ap->a_target);
 	if (len < vp->v_mount->mnt_maxsymlinklen) {
 		ip = VTOI(vp);
-		bcopy(ap->a_target, (char *)ip->i_shortlink, len);
+		memcpy((char *)ip->i_shortlink, ap->a_target, len);
 		ip->i_size = len;
 		ip->i_flag |= IN_CHANGE | IN_UPDATE;
 	} else

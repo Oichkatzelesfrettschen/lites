@@ -495,7 +495,7 @@ tp_ctloutput(cmd, so, level, optname, mp)
 #endif
 #if ISO
 					case AF_ISO:
-						if (bcmp(ISOA(t).isoa_genaddr, ISOA(tpcb).isoa_genaddr,
+						if (memcmp(ISOA(t).isoa_genaddr, ISOA(tpcb).isoa_genaddr,
 										ISOA(t).isoa_len) == 0)
 							goto done;
 						continue;
@@ -514,14 +514,14 @@ tp_ctloutput(cmd, so, level, optname, mp)
 	case TPOPT_MY_TSEL:
 		if ( cmd == PRCO_GETOPT ) {
 			ASSERT( tpcb->tp_lsuffixlen <= MAX_TSAP_SEL_LEN );
-			bcopy((caddr_t)tpcb->tp_lsuffix, value, tpcb->tp_lsuffixlen);
+			memcpy(value, (caddr_t)tpcb->tp_lsuffix, tpcb->tp_lsuffixlen);
 			(*mp)->m_len = tpcb->tp_lsuffixlen;
 		} else /* cmd == PRCO_SETOPT  */ {
 			if( (val_len > MAX_TSAP_SEL_LEN) || (val_len <= 0 )) {
 				printf("val_len 0x%x (*mp)->m_len 0x%x\n", val_len, (*mp));
 				error = EINVAL;
 			} else {
-				bcopy(value, (caddr_t)tpcb->tp_lsuffix, val_len);
+				memcpy((caddr_t)tpcb->tp_lsuffix, value, val_len);
 				tpcb->tp_lsuffixlen = val_len;
 			}
 		}
@@ -530,14 +530,14 @@ tp_ctloutput(cmd, so, level, optname, mp)
 	case TPOPT_PEER_TSEL:
 		if ( cmd == PRCO_GETOPT ) {
 			ASSERT( tpcb->tp_fsuffixlen <= MAX_TSAP_SEL_LEN );
-			bcopy((caddr_t)tpcb->tp_fsuffix, value, tpcb->tp_fsuffixlen);
+			memcpy(value, (caddr_t)tpcb->tp_fsuffix, tpcb->tp_fsuffixlen);
 			(*mp)->m_len = tpcb->tp_fsuffixlen;
 		} else /* cmd == PRCO_SETOPT  */ {
 			if( (val_len > MAX_TSAP_SEL_LEN) || (val_len <= 0 )) {
 				printf("val_len 0x%x (*mp)->m_len 0x%x\n", val_len, (*mp));
 				error = EINVAL; 
 			} else {
-				bcopy(value, (caddr_t)tpcb->tp_fsuffix, val_len);
+				memcpy((caddr_t)tpcb->tp_fsuffix, value, val_len);
 				tpcb->tp_fsuffixlen = val_len;
 			}
 		}

@@ -136,7 +136,7 @@ iso_getsufx(isop, lenp, data_out, which)
 		addr = isop->isop_faddr;
 	}
 	if (addr)
-		bcopy(TSEL(addr), data_out, (*lenp = addr->siso_tlen));
+		memcpy(data_out, TSEL(addr), (*lenp = addr->siso_tlen));
 }
 
 /* CALLED FROM:
@@ -190,7 +190,7 @@ iso_putsufx(isop, sufxloc, sufxlen, which)
 				m->m_len = len;
 		}
 	}
-	bcopy(sufxloc, TSEL(addr), sufxlen);
+	memcpy(TSEL(addr), sufxloc, sufxlen);
 	addr->siso_tlen = sufxlen;
 	addr->siso_len = len;
 }
@@ -287,9 +287,9 @@ iso_cmpnetaddr(isop, name, which)
 		printf("ISO_CMPNETADDR\n");
 		dump_isoaddr(siso);
 	ENDDEBUG
-	if (name->siso_tlen && bcmp(TSEL(name), TSEL(siso), name->siso_tlen))
+	if (name->siso_tlen && memcmp(TSEL(name), TSEL(siso), name->siso_tlen))
 		return (0);
-	return (bcmp((caddr_t)name->siso_data,
+	return (memcmp((caddr_t)name->siso_data,
 			 (caddr_t)siso->siso_data, name->siso_nlen) == 0);
 }
 
@@ -311,7 +311,7 @@ iso_getnetaddr( isop, name, which)
 	struct sockaddr_iso *siso =
 		(which == TP_LOCAL ? isop->isop_laddr : isop->isop_faddr);
 	if (siso)
-		bcopy((caddr_t)siso, mtod(name, caddr_t),
+		memcpy(mtod(name, (caddr_t)siso, caddr_t),
 				(unsigned)(name->m_len = siso->siso_len));
 	else
 		name->m_len = 0;
@@ -424,7 +424,7 @@ tpclnp_output_dg(laddr, faddr, m0, datalen, ro, nochksum)
 	 *	Fill in minimal portion of isopcb so that clnp can send the
 	 *	packet.
 	 */
-	bzero((caddr_t)&tmppcb, sizeof(tmppcb));
+	memset((caddr_t)&tmppcb, 0, sizeof(tmppcb));
 	tmppcb.isop_laddr = &tmppcb.isop_sladdr;
 	tmppcb.isop_laddr->siso_addr = *laddr;
 	tmppcb.isop_faddr = &tmppcb.isop_sfaddr;
@@ -653,8 +653,8 @@ tpclnp_ctlinput1(cmd, isoa)
 	int cmd;
 	struct iso_addr *isoa;
 {
-	bzero((caddr_t)&siso.siso_addr, sizeof(siso.siso_addr));
-	bcopy((caddr_t)isoa, (caddr_t)&siso.siso_addr, isoa->isoa_len);
+	memset((caddr_t)&siso.siso_addr, 0, sizeof(siso.siso_addr));
+	memcpy((caddr_t)&siso.siso_addr, (caddr_t)isoa, isoa->isoa_len);
 	tpclnp_ctlinput(cmd, &siso);
 }
 

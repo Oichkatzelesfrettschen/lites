@@ -157,9 +157,9 @@ mach_error_t kernfs_mount(mp, path, data, ndp, p)
 	getnewfsid(mp, MOUNT_KERNFS);
 
 	(void) copyinstr(path, mp->mnt_stat.f_mntonname, MNAMELEN - 1, &size);
-	bzero(mp->mnt_stat.f_mntonname + size, MNAMELEN - size);
-	bzero(mp->mnt_stat.f_mntfromname, MNAMELEN);
-	bcopy("kernfs", mp->mnt_stat.f_mntfromname, sizeof("kernfs"));
+	memset(mp->mnt_stat.f_mntonname + size, 0, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname, 0, MNAMELEN);
+	memcpy(mp->mnt_stat.f_mntfromname, "kernfs", sizeof("kernfs"));
 #ifdef KERNFS_DIAGNOSTIC
 	printf("kernfs_mount: at %s\n", mp->mnt_stat.f_mntonname);
 #endif
@@ -276,9 +276,9 @@ mach_error_t kernfs_statfs(mp, sbp, p)
 	sbp->f_files = 0;
 	sbp->f_ffree = 0;
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(&sbp->f_fsid, &mp->mnt_stat.f_fsid, sizeof(sbp->f_fsid));
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
         strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);

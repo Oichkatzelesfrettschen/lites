@@ -98,9 +98,9 @@ cltp_input(m0, srcsa, dstsa, cons_channel, output)
 				goto bad;
 			m->m_len = src->siso_len;
 			src = mtod(m, struct sockaddr_iso *);
-			bcopy((caddr_t)srcsa, (caddr_t)src, srcsa->sa_len);
+			memcpy((caddr_t)src, (caddr_t)srcsa, srcsa->sa_len);
 		}
-		bcopy((caddr_t)up + 2, TSEL(src), up[1]);
+		memcpy(TSEL(src), (caddr_t)up + 2, up[1]);
 		up += 2 + src->siso_tlen;
 		continue;
 	
@@ -131,7 +131,7 @@ cltp_input(m0, srcsa, dstsa, cons_channel, output)
 			goto bad;
 		}
 		if (isop->isop_laddr &&
-		    bcmp(TSEL(isop->isop_laddr), dtsap, dlen) == 0)
+		    memcmp(TSEL(isop->isop_laddr), dtsap, dlen) == 0)
 			break;
 	}
 	m = m0;
@@ -228,12 +228,12 @@ cltp_output(isop, m)
 	up[2] = CLTPOVAL_SRC;
 	up[3] = (siso = isop->isop_laddr)->siso_tlen;
 	up += 4;
-	bcopy(TSEL(siso), (caddr_t)up, siso->siso_tlen);
+	memcpy((caddr_t)up, TSEL(siso), siso->siso_tlen);
 	up += siso->siso_tlen;
 	up[0] = CLTPOVAL_DST;
 	up[1] = (siso = isop->isop_faddr)->siso_tlen;
 	up += 2;
-	bcopy(TSEL(siso), (caddr_t)up, siso->siso_tlen);
+	memcpy((caddr_t)up, TSEL(siso), siso->siso_tlen);
 	/*
 	 * Stuff checksum and output datagram.
 	 */
@@ -366,13 +366,13 @@ cltp_usrreq(so, req, m, nam, control)
 
 	case PRU_SOCKADDR:
 		if (isop->isop_laddr)
-			bcopy((caddr_t)isop->isop_laddr, mtod(m, caddr_t),
+			memcpy(mtod(m, (caddr_t)isop->isop_laddr, caddr_t),
 				nam->m_len = isop->isop_laddr->siso_len);
 		break;
 
 	case PRU_PEERADDR:
 		if (isop->isop_faddr)
-			bcopy((caddr_t)isop->isop_faddr, mtod(m, caddr_t),
+			memcpy(mtod(m, (caddr_t)isop->isop_faddr, caddr_t),
 				nam->m_len = isop->isop_faddr->siso_len);
 		break;
 

@@ -188,7 +188,7 @@ struct mbuf		*control;	/* optional control */
 		}
 		MALLOC(rp, struct rawcb *, sizeof(*rp), M_PCB, M_WAITOK);
 		if (so->so_pcb = (caddr_t)rp) {
-			bzero(so->so_pcb, sizeof(*rp));
+			memset(so->so_pcb, 0, sizeof(*rp));
 			insque(rp, &esis_pcb);
 			rp->rcb_socket = so;
 			error = soreserve(so, esis_sendspace, esis_recvspace);
@@ -344,7 +344,7 @@ struct rtentry		*rt;			/* snpa cache info regarding next hop of
 		esis_stat.es_nomem++;
 		return;
 	}
-	bzero(mtod(m, caddr_t), MHLEN);
+	memset(mtod(m, 0, caddr_t), MHLEN);
 
 	pdu = mtod(m, struct esis_fixed *);
 	cp = (caddr_t)(pdu + 1); /*pointer arith.; 1st byte after header */
@@ -363,7 +363,7 @@ struct rtentry		*rt;			/* snpa cache info regarding next hop of
 
 	/* Insert the snpa of better next hop */
 	*cp++ = sdl->sdl_alen;
-	bcopy(LLADDR(sdl), cp, sdl->sdl_alen);
+	memcpy(cp, LLADDR(sdl), sdl->sdl_alen);
 	cp += sdl->sdl_alen;
 	len += (sdl->sdl_alen + 1);
 
@@ -417,18 +417,15 @@ struct rtentry		*rt;			/* snpa cache info regarding next hop of
 		 *	the option code and length
 		 */
 		if (inbound_oidx->cni_qos_formatp) {
-			bcopy(mtod(inbound_m, caddr_t) + inbound_oidx->cni_qos_formatp - 2,
-				cp, (unsigned)(inbound_oidx->cni_qos_len + 2));
+			memcpy(caddr_t) + inbound_oidx->cni_qos_formatp - 2, mtod(inbound_m, cp, (unsigned)(inbound_oidx->cni_qos_len + 2));
 			cp += inbound_oidx->cni_qos_len + 2;
 		}
 		if (inbound_oidx->cni_priorp) {
-			bcopy(mtod(inbound_m, caddr_t) + inbound_oidx->cni_priorp - 2,
-					cp, 3);
+			memcpy(caddr_t) + inbound_oidx->cni_priorp - 2, mtod(inbound_m, cp, 3);
 			cp += 3;
 		}
 		if (inbound_oidx->cni_securep) {
-			bcopy(mtod(inbound_m, caddr_t) + inbound_oidx->cni_securep - 2, cp, 
-				(unsigned)(inbound_oidx->cni_secure_len + 2));
+			memcpy(caddr_t) + inbound_oidx->cni_securep - 2, cp, mtod(inbound_m, (unsigned)(inbound_oidx->cni_secure_len + 2));
 			cp += inbound_oidx->cni_secure_len + 2;
 		}
 		m->m_len += optlen;
@@ -438,12 +435,12 @@ struct rtentry		*rt;			/* snpa cache info regarding next hop of
 	pdu->esis_hdr_len = m0->m_pkthdr.len = len;
 	iso_gen_csum(m0, ESIS_CKSUM_OFF, (int)pdu->esis_hdr_len);
 
-	bzero((caddr_t)&siso, sizeof(siso));
+	memset((caddr_t)&siso, 0, sizeof(siso));
 	siso.siso_family = AF_ISO;
 	siso.siso_data[0] = AFI_SNA;
 	siso.siso_nlen = 6 + 1;	/* should be taken from snpa_hdr */
 										/* +1 is for AFI */
-	bcopy(inbound_shp->snh_shost, siso.siso_data + 1, 6);
+	memcpy(siso.siso_data + 1, inbound_shp->snh_shost, 6);
 	(ifp->if_output)(ifp, m0, (struct sockaddr *)&siso, 0);
 }
 
@@ -470,7 +467,7 @@ int							nsellen;
 	isoa->isoa_len -= nsellen;
 	newlen = isoa->isoa_len + 1;
 	if (newlen <=  M_TRAILINGSPACE(m)) {
-		bcopy((caddr_t)isoa, *buf, newlen);
+		memcpy(*buf, (caddr_t)isoa, newlen);
 		*len += newlen;
 		*buf += newlen;
 		m->m_len += newlen;
@@ -833,7 +830,7 @@ struct	iso_addr *isoa;
 		esis_stat.es_nomem++;
 		return;
 	}
-	bzero(mtod(m, caddr_t), MHLEN);
+	memset(mtod(m, 0, caddr_t), MHLEN);
 
 	pdu = mtod(m, struct esis_fixed *);
 	naddrp = cp = (caddr_t)(pdu + 1);
@@ -917,11 +914,11 @@ struct	iso_addr *isoa;
 	pdu->esis_hdr_len = len;
 	iso_gen_csum(m0, ESIS_CKSUM_OFF, (int)pdu->esis_hdr_len);
 
-	bzero((caddr_t)&siso, sizeof(siso));
+	memset((caddr_t)&siso, 0, sizeof(siso));
 	siso.siso_family = AF_ISO;
 	siso.siso_data[0] = AFI_SNA;
 	siso.siso_nlen = sn_len + 1;
-	bcopy(sn_addr, siso.siso_data + 1, (unsigned)sn_len);
+	memcpy(siso.siso_data + 1, sn_addr, (unsigned)sn_len);
 	(ifp->if_output)(ifp, m0, (struct sockaddr *)&siso, 0);
 }
 
@@ -960,7 +957,7 @@ struct snpa_hdr	*shp;	/* subnetwork header */
 	ENDDEBUG
 	esis_dl.sdl_alen = ifp->if_addrlen;
 	esis_dl.sdl_index = ifp->if_index;
-	bcopy(shp->snh_shost, (caddr_t)esis_dl.sdl_data, esis_dl.sdl_alen);
+	memcpy((caddr_t)esis_dl.sdl_data, shp->snh_shost, esis_dl.sdl_alen);
 	for (rp = esis_pcb.rcb_next; rp != &esis_pcb; rp = rp->rcb_next) {
 		if (first_rp == 0) {
 			first_rp = rp;
@@ -1016,11 +1013,11 @@ struct mbuf *m;
 		}
 		printf("\n");
 	ENDDEBUG
-	bzero((caddr_t)&siso, sizeof(siso));
+	memset((caddr_t)&siso, 0, sizeof(siso));
 	siso.siso_family = AF_ISO; /* This convention may be useful for X.25 */
 	siso.siso_data[0] = AFI_SNA;
 	siso.siso_nlen = sn_len + 1;
-	bcopy(LLADDR(sdl), siso.siso_data + 1, sn_len);
+	memcpy(siso.siso_data + 1, LLADDR(sdl), sn_len);
 	error = (ifp->if_output)(ifp, m, (struct sockaddr *)&siso, 0);
 	if (error) {
 		IFDEBUG(D_ISISOUTPUT)

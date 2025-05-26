@@ -172,7 +172,7 @@ kernfs_xread(kt, buf, len, lenp)
 		if (xlen >= len)
 			return (EINVAL);
 
-		bcopy(cp, buf, xlen);
+		memcpy(buf, cp, xlen);
 		break;
 	}
 
@@ -183,7 +183,7 @@ kernfs_xread(kt, buf, len, lenp)
 		if (xlen >= (len-2))
 			return (EINVAL);
 
-		bcopy(cp, buf, xlen);
+		memcpy(buf, cp, xlen);
 		buf[xlen] = '\n';
 		buf[xlen+1] = '\0';
 		break;
@@ -252,7 +252,7 @@ kernfs_xwrite(kt, buf, len)
 	case KTT_HOSTNAME: {
 		if (buf[len-1] == '\n')
 			--len;
-		bcopy(buf, hostname, len);
+		memcpy(hostname, buf, len);
 		hostname[len] = '\0';
 		hostnamelen = len;
 		return (0);
@@ -298,7 +298,7 @@ mach_error_t kernfs_lookup(ap)
 	}
 
 #if 0
-	if (cnp->cn_namelen == 4 && bcmp(pname, "root", 4) == 0) {
+	if (cnp->cn_namelen == 4 && memcmp(pname, "root", 4) == 0) {
 		*vpp = rootdir;
 		VREF(rootdir);
 		VOP_LOCK(rootdir);
@@ -309,7 +309,7 @@ mach_error_t kernfs_lookup(ap)
 	/*
 	 * /kern/rootdev is the root device
 	 */
-	if (cnp->cn_namelen == 7 && bcmp(pname, "rootdev", 7) == 0) {
+	if (cnp->cn_namelen == 7 && memcmp(pname, "rootdev", 7) == 0) {
 		*vpp = rootvp;
 		VREF(rootvp);
 		VOP_LOCK(rootvp);
@@ -320,7 +320,7 @@ mach_error_t kernfs_lookup(ap)
 	/*
 	 * /kern/rrootdev is the raw root device
 	 */
-	if (cnp->cn_namelen == 8 && bcmp(pname, "rrootdev", 8) == 0) {
+	if (cnp->cn_namelen == 8 && memcmp(pname, "rrootdev", 8) == 0) {
 		if (rrootvp) {
 			*vpp = rrootvp;
 			VREF(rrootvp);
@@ -337,7 +337,7 @@ mach_error_t kernfs_lookup(ap)
 	for (i = 0; i < nkern_targets; i++) {
 		struct kern_target *kt = &kern_targets[i];
 		if (cnp->cn_namelen == strlen(kt->kt_name) &&
-		    bcmp(kt->kt_name, pname, cnp->cn_namelen) == 0) {
+		    memcmp(kt->kt_name, pname, cnp->cn_namelen) == 0) {
 			error = 0;
 			break;
 		}
@@ -451,7 +451,7 @@ mach_error_t kernfs_getattr(ap)
 	int error = 0;
 	char strbuf[KSTRING];
 
-	bzero((caddr_t) vap, sizeof(*vap));
+	memset((caddr_t) vap, 0, sizeof(*vap));
 	vattr_null(vap);
 	vap->va_uid = 0;
 	vap->va_gid = 0;
@@ -608,10 +608,10 @@ mach_error_t kernfs_readdir(ap)
 		printf("kernfs_readdir: i = %d\n", i);
 #endif
 
-		bzero((caddr_t) dp, UIO_MX);
+		memset((caddr_t) dp, 0, UIO_MX);
 
 		dp->d_namlen = strlen(kt->kt_name);
-		bcopy(kt->kt_name, dp->d_name, dp->d_namlen+1);
+		memcpy(dp->d_name, kt->kt_name, dp->d_namlen+1);
 
 #ifdef KERNFS_DIAGNOSTIC
 		printf("kernfs_readdir: name = %s, len = %d\n",

@@ -108,7 +108,7 @@ sdl_cmp(struct sockaddr_dl *sdl_a, struct sockaddr_dl *sdl_b)
 {
 	if (LLADDRLEN(sdl_a) != LLADDRLEN(sdl_b))
 		return(1);
-	return(bcmp((caddr_t) sdl_a->sdl_data, (caddr_t) sdl_b->sdl_data,
+	return(memcmp((caddr_t) sdl_a->sdl_data, (caddr_t) sdl_b->sdl_data,
 		    LLADDRLEN(sdl_a)));
 }
 
@@ -116,7 +116,7 @@ sdl_cmp(struct sockaddr_dl *sdl_a, struct sockaddr_dl *sdl_b)
 
 sdl_copy(struct sockaddr_dl *sdl_f, struct sockaddr_dl *sdl_t)
 {
-	bcopy((caddr_t) sdl_f, (caddr_t) sdl_t, sdl_f->sdl_len);
+	memcpy((caddr_t) sdl_t, (caddr_t) sdl_f, sdl_f->sdl_len);
 }
 
 /* Swap sdl_a w/ sdl_b */
@@ -167,7 +167,7 @@ sdl_setaddrif(struct ifnet *ifp, u_char *mac_addr, u_char dlsap_addr,
 
 	if ((sdl_tmp = sdl_getaddrif(ifp)) ) { 	
 		sdl_copy(sdl_tmp, sdl_to); 	
-		bcopy((caddr_t) mac_addr, (caddr_t) LLADDR(sdl_to), mac_len);
+		memcpy((caddr_t) LLADDR(sdl_to), (caddr_t) mac_addr, mac_len);
 		*(LLADDR(sdl_to)+mac_len) = dlsap_addr;
 		sdl_to->sdl_alen = mac_len+1; 	
 		return(1); 
@@ -242,7 +242,7 @@ llc_setsapinfo(struct ifnet *ifp, u_char af, u_char sap, struct dllconfig *llcon
 	sirt->rt_llinfo = malloc(size , M_PCB, M_WAITOK); 
 	sapinfo = (struct npaidbentry *) sirt->rt_llinfo; 
 	if (sapinfo) { 	
-		bzero ((caddr_t)sapinfo, size); 	
+		memset((caddr_t)sapinfo, 0, size); 	
 		/* 	 
 		 * For the time being we support LLC CLASS II here 	 
 		 * only 	 
@@ -2111,7 +2111,7 @@ llc_newlink(struct sockaddr_dl *dst, struct ifnet *ifp, struct rtentry *nlrt,
 	       M_PCB, M_DONTWAIT);
 	if (nlinkp == 0)
 		return (NULL);
-	bzero((caddr_t)nlinkp, sizeof(struct llc_linkcb));
+	memset((caddr_t)nlinkp, 0, sizeof(struct llc_linkcb));
 	
 	/* copy link address */
 	sdl_copy(dst, &nlinkp->llcl_addr);
@@ -2148,8 +2148,7 @@ llc_newlink(struct sockaddr_dl *dst, struct ifnet *ifp, struct rtentry *nlrt,
 		FREE(nlinkp, M_PCB);
 		return(NULL);
 	}
-	bzero((caddr_t)nlinkp->llcl_output_buffers, 
-	      llcwindow*sizeof(struct mbuf *));
+	memset((caddr_t)nlinkp->llcl_output_buffers, 0, llcwindow*sizeof(struct mbuf *));
 
 	/* set window size & slotsfree */
 	nlinkp->llcl_slotsfree = nlinkp->llcl_window = llcwindow;

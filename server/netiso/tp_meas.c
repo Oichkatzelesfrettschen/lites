@@ -115,10 +115,9 @@ Tpmeas(ref, kind, timev, seq, win, size)
 	tpm->tpm_tseq = mseq++;
 	tpm->tpm_ref = ref;
 	if(kind == TPtime_from_ll)
-		bcopy((caddr_t)timev, (caddr_t)&tpm->tpm_time, sizeof(struct timeval));
+		memcpy((caddr_t)&tpm->tpm_time, (caddr_t)timev, sizeof(struct timeval));
 	else
-		bcopy( (caddr_t)&time, 
-			(caddr_t)&tpm->tpm_time, sizeof(struct timeval) );
+		memcpy((caddr_t)&tpm->tpm_time, (caddr_t)&time, sizeof(struct timeval) );
 	tpm->tpm_seq = seq;
 	tpm->tpm_window = win;
 	tpm->tpm_size = size;

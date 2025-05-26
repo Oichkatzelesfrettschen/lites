@@ -98,9 +98,8 @@ tuba_lookup(siso, wait)
 	if ((tc = (struct tuba_cache *)malloc(sizeof(*tc), M_RTABLE, wait))
 		== NULL)
 		return (0);
-	bzero((caddr_t)tc, sizeof (*tc));
-	bcopy(siso->siso_data, tc->tc_siso.siso_data,
-		tc->tc_siso.siso_nlen =  siso->siso_nlen);
+	memset((caddr_t)tc, 0, sizeof (*tc));
+	memcpy(tc->tc_siso.siso_data, siso->siso_data, tc->tc_siso.siso_nlen =  siso->siso_nlen);
 	rn_insert(&tc->tc_siso.siso_addr, tuba_tree, &dupentry, tc->tc_nodes);
 	if (dupentry)
 		panic("tuba_lookup 1");
@@ -129,9 +128,9 @@ tuba_lookup(siso, wait)
 		free((caddr_t)tc, M_RTABLE);
 		return (0);
 	}
-	bzero((caddr_t)new, (unsigned)i);
+	memset((caddr_t)new, 0, (unsigned)i);
 	if (tuba_table) {
-		bcopy((caddr_t)tuba_table, (caddr_t)new, i >> 1);
+		memcpy((caddr_t)new, (caddr_t)tuba_table, i >> 1);
 		free((caddr_t)tuba_table, M_RTABLE);
 	}
 	tuba_table = new;

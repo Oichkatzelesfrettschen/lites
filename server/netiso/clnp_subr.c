@@ -164,7 +164,7 @@ register struct iso_addr	*destp;		/* ptr to destination address buffer */
 		return((caddr_t)0);
 	}
 	len = destp->isoa_len = (u_char)*bufp++;
-	(void) bcopy(bufp, (caddr_t)destp, len);
+	(void) memcpy((caddr_t)destp, bufp, len);
 	buflen -= len;
 	bufp += len;
 
@@ -175,7 +175,7 @@ register struct iso_addr	*destp;		/* ptr to destination address buffer */
 		return((caddr_t)0);
 	}
 	len = srcp->isoa_len = (u_char)* bufp++;
-	(void) bcopy(bufp, (caddr_t)srcp, len);
+	(void) memcpy((caddr_t)srcp, bufp, len);
 	bufp += len;
 
 	/*
@@ -216,7 +216,7 @@ register struct iso_addr *dst;		/* ptr to destination address */
 		 * We are overloading siso_tlen in the if's address, as an nsel length.
 		 */
 		if (dst->isoa_len == ia->ia_addr.siso_nlen &&
-			bcmp((caddr_t)ia->ia_addr.siso_addr.isoa_genaddr,
+			memcmp((caddr_t)ia->ia_addr.siso_addr.isoa_genaddr,
 				 (caddr_t)dst->isoa_genaddr,
 				 ia->ia_addr.siso_nlen - ia->ia_addr.siso_tlen) == 0)
 					return 1;
@@ -259,7 +259,7 @@ struct snpa_hdr		*inbound_shp;	/* subnetwork header of inbound packet */
 	extern int				iso_systype;
 
 	clnp = mtod(m, struct clnp_fixed *);
-	bzero((caddr_t)&route, sizeof(route)); /* MUST be done before "bad:" */
+	memset((caddr_t)&route, 0, sizeof(route)); /* MUST be done before "bad:" */
 
 	/*
 	 *	Don't forward multicast or broadcast packets
@@ -405,11 +405,11 @@ register struct iso_addr	*srcp;	/* ptr to src addr */
 register struct iso_addr	*dstp;	/* ptr to dst addr */
 {
 	*bufp++ = dstp->isoa_len;
-	(void) bcopy((caddr_t)dstp, bufp, dstp->isoa_len);
+	(void) memcpy(bufp, (caddr_t)dstp, dstp->isoa_len);
 	bufp += dstp->isoa_len;
 
 	*bufp++ = srcp->isoa_len;
-	(void) bcopy((caddr_t)srcp, bufp, srcp->isoa_len);
+	(void) memcpy(bufp, (caddr_t)srcp, srcp->isoa_len);
 	bufp += srcp->isoa_len;
 
 	return bufp;
@@ -450,9 +450,8 @@ clnp_route(dst, ro, flags, first_hop, ifa)
 			RTFREE(ro->ro_rt);
 			ro->ro_rt = 0;
 		}
-		bzero((caddr_t)&ro->ro_dst, sizeof(ro->ro_dst));
-		bcopy((caddr_t)dst, (caddr_t)&ro->ro_dst.siso_addr,
-			1 + (unsigned)dst->isoa_len);
+		memset((caddr_t)&ro->ro_dst, 0, sizeof(ro->ro_dst));
+		memcpy((caddr_t)&ro->ro_dst.siso_addr, (caddr_t)dst, 1 + (unsigned)dst->isoa_len);
 		ro->ro_dst.siso_family = AF_ISO;
 		ro->ro_dst.siso_len = sizeof(ro->ro_dst);
 		ia = iso_localifa(&ro->ro_dst);
@@ -488,7 +487,7 @@ clnp_route(dst, ro, flags, first_hop, ifa)
 
 	if (ro->ro_rt == 0) {
 		/* set up new route structure */
-		bzero((caddr_t)&ro->ro_dst, sizeof(ro->ro_dst));
+		memset((caddr_t)&ro->ro_dst, 0, sizeof(ro->ro_dst));
 		ro->ro_dst.siso_len = sizeof(ro->ro_dst);
 		ro->ro_dst.siso_family = AF_ISO;
 		Bcopy(dst, &ro->ro_dst.siso_addr, 1 + dst->isoa_len);
@@ -548,13 +547,13 @@ struct iso_addr		*final_dst;		/* final destination */
 	 */
 	if CLNPSRCRT_TERM(oidx, options) {
 		dst.isoa_len = final_dst->isoa_len;
-		bcopy(final_dst->isoa_genaddr, dst.isoa_genaddr, dst.isoa_len);
+		memcpy(dst.isoa_genaddr, final_dst->isoa_genaddr, dst.isoa_len);
 	} else {
 		/*
 		 * setup dst based on src rt specified
 		 */
 		dst.isoa_len = CLNPSRCRT_CLEN(oidx, options);
-		bcopy(CLNPSRCRT_CADDR(oidx, options), dst.isoa_genaddr, dst.isoa_len);
+		memcpy(options), CLNPSRCRT_CADDR(oidx, dst.isoa_genaddr, dst.isoa_len);
 	}
 
 	/*
@@ -599,7 +598,7 @@ struct clnp_optidx	*ec_oidxp;	/* options index to ec packet */
 	int				ret;
 
 	/* fill in fake isopcb to pass to output function */
-	bzero(&isopcb, sizeof(isopcb));
+	memset(&isopcb, 0, sizeof(isopcb));
 	isopcb.isop_laddr = ec_dst;
 	isopcb.isop_faddr = ec_src;
 

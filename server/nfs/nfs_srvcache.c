@@ -222,7 +222,7 @@ loop:
 	if (numnfsrvcache < desirednfsrvcache) {
 		rp = (struct nfsrvcache *)malloc((u_long)sizeof *rp,
 		    M_NFSD, M_WAITOK);
-		bzero((char *)rp, sizeof *rp);
+		memset((char *)rp, 0, sizeof *rp);
 		numnfsrvcache++;
 		rp->rc_flag = RC_LOCKED;
 	} else {
@@ -341,7 +341,7 @@ nfsrv_cleancache()
 		nextrp = rp->rc_next;
 		free(rp, M_NFSD);
 	}
-	bzero((char *)rheadhtbl, (rheadhash + 1) * sizeof(void *));
+	memset((char *)rheadhtbl, 0, (rheadhash + 1) * sizeof(void *));
 	nfsrvlruhead = NULL;
 	nfsrvlrutail = &nfsrvlruhead;
 	numnfsrvcache = 0;

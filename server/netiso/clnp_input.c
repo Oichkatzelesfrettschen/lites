@@ -186,14 +186,13 @@ next:
 			goto next;
 		}
 	}
-	bzero((caddr_t)&sh, sizeof(sh));
+	memset((caddr_t)&sh, 0, sizeof(sh));
 	sh.snh_flags = m->m_flags & (M_MCAST|M_BCAST);
 	switch((sh.snh_ifp = m->m_pkthdr.rcvif)->if_type) {
 		extern int ether_output();
 	case IFT_EON:
-		bcopy(mtod(m, caddr_t), (caddr_t)sh.snh_dhost, sizeof(u_long));
-		bcopy(sizeof(u_long) + mtod(m, caddr_t),
-					(caddr_t)sh.snh_shost, sizeof(u_long));
+		memcpy(caddr_t), mtod(m, (caddr_t)sh.snh_dhost, sizeof(u_long));
+		memcpy(caddr_t), sizeof(u_long) + mtod(m, (caddr_t)sh.snh_shost, sizeof(u_long));
 		sh.snh_dhost[4] = mtod(m, u_char *)[sizeof(struct ip) +
 								_offsetof(struct eon_hdr, eonh_class)];
 		m->m_data += EONIPLEN;
@@ -203,8 +202,7 @@ next:
 
 	default:
 		if (sh.snh_ifp->if_output == ether_output) {
-			bcopy((caddr_t)(mtod(m, struct ether_header *)->ether_dhost),
-				(caddr_t)sh.snh_dhost, 2*sizeof(sh.snh_dhost));
+			memcpy(struct ether_header *)->ether_dhost), (caddr_t)(mtod(m, (caddr_t)sh.snh_dhost, 2*sizeof(sh.snh_dhost));
 			m->m_data += sizeof (struct ether_header);
 			m->m_len -= sizeof (struct ether_header);
 			m->m_pkthdr.len -= sizeof (struct ether_header);
@@ -397,7 +395,7 @@ struct snpa_hdr	*shp;	/* subnetwork header */
 			clnp_discard(m, GEN_INCOMPLETE);
 			return;
 		} else {
-			(void) bcopy(hoff, (caddr_t)&seg_part, sizeof(struct clnp_segment));
+			(void) memcpy((caddr_t)&seg_part, hoff, sizeof(struct clnp_segment));
 			/* make sure segmentation fields are in host order */
 			seg_part.cng_id = ntohs(seg_part.cng_id);
 			seg_part.cng_off = ntohs(seg_part.cng_off);

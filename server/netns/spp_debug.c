@@ -90,11 +90,11 @@ spp_trace(act, ostate, sp, si, req)
 	if (sp)
 		sd->sd_sp = *sp;
 	else
-		bzero((caddr_t)&sd->sd_sp, sizeof (*sp));
+		memset((caddr_t)&sd->sd_sp, 0, sizeof (*sp));
 	if (si)
 		sd->sd_si = *si;
 	else
-		bzero((caddr_t)&sd->sd_si, sizeof (*si));
+		memset((caddr_t)&sd->sd_si, 0, sizeof (*si));
 	sd->sd_req = req;
 	if (sppconsdebug == 0)
 		return;

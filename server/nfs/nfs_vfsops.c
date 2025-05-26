@@ -143,8 +143,8 @@ nfs_statfs(mp, sbp, p)
 		sbp->f_ffree = 0;
 	}
 	if (sbp != &mp->mnt_stat) {
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
 	strncpy(&sbp->f_fstypename[0], mp->mnt_op->vfs_name, MFSNAMELEN);
 	nfsm_reqdone;
@@ -213,7 +213,7 @@ nfs_mountroot()
 	if (nd->mygateway.sin_len != 0) {
 		struct sockaddr_in mask, sin;
 
-		bzero((caddr_t)&mask, sizeof(mask));
+		memset((caddr_t)&mask, 0, sizeof(mask));
 		sin = mask;
 		sin.sin_family = AF_INET;
 		sin.sin_len = sizeof(sin);
@@ -270,7 +270,7 @@ nfs_mountroot()
 	 * set hostname here and then let the "/etc/rc.xxx" files
 	 * mount the right /var based upon its preset value.
 	 */
-	bcopy(nd->my_hostnam, hostname, MAXHOSTNAMELEN);
+	memcpy(hostname, nd->my_hostnam, MAXHOSTNAMELEN);
 	hostname[MAXHOSTNAMELEN - 1] = '\0';
 	for (i = 0; i < MAXHOSTNAMELEN; i++)
 		if (hostname[i] == '\0')
@@ -300,14 +300,14 @@ nfs_mountdiskless(path, which, mountflag, sin, args, vpp)
 	    M_MOUNT, M_NOWAIT);
 	if (mp == NULL)
 		panic("nfs_mountroot: %s mount malloc", which);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = &nfs_vfsops;
 	mp->mnt_flag = mountflag;
 
 	MGET(m, MT_SONAME, M_DONTWAIT);
 	if (m == NULL)
 		panic("nfs_mountroot: %s mount mbuf", which);
-	bcopy((caddr_t)sin, mtod(m, caddr_t), sin->sin_len);
+	memcpy(mtod(m, (caddr_t)sin, caddr_t), sin->sin_len);
 	m->m_len = sin->sin_len;
 	nfsargs_ntoh(args);
 	if (error = mountnfs(args, mp, m, which, path, vpp))
@@ -370,10 +370,10 @@ nfs_mount(mp, path, data, ndp, p)
 		return (error);
 	if (error = copyinstr(path, pth, MNAMELEN-1, &len))
 		return (error);
-	bzero(&pth[len], MNAMELEN - len);
+	memset(&pth[len], 0, MNAMELEN - len);
 	if (error = copyinstr(args.hostname, hst, MNAMELEN-1, &len))
 		return (error);
-	bzero(&hst[len], MNAMELEN - len);
+	memset(&hst[len], 0, MNAMELEN - len);
 	/* sockargs() call must be after above copyin() calls */
 	if (error = sockargs(&nam, (caddr_t)args.addr,
 		args.addrlen, MT_SONAME))
@@ -406,7 +406,7 @@ mountnfs(argp, mp, nam, pth, hst, vpp)
 	} else {
 		MALLOC(nmp, struct nfsmount *, sizeof (struct nfsmount),
 		    M_NFSMNT, M_WAITOK);
-		bzero((caddr_t)nmp, sizeof (struct nfsmount));
+		memset((caddr_t)nmp, 0, sizeof (struct nfsmount));
 		mp->mnt_data = (qaddr_t)nmp;
 	}
 	getnewfsid(mp, MOUNT_NFS);
@@ -436,11 +436,11 @@ mountnfs(argp, mp, nam, pth, hst, vpp)
 	nmp->nm_tnext = (struct nfsnode *)nmp;
 	nmp->nm_tprev = (struct nfsnode *)nmp;
 	nmp->nm_inprog = NULLVP;
-	bcopy((caddr_t)argp->fh, (caddr_t)&nmp->nm_fh, sizeof(nfsv2fh_t));
+	memcpy((caddr_t)&nmp->nm_fh, (caddr_t)argp->fh, sizeof(nfsv2fh_t));
 	mp->mnt_stat.f_type = MOUNT_NFS;
 	strncpy(&mp->mnt_stat.f_fstypename[0], mp->mnt_op->vfs_name, MFSNAMELEN);
-	bcopy(hst, mp->mnt_stat.f_mntfromname, MNAMELEN);
-	bcopy(pth, mp->mnt_stat.f_mntonname, MNAMELEN);
+	memcpy(mp->mnt_stat.f_mntfromname, hst, MNAMELEN);
+	memcpy(mp->mnt_stat.f_mntonname, pth, MNAMELEN);
 	nmp->nm_nam = nam;
 
 	if ((argp->flags & NFSMNT_TIMEO) && argp->timeo > 0) {

@@ -230,7 +230,7 @@ restart:
 	/* Assuming at most one xpd tpdu is in the buffer at once */
 	while (n != MNULL) {
 		m->m_len += n->m_len;
-		bcopy(mtod(n, caddr_t), mtod(m, caddr_t), (unsigned)n->m_len);
+               memcpy(mtod(m, caddr_t), mtod(n, caddr_t), (unsigned)n->m_len);
 		m->m_data += n->m_len; /* so mtod() in bcopy() above gives right addr */
 		n = n->m_next;
 	}

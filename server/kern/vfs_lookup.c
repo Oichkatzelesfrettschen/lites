@@ -191,7 +191,7 @@ namei(ndp)
 			break;
 		}
 		if (ndp->ni_pathlen > 1) {
-			bcopy(ndp->ni_next, cp + linklen, ndp->ni_pathlen);
+			memcpy(cp + linklen, ndp->ni_next, ndp->ni_pathlen);
 			FREE(cnp->cn_pnbuf, M_NAMEI);
 			cnp->cn_pnbuf = cp;
 		} else
@@ -304,19 +304,19 @@ dirloop:
 	if (cnp->cn_nameptr[0] == '@') {
 		extern char hostname[], machine[], atsys[];
 		if (cnp->cn_namelen == 4) {
-			if (!bcmp("sys", cnp->cn_nameptr + 1, 3)) {
+			if (!memcmp("sys", cnp->cn_nameptr + 1, 3)) {
 				cnp->cn_nameptr = atsys;
 				cnp->cn_namelen = strlen(cnp->cn_nameptr);
-			} else if (!bcmp("cpu", cnp->cn_nameptr + 1, 3)) {
+			} else if (!memcmp("cpu", cnp->cn_nameptr + 1, 3)) {
 				cnp->cn_nameptr = machine;
 				cnp->cn_namelen = strlen(cnp->cn_nameptr);
-			} else if (!bcmp("bin", cnp->cn_nameptr + 1, 3)) {
+			} else if (!memcmp("bin", cnp->cn_nameptr + 1, 3)) {
 				cnp->cn_nameptr = (p->p_atbin
 						   ? p->p_atbin : atsys);
 				cnp->cn_namelen = strlen(cnp->cn_nameptr);
 			}
 		} else if (cnp->cn_namelen == 5) {
-			if (!bcmp("host", cnp->cn_nameptr + 1, 4)) {
+			if (!memcmp("host", cnp->cn_nameptr + 1, 4)) {
 				cnp->cn_nameptr = hostname;
 				cnp->cn_namelen = strlen(cnp->cn_nameptr);
 			}

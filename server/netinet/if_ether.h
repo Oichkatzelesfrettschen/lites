@@ -197,8 +197,8 @@ struct ether_multistep {
 { \
 	for ((enm) = (ac)->ac_multiaddrs; \
 	    (enm) != NULL && \
-	    (bcmp((enm)->enm_addrlo, (addrlo), 6) != 0 || \
-	     bcmp((enm)->enm_addrhi, (addrhi), 6) != 0); \
+	    (memcmp((enm)->enm_addrlo, (addrlo), 6) != 0 || \
+	     memcmp((enm)->enm_addrhi, (addrhi), 6) != 0); \
 		(enm) = (enm)->enm_next); \
 }
 

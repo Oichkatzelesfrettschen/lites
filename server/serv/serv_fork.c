@@ -226,7 +226,7 @@ void proc_allocate(np)
 		    panic("proc_allocate");
 		*np = (struct proc *) malloc(sizeof(struct proc));
 		assert(*np);
-		bzero(*np, sizeof(struct proc));
+		memset(*np, 0, sizeof(struct proc));
 #if MAP_UAREA
 		alloc_mapped_uarea(*np);
 #endif
@@ -354,10 +354,8 @@ again:
 	 * Start by zeroing the section of proc that is zero-initialized,
 	 * then copy the section that is copied directly from the parent.
 	 */
-	bzero(&p2->p_startzero,
-	    (unsigned) ((caddr_t)&p2->p_endzero - (caddr_t)&p2->p_startzero));
-	bcopy(&p1->p_startcopy, &p2->p_startcopy,
-	    (unsigned) ((caddr_t)&p2->p_endcopy - (caddr_t)&p2->p_startcopy));
+	memset(&p2->p_startzero, 0, (unsigned) ((caddr_t)&p2->p_endzero - (caddr_t)&p2->p_startzero));
+	memcpy(&p2->p_startcopy, &p1->p_startcopy, (unsigned) ((caddr_t)&p2->p_endcopy - (caddr_t)&p2->p_startcopy));
 
 	p2->p_ref = 0;
 	p2->p_servers_count = 0;
@@ -407,8 +405,8 @@ again:
 	    panic("kern_fork");
 	    return 0;
 	}
-	bcopy(p1->p_shared_ro,p2->p_shared_ro,sizeof(struct ushared_ro));
-	bcopy(p1->p_shared_rw,p2->p_shared_rw,sizeof(struct ushared_rw));
+	memcpy(p2->p_shared_ro, p1->p_shared_ro, sizeof(struct ushared_ro));
+	memcpy(p2->p_shared_rw, p1->p_shared_rw, sizeof(struct ushared_rw));
 	p2->p_shared_rw->us_inuse = 0;
 	p2->p_shared_rw->us_debug = 0;
 	share_lock_init(&p2->p_shared_rw->us_lock);
@@ -431,7 +429,7 @@ again:
 	 */
 	MALLOC(p2->p_cred, struct pcred *, sizeof(struct pcred),
 	    M_SUBPROC, M_WAITOK);
-	bcopy(p1->p_cred, p2->p_cred, sizeof(*p2->p_cred));
+	memcpy(p2->p_cred, p1->p_cred, sizeof(*p2->p_cred));
 	p2->p_cred->p_refcnt = 1;
 	crhold(p1->p_ucred);
 
@@ -451,7 +449,7 @@ again:
 	 */
 #if	MAP_UAREA
 	p2->p_limit = &p2->p_shared_ro->us_limit;
-	bcopy(p1->p_limit, p2->p_limit, sizeof(*p2->p_limit));
+	memcpy(p2->p_limit, p1->p_limit, sizeof(*p2->p_limit));
 #else
 	if (p1->p_limit->p_lflags & PL_SHAREMOD)
 		p2->p_limit = limcopy(p1->p_limit);

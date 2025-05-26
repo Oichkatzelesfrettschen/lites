@@ -89,12 +89,10 @@ idrp_input(m, src, dst)
 	bad:	m_freem(m);
 		return 0;
 	}
-	bzero(idrp_addrs[0].siso_data, sizeof(idrp_addrs[0].siso_data));
-	bcopy((caddr_t)&(src->siso_addr), (caddr_t)&idrp_addrs[0].siso_addr,
-		1 + src->siso_nlen);
-	bzero(idrp_addrs[1].siso_data, sizeof(idrp_addrs[1].siso_data));
-	bcopy((caddr_t)&(dst->siso_addr), (caddr_t)&idrp_addrs[1].siso_addr,
-		1 + dst->siso_nlen);
+	memset(idrp_addrs[0].siso_data, 0, sizeof(idrp_addrs[0].siso_data));
+	memcpy((caddr_t)&idrp_addrs[0].siso_addr, (caddr_t)&(src->siso_addr), 1 + src->siso_nlen);
+	memset(idrp_addrs[1].siso_data, 0, sizeof(idrp_addrs[1].siso_data));
+	memcpy((caddr_t)&idrp_addrs[1].siso_addr, (caddr_t)&(dst->siso_addr), 1 + dst->siso_nlen);
 	if (sbappendaddr(&idrp_isop.isop_socket->so_rcv,
 		(struct sockaddr *)idrp_addrs, m, (struct mbuf *)0) == 0)
 		goto bad;
@@ -108,11 +106,9 @@ idrp_output(m, addr)
 	register struct sockaddr_iso *siso = mtod(addr, struct sockaddr_iso *);
 	int s = splnet(), i;
 
-	bcopy((caddr_t)&(siso->siso_addr),
-	      (caddr_t)&idrp_isop.isop_sfaddr.siso_addr, 1 + siso->siso_nlen);
+	memcpy((caddr_t)&idrp_isop.isop_sfaddr.siso_addr, (caddr_t)&(siso->siso_addr), 1 + siso->siso_nlen);
 	siso++;
-	bcopy((caddr_t)&(siso->siso_addr),
-	      (caddr_t)&idrp_isop.isop_sladdr.siso_addr, 1 + siso->siso_nlen);
+	memcpy((caddr_t)&idrp_isop.isop_sladdr.siso_addr, (caddr_t)&(siso->siso_addr), 1 + siso->siso_nlen);
 	i = clnp_output(m, idrp_isop, m->m_pkthdr.len, 0);
 	splx(s);
 	return (i);

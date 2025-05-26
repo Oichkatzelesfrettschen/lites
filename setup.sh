@@ -11,10 +11,26 @@ set -x
 
 export DEBIAN_FRONTEND=noninteractive
 
-if ! apt-get update -y; then
+# Always attempt to update and upgrade packages. Retry a couple of times if
+# the network is flaky. Any failures are logged for later review.
+retry_cmd() {
+  local n=0
+  local max=3
+  until "$@"; do
+    n=$((n+1))
+    if (( n >= max )); then
+      echo "command '$*' failed after $n attempts" >> "$FAIL_LOG"
+      return 1
+    fi
+    echo "Retrying '$*' ($n/$max)" | tee -a "$LOG"
+    sleep 1
+  done
+}
+
+if ! retry_cmd apt-get update -y; then
   echo "apt-get update failed" >> "$FAIL_LOG"
 fi
-if ! apt-get dist-upgrade -y; then
+if ! retry_cmd apt-get dist-upgrade -y; then
   echo "apt-get dist-upgrade failed" >> "$FAIL_LOG"
 fi
 
@@ -22,7 +38,7 @@ install_pkg() {
   local pkg="$1"
   echo "\n===== Installing $pkg =====" | tee -a "$LOG"
 
-  if apt-get install -y "$pkg"; then
+  if retry_cmd apt-get install -y "$pkg"; then
     echo "$pkg installed via apt" >> "$LOG"
     return 0
   fi
@@ -83,6 +99,7 @@ packages=(
   doxygen graphviz python3-sphinx
   shellcheck yamllint
   python3 python3-pip python3-venv python3-setuptools python3-wheel
+  gcc-i686-linux-gnu g++-i686-linux-gnu
   nodejs npm yarnpkg
   coq coqide tla4tools isabelle asda
   afl++ honggfuzz cargo-fuzz
@@ -115,4 +132,6 @@ export CLANG_EXTRA_FLAGS="-mllvm -polly"
 # Troubleshooting notes:
 # - Inspect $LOG for command output from each step.
 # - Any package that could not be installed is listed in $FAIL_LOG.
-# - Rerun this script after addressing network or dependency issues.
+# - Resolve those packages manually or adjust the network configuration.
+# - Re-run this script; it will retry failed steps up to three times.
+# - Continue iterating until $FAIL_LOG is empty.

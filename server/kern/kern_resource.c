@@ -516,8 +516,7 @@ limcopy(lim)
 
 	MALLOC(copy, struct plimit *, sizeof(struct plimit),
 	    M_SUBPROC, M_WAITOK);
-	bcopy(lim->pl_rlimit, copy->pl_rlimit,
-	    sizeof(struct rlimit) * RLIM_NLIMITS);
+	memcpy(copy->pl_rlimit, lim->pl_rlimit, sizeof(struct rlimit) * RLIM_NLIMITS);
 	copy->p_lflags = 0;
 	copy->p_refcnt = 1;
 	return (copy);

@@ -239,7 +239,7 @@ bsd_pid_by_task(
 	    len = strlen(sp->p_comm);
 	    if (*commlen < len)
 		len = *commlen;
-	    bcopy(sp->p_comm, comm, len);
+	    memcpy(comm, sp->p_comm, len);
 	    *commlen = len;
 	    /* get rid of the send right (consume on success) */
 	    (void) mach_port_deallocate(mach_task_self(), task);

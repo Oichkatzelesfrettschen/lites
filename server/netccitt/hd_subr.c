@@ -90,7 +90,7 @@ struct sockaddr *addr;
 		MALLOC(hdp, struct hdcb *, sizeof (*hdp), M_PCB, M_DONTWAIT);
 		if (hdp == 0)
 			return (ENOBUFS);
-		bzero((caddr_t)hdp, sizeof(*hdp));
+		memset((caddr_t)hdp, 0, sizeof(*hdp));
 		hdp->hd_pkp =
 			(caddr_t) pk_newlink ((struct x25_ifaddr *) ifa, 
 					      (caddr_t) hdp);
@@ -301,7 +301,7 @@ register int frametype, pf;
 
 	case FRMR: 
 		frame -> control = FRMR_CONTROL;
-		bcopy ((caddr_t)&hd_frmr, (caddr_t)frame -> info, 3);
+		memcpy((caddr_t)frame -> info, (caddr_t)&hd_frmr, 3);
 		buf -> m_len = 5;
 		hdp->hd_frmrs_out++;
 

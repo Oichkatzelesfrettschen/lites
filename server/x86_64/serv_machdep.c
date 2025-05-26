@@ -307,7 +307,7 @@ void pagemove(
 	kern_return_t kr = KERN_SUCCESS;
 
 	if(size % PAGE_SIZE || (int)from % PAGE_SIZE) 
-		bcopy(from, to, size);
+		memcpy(to, from, size);
 	else
 		kr = vm_write(mach_task_self(), (vm_offset_t) to,
 		      (vm_offset_t) from, size);

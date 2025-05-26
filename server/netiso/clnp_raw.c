@@ -285,7 +285,7 @@ clnp_usrreq(so, req, m, nam, control)
 		MALLOC(rp, struct rawisopcb *, sizeof *rp, M_PCB, M_WAITOK);
 		if (rp == 0)
 			return (ENOBUFS);
-		bzero((caddr_t)rp, sizeof *rp);
+		memset((caddr_t)rp, 0, sizeof *rp);
 		so->so_pcb = (caddr_t)rp;
 		break;
 

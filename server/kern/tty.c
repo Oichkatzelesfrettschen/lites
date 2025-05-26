@@ -170,7 +170,7 @@ ttyopen(device, tp)
 	tp->t_dev = device;
 	if (!ISSET(tp->t_state, TS_ISOPEN)) {
 		SET(tp->t_state, TS_ISOPEN);
-		bzero(&tp->t_winsize, sizeof(tp->t_winsize));
+		memset(&tp->t_winsize, 0, sizeof(tp->t_winsize));
 	}
 	CLR(tp->t_state, TS_WOPEN);
 	splx(s);
@@ -719,7 +719,7 @@ ttioctl(
 	case TIOCGETA: {		/* get termios struct */
 		struct termios *t = (struct termios *)data;
 
-		bcopy(&tp->t_termios, t, sizeof(struct termios));
+		memcpy(t, &tp->t_termios, sizeof(struct termios));
 		break;
 	}
 	case TIOCGETD:			/* get line discipline */
@@ -809,7 +809,7 @@ ttioctl(
 		else
 			CLR(t->c_lflag, EXTPROC);
 		tp->t_lflag = t->c_lflag | ISSET(tp->t_lflag, PENDIN);
-		bcopy(t->c_cc, tp->t_cc, sizeof(t->c_cc));
+		memcpy(tp->t_cc, t->c_cc, sizeof(t->c_cc));
 		splx(s);
 		break;
 	}
@@ -884,7 +884,7 @@ ttioctl(
 		break;
 	}
 	case TIOCSWINSZ:		/* set window size */
-		if (bcmp((caddr_t)&tp->t_winsize, data,
+		if (memcmp((caddr_t)&tp->t_winsize, data,
 		    sizeof (struct winsize))) {
 			tp->t_winsize = *(struct winsize *)data;
 			pgsignal(tp->t_pgrp, SIGWINCH, 1);
@@ -1025,7 +1025,7 @@ ttychars(tp)
 	struct tty *tp;
 {
 
-	bcopy(ttydefchars, tp->t_cc, sizeof(ttydefchars));
+	memcpy(tp->t_cc, ttydefchars, sizeof(ttydefchars));
 }
 
 /*

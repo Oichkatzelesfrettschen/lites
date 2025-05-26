@@ -87,7 +87,7 @@ static struct vmspace *vmspace_fork(struct vmspace *ovs, struct proc *p2)
 #else
 	vs = &p2->p_realvmspace;
 #endif
-	bcopy(ovs, vs, sizeof(*vs));
+	memcpy(vs, ovs, sizeof(*vs));
 	vs->vm_refcnt = 1;
 	vs->vm_shm = 0;
 	return vs;
@@ -134,11 +134,9 @@ vm_fork(p1, p2, isvfork)
 	p2->p_stats = &up->u_stats;
 	p2->p_sigacts = &up->u_sigacts;
 	up->u_sigacts = *p1->p_sigacts;
-	bzero(&up->u_stats.pstat_startzero,
-	    (unsigned) ((caddr_t)&up->u_stats.pstat_endzero -
+	memset(&up->u_stats.pstat_startzero, 0, (unsigned) ((caddr_t)&up->u_stats.pstat_endzero -
 	    (caddr_t)&up->u_stats.pstat_startzero));
-	bcopy(&p1->p_stats->pstat_startcopy, &up->u_stats.pstat_startcopy,
-	    ((caddr_t)&up->u_stats.pstat_endcopy -
+	memcpy(&up->u_stats.pstat_startcopy, &p1->p_stats->pstat_startcopy, ((caddr_t)&up->u_stats.pstat_endcopy -
 	     (caddr_t)&up->u_stats.pstat_startcopy));
 
 #ifdef LITES

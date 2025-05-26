@@ -426,9 +426,7 @@ mach_error_t ether_ioctl(
 			if (ns_nullhost(*ina))
 			    ina->x_host = *(union ns_host *)es->es_addr;
 			else {
-			    bcopy(ina->x_host.c_host,
-				  es->es_addr,
-				  sizeof(es->es_addr));
+			    memcpy(es->es_addr, ina->x_host.c_host, sizeof(es->es_addr));
 			    /*
 			     * Tell hardware to change address XXX
 			     */
@@ -511,8 +509,8 @@ iface_find(char *name)
 		extern int tcp_recvspace;
 
 		if (tcp_recvspace != 0x300 &&
-		    (!bcmp(name, "de", 2) ||
-		     !bcmp(name, "et", 2)))
+		    (!memcmp(name, "de", 2) ||
+		     !memcmp(name, "et", 2)))
 			tcp_recvspace = 0x300;
 	}
 #endif	/* i386 */
@@ -573,7 +571,7 @@ iface_find(char *name)
 	 * Allocate an Ethernet interface structure.
 	 */
 	es = (struct ether_softc *)malloc(sizeof(struct ether_softc));
-	bzero((caddr_t) es, sizeof(struct ether_softc));
+	memset((caddr_t) es, 0, sizeof(struct ether_softc));
 
 	ifp = &es->es_if;
 
@@ -604,7 +602,7 @@ iface_find(char *name)
 	ifp->if_start =		ether_start;
 	ifp->if_ioctl =		ether_ioctl;
 
-	bcopy(if_addr, es->es_addr, sizeof(es->es_addr));
+	memcpy(es->es_addr, if_addr, sizeof(es->es_addr));
 
 	es->es_port = if_port;
 	es->es_reply_port = reply_port;

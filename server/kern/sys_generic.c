@@ -177,7 +177,7 @@ s_readv(p, uap, retval)
 	 */
 	if (KTRPOINT(p, KTR_GENIO))  {
 		MALLOC(ktriov, struct iovec *, iovlen, M_TEMP, M_WAITOK);
-		bcopy((caddr_t)auio.uio_iov, (caddr_t)ktriov, iovlen);
+		memcpy((caddr_t)ktriov, (caddr_t)auio.uio_iov, iovlen);
 	}
 #endif
 	cnt = auio.uio_resid;
@@ -328,7 +328,7 @@ writev(p, uap, retval)
 	 */
 	if (KTRPOINT(p, KTR_GENIO))  {
 		MALLOC(ktriov, struct iovec *, iovlen, M_TEMP, M_WAITOK);
-		bcopy((caddr_t)auio.uio_iov, (caddr_t)ktriov, iovlen);
+		memcpy((caddr_t)ktriov, (caddr_t)auio.uio_iov, iovlen);
 	}
 #endif
 	cnt = auio.uio_resid;
@@ -424,7 +424,7 @@ ioctl(p, uap, retval)
 		 * Zero the buffer so the user always
 		 * gets back something deterministic.
 		 */
-		bzero(data, size);
+		memset(data, 0, size);
 	else if (com&IOC_VOID)
 		*(caddr_t *)data = uap->data;
 

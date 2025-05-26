@@ -211,7 +211,7 @@ tp_emit(dutype,	tpcb, seq, eot, data)
 	m->m_act = MNULL;
 
 	hdr = mtod(m, struct tpdu *);
-	bzero((caddr_t)hdr, sizeof(struct tpdu));
+	memset((caddr_t)hdr, 0, sizeof(struct tpdu));
 
 	{
 		int 	tp_headersize();
@@ -604,9 +604,9 @@ tp_emit(dutype,	tpcb, seq, eot, data)
 				subseq = htons(tpcb->tp_r_subseq);
 				fcredit = htons(tpcb->tp_fcredit);
 
-				bcopy((caddr_t) &lwe, (caddr_t)&bogus[0], sizeof(SeqNum));
-				bcopy((caddr_t) &subseq, (caddr_t)&bogus[2], sizeof(u_short));
-				bcopy((caddr_t) &fcredit, (caddr_t)&bogus[3], sizeof(u_short));
+				memcpy((caddr_t)&bogus[0], (caddr_t) &lwe, sizeof(SeqNum));
+				memcpy((caddr_t)&bogus[2], (caddr_t) &subseq, sizeof(u_short));
+				memcpy((caddr_t)&bogus[3], (caddr_t) &fcredit, sizeof(u_short));
 
 				IFTRACE(D_ACKSEND)
 					tptraceTPCB(TPPTmisc, 

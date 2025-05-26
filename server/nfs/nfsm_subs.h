@@ -100,11 +100,11 @@ extern struct mbuf *nfsm_reqh();
 
 #define nfsm_fhtom(v) \
 		nfsm_build(cp,caddr_t,NFSX_FH); \
-		bcopy((caddr_t)&(VTONFS(v)->n_fh), cp, NFSX_FH)
+		memcpy(cp, (caddr_t)&(VTONFS(v)->n_fh), NFSX_FH)
 
 #define nfsm_srvfhtom(f) \
 		nfsm_build(cp,caddr_t,NFSX_FH); \
-		bcopy((caddr_t)(f), cp, NFSX_FH)
+		memcpy(cp, (caddr_t)(f), NFSX_FH)
 
 #define nfsm_mtofh(d,v) \
 		{ struct nfsnode *np; nfsv2fh_t *fhp; \
@@ -177,7 +177,7 @@ extern struct mbuf *nfsm_reqh();
 			nfsm_build(tl,u_long *,t2); \
 			*tl++ = txdr_unsigned(s); \
 			*(tl+((t2>>2)-2)) = 0; \
-			bcopy((caddr_t)(a), (caddr_t)tl, (s)); \
+			memcpy((caddr_t)tl, (caddr_t)(a), (s)); \
 		} else if (error = nfsm_strtmbuf(&mb, &bpos, (a), (s))) { \
 			m_freem(mreq); \
 			goto nfsmout; \
@@ -213,7 +213,7 @@ extern struct mbuf *nfsm_reqh();
 
 #define nfsm_srvmtofh(f) \
 		nfsm_dissect(tl, u_long *, NFSX_FH); \
-		bcopy((caddr_t)tl, (caddr_t)f, NFSX_FH)
+		memcpy((caddr_t)f, (caddr_t)tl, NFSX_FH)
 
 #define	nfsm_clget \
 		if (bp >= be) { \

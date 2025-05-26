@@ -122,21 +122,19 @@ tpTrace(tpcb, event, arg, src, len, arg4, arg5)
 	tp->tpt_arg = arg;
 	if(tpcb)
 		tp->tpt_arg2 = tpcb->tp_lref;
-	bcopy( (caddr_t)&time, (caddr_t)&tp->tpt_time, sizeof(struct timeval) );
+	memcpy((caddr_t)&tp->tpt_time, (caddr_t)&time, sizeof(struct timeval) );
 
 	switch(event) {
 
 	case TPPTertpdu:
-		bcopy((caddr_t)src, (caddr_t)&tp->tpt_ertpdu,
-			(unsigned)MIN((int)len, sizeof(struct tp_Trace)));
+		memcpy((caddr_t)&tp->tpt_ertpdu, (caddr_t)src, (unsigned)MIN((int)len, sizeof(struct tp_Trace)));
 		break;
 
 	case TPPTusrreq:
 	case TPPTmisc:
 
 		/* arg is a string */
-		bcopy((caddr_t)arg, (caddr_t)tp->tpt_str, 
-			(unsigned)MIN(1+strlen((caddr_t) arg), TPTRACE_STRLEN));
+		memcpy((caddr_t)tp->tpt_str, (caddr_t)arg, (unsigned)MIN(1+strlen((caddr_t) arg), TPTRACE_STRLEN));
 		tp->tpt_m2 = src; 
 		tp->tpt_m3 = len;
 		tp->tpt_m4 = arg4;
@@ -158,17 +156,16 @@ tpTrace(tpcb, event, arg, src, len, arg4, arg5)
 		tp->tpt_m1 = arg5; 
 		break;
 	case TPPTparam:
-		bcopy((caddr_t)src, (caddr_t)&tp->tpt_param, sizeof(struct tp_param));
+		memcpy((caddr_t)&tp->tpt_param, (caddr_t)src, sizeof(struct tp_param));
 		break;
 	case TPPTref:
-		bcopy((caddr_t)src, (caddr_t)&tp->tpt_ref, sizeof(struct tp_ref));
+		memcpy((caddr_t)&tp->tpt_ref, (caddr_t)src, sizeof(struct tp_ref));
 		break;
 
 	case TPPTtpduin:
 	case TPPTtpduout:
 		tp->tpt_arg2 = arg4;
-		bcopy((caddr_t)src, (caddr_t)&tp->tpt_tpdu,
-		      (unsigned)MIN((int)len, sizeof(struct tp_Trace)));
+		memcpy((caddr_t)&tp->tpt_tpdu, (caddr_t)src, (unsigned)MIN((int)len, sizeof(struct tp_Trace)));
 		break;
 	}
 }

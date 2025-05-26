@@ -132,7 +132,7 @@ struct rtentry *rt;			/* route if direct ether */
 
 
 		INCSTAT(cns_fragmented);
-        (void) bcopy(segoff + mtod(m, caddr_t), (caddr_t)&seg_part,
+        (void) memcpy(caddr_t), segoff + mtod(m, (caddr_t)&seg_part,
             sizeof(seg_part));
 		frag_base = ntohs(seg_part.cng_off);
 		/*
@@ -214,7 +214,7 @@ struct rtentry *rt;			/* route if direct ether */
 			m_cat(frag_hdr, frag_data);
 
 			/* insert segmentation part; updated below */
-			bcopy((caddr_t)&seg_part, mtod(frag_hdr, caddr_t) + segoff,
+			memcpy(mtod(frag_hdr, (caddr_t)&seg_part, caddr_t) + segoff,
 				sizeof(struct clnp_segment));
 
 			{
@@ -414,8 +414,8 @@ struct clnp_segment	*seg;	/* segment part of fragment header */
 	}
 	
 	/* Fill in rest of fragl structure */
-	bcopy((caddr_t)src, (caddr_t)&cfh->cfl_src, sizeof(struct iso_addr));
-	bcopy((caddr_t)dst, (caddr_t)&cfh->cfl_dst, sizeof(struct iso_addr));
+	memcpy((caddr_t)&cfh->cfl_src, (caddr_t)src, sizeof(struct iso_addr));
+	memcpy((caddr_t)&cfh->cfl_dst, (caddr_t)dst, sizeof(struct iso_addr));
 	cfh->cfl_id = seg->cng_id;
 	cfh->cfl_ttl = clnp->cnf_ttl;
 	cfh->cfl_last = (seg->cng_tot_len - clnp->cnf_hdr_len) - 1;

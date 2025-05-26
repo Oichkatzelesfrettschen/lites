@@ -224,9 +224,7 @@ llc_rawsend(struct llc_linkcb *linkp, struct mbuf *m, struct llc *frame,
 		frame->llc_control = LLC_FRMR;
 		/* get more space --- FRMR frame are longer then usual */
 		LLC_SETLEN(m, LLC_FRMRLEN);
-		bcopy((caddr_t) &linkp->llcl_frmrinfo, 
-		      (caddr_t) &frame->llc_frmrinfo,
-		      sizeof(struct frmrinfo));
+		memcpy((caddr_t) &frame->llc_frmrinfo, (caddr_t) &linkp->llcl_frmrinfo, sizeof(struct frmrinfo));
 		break;
 	default:
 		/*

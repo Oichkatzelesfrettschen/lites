@@ -127,7 +127,7 @@ iso_pcballoc(so, head)
 	MALLOC(isop, struct isopcb *, sizeof(*isop), M_PCB, M_NOWAIT);
 	if (isop == NULL)
 		return ENOBUFS;
-	bzero((caddr_t)isop, sizeof(*isop));
+	memset((caddr_t)isop, 0, sizeof(*isop));
 	isop->isop_head = head;
 	isop->isop_socket = so;
 	insque(isop, head);
@@ -220,14 +220,14 @@ iso_pcbbind(isop, nam)
 			return ENOBUFS;
 		isop->isop_laddr = mtod(nam, struct sockaddr_iso *);
 	}
-	bcopy((caddr_t)siso, (caddr_t)isop->isop_laddr, siso->siso_len);
+	memcpy((caddr_t)isop->isop_laddr, (caddr_t)siso, siso->siso_len);
 	if (siso->siso_tlen == 0)
 		goto noname;
 	if ((isop->isop_socket->so_options & SO_REUSEADDR) == 0 &&
 		iso_pcblookup(head, 0, (caddr_t)0, isop->isop_laddr))
 		return EADDRINUSE;
 	if (siso->siso_tlen <= 2) {
-		bcopy(TSEL(siso), suf.data, sizeof(suf.data));
+		memcpy(suf.data, TSEL(siso), sizeof(suf.data));
 		suf.s = ntohs(suf.s);
 		if((suf.s < ISO_PORT_RESERVED) &&
 		   (isop->isop_socket->so_state && SS_PRIV) == 0)
@@ -298,8 +298,7 @@ iso_pcbconnect(isop, nam)
 			int nlen = ia->ia_addr.siso_nlen;
 			ovbcopy(TSEL(siso), nlen + TSEL(siso),
 				siso->siso_plen + siso->siso_tlen + siso->siso_slen);
-			bcopy((caddr_t)&ia->ia_addr.siso_addr,
-				  (caddr_t)&siso->siso_addr, nlen + 1);
+			memcpy((caddr_t)&siso->siso_addr, (caddr_t)&ia->ia_addr.siso_addr, nlen + 1);
 			/* includes siso->siso_nlen = nlen; */
 		} else
 			return EADDRNOTAVAIL;
@@ -361,7 +360,7 @@ iso_pcbconnect(isop, nam)
 		siso->siso_nlen = ia->ia_addr.siso_nlen;
 		newtsel = TSEL(siso);
 		ovbcopy(oldtsel, newtsel, tlen);
-		bcopy(ia->ia_addr.siso_data, siso->siso_data, nlen);
+		memcpy(siso->siso_data, ia->ia_addr.siso_data, nlen);
 		siso->siso_tlen = tlen;
 		siso->siso_family = AF_ISO;
 		siso->siso_len = totlen;
@@ -389,7 +388,7 @@ iso_pcbconnect(isop, nam)
 			isop->isop_faddr = mtod(m, struct sockaddr_iso *);
 		}
 	}
-	bcopy((caddr_t)siso, (caddr_t)isop->isop_faddr, siso->siso_len);
+	memcpy((caddr_t)isop->isop_faddr, (caddr_t)siso, siso->siso_len);
 	IFDEBUG(D_ISO)
 		printf("in iso_pcbconnect after bcopy isop 0x%x isop->sock 0x%x\n", 
 			isop, isop->isop_socket);
@@ -603,10 +602,10 @@ iso_pcblookup(head, fportlen, fport, laddr)
 			continue;
 		if (isop->isop_laddr->siso_tlen != llen)
 			continue;
-		if (bcmp(lp, TSEL(isop->isop_laddr), llen))
+		if (memcmp(lp, TSEL(isop->isop_laddr), llen))
 			continue;
 		if (fportlen && isop->isop_faddr &&
-			bcmp(fport, TSEL(isop->isop_faddr), (unsigned)fportlen))
+			memcmp(fport, TSEL(isop->isop_faddr), (unsigned)fportlen))
 			continue;
 		/*	PHASE2
 		 *	addrmatch1 should be iso_addrmatch(a, b, mask)

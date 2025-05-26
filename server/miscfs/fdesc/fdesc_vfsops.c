@@ -92,9 +92,9 @@ fdesc_mount(mp, path, data, ndp, p)
 	getnewfsid(mp, MOUNT_FDESC);
 
 	(void) copyinstr(path, mp->mnt_stat.f_mntonname, MNAMELEN - 1, &size);
-	bzero(mp->mnt_stat.f_mntonname + size, MNAMELEN - size);
-	bzero(mp->mnt_stat.f_mntfromname, MNAMELEN);
-	bcopy("fdesc", mp->mnt_stat.f_mntfromname, sizeof("fdesc"));
+	memset(mp->mnt_stat.f_mntonname + size, 0, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname, 0, MNAMELEN);
+	memcpy(mp->mnt_stat.f_mntfromname, "fdesc", sizeof("fdesc"));
 	return (0);
 }
 
@@ -224,9 +224,9 @@ fdesc_statfs(mp, sbp, p)
 	sbp->f_files = lim + 1;		/* Allow for "." */
 	sbp->f_ffree = freefd;		/* See comments above */
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(&sbp->f_fsid, &mp->mnt_stat.f_fsid, sizeof(sbp->f_fsid));
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
 	strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);

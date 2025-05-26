@@ -335,7 +335,7 @@ searchloop:
 				namlen = ep->d_namlen;
 #			endif
 			if (namlen == cnp->cn_namelen &&
-			    !bcmp(cnp->cn_nameptr, ep->d_name,
+			    !memcmp(cnp->cn_nameptr, ep->d_name,
 				(unsigned)namlen)) {
 				/*
 				 * Save directory entry's inode number and
@@ -663,7 +663,7 @@ ufs_direnter(ip, dvp, cnp)
 	dp = VTOI(dvp);
 	newdir.d_ino = ip->i_number;
 	newdir.d_namlen = cnp->cn_namelen;
-	bcopy(cnp->cn_nameptr, newdir.d_name, (unsigned)cnp->cn_namelen + 1);
+	memcpy(newdir.d_name, cnp->cn_nameptr, (unsigned)cnp->cn_namelen + 1);
 	if (dvp->v_mount->mnt_maxsymlinklen > 0)
 		newdir.d_type = IFTODT(ip->i_mode);
 	else {
@@ -752,7 +752,7 @@ ufs_direnter(ip, dvp, cnp)
 		dsize = DIRSIZ(FSFMT(dvp), nep);
 		spacefree += nep->d_reclen - dsize;
 		loc += nep->d_reclen;
-		bcopy((caddr_t)nep, (caddr_t)ep, dsize);
+		memcpy((caddr_t)ep, (caddr_t)nep, dsize);
 	}
 	/*
 	 * Update the pointer fields in the previous entry (if any),
@@ -769,7 +769,7 @@ ufs_direnter(ip, dvp, cnp)
 		ep->d_reclen = dsize;
 		ep = (struct direct *)((char *)ep + dsize);
 	}
-	bcopy((caddr_t)&newdir, (caddr_t)ep, (u_int)newentrysize);
+	memcpy((caddr_t)ep, (caddr_t)&newdir, (u_int)newentrysize);
 	error = VOP_BWRITE(bp);
 	dp->i_flag |= IN_CHANGE | IN_UPDATE;
 	if (!error && dp->i_endoff && dp->i_endoff < dp->i_size)

@@ -231,7 +231,7 @@ _Noreturn void system_setup(void)
 	p->p_flag = P_INMEM | P_SYSTEM;
 	p->p_stat = SRUN;
 	p->p_nice = NZERO;
-	bcopy("swapper", p->p_comm, sizeof ("swapper"));
+	memcpy(p->p_comm, "swapper", sizeof ("swapper"));
 
 	/* Create credentials. */
 	cred0.p_refcnt = 1;

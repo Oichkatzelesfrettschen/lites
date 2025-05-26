@@ -171,7 +171,7 @@ in_putsufx(inp, sufxloc, sufxlen, which)
 	int which;
 {
 	if (which == TP_FOREIGN) {
-		bcopy(sufxloc, (caddr_t)&inp->inp_fport, sizeof(inp->inp_fport));
+		memcpy((caddr_t)&inp->inp_fport, sufxloc, sizeof(inp->inp_fport));
 	}
 }
 
@@ -226,15 +226,13 @@ in_putnetaddr(inp, name, which)
 {
 	switch (which) {
 	case TP_LOCAL:
-		bcopy((caddr_t)&name->sin_addr, 
-			(caddr_t)&inp->inp_laddr, sizeof(struct in_addr));
+		memcpy((caddr_t)&inp->inp_laddr, (caddr_t)&name->sin_addr, sizeof(struct in_addr));
 			/* won't work if the dst address (name) is INADDR_ANY */
 
 		break;
 	case TP_FOREIGN:
 		if( name != (struct sockaddr_in *)0 ) {
-			bcopy((caddr_t)&name->sin_addr, 
-				(caddr_t)&inp->inp_faddr, sizeof(struct in_addr));
+			memcpy((caddr_t)&inp->inp_faddr, (caddr_t)&name->sin_addr, sizeof(struct in_addr));
 		}
 	}
 }
@@ -296,7 +294,7 @@ in_getnetaddr( inp, name, which)
 	int which;
 {
 	register struct sockaddr_in *sin = mtod(name, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof(*sin));
+	memset((caddr_t)sin, 0, sizeof(*sin));
 	switch (which) {
 	case TP_LOCAL:
 		sin->sin_addr = inp->inp_laddr;
@@ -422,7 +420,7 @@ tpip_output_dg(laddr, faddr, m0, datalen, ro, nochksum)
 	m->m_len = sizeof(struct ip);
 
 	ip = mtod(m, struct ip *);
-	bzero((caddr_t)ip, sizeof *ip);
+	memset((caddr_t)ip, 0, sizeof *ip);
 
 	ip->ip_p = IPPROTO_TP;
 	m->m_pkthdr.len = ip->ip_len = sizeof(struct ip) + datalen;

@@ -107,7 +107,7 @@ cache_lookup(dvp, vpp, cnp)
 		if (ncp->nc_dvp == dvp &&
 		    ncp->nc_dvpid == dvp->v_id &&
 		    ncp->nc_nlen == cnp->cn_namelen &&
-		    !bcmp(ncp->nc_name, cnp->cn_nameptr, (u_int)ncp->nc_nlen))
+		    !memcmp(ncp->nc_name, cnp->cn_nameptr, (u_int)ncp->nc_nlen))
 			break;
 	}
 	if (ncp == NULL) {
@@ -207,7 +207,7 @@ cache_enter(dvp, vp, cnp)
 	if (numcache < desiredvnodes) {
 		ncp = (struct namecache *)
 			malloc((u_long)sizeof *ncp, M_CACHE, M_WAITOK);
-		bzero((char *)ncp, sizeof *ncp);
+		memset((char *)ncp, 0, sizeof *ncp);
 		numcache++;
 	} else if (ncp = nchhead) {
 		/* remove from lru chain */
@@ -236,7 +236,7 @@ cache_enter(dvp, vp, cnp)
 	ncp->nc_dvp = dvp;
 	ncp->nc_dvpid = dvp->v_id;
 	ncp->nc_nlen = cnp->cn_namelen;
-	bcopy(cnp->cn_nameptr, ncp->nc_name, (unsigned)ncp->nc_nlen);
+	memcpy(ncp->nc_name, cnp->cn_nameptr, (unsigned)ncp->nc_nlen);
 	/* link at end of lru chain */
 	ncp->nc_nxt = NULL;
 	ncp->nc_prev = nchtail;

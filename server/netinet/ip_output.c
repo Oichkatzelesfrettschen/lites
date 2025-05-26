@@ -114,7 +114,7 @@ ip_output(m0, opt, ro, flags, imo)
 	 */
 	if (ro == 0) {
 		ro = &iproute;
-		bzero((caddr_t)ro, sizeof (*ro));
+		memset((caddr_t)ro, 0, sizeof (*ro));
 	}
 	dst = (struct sockaddr_in *)&ro->ro_dst;
 	/*
@@ -425,7 +425,7 @@ ip_insertoptions(m, opt, phlen)
 		m = n;
 		m->m_len = optlen + sizeof(struct ip);
 		m->m_data += max_linkhdr;
-		bcopy((caddr_t)ip, mtod(m, caddr_t), sizeof(struct ip));
+		memcpy(mtod(m, (caddr_t)ip, caddr_t), sizeof(struct ip));
 	} else {
 		m->m_data -= optlen;
 		m->m_len += optlen;
@@ -433,7 +433,7 @@ ip_insertoptions(m, opt, phlen)
 		ovbcopy((caddr_t)ip, mtod(m, caddr_t), sizeof(struct ip));
 	}
 	ip = mtod(m, struct ip *);
-	bcopy((caddr_t)p->ipopt_list, (caddr_t)(ip + 1), (unsigned)optlen);
+	memcpy((caddr_t)(ip + 1), (caddr_t)p->ipopt_list, (unsigned)optlen);
 	*phlen = sizeof(struct ip) + optlen;
 	ip->ip_len += optlen;
 	return (m);
@@ -468,7 +468,7 @@ ip_optcopy(ip, jp)
 		if (optlen > cnt)
 			optlen = cnt;
 		if (IPOPT_COPIED(opt)) {
-			bcopy((caddr_t)cp, (caddr_t)dp, (unsigned)optlen);
+			memcpy((caddr_t)dp, (caddr_t)cp, (unsigned)optlen);
 			dp += optlen;
 		}
 	}
@@ -571,8 +571,7 @@ ip_ctloutput(op, so, level, optname, mp)
 			*mp = m = m_get(M_WAIT, MT_SOOPTS);
 			if (inp->inp_options) {
 				m->m_len = inp->inp_options->m_len;
-				bcopy(mtod(inp->inp_options, caddr_t),
-				    mtod(m, caddr_t), (unsigned)m->m_len);
+				memcpy(caddr_t), mtod(inp->inp_options, mtod(m, caddr_t), (unsigned)m->m_len);
 			} else
 				m->m_len = 0;
 			break;
@@ -675,7 +674,7 @@ ip_pcbopts(pcbopt, m)
 	m->m_len += sizeof(struct in_addr);
 	cp = mtod(m, u_char *) + sizeof(struct in_addr);
 	ovbcopy(mtod(m, caddr_t), (caddr_t)cp, (unsigned)cnt);
-	bzero(mtod(m, caddr_t), sizeof(struct in_addr));
+	memset(mtod(m, 0, caddr_t), sizeof(struct in_addr));
 
 	for (; cnt > 0; cnt -= optlen, cp += optlen) {
 		opt = cp[IPOPT_OPTVAL];
@@ -712,7 +711,7 @@ ip_pcbopts(pcbopt, m)
 			/*
 			 * Move first hop before start of options.
 			 */
-			bcopy((caddr_t)&cp[IPOPT_OFFSET+1], mtod(m, caddr_t),
+			memcpy(mtod(m, (caddr_t)&cp[IPOPT_OFFSET+1], caddr_t),
 			    sizeof(struct in_addr));
 			/*
 			 * Then copy rest of options back

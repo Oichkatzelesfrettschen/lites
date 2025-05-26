@@ -113,7 +113,7 @@ caddr_t llnext;
 	pkp = (struct pkcb *) malloc (size, M_PCB, M_WAITOK);
 	if (pkp == 0)
 		return ((struct pkcb *)0);
-	bzero ((caddr_t) pkp, size);
+	memset((caddr_t) pkp, 0, size);
 	pkp -> pk_lloutput = pp -> pr_output;
 	pkp -> pk_llctlinput = (caddr_t (*)()) pp -> pr_ctlinput;
 	pkp -> pk_xcp = xcp;
@@ -219,7 +219,7 @@ register struct pkcb *pkp;
 		pkp -> pk_chan =
 			(struct pklcd **) malloc (size, M_IFADDR, M_WAITOK);
 		if (pkp -> pk_chan) {
-			bzero ((caddr_t) pkp -> pk_chan, size);
+			memset((caddr_t) pkp -> pk_chan, 0, size);
 			/*
 			 * Allocate a logical channel descriptor for lcn 0
 			 */
@@ -841,7 +841,7 @@ register struct x25config *xcp;
 	octet *cp;
 	unsigned count;
 
-	bzero ((caddr_t) sa, sizeof (*sa));
+	memset((caddr_t) sa, 0, sizeof (*sa));
 	sa -> x25_len = sizeof (*sa);
 	sa -> x25_family = AF_CCITT;
 	if (iscalling) {
@@ -858,7 +858,7 @@ register struct x25config *xcp;
 		sprintf ((char *) dnicname, "%d", xcp -> xc_addr.x25_net);
 		prune_dnic ((char *) buf, sa -> x25_addr, dnicname, xcp);
 	} else
-		bcopy ((caddr_t) buf, (caddr_t) sa -> x25_addr, count + 1);
+		memcpy((caddr_t) sa -> x25_addr, (caddr_t) buf, count + 1);
 }
 
 static
@@ -879,7 +879,7 @@ struct socket *so;
 		M_PREPEND (m, sizeof (cmsghdr), M_DONTWAIT);
 		if (m == 0)
 			return;
-		bcopy ((caddr_t)&cmsghdr, mtod (m, caddr_t), sizeof (cmsghdr));
+		memcpy(mtod (m, (caddr_t)&cmsghdr, caddr_t), sizeof (cmsghdr));
 		MCHTYPE(m, MT_CONTROL);
 		sbappendrecord (&so -> so_rcv, m);
 	}
@@ -924,7 +924,7 @@ struct pkcb *pkp;
 		udlen = 0;
 	pk_from_bcd (a, 1, sa, pkp -> pk_xcp); /* get calling address */
 	pk_parse_facilities (facp, sa);
-	bcopy ((caddr_t) u, sa -> x25_udata, udlen);
+	memcpy(sa -> x25_udata, (caddr_t) u, udlen);
 	sa -> x25_udlen = udlen;
 
 	/*
@@ -937,7 +937,7 @@ struct pkcb *pkp;
 	for (l = pk_listenhead; l; l = l -> lcd_listen) {
 		struct sockaddr_x25 *sxp = l -> lcd_ceaddr;
 
-		if (bcmp (sxp -> x25_udata, u, sxp -> x25_udlen))
+               if (memcmp (sxp -> x25_udata, u, sxp -> x25_udlen))
 			continue;
 		if (sxp -> x25_net &&
 		    sxp -> x25_net != xcp -> xc_addr.x25_net)
@@ -1008,10 +1008,10 @@ struct pkcb *pkp;
 	 * CONFIRMATION.
 	 */
 #ifdef WATERLOO		/* be explicit */
-	if (l == 0 && bcmp (sa -> x25_udata, "ean", 3) == 0)
+       if (l == 0 && memcmp (sa -> x25_udata, "ean", 3) == 0)
 		pk_message (lcn, pkp -> pk_xcp, "host=%s ean%c: %s",
 			sa -> x25_addr, sa -> x25_udata[3] & 0xff, errstr);
-	else if (l == 0 && bcmp (sa -> x25_udata, "\1\0\0\0", 4) == 0)
+       else if (l == 0 && memcmp (sa -> x25_udata, "\1\0\0\0", 4) == 0)
 		pk_message (lcn, pkp -> pk_xcp, "host=%s x29d: %s",
 			sa -> x25_addr, errstr);
 	else

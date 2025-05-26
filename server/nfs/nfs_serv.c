@@ -299,7 +299,7 @@ nfsrv_lookup(nfsd, mrep, md, dpos, cred, nam, mrq)
 	vrele(nd.ni_startdir);
 	FREE(nd.ni_cnd.cn_pnbuf, M_NAMEI);
 	vp = nd.ni_vp;
-	bzero((caddr_t)fhp, sizeof(nfh));
+	memset((caddr_t)fhp, 0, sizeof(nfh));
 	fhp->fh_fsid = vp->v_mount->mnt_stat.f_fsid;
 	if (error = VFS_VPTOFH(vp, &fhp->fh_fid)) {
 		vput(vp);
@@ -793,7 +793,7 @@ nfsrv_create(nfsd, mrep, md, dpos, cred, nam, mrq)
 			}
 		}
 	}
-	bzero((caddr_t)fhp, sizeof(nfh));
+	memset((caddr_t)fhp, 0, sizeof(nfh));
 	fhp->fh_fsid = vp->v_mount->mnt_stat.f_fsid;
 	if (error = VFS_VPTOFH(vp, &fhp->fh_fid)) {
 		vput(vp);
@@ -971,7 +971,7 @@ nfsrv_rename(nfsd, mrep, md, dpos, cred, nam, mrq)
 	 */
 	if (fvp == tvp && fromnd.ni_dvp == tdvp &&
 	    fromnd.ni_cnd.cn_namelen == tond.ni_cnd.cn_namelen &&
-	    !bcmp(fromnd.ni_cnd.cn_nameptr, tond.ni_cnd.cn_nameptr,
+	    !memcmp(fromnd.ni_cnd.cn_nameptr, tond.ni_cnd.cn_nameptr,
 	      fromnd.ni_cnd.cn_namelen))
 		error = -1;
 out:
@@ -1218,7 +1218,7 @@ nfsrv_mkdir(nfsd, mrep, md, dpos, cred, nam, mrq)
 	if (error = VOP_MKDIR(nd.ni_dvp, &nd.ni_vp, &nd.ni_cnd, vap))
 		nfsm_reply(0);
 	vp = nd.ni_vp;
-	bzero((caddr_t)fhp, sizeof(nfh));
+	memset((caddr_t)fhp, 0, sizeof(nfh));
 	fhp->fh_fsid = vp->v_mount->mnt_stat.f_fsid;
 	if (error = VFS_VPTOFH(vp, &fhp->fh_fid)) {
 		vput(vp);
@@ -1489,7 +1489,7 @@ again:
 					tsiz = be-bp;
 				else
 					tsiz = xfer;
-				bcopy(cp, bp, tsiz);
+				memcpy(bp, cp, tsiz);
 				bp += tsiz;
 				xfer -= tsiz;
 				if (xfer > 0)
@@ -1656,7 +1656,7 @@ again:
 			 */
 			if (VFS_VGET(vp->v_mount, dp->d_fileno, &nvp))
 				goto invalid;
-			bzero((caddr_t)&fl.fl_nfh, sizeof (nfsv2fh_t));
+			memset((caddr_t)&fl.fl_nfh, 0, sizeof (nfsv2fh_t));
 			fl.fl_nfh.fh_generic.fh_fsid =
 				nvp->v_mount->mnt_stat.f_fsid;
 			if (VFS_VPTOFH(nvp, &fl.fl_nfh.fh_generic.fh_fid)) {
@@ -1703,7 +1703,7 @@ again:
 					tsiz = be-bp;
 				else
 					tsiz = xfer;
-				bcopy(cp, bp, tsiz);
+				memcpy(bp, cp, tsiz);
 				bp += tsiz;
 				xfer -= tsiz;
 				if (xfer > 0)
@@ -1725,7 +1725,7 @@ again:
 					tsiz = be-bp;
 				else
 					tsiz = xfer;
-				bcopy(cp, bp, tsiz);
+				memcpy(bp, cp, tsiz);
 				bp += tsiz;
 				xfer -= tsiz;
 				if (xfer > 0)

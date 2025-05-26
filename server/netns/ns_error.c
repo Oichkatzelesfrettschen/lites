@@ -145,7 +145,7 @@ ns_error(om, type, param)
 	ns_errstat.ns_es_outhist[ns_err_x(type)]++;
 	ep->ns_ep_errp.ns_err_num = htons((u_short)type);
 	ep->ns_ep_errp.ns_err_param = htons((u_short)param);
-	bcopy((caddr_t)oip, (caddr_t)&ep->ns_ep_errp.ns_err_idp, 42);
+	memcpy((caddr_t)&ep->ns_ep_errp.ns_err_idp, (caddr_t)oip, 42);
 	nip = &ep->ns_ep_idp;
 	nip->idp_len = sizeof(*ep);
 	nip->idp_len = htons((u_short)nip->idp_len);

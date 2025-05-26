@@ -248,7 +248,7 @@ char					reason;	/* reason for discard */
 		printf("clnp_emit_er: m x%x, hdr len %d\n", m, clnp->cnf_hdr_len);
 	ENDDEBUG
 
-	bzero((caddr_t)&route, sizeof(route));
+	memset((caddr_t)&route, 0, sizeof(route));
 
 	/*
 	 *	If header length is incorrect, or entire header is not contained

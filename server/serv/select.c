@@ -116,14 +116,14 @@ mach_error_t s_select(
 
 	assert(pk->k_p == p);
 
-	bzero((caddr_t)obits, sizeof(obits));
+	memset((caddr_t)obits, 0, sizeof(obits));
 	if (nd > FD_SETSIZE)
 		return (EINVAL);
 	if (nd > p->p_fd->fd_nfiles)
 		nd = p->p_fd->fd_nfiles;	/* forgiving; slightly wrong */
 
 	if (tv) {
-		bcopy((void *) tv, (void *) &atv, sizeof(atv));
+		memcpy((void *) &atv, (void *) tv, sizeof(atv));
 
 		if (itimerfix(&atv)) {
 			error = EINVAL;
@@ -177,7 +177,7 @@ done:
 		error = 0;
 #define	putbits(name, x) \
 	if (name) \
-	    bcopy((void *) &obits[x], (void *) name, sizeof(fd_set));
+	    memcpy((void *) name, (void *) &obits[x], sizeof(fd_set));
 
 	if (error == 0) {
 		putbits(in, 0);
