@@ -210,16 +210,17 @@ next:
 			m->m_pkthdr.len -= sizeof (struct ether_header);
 		}
 	}
-	IFDEBUG(D_INPUT)
-		int i;
-		printf("clnlintr: src:");
-		for (i=0; i<6; i++)
-			printf("%x%c", sh.snh_shost[i] & 0xff, (i<5) ? ':' : ' ');
-		printf(" dst:");
-		for (i=0; i<6; i++)
-			printf("%x%c", sh.snh_dhost[i] & 0xff, (i<5) ? ':' : ' ');
-		printf("\n");
-	ENDDEBUG
+        IFDEBUG(D_INPUT)
+                printf("clnlintr: src:");
+                printf("%x:%x:%x:%x:%x:%x dst:",
+                       sh.snh_shost[0] & 0xff, sh.snh_shost[1] & 0xff,
+                       sh.snh_shost[2] & 0xff, sh.snh_shost[3] & 0xff,
+                       sh.snh_shost[4] & 0xff, sh.snh_shost[5] & 0xff);
+                printf("%x:%x:%x:%x:%x:%x\n",
+                       sh.snh_dhost[0] & 0xff, sh.snh_dhost[1] & 0xff,
+                       sh.snh_dhost[2] & 0xff, sh.snh_dhost[3] & 0xff,
+                       sh.snh_dhost[4] & 0xff, sh.snh_dhost[5] & 0xff);
+        ENDDEBUG
 
 	/*
 	 *	Get the fixed part of the clnl header into the first mbuf.

@@ -93,18 +93,34 @@ tcp_slowtimo(ev, unusedArg)
 		tp = intotcpcb(ip);
 		if (tp == 0)
 		  continue;
-		for (i = 0; i < TCPT_NTIMERS; i++) {
-		    if (tp->t_timer[i] && --tp->t_timer[i] == 0) {
-			/* 
-			 * What if this blocks???
-			 */
-			(void) tcp_usrreq(tp->t_inpcb->inp_session,
-					  PRU_SLOWTIMO, (Msg *)0,
-					  (Msg *)i);
-			if (ipnxt->inp_prev != ip)
-			  goto tpgone;
-		    }
-		}
+                if (tp->t_timer[0] && --tp->t_timer[0] == 0) {
+                        (void) tcp_usrreq(tp->t_inpcb->inp_session,
+                                          PRU_SLOWTIMO, (Msg *)0,
+                                          (Msg *)0);
+                        if (ipnxt->inp_prev != ip)
+                          goto tpgone;
+                }
+                if (tp->t_timer[1] && --tp->t_timer[1] == 0) {
+                        (void) tcp_usrreq(tp->t_inpcb->inp_session,
+                                          PRU_SLOWTIMO, (Msg *)0,
+                                          (Msg *)1);
+                        if (ipnxt->inp_prev != ip)
+                          goto tpgone;
+                }
+                if (tp->t_timer[2] && --tp->t_timer[2] == 0) {
+                        (void) tcp_usrreq(tp->t_inpcb->inp_session,
+                                          PRU_SLOWTIMO, (Msg *)0,
+                                          (Msg *)2);
+                        if (ipnxt->inp_prev != ip)
+                          goto tpgone;
+                }
+                if (tp->t_timer[3] && --tp->t_timer[3] == 0) {
+                        (void) tcp_usrreq(tp->t_inpcb->inp_session,
+                                          PRU_SLOWTIMO, (Msg *)0,
+                                          (Msg *)3);
+                        if (ipnxt->inp_prev != ip)
+                          goto tpgone;
+                }
 		tp->t_idle++;
 		if (tp->t_rtt)
 		  tp->t_rtt++;
@@ -128,10 +144,10 @@ void
 tcp_canceltimers(tp)
 	struct tcpcb *tp;
 {
-	register int i;
-
-	for (i = 0; i < TCPT_NTIMERS; i++)
-		tp->t_timer[i] = 0;
+        tp->t_timer[0] = 0;
+        tp->t_timer[1] = 0;
+        tp->t_timer[2] = 0;
+        tp->t_timer[3] = 0;
 }
 
 int	tcp_backoff[TCP_MAXRXTSHIFT + 1] =
