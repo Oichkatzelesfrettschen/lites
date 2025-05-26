@@ -14,6 +14,9 @@ def parse_headers(root: str):
             if not name.endswith(".h"):
                 continue
             path = os.path.join(dirpath, name)
+            if not os.path.isfile(path):
+                # skip dangling symlinks or other non-regular files
+                continue
             key = os.path.relpath(path, root)
             graph.setdefault(key, [])
             with open(path, "r", errors="ignore") as f:
