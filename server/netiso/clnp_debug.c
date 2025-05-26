@@ -77,6 +77,7 @@ SOFTWARE.
 #include <netiso/clnp.h>
 #include <netiso/clnp_stat.h>
 #include <netiso/argo_debug.h>
+#include "simd.h"
 
 #ifdef	ARGO_DEBUG
 
@@ -139,20 +140,50 @@ static char letters[] = "0123456789abcdef";
  *	Do not null terminate.
  */
 char *
-clnp_hexp(src, len, where)
-char	*src;		/* src of data to print */
-int		len;				/* lengthof src */
-char	*where;		/* where to put data */
+clnp_hexp(char *src, int len, char *where)
 {
-	int i;
-
-	for (i=0; i<len; i++) {
-		register int j = ((u_char *)src)[i];
-		*where++ = letters[j >> 4];
-		*where++ = letters[j & 0x0f];
-	}
-	return where;
+#if LITES_HAVE_SSE
+    static const char lut[16] = "0123456789abcdef";
+    while (len >= 16) {
+        __m128i bytes = _mm_loadu_si128((const __m128i *)src);
+        __m128i high = _mm_and_si128(_mm_srli_epi16(bytes, 4), _mm_set1_epi8(0x0f));
+        __m128i low = _mm_and_si128(bytes, _mm_set1_epi8(0x0f));
+        __m128i table = _mm_loadu_si128((const __m128i *)lut);
+        __m128i high_chars = _mm_shuffle_epi8(table, high);
+        __m128i low_chars = _mm_shuffle_epi8(table, low);
+        __m128i lo = _mm_unpacklo_epi8(high_chars, low_chars);
+        __m128i hi = _mm_unpackhi_epi8(high_chars, low_chars);
+        _mm_storeu_si128((__m128i *)where, lo);
+        _mm_storeu_si128((__m128i *)(where + 16), hi);
+        src += 16;
+        where += 32;
+        len -= 16;
+    }
+#elif LITES_HAVE_NEON
+    static const uint8_t lut[16] = "0123456789abcdef";
+    while (len >= 16) {
+        uint8x16_t bytes = vld1q_u8((const uint8_t *)src);
+        uint8x16_t high = vandq_u8(vshrq_n_u8(bytes, 4), vdupq_n_u8(0x0f));
+        uint8x16_t low = vandq_u8(bytes, vdupq_n_u8(0x0f));
+        uint8x16_t table = vld1q_u8(lut);
+        uint8x16_t high_chars = vqtbl1q_u8(table, high);
+        uint8x16_t low_chars = vqtbl1q_u8(table, low);
+        uint8x16x2_t z = vzipq_u8(high_chars, low_chars);
+        vst1q_u8((uint8_t *)where, z.val[0]);
+        vst1q_u8((uint8_t *)(where + 16), z.val[1]);
+        src += 16;
+        where += 32;
+        len -= 16;
+    }
+#endif
+    for (int i = 0; i < len; i++) {
+        int j = ((u_char *)src)[i];
+        *where++ = letters[j >> 4];
+        *where++ = letters[j & 0x0f];
+    }
+    return where;
 }
+
 
 /*
  *	Return a ptr to a human readable form of an iso addr 
