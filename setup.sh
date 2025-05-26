@@ -126,6 +126,13 @@ done
 if [[ -s "$FAIL_LOG" ]]; then
   echo "The following packages failed to install:" | tee -a "$LOG"
   cat "$FAIL_LOG" | tee -a "$LOG"
+  echo "Attempting to automatically resolve package failures" | tee -a "$LOG"
+  if apt-get -f install -y >> "$LOG" 2>&1; then
+    : > "$FAIL_LOG"
+    echo "Automatic repair succeeded" | tee -a "$LOG"
+  else
+    echo "Automatic repair failed; inspect $FAIL_LOG" | tee -a "$LOG"
+  fi
 else
   echo "All packages installed successfully" | tee -a "$LOG"
 fi
