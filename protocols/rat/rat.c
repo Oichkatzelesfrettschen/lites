@@ -13,56 +13,27 @@
 #include "ip.h"
 #include "chan.h"
 
-#ifdef __STDC__
-
 XObj   ratOpen(XObj, XObj, XObj, Part *);
 static xkern_return_t ratOpenEnable(XObj, XObj, XObj, Part *);
 static xkern_return_t ratOpenDisable(XObj, XObj, XObj, Part *);
 static xkern_return_t ratDemux(XObj, XObj, Msg *);
 static xmsg_handle_t ratPush(XObj, Msg *);
-static xkern_return_t ratPop(XObj, XObj, Msg  *,void *);
-static int ratControl(XObj, int, char *, int );
-static int ratControlSessn(XObj, int, char *, int );
+static xkern_return_t ratPop(XObj, XObj, Msg *, void *);
+static int ratControl(XObj, int, char *, int);
+static int ratControlSessn(XObj, int, char *, int);
 static xkern_return_t ratCloseSessn(XObj);
-XObj   ratCreateSessn( XObj, XObj, XObj, ActiveID  *, IPID);
+XObj   ratCreateSessn(XObj, XObj, XObj, ActiveID *, IPID);
 void   rat_init(XObj);
 static void rat_sessn_init(XObj);
 long   ratHdrLoad(void *, char *, long, void *);
 long   ratDemuxHdrLoad(void *, char *, long, void *);
-void   ratHdrStore(void *,char *, long, void *);
+void   ratHdrStore(void *, char *, long, void *);
 XObj   ratOpenTcp(XObj, IPhost);
 XObj   ratOpenIp(XObj, IPhost);
-static xkern_return_t   readSPort( XObj, char **, int, int, VOID * );
-static xkern_return_t   readDPort( XObj, char **, int, int, VOID * );
-static xkern_return_t   readSndBuf( XObj, char **, int, int, VOID * );
-static xkern_return_t   readRcvBuf( XObj, char **, int, int, VOID * );
-
-#else
-
-XObj   ratOpen();
-static xkern_return_t ratOpenEnable();
-static xkern_return_t ratOpenDisable();
-static xkern_return_t ratDemux();
-static xmsg_handle_t ratPush();
-static xkern_return_t ratPop();
-static xkern_return_t ratCloseSessn();
-static int ratControl();
-static int ratControlSessn();
-XObj   ratCreateSessn();
-void   rat_init();
-static void rat_sessn_init();
-long   ratHdrLoad();
-long   ratDemuxHdrLoad();
-void   ratHdrStore();
-XObj   ratOpenTcp();
-XObj   ratOpenIp();
-static xkern_return_t   readSPort();
-static xkern_return_t   readDPort();
-static xkern_return_t   readSndBuf();
-static xkern_return_t   readRcvBuf();
-
-
-#endif
+static xkern_return_t   readSPort(XObj, char **, int, int, VOID *);
+static xkern_return_t   readDPort(XObj, char **, int, int, VOID *);
+static xkern_return_t   readSndBuf(XObj, char **, int, int, VOID *);
+static xkern_return_t   readRcvBuf(XObj, char **, int, int, VOID *);
 
 
 static XObjRomOpt ratOpt[] = {

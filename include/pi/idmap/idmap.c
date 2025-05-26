@@ -30,24 +30,13 @@ int	traceidmap;
 
 #define MAX_MAP_SIZE 1024
 
-#ifdef __STDC__
-static int generichash( char *,  int ,  int );
-static xkern_return_t	mgenericresolve( Map, VOID *, VOID ** );
-static Bind 		mgenericbind( Map, VOID *, VOID * );
-static xkern_return_t  	mgenericunbind( Map, VOID * );
-static xkern_return_t  	mgenericremove( Map, Bind );
-static xkern_return_t  	mgenericerror( Map, VOID *, VOID ** );
-static void		removeList( MapElement * );
-
-#else
-
-static int generichash();
-static xkern_return_t	mgenericresolve();
-static Bind 		mgenericbind();
-static xkern_return_t  	mgenericunbind();
-static xkern_return_t  	mgenericremove();
-static xkern_return_t  	mgenericerror();
-#endif /* __STDC__ */
+static int generichash(char *, int, int);
+static xkern_return_t   mgenericresolve(Map, VOID *, VOID **);
+static Bind             mgenericbind(Map, VOID *, VOID *);
+static xkern_return_t   mgenericunbind(Map, VOID *);
+static xkern_return_t   mgenericremove(Map, Bind);
+static xkern_return_t   mgenericerror(Map, VOID *, VOID **);
+static void             removeList(MapElement *);
 
 /*
  * Create and return a new map containing a table with nEntries entries 
@@ -298,17 +287,13 @@ mapForEach(m, f, arg)
 #  define INLINE
 #endif
 
-#ifdef __STDC__
-
-static INLINE int	hash2( void *, int );
-static INLINE int	hash4( void *, int );
-static INLINE int	hash6( void *, int );
-static INLINE int	hash8( void *, int );
-static INLINE int	hash10( void *, int );
-static INLINE int	hash12( void *, int );
-static INLINE int	hash16( void *, int );
-
-#endif /* __STDC__ */
+static INLINE int       hash2(void *, int);
+static INLINE int       hash4(void *, int);
+static INLINE int       hash6(void *, int);
+static INLINE int       hash8(void *, int);
+static INLINE int       hash10(void *, int);
+static INLINE int       hash12(void *, int);
+static INLINE int       hash16(void *, int);
 
 
 #define GENCOMPBYTES(s1, s2) (!memcmp(s1, s2, table->keySize))

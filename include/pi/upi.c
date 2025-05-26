@@ -59,19 +59,9 @@ static char *controlops[] = {
 #  define CONTROLMSG(n) ""
 #endif XK_DEBUG
 
-#ifdef __STDC__
-
 static XObj xCreateXObj(int downc, XObj *downv);
 static xkern_return_t xDestroyXObj(XObj s);
-static XObj	defaultOpen( XObj, XObj, XObj, Part * );
-
-#else
-
-static XObj xCreateXObj();
-static xkern_return_t xDestroyXObj();
-static XObj	defaultOpen();
-
-#endif __STDC__
+static XObj     defaultOpen(XObj, XObj, XObj, Part *);
 
 /* 
  * If inline functions are not being used, the upi_inline functions
