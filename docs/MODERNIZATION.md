@@ -1,7 +1,7 @@
 # Modernization Status
 
-The `src-lites-1.1-2025` tree contains ongoing work to bring the
-original Lites sources forward.  This document summarises what has
+The `xlites` project contains ongoing work to bring the
+original Lites 1.1 U3 sources forward.  This document summarises what has
 already been completed and what is still planned.
 
 ## Completed tasks
@@ -35,9 +35,9 @@ already been completed and what is still planned.
 
 ### Mach-specific TODOs
 
-- `mach3/drivers/xec596/xec596.c` – TODO: "Go native" for the Intel 82596 driver implementation.
-- `mach4/drivers/xec596/xec596.c` – same TODO as above.
-- `mach4/pxk/time.c` uses placeholder values for
+- `xec596/xec596.c` – TODO: "Go native" for the Intel 82596 driver implementation.
+- `xec596/xec596.c` – same TODO as above.
+- `time.c` uses placeholder values for
   `xGetTime()` marked as "FAKE! TODO! PNR" and needs a proper Mach
   time source.
 - A helper script `import-mach-headers.sh` now copies Mach headers from either
