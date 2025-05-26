@@ -190,6 +190,8 @@ You can also invoke `scripts/run-precommit.sh` which automatically installs
 The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
 clang-tidy can analyse the sources even before the project has been built.
+The top-level `CMakeLists.txt` now enables `CMAKE_EXPORT_COMPILE_COMMANDS`
+so the compile database is produced whenever the project is configured.
 
 To try the built binaries under QEMU use `scripts/run-qemu.sh`.  The script
 launches the `lites_server` (and the optional `lites_emulator` when present)

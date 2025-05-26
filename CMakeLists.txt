@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export compile commands")
 set(CMAKE_C_STANDARD 23)
 find_package(BISON)
 
