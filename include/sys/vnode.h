@@ -66,6 +66,7 @@
 #endif
 
 #include <sys/queue.h>
+#include "id128.h"
 
 /*
  * The vnode is the focus of all file activity in UNIX.  There is a
@@ -121,7 +122,7 @@ struct vnode {
 	short	v_writecount;			/* reference count of writers */
 	long	v_holdcnt;			/* page & buffer references */
 	daddr_t	v_lastr;			/* last read (read-ahead) */
-	u_long	v_id;				/* capability identifier */
+	id128_t	v_id;				/* capability identifier */
 	struct	mount *v_mount;			/* ptr to vfs we are in */
 	int 	(**v_op)();			/* vnode operations vector */
 	TAILQ_ENTRY(vnode) v_freelist;		/* vnode freelist */

@@ -53,6 +53,7 @@
 #include <sys/mount.h>
 #include <sys/vnode.h>
 #include <sys/malloc.h>
+#include "id128.h"
 #include <sys/dirent.h>
 
 #include <ufs/ufs/quota.h>
@@ -302,7 +303,7 @@ ext2_lookup(ap)
 	 * we are looking for is known already.
 	 */
 	if (error = cache_lookup(vdp, vpp, cnp)) {
-		int vpid;	/* capability number of vnode */
+		id128_t vpid;	/* capability number of vnode */
 
 		if (error == ENOENT)
 			return (error);

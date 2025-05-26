@@ -34,6 +34,7 @@
  */
 
 #pragma once
+#include "id128.h"
 
 /*
  * Encapsulation of namei parameters.
@@ -158,15 +159,15 @@ struct	namecache {
 	struct	namecache *nc_nxt;	/* LRU chain */
 	struct	namecache **nc_prev;	/* LRU chain */
 	struct	vnode *nc_dvp;		/* vnode of parent of name */
-	u_long	nc_dvpid;		/* capability number of nc_dvp */
+	id128_t	nc_dvpid;		/* capability number of nc_dvp */
 	struct	vnode *nc_vp;		/* vnode the name refers to */
-	u_long	nc_vpid;		/* capability number of nc_vp */
+	id128_t	nc_vpid;		/* capability number of nc_vp */
 	char	nc_nlen;		/* length of name */
 	char	nc_name[NCHNAMLEN];	/* segment name */
 };
 
 #ifdef KERNEL
-u_long	nextvnodeid;
+id128_t nextvnodeid;
 int	namei (struct nameidata *ndp);
 int	lookup (struct nameidata *ndp);
 #endif
