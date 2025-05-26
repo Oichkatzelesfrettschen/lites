@@ -6,7 +6,10 @@ all: test_vm_fault
 
 .PHONY: all clean
 
-SRC_DIR ?= ../../src-lites-1.1-2025
+ifndef LITES_SRC_DIR
+$(error LITES_SRC_DIR must be set)
+endif
+SRC_DIR := $(LITES_SRC_DIR)
 VM_SRC := $(SRC_DIR)/server/vm/vm_handlers.c
 ifneq ($(wildcard $(VM_SRC)),)
 VM_PATH := $(VM_SRC)

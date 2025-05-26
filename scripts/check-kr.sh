@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC_DIR="${LITES_SRC_DIR:-src-lites-1.1-2025}"
+if [ -z "${LITES_SRC_DIR:-}" ]; then
+  echo "LITES_SRC_DIR must be set" >&2
+  exit 1
+fi
+SRC_DIR="$LITES_SRC_DIR"
 
 found=0
 while IFS= read -r file; do

@@ -5,7 +5,11 @@
 
 set -euo pipefail
 
-TARGET_BASE="${LITES_SRC_DIR:-src-lites-1.1-2025}/include/all_headers"
+if [ -z "${LITES_SRC_DIR:-}" ]; then
+  echo "LITES_SRC_DIR must be set" >&2
+  exit 1
+fi
+TARGET_BASE="$LITES_SRC_DIR/include/all_headers"
 
 # Create the destination base directory
 mkdir -p "$TARGET_BASE"

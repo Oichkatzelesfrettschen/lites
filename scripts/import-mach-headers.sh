@@ -3,7 +3,11 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/localmach/include"
-SRC_DIR="${LITES_SRC_DIR:-$ROOT/src-lites-1.1-2025}"
+if [ -z "${LITES_SRC_DIR:-}" ]; then
+    echo "LITES_SRC_DIR must be set" >&2
+    exit 1
+fi
+SRC_DIR="$LITES_SRC_DIR"
 
 copy_headers() {
     local src="$1"

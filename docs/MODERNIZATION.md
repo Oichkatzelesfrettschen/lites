@@ -1,6 +1,6 @@
 # Modernization Status
 
-The modernised tree (`$LITES_SRC_DIR` by default) contains ongoing work to bring the
+The modernised tree (in `$LITES_SRC_DIR`) contains ongoing work to bring the
 original Lites sources forward.  This document summarises what has
 already been completed and what is still planned.
 
