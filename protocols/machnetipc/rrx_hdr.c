@@ -129,7 +129,7 @@ rrxSendHostLoad( sh, src )
     char	*src;
 {
     xferHostLoad(&sh->xh, src);					
-    bcopy(src + XFERHOST_NETLEN, (char *)&sh->sendCount, SENDCOUNT_NETLEN);
+    memcpy((char *)&sh->sendCount, src + XFERHOST_NETLEN, SENDCOUNT_NETLEN);
 }
 
 static void
@@ -138,7 +138,7 @@ rrxSendHostStore( sh, dst )
     char	*dst;
 {
     xferHostStore(&sh->xh, dst);	
-    bcopy((char *)&sh->sendCount, dst + XFERHOST_NETLEN, SENDCOUNT_NETLEN);
+    memcpy(dst + XFERHOST_NETLEN, (char *)&sh->sendCount, SENDCOUNT_NETLEN);
     
 }
 
@@ -162,7 +162,7 @@ loadXferMsg(  hdr, src, len, arg )
     RrxSendHost	*hosts;
     int		i;
 
-    bcopy(src, (char *)&HDR->u.transfer.msgId, MSGID_NETLEN);
+    memcpy((char *)&HDR->u.transfer.msgId, src, MSGID_NETLEN);
     src += MSGID_NETLEN;
     xferHostLoad(&HDR->u.transfer.orr, src);
     src += XFERHOST_NETLEN;
@@ -257,11 +257,11 @@ loadReq( hdr, src, len, arg )
     }
     HDR->type = (RrxMsgType)src[0];
     if ( HDR->type == RECEIVE_RIGHT_TRANSFER ) {
-	bcopy(&src[2], (char *)&HDR->u.transfer.numSenders, 2);
+	memcpy((char *)&HDR->u.transfer.numSenders, &src[2], 2);
 	HDR->u.transfer.numSenders = ntohs(HDR->u.transfer.numSenders);
     }
     src += 4;
-    bcopy(src, (char *)&HDR->archTag, MN_ARCH_TAG_NETLEN);
+    memcpy((char *)&HDR->archTag, src, MN_ARCH_TAG_NETLEN);
     src += MN_ARCH_TAG_NETLEN;
     portNumberLoad(&HDR->portNumber, src);
     return RRX_REQMSG_NETLEN;
@@ -349,7 +349,7 @@ storeRequest( hdr, dst, len, arg )
     dst[1] = 0;
     dst += 4;
     archTag = MN_ARCH_MARKER;
-    bcopy((char *)&archTag, dst, MN_ARCH_TAG_NETLEN);
+    memcpy(dst, (char *)&archTag, MN_ARCH_TAG_NETLEN);
     dst += MN_ARCH_TAG_NETLEN;
     portNumberStore(&HDR->port->net_port_number, dst);
     dst += PORT_NUMBER_NETLEN;
@@ -359,7 +359,7 @@ storeRequest( hdr, dst, len, arg )
 	    ListElement	*e;
 	    u_short	numSenders = 0;
 	    
-	    bcopy((char *)&HDR->u.transfer.msgId, dst, MSGID_NETLEN);
+	    memcpy(dst, (char *)&HDR->u.transfer.msgId, MSGID_NETLEN);
 	    dst += MSGID_NETLEN;
 	    xferHostStore(&HDR->u.transfer.orr, dst);
 	    dst += XFERHOST_NETLEN;
@@ -372,7 +372,7 @@ storeRequest( hdr, dst, len, arg )
 		}
 	    }
 	    numSenders = htons(numSenders);
-	    bcopy((char *)&numSenders, origDst + 2, 2);
+	    memcpy(origDst + 2, (char *)&numSenders, 2);
 	}
 	break;
 

@@ -73,9 +73,6 @@ size_t	 strxfrm (char *, const char *, size_t);
 
 /* Nonstandard routines */
 #ifndef _ANSI_SOURCE
-int	 bcmp (const void *, const void *, size_t);
-void	 bcopy (const void *, void *, size_t);
-void	 bzero (void *, size_t);
 int	 ffs (int);
 char	*index (const char *, int);
 void	*memccpy (void *, const void *, int, size_t);

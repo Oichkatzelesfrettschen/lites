@@ -80,7 +80,7 @@ NAME/**/PortMapInit
 
   if (!(*ps))  {
     *ps = (port_state *)xMalloc(sizeof (port_state));
-    bzero((char *)*ps, sizeof(port_state));
+    memset((char *)*ps, 0, sizeof(port_state));
   }
   if ( ! (*ps)->portMap ) {
     (*ps)->portMap = mapCreate(PORT_MAP_SIZE, sizeof(long));

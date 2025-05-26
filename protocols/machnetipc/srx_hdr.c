@@ -123,7 +123,7 @@ storeReply( hdr, dst, len, arg )
     if ( HDR->type == SEND_LOCK_REQ ) {
 	xAssert( len == SRX_REPMSG_NETLEN + SRX_LOCKREPLY_NETLEN );
 	dst += 4;
-	bcopy((char *)&HDR->u.lock.sendCount, dst, SENDCOUNT_NETLEN);
+	memcpy(dst, (char *)&HDR->u.lock.sendCount, SENDCOUNT_NETLEN);
     }
 #undef HDR
 }    
@@ -194,7 +194,7 @@ loadReq( hdr, src, len, arg )
     }
     HDR->type = (SrxMsgType)src[0];
     src += 4;
-    bcopy(src, (char *)&HDR->archTag, MN_ARCH_TAG_NETLEN);
+    memcpy((char *)&HDR->archTag, src, MN_ARCH_TAG_NETLEN);
     src += MN_ARCH_TAG_NETLEN;
     portNumberLoad(&HDR->portNumber, src);
     src += PORT_NUMBER_NETLEN;
@@ -263,11 +263,11 @@ loadXferReq(  hdr, src, len, arg )
 
     xAssert(len >= SRX_XFERMSG_NETLEN);
 
-    bcopy(src, (char *)&HDR->u.xfer.msgId, MSGID_NETLEN);
+    memcpy((char *)&HDR->u.xfer.msgId, src, MSGID_NETLEN);
     src += MSGID_NETLEN;
     xferHostLoad(&HDR->u.xfer.rr, src);
     src += XFERHOST_NETLEN;
-    bcopy(src, (char *)&HDR->u.xfer.sendCount, SENDCOUNT_NETLEN);
+    memcpy((char *)&HDR->u.xfer.sendCount, src, SENDCOUNT_NETLEN);
     return SRX_XFERMSG_NETLEN;
 
 #undef HDR
@@ -361,7 +361,7 @@ storeRequest( hdr, dst, len, arg )
     dst[1] = dst[2] = dst[3] = 0;
     dst += 4;
     archTag = MN_ARCH_MARKER;
-    bcopy((char *)&archTag, dst, MN_ARCH_TAG_NETLEN);
+    memcpy(dst, (char *)&archTag, MN_ARCH_TAG_NETLEN);
     dst += MN_ARCH_TAG_NETLEN;
     portNumberStore(&HDR->port->net_port_number, dst);
     dst += PORT_NUMBER_NETLEN;
@@ -376,11 +376,11 @@ storeRequest( hdr, dst, len, arg )
 
       case SEND_RIGHT_TRANSFER:
 	xAssert(len == SRX_REQMSG_NETLEN + SRX_XFERMSG_NETLEN);
-	bcopy((char *)&HDR->u.xfer.msgId, dst, MSGID_NETLEN);
+	memcpy(dst, (char *)&HDR->u.xfer.msgId, MSGID_NETLEN);
 	dst += MSGID_NETLEN;
 	xferHostStore(&HDR->u.xfer.rr, dst);
 	dst += XFERHOST_NETLEN;
-	bcopy((char *)&HDR->u.xfer.sendCount, dst, SENDCOUNT_NETLEN);
+	memcpy(dst, (char *)&HDR->u.xfer.sendCount, SENDCOUNT_NETLEN);
 	break;
 
       default:

@@ -489,11 +489,11 @@ arpHdrStore(hdr, netHdr, len, arg)
     
     xTrace0(arpp, 5, "Entering arpHdrStore");
     xAssert( len == sizeof(ArpHdr) );
-    bcopy( hdr, (char *)&tmpHdr, sizeof(ArpHdr) );
+    memcpy((char *)&tmpHdr, hdr, sizeof(ArpHdr) );
     tmpHdr.arp_hrd = htons(tmpHdr.arp_hrd);
     tmpHdr.arp_prot = htons(tmpHdr.arp_prot);
     tmpHdr.arp_op = htons(tmpHdr.arp_op);
-    bcopy( (char *)&tmpHdr, netHdr, sizeof(ArpHdr) );
+    memcpy(netHdr, (char *)&tmpHdr, sizeof(ArpHdr) );
     xTrace0(arpp, 7, "leaving arpHdrStore");
 }
 
@@ -508,7 +508,7 @@ arpHdrLoad(hdr, netHdr, len, arg)
     xAssert( len == sizeof(ArpHdr) );
 
     xTrace0(arpp, 5, "Entering arpHdrLoad");
-    bcopy( netHdr, hdr, sizeof(ArpHdr) );
+    memcpy(hdr, netHdr, sizeof(ArpHdr) );
     ((ArpHdr *)hdr)->arp_hrd = ntohs(((ArpHdr *)hdr)->arp_hrd);
     ((ArpHdr *)hdr)->arp_prot = ntohs(((ArpHdr *)hdr)->arp_prot);
     ((ArpHdr *)hdr)->arp_op = ntohs(((ArpHdr *)hdr)->arp_op);
@@ -522,7 +522,7 @@ newWait(w, self)
     ArpWait 	*w;
     XObj	self;
 {
-    bzero((char *)w, sizeof(ArpWait));
+    memset((char *)w, 0, sizeof(ArpWait));
     semInit(&w->s, 0);
     w->self = self;
 }

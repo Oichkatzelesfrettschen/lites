@@ -48,8 +48,6 @@ __DECL(void *,memcpy(void *to, const void *from, unsigned int n));
 #endif
 __DECL(void *,memset(void *to, int ch, unsigned int n));
 
-__DECL(void,bcopy(const void *from, void *to, unsigned int n));
-__DECL(void,bzero(void *to, unsigned int n));
 
 __END_DECLS
 

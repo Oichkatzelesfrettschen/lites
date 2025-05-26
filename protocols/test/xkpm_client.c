@@ -102,7 +102,7 @@ void pmapcln_init_part2(ev, arg) Event ev; VOID *arg;  /* arg is not used */
   { if (xControl(SUNRPC, GETMYHOST, (char *)&IPServer, sizeof(IPhost)) < 0)
     { printf("Can't find my IP addr\n"); return; }; };
 
-  bcopy((char *) &IPServer, (char *) &pmipaddr, sizeof(IPhost));
+  memcpy((char *) &pmipaddr, (char *) &IPServer, sizeof(IPhost));
 
   partInit(part, 1);
   partPush(part[0], (long *) &pmipaddr, sizeof(IPhost));
@@ -307,7 +307,7 @@ void test_server()
 	 testvalr, testvali, testzrsb=101.90625, testzisb=1767.5;
   XKXDR xdrs, xdrr; char buf[100], vbuf[100]; Msg msgr; long i;
 
-  bcopy((char *) &IPServer, (char *) &srvipaddr, sizeof(IPhost));
+  memcpy((char *) &srvipaddr, (char *) &IPServer, sizeof(IPhost));
 
 /* now actually do some testing */
 /* open a session to the determinant server */

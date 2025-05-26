@@ -215,7 +215,7 @@ simsimeth_init( self )
     xTrace0(simsimethp, TR_MAJOR_EVENTS, "init_ether");
 
     ps = X_NEW(PState);
-    bzero((char *)ps, sizeof(PState));
+    memset((char *)ps, 0, sizeof(PState));
     self->state = (VOID *)ps;
     processRomFile(self);
     if ( ps->port == -1 ) {
@@ -264,7 +264,7 @@ ethMsgStore( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
     ((ETHhdr *)hdr)->type = ((ETHhdr *)hdr)->type;
-    bcopy(hdr, netHdr, sizeof(ETHhdr));
+    memcpy(netHdr, hdr, sizeof(ETHhdr));
 }
 
 
@@ -272,7 +272,7 @@ static long
 ethMsgLoad( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
-    bcopy(netHdr, (char *)hdr, sizeof(ETHhdr));
+    memcpy((char *)hdr, netHdr, sizeof(ETHhdr));
     ((ETHhdr *)hdr)->type = ((ETHhdr *)netHdr)->type;
     return sizeof(ETHhdr);
 }
@@ -369,7 +369,7 @@ simsimethControl( s, op, buf, len )
 
       case GETMYHOST:
 	checkLen(len, sizeof(ETHhost));
-	bcopy((char *) &ps->myHost, buf, sizeof(ETHhost));
+	memcpy(buf, (char *) &ps->myHost, sizeof(ETHhost));
 	return (sizeof(ETHhost));
 
       default:

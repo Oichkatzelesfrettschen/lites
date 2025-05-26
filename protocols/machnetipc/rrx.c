@@ -518,7 +518,7 @@ lockForMovingReceiver( self, req, rep, lls )
     {
 	mportNetRep		netport;
 		       
-	bzero((char *)&netport, sizeof(netport));
+	memset((char *)&netport, 0, sizeof(netport));
 	netport.net_port_number = req->portNumber;
 	if ( findNetPort(&netport, req->archTag, FALSE, &npd) == XK_FAILURE ) {
 	    xTrace0(rrxp, TR_SOFT_ERRORS,
@@ -605,7 +605,7 @@ unlockForMovingReceiver( self, req, rep, lls )
     {
 	mportNetRep		netport;
 		       
-	bzero((char *)&netport, sizeof(netport));
+	memset((char *)&netport, 0, sizeof(netport));
 	netport.net_port_number = req->portNumber;
 	if ( findNetPort(&netport, req->archTag, FALSE, &npd) == XK_FAILURE ) {
 	    xTrace0(rrxp, TR_SOFT_ERRORS,

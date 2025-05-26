@@ -205,7 +205,7 @@ vcacheCreateSessn( self, hlpRcv, hlpType, lls )
 	return ERR_XOBJ;
     }
     ss = X_NEW(SState);
-    bzero((char *)ss, sizeof(SState));
+    memset((char *)ss, 0, sizeof(SState));
     s->state = (VOID *)ss;
     ss->remote_host = peer;
     /*

@@ -178,7 +178,7 @@ vchanOpen( self, hlpRcv, hlpType, p )
     pLen = partLen(p) * sizeof(Part);
     for ( i=0; i < DEFAULT_NUM_SESSNS; i++ ) {
 	Part	tmpPart[2];
-	bcopy((char *)p, (char *)tmpPart, pLen);
+	memcpy((char *)tmpPart, (char *)p, pLen);
 	lls = xOpen(self, hlpType, xGetDown(self, 0), tmpPart);
 	if ( lls == ERR_XOBJ ) {
 	    xTrace0(vchanp, TR_ERRORS, "vchanOpen could not open lls");
@@ -328,7 +328,7 @@ increaseConcurrency( s, n )
      */
     newArr = (XObj *)xMalloc((stack->size + n) * sizeof(XObj));
     xAssert( stack->s );
-    bcopy((char *)stack->s, (char *)newArr, stack->top * sizeof(XObj));
+    memcpy((char *)newArr, (char *)stack->s, stack->top * sizeof(XObj));
     xFree((char *)stack->s);
     stack->s = newArr;
     /*

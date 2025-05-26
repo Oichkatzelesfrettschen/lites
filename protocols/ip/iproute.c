@@ -49,7 +49,7 @@ rt_init( ps, defGw)
     xTrace0(ipp, TR_GROSS_EVENTS, "IP rt_init()");
     tbl->valid = TRUE;
     tbl->arr = (route **)xMalloc(ROUTETABLESIZE * sizeof(route *));
-    bzero((char *)tbl->arr, ROUTETABLESIZE * sizeof(route *));
+    memset((char *)tbl->arr, 0, ROUTETABLESIZE * sizeof(route *));
     tbl->bpoolsize = BPSIZE;
     if ( IP_EQUAL(*defGw, ipNull) ) {
 	xTrace0(ipp, TR_GROSS_EVENTS,

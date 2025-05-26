@@ -88,7 +88,7 @@ lockForAddingSender( self, req, rep )
     {
 	mportNetRep		netport;
 		       
-	bzero((char *)&netport, sizeof(netport));
+	memset((char *)&netport, 0, sizeof(netport));
 	netport.net_port_number = req->portNumber;
 	if ( findNetPort(&netport, req->archTag, FALSE, &npd) == XK_FAILURE ) {
 	    xTrace0(srxp, TR_SOFT_ERRORS,
@@ -223,7 +223,7 @@ unlockForAddingSender( self, req, rep )
     {
 	mportNetRep		netport;
 		       
-	bzero((char *)&netport, sizeof(netport));
+	memset((char *)&netport, 0, sizeof(netport));
 	netport.net_port_number = req->portNumber;
 	if ( findNetPort(&netport, req->archTag, FALSE, &npd) == XK_FAILURE ) {
 	    xTrace0(srxp, TR_ERRORS, "request for unlocking nonexistent port");

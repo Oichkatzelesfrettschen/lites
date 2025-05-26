@@ -89,7 +89,7 @@ tcpHdrStore(hdr, dst, len, arg)
     ((struct tcphdr *)hdr)->th_win   = htons(((struct tcphdr *)hdr)->th_win);
     ((struct tcphdr *)hdr)->th_urp   = htons(((struct tcphdr *)hdr)->th_urp);
     ((struct tcphdr *)hdr)->th_sum   = 0;
-    bcopy(hdr, dst, len);
+    memcpy(dst, hdr, len);
     /*
      * Checksum
      */
@@ -131,7 +131,7 @@ tcpHdrLoad(hdr, src, len, arg)
     xAssert(len == sizeof(struct tcphdr));
     pHdr = (u_short *)msgGetAttr((Msg *)arg, 0);
     xAssert(pHdr);
-    bcopy(src, hdr, len);
+    memcpy(hdr, src, len);
     xIfTrace(tcpp, CKSUM_TRACE) {
 	printf("Received: ");
 	dispPseudoHdr((IPpseudoHdr *)pHdr);
@@ -194,7 +194,7 @@ tcpOptionsStore(hdr, dst, len, arg)
     int hdrLen;	
     
     hdrLen = *(int *)arg;
-    bcopy(hdr, dst, hdrLen);
+    memcpy(dst, hdr, hdrLen);
     if (hdrLen % 4) {
 	dst += hdrLen;
 	do {
@@ -212,7 +212,7 @@ tcpOptionsLoad(hdr, src, len, arg)
     long int len;
     VOID *arg;
 {
-    bcopy(src, hdr, len);
+    memcpy(hdr, src, len);
     return len;
 }
 

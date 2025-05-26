@@ -77,7 +77,7 @@ chanHdrStore(hdr, dst, len, arg)
     h.prot_id = htonl(HDR->prot_id);
     h.seq = htonl(HDR->seq);
     h.len = htonl(HDR->len);
-    bcopy((char *)(&h), dst, CHANHLEN);
+    memcpy(dst, (char *)(&h), CHANHLEN);
 }
 
 
@@ -92,7 +92,7 @@ chanHdrLoad(hdr, src, len, arg)
     VOID *arg;
 {
     xAssert(len == sizeof(CHAN_HDR));  
-    bcopy(src, (char *)hdr, CHANHLEN);
+    memcpy((char *)hdr, src, CHANHLEN);
     HDR->chan = ntohs(HDR->chan);
     HDR->prot_id = ntohl(HDR->prot_id);
     HDR->seq = ntohl(HDR->seq);
@@ -215,7 +215,7 @@ chanCreateSessn( self, hlpRcv, hlpType, key, initFunc, keyMap, hostMap )
     xTrace0(chanp, TR_MAJOR_EVENTS, "CHAN createSessn ......................");
     xIfTrace(chanp, TR_MAJOR_EVENTS) chanDispKey(key);
     ss = X_NEW(CHAN_STATE);
-    bzero((char *)ss, sizeof(CHAN_STATE));
+    memset((char *)ss, 0, sizeof(CHAN_STATE));
     /*
      * Fill in  state
      */
@@ -949,7 +949,7 @@ chanResend( s, flags, forceUsrMsg )
     /*
      * Send message
      */
-    bzero((char *)&ss->info, sizeof(ss->info));
+    memset((char *)&ss->info, 0, sizeof(ss->info));
     msgSetAttr(&packet, 0, (void *)&ss->info, sizeof(ss->info));
     xAssert(xIsSession(xGetDown(s, 0)));
     rval = xPush(xGetDown(s, 0), &packet);

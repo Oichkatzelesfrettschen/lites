@@ -294,7 +294,7 @@ icmpHdrLoad(hdr, src, len, arg)
     
     xAssert(len == sizeof(ICMPHeader));
     *sum = inCkSum(msg, 0, 0);
-    bcopy(src, (char *)hdr, sizeof(ICMPHeader));
+    memcpy((char *)hdr, src, sizeof(ICMPHeader));
     return sizeof(ICMPHeader);
 }  
 
@@ -318,12 +318,12 @@ icmpHdrStore(hdr, dst, len, arg)
     xAssert(len == sizeof(ICMPHeader));
     if (arg) {
 	((ICMPHeader *)hdr)->icmp_cksum = 0;
-	bcopy((char *)hdr, dst, sizeof(ICMPHeader));
+	memcpy(dst, (char *)hdr, sizeof(ICMPHeader));
 	((ICMPHeader *)hdr)->icmp_cksum = inCkSum((Msg *)arg, 0, 0);
-	bcopy((char *)hdr, dst, sizeof(ICMPHeader));
+	memcpy(dst, (char *)hdr, sizeof(ICMPHeader));
 	xAssert(! inCkSum((Msg *)arg, 0, 0));
     } else {
-	bcopy((char *)hdr, dst, sizeof(ICMPHeader));
+	memcpy(dst, (char *)hdr, sizeof(ICMPHeader));
     }
 }  
 
@@ -336,7 +336,7 @@ icmpEchoLoad(hdr, src, len, arg)
     VOID *arg;
 {
     xAssert(len == sizeof(ICMPEcho));
-    bcopy(src, (char *)hdr, sizeof(ICMPEcho));
+    memcpy((char *)hdr, src, sizeof(ICMPEcho));
     ((ICMPEcho *)hdr)->icmp_id = ntohs(((ICMPEcho *)hdr)->icmp_id);
     ((ICMPEcho *)hdr)->icmp_seqnum = ntohs(((ICMPEcho *)hdr)->icmp_seqnum);
     return sizeof(ICMPEcho);
@@ -356,7 +356,7 @@ icmpEchoStore(hdr, dst, len, arg)
     xAssert(len == sizeof(ICMPEcho));
     ((ICMPEcho *)hdr)->icmp_id = ntohs(((ICMPEcho *)hdr)->icmp_id);
     ((ICMPEcho *)hdr)->icmp_seqnum = ntohs(((ICMPEcho *)hdr)->icmp_seqnum);
-    bcopy((char *)hdr, dst, sizeof(ICMPEcho));
+    memcpy(dst, (char *)hdr, sizeof(ICMPEcho));
 }
 
 
@@ -368,7 +368,7 @@ icmpRedirectLoad(hdr, src, len, arg)
     VOID *arg;
 {
     xAssert(len == sizeof(ICMPRedirect));
-    bcopy(src, (char *)hdr, sizeof(ICMPRedirect));
+    memcpy((char *)hdr, src, sizeof(ICMPRedirect));
     return sizeof(ICMPRedirect);
 }
 

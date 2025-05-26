@@ -67,7 +67,7 @@ ipHdrStore(hdr, dst, len, arg)
     ((IPheader *)hdr)->checksum = 0;
     ((IPheader *)hdr)->checksum = ~ocsum((u_short *)hdr, sizeof(IPheader) / 2);
     xAssert(! (~ ocsum( (u_short *)hdr, sizeof(IPheader) / 2 ) & 0xFFFF ));
-    bcopy ( (char *)hdr, dst, sizeof(IPheader) );
+    memcpy(dst, (char *)hdr, sizeof(IPheader) );
 }
 
 
@@ -83,7 +83,7 @@ ipStdHdrLoad(hdr, src, len, arg)
     VOID *arg;
 {
     xAssert(len == sizeof(IPheader));
-    bcopy(src, (char *)hdr, sizeof(IPheader));
+    memcpy((char *)hdr, src, sizeof(IPheader));
     ((IPheader *)hdr)->checksum =
       ~ ocsum((u_short *)hdr, sizeof(IPheader) / 2) & 0xFFFF;
     ((IPheader *)hdr)->dlen = ntohs(((IPheader *)hdr)->dlen);
@@ -100,7 +100,7 @@ ipOptionsLoad(hdr, netHdr, len, arg)
     long int len;
     VOID *arg;
 {
-    bcopy(netHdr, (char *)hdr, len);
+    memcpy((char *)hdr, netHdr, len);
     *(u_short *)arg = ~ocsum((u_short *)hdr, len / 2);
     return len;
 }

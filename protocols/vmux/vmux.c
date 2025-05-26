@@ -32,10 +32,10 @@
 	}
 
 #define savePart(pxx, spxx)	\
-    bcopy((char *)(pxx), (char *)(spxx), sizeof(Part) * partLen(p))
+    memcpy((char *)(spxx), (char *)(pxx), sizeof(Part) * partLen(p))
 
 #define restorePart(pxx, spxx)	\
-    bcopy((char *)(spxx), (char *)(pxx), sizeof(Part) * partLen(p))
+    memcpy((char *)(pxx), (char *)(spxx), sizeof(Part) * partLen(p))
 
 
 

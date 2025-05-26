@@ -76,7 +76,7 @@ hdrLoad( hdr, src, len, arg )
     long  	len;
 {
     xAssert(len == sizeof(SelHdr));
-    bcopy( src, hdr, len );
+    memcpy(hdr, src, len );
     ((SelHdr *)hdr)->id = ntohl(((SelHdr *)hdr)->id);
     ((SelHdr *)hdr)->status = ntohl(((SelHdr *)hdr)->status);
     return len;
@@ -94,7 +94,7 @@ hdrStore(hdr, dst, len, arg)
     xAssert( len == sizeof(SelHdr) );
     h.id = htonl(((SelHdr *)hdr)->id);
     h.status = htonl(((SelHdr *)hdr)->status);
-    bcopy( (char *)&h, dst, len );
+    memcpy(dst, (char *)&h, len );
 }
 
 
@@ -145,7 +145,7 @@ selectCreateSessn( self, hlpRcv, hlpType, key )
     
     xTrace0(selectp, TR_FUNCTIONAL_TRACE, "selectCreateSessn");
     state = X_NEW(SState);
-    bzero((char *)state, sizeof(SState));
+    memset((char *)state, 0, sizeof(SState));
     hdr = &state->hdr;
     hdr->status = SEL_OK;
     hdr->id = key->id;

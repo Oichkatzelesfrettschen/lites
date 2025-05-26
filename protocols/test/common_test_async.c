@@ -150,7 +150,7 @@ defaultRunTest( self, len, testNumber )
 #ifdef CHECK_MESSAGE_CONTENTS
 static long revbcopy0(to,from,len,ignore)
     char *to, *from, *ignore; long len;
-{   bcopy(from,to,len); ignore++; return 0; }
+{   memcpy(to, from, len); ignore++; return 0; }
 #endif
 
 

@@ -38,7 +38,7 @@ sunrpcControlProtl(self, opcode, buf, len)
 	{
 	    u_short port;
 	    port = (u_short) sunrpcGetPort();
-	    bcopy((char *)&port, buf, sizeof(short));
+	    memcpy(buf, (char *)&port, sizeof(short));
 	    return(0);
 	}
 	break;
@@ -79,7 +79,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_SVCGETHLP: 
 	checkServer(state);
 	checkLen( len, sizeof(s->up));
-	bcopy((char *)&s->up, buf, sizeof(s->up));
+	memcpy(buf, (char *)&s->up, sizeof(s->up));
 	return(0);
 	break;
 	
@@ -88,7 +88,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_CLNTGETERROR: 
 	checkClient(state);
 	checkLen( len, sizeof(struct rpc_err));
-	bcopy((char *)&state->c_error, buf, sizeof(struct rpc_err));
+	memcpy(buf, (char *)&state->c_error, sizeof(struct rpc_err));
 	return(0);
 	break;
 	
@@ -106,7 +106,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	xIfTrace(sunrpcp, 9) {
 	    prpcaddr(state->server);
 	}
-	bcopy((char *)&state->server, buf, SUNRPCADLEN);
+	memcpy(buf, (char *)&state->server, SUNRPCADLEN);
 	return(0);
 	break;
 #endif
@@ -115,7 +115,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_CLNTSETTOUT:
 	checkClient(state);
 	checkLen( len, TIMEVALLEN);
-	bcopy(buf, (char *)&state->c_tout, TIMEVALLEN);
+	memcpy((char *)&state->c_tout, buf, TIMEVALLEN);
 	return(0);
 	break;
 	
@@ -123,7 +123,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_CLNTGETTOUT:
 	checkClient(state);
 	checkLen( len, TIMEVALLEN);
-	bcopy((char *)&state->c_tout, buf, TIMEVALLEN);
+	memcpy(buf, (char *)&state->c_tout, TIMEVALLEN);
 	return(0);
 	break;
 	
@@ -131,7 +131,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_CLNTSETWAIT:
 	checkClient(state);
 	checkLen( len, TIMEVALLEN);
-	bcopy(buf, (char *)&state->c_wait, TIMEVALLEN);
+	memcpy((char *)&state->c_wait, buf, TIMEVALLEN);
 	return(0);
 	break;
 	
@@ -139,7 +139,7 @@ sunrpcControlSessn(s, opcode, buf, len)
       case SUNRPC_CLNTGETWAIT:
 	checkClient(state);
 	checkLen( len, TIMEVALLEN);
-	bcopy((char *)&state->c_wait, buf, TIMEVALLEN);
+	memcpy(buf, (char *)&state->c_wait, TIMEVALLEN);
 	return(0);
 	break;
 	
@@ -149,7 +149,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    Auth	*cred = getCred(state);
 
 	    checkLen( len, sizeof(int));
-	    bcopy((char *)&cred->oa_flavor, buf, sizeof(int));
+	    memcpy(buf, (char *)&cred->oa_flavor, sizeof(int));
 	    return(0);
 	    break;
 	}
@@ -160,7 +160,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    Auth	*cred = getCred(state);
 
 	    checkLen( len, cred->oa_length); 
-	    bcopy((char *)&cred->oa_base, buf, cred->oa_length);
+	    memcpy(buf, (char *)&cred->oa_base, cred->oa_length);
 	    return(0);
 	    break;
 	}
@@ -172,7 +172,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 
 	    checkLen( len, sizeof(int));
 	    sunrpcAuthFree(cred);
-	    bcopy(buf, (char *)&cred->oa_flavor, sizeof(int));
+	    memcpy((char *)&cred->oa_flavor, buf, sizeof(int));
 	    return(0);
 	    break;
 	}
@@ -187,7 +187,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    }
 	    cred->oa_length = len;
 	    cred->oa_base = (caddr_t) xMalloc(len+2);
-	    bcopy(buf, cred->oa_base, len);
+	    memcpy(cred->oa_base, buf, len);
 	    {
 		char *mname;
 		struct authunix_parms *au_ptr;
@@ -208,7 +208,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    Auth	*verf = getVerf(state);
 
 	    checkLen( len, sizeof(int));
-	    bcopy((char *)verf->oa_flavor, buf, sizeof(int));
+	    memcpy(buf, (char *)verf->oa_flavor, sizeof(int));
 	    return(0);
 	    break;
 	}
@@ -219,7 +219,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    Auth	*verf = getVerf(state);
 	    
 	    checkLen( len, verf->oa_length); 
-	    bcopy((char *)&verf->oa_base, buf, verf->oa_length);
+	    memcpy(buf, (char *)&verf->oa_base, verf->oa_length);
 	    return(0);
 	    break;
 	}
@@ -231,7 +231,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    
 	    checkLen( len, sizeof(int));
 	    sunrpcAuthFree(verf);
-	    bcopy(buf, (char *)&verf->oa_flavor, sizeof(int));
+	    memcpy((char *)&verf->oa_flavor, buf, sizeof(int));
 	    return(0);
 	    break;
 	}	
@@ -246,7 +246,7 @@ sunrpcControlSessn(s, opcode, buf, len)
 	    }
 	    verf->oa_length = len;
 	    verf->oa_base = (caddr_t) xMalloc(len+2);
-	    bcopy(buf, (char *)&verf->oa_base, len);
+	    memcpy((char *)&verf->oa_base, buf, len);
 	    return(0);
 	    break;
 	}

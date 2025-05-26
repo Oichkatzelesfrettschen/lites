@@ -189,7 +189,7 @@ bidctlHdrLoad( hdr, src, len, arg )
     long	len;
 {
     xAssert( len == sizeof(BidctlHdr) );
-    bcopy(src, hdr, len);
+    memcpy(hdr, src, len);
     xTrace1(bidctlp, TR_DETAILED, "original checksum: %x",
 	    ((BidctlHdr *)hdr)->sum);
     ((BidctlHdr *)hdr)->sum = ~ ocsum((u_short *)hdr, len/2);
@@ -212,7 +212,7 @@ bidctlHdrStore( hdr, dst, len, arg )
     h->sum = ~ocsum((u_short *)h, len/2); 
     xAssert( (~ocsum((u_short *)h, len/2) & 0xffff) == 0 );
     xTrace1(bidctlp, TR_DETAILED, "outgoing checksum: %x", h->sum);
-    bcopy((char *)h, dst, len);
+    memcpy(dst, (char *)h, len);
 }
 
 
@@ -264,7 +264,7 @@ getState( self, peer, create )
 	    return 0;
 	}
 	bs = X_NEW(BidctlState);
-	bzero((char *)bs, sizeof(BidctlState));
+	memset((char *)bs, 0, sizeof(BidctlState));
 	bs->myProtl = self;
 	bs->peerHost = *peer;
 	bs->peerBid = 0;

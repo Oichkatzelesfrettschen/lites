@@ -151,7 +151,7 @@ sunrpcOpen( self, hlpRcv, hlpType, p )
     s = xCreateSessn(getProcClient, hlpRcv, hlpType, self, 1, &lls);
     state = X_NEW(SState);
     s->state = (VOID *)state;
-    bzero((char *)state, sizeof(SState));
+    memset((char *)state, 0, sizeof(SState));
     state->c_tout = 6 * 1000 * 1000;
     state->c_wait = 1 * 1000 * 1000;
     semInit(&state->c_replySem, 0);
@@ -200,7 +200,7 @@ sunrpcOpenEnable( self, hlpRcv, hlpType, p )
     /* 
      * Save the participants to use in opendisable (if necessary)
      */
-    bcopy((char *)p, (char *)sp, partLen(p) * sizeof(Part));
+    memcpy((char *)sp, (char *)p, partLen(p) * sizeof(Part));
     /*
      * Now openenable downward
      */
@@ -321,7 +321,7 @@ rpc_demux(self, s, dg)
     /*
      * Decode header
      */
-    bzero((char *)&hdr,sizeof(hdr));
+    memset((char *)&hdr, 0, sizeof(hdr));
     if (! msgPop(dg, sunrpcHdrLoad, &hdr, MIN(XDRHDRSIZE, msgLen(dg)),
 		 &status)) {
 	xTrace0(sunrpcp, 3, "sunrpc_demux: msgPop failed");

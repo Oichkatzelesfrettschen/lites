@@ -103,7 +103,7 @@ tcp_init(self)
   xAssert(xIsProtocol(self));
 
   pstate = (PSTATE *)xMalloc(sizeof(PSTATE));
-  bzero((char *)pstate,sizeof(PSTATE));
+  memset((char *)pstate, 0, sizeof(PSTATE));
   self->state = (char *)pstate;
 
   self->control = tcpControlProtl;
@@ -133,7 +133,7 @@ struct tcpstate *new_tcpstate()
 {
   struct tcpstate *tcpstate;
   tcpstate = (struct tcpstate *) xMalloc(sizeof(struct tcpstate));
-  bzero((char *)tcpstate, sizeof(struct tcpstate));
+  memset((char *)tcpstate, 0, sizeof(struct tcpstate));
   tcpSemInit(&tcpstate->waiting, 0);
   tcpSemInit(&tcpstate->lock, 1);
   tcpstate->closed = 0;

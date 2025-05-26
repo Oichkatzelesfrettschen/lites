@@ -96,7 +96,7 @@ vsizeOpen(XObj self, XObj hlpRcv, XObj hlpType, Part *p)
      * use it in both opens and it will get munged in the first open
      */
     plen = partLen(p) * sizeof(Part);
-    bcopy((char *)p, (char *)savedPart, plen);
+    memcpy((char *)savedPart, (char *)p, plen);
 
     for (i=0; i<pstate->numdown; i++) {
     	lls[i] = xOpen(self, hlpType, xGetDown(self, i), p);
@@ -107,7 +107,7 @@ vsizeOpen(XObj self, XObj hlpRcv, XObj hlpType, Part *p)
 	    }
 	    return ERR_XOBJ;
         }
-        bcopy((char *)savedPart, (char *)p, plen);
+        memcpy((char *)p, (char *)savedPart, plen);
     }
     if ( mapResolve(pstate->activeMap, lls, &s) == XK_SUCCESS ) {
 	xTrace0(vsizep, TR_MAJOR_EVENTS, "found an existing one");
