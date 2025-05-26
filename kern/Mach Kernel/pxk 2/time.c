@@ -33,10 +33,6 @@ XTime *where;
 #else
 #ifdef XKMACH4
   host_get_time(mach_host_self(), where);
-#if 0
-  where->sec = 0;		/* FAKE! TODO! PNR */
-  where->usec = 0;
-#endif
 #else
   gettimeofday((struct timeval *)where, 0);
 #endif XKMACH4

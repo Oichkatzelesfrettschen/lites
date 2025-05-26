@@ -54,3 +54,8 @@ target_compile_options(test_spawn_wait PRIVATE -std=gnu23 -Wall -Wextra -Werror)
 #    ../src-lites-1.1-2025/libposix/posix.c)
 #target_include_directories(test_fifo PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src-lites-1.1-2025/include)
 #target_compile_options(test_fifo PRIVATE -std=gnu23 -Wall -Wextra -Werror)
+
+add_executable(test_xec596_init
+    xec596/test_xec596_init.c)
+target_compile_options(test_xec596_init PRIVATE -std=gnu23 -Wall -Wextra -Werror)
+
