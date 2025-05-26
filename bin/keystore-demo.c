@@ -20,6 +20,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+#if KS_HAVE_OPENSSL
+    printf("Using AES-128 encryption (OpenSSL)\n");
+#else
+    printf("Using XOR fallback encryption\n");
+#endif
+
     size_t msg_len = strlen(argv[2]);
     unsigned char *enc = malloc(msg_len);
     unsigned char *dec = malloc(msg_len + 1);
