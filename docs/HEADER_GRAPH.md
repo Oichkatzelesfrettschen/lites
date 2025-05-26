@@ -31,3 +31,10 @@ sys/ushared.h -> sys/proc.h -> sys/shared_lock.h
 
 This cycle indicates tight coupling between the `sys` headers. Breaking it
 could reduce build dependencies.
+
+## Header reorganisation
+
+After running `header_graph.py` across the whole repository we identified a set of legacy
+headers living in the project root. These files have now been moved under
+`include/legacy/` to keep the include tree consistent. The script output has
+been refreshed in `docs/header_graph_full.dot`.
