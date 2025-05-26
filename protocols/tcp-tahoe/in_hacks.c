@@ -27,11 +27,9 @@
 
 
 int
-in_pcballoc(so, head)
-	XObj so;
-	struct inpcb *head;
+in_pcballoc(XObj so, struct inpcb *head)
 {
-	register struct inpcb *inp;
+	struct inpcb *inp;
 
 	inp = (struct inpcb *)xMalloc(sizeof *inp);
 	inp->inp_head = head;
@@ -44,16 +42,14 @@ in_pcballoc(so, head)
 
 /*ARGSUSED*/
 void
-in_pcbdisconnect(inp)
-    struct inpcb *inp;
+in_pcbdisconnect(struct inpcb *inp)
 {
     Kabort("in_pcbdisconnect");
 }
 
 
 void
-in_pcbdetach(inp)
-    struct inpcb *inp;
+in_pcbdetach(struct inpcb *inp)
 {
     remque(inp);
     xFree((char *)inp);
@@ -61,8 +57,7 @@ in_pcbdetach(inp)
 
 
 bool
-in_broadcast(addr)
-    struct in_addr addr;
+in_broadcast(struct in_addr addr)
 {
     return (ntohl(addr.s_addr) & 0xff) == 0 ||
       	   (ntohl(addr.s_addr) & 0xff) == 0xff;

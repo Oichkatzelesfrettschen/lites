@@ -45,14 +45,11 @@ int	tcpsenderrors;
  */
 /*ARGSUSED*/
 int
-tcp_usrreq(so, req, m, nam)
-	XObj so;
-	int req;
-	Msg *m, *nam;
+tcp_usrreq(XObj so, int req, Msg *m, Msg *nam)
 {
-	register struct inpcb *inp;
-	register struct tcpcb *tp = 0;
-	register struct tcpstate *tcpst = (struct tcpstate*)so->state;
+	struct inpcb *inp;
+	struct tcpcb *tp = 0;
+	struct tcpstate *tcpst = (struct tcpstate*)so->state;
 	/* int s; */
 	int error = 0;
 	int ostate;
@@ -251,10 +248,9 @@ int	tcp_recvspace = TCPRCVWIN;
  * bufer space, and entering LISTEN state if to accept connections.
  */
 int
-tcp_attach(so)
-	XObj so;
+tcp_attach(XObj so)
 {
-	register struct tcpcb *tp;
+	struct tcpcb *tp;
 	struct inpcb *inp;
 	int error;
 
@@ -279,8 +275,7 @@ tcp_attach(so)
  * send segment to peer (with FIN).
  */
 struct tcpcb *
-tcp_disconnect(tp)
-	register struct tcpcb *tp;
+tcp_disconnect(struct tcpcb *tp)
 {
 	XObj so = tp->t_inpcb->inp_session;
 	xTrace1(tcpp, 3, "tcp_disconnect: tp %X", tp);
@@ -306,8 +301,7 @@ tcp_disconnect(tp)
  * We can let the user exit from the close as soon as the FIN is acked.
  */
 struct tcpcb *
-tcp_usrclosed(tp)
-	register struct tcpcb *tp;
+tcp_usrclosed(struct tcpcb *tp)
 {
 
 	switch (tp->t_state) {

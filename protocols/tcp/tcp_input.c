@@ -79,13 +79,9 @@ static void 	tcp_pulloutofband();
 
 
 int
-tcp_reass(tp, th, so, m, demuxmsg)
-	register struct tcpcb *tp;
-	register struct tcphdr *th;
-     	XObj so;
-	Msg *m, *demuxmsg;
+tcp_reass(struct tcpcb *tp, struct tcphdr *th, XObj so, Msg *m, Msg *demuxmsg)
 {
-	register struct reass *q, *next;
+	struct reass *q, *next;
 	int flags;
 
 	xTrace0(tcpp, TR_FUNCTIONAL_TRACE, "tcp_reass function entered");
@@ -116,7 +112,7 @@ tcp_reass(tp, th, so, m, demuxmsg)
 	 * segment.  If it provides all of our data, drop us.
 	 */
 	if (q->prev != (struct reass *)tp) {
-		register int i;
+		int i;
 		q = q->prev;
 		/* conversion to int (in i) handles seq wraparound */
 		i = q->th.th_seq + msgLen(&q->m) - th->th_seq;
@@ -139,7 +135,7 @@ tcp_reass(tp, th, so, m, demuxmsg)
 	 * if they are completely covered, dequeue them.
 	 */
 	while (q != (struct reass *)tp) {
-		register int i = (th->th_seq + msgLen(m)) - q->th.th_seq;
+		int i = (th->th_seq + msgLen(m)) - q->th.th_seq;
 		if (i <= 0)
 			break;
 		if (i < msgLen(&q->m)) {
@@ -198,11 +194,7 @@ drop:
 
 
 xkern_return_t
-tcpPop(self, lls, m, h)
-    XObj self;
-    XObj lls;
-    Msg *m;
-    VOID *h;
+tcpPop(XObj self, XObj lls, Msg *m, VOID *h)
 {
     return xDemux(self, m);
 }
@@ -213,9 +205,7 @@ tcpPop(self, lls, m, h)
  * protocol specification dated September, 1981 very closely.
  */
 xkern_return_t
-tcp_input(self, transport_s, m)
-	XObj self, transport_s;
-	Msg *m;
+tcp_input(XObj self, XObj transport_s, Msg *m)
 {
 /*	register struct tcpiphdr *ti; */
 	struct inpcb *inp;
@@ -224,7 +214,7 @@ tcp_input(self, transport_s, m)
 	int option_len = 0;
 	int len, tlen, off;
 	struct tcpcb *tp;
-	register int tiflags;
+	int tiflags;
 	XObj so = 0, hlpType = 0;
 	struct tcpstate *tcpst;
 	int todrop, acked, ourfinisacked, needoutput = 0;
@@ -865,7 +855,7 @@ do_rst:
 		if (tp->t_rtt && SEQ_GT(tHdr.th_ack, tp->t_rtseq)) {
 			tcpstat.tcps_rttupdated++;
 			if (tp->t_srtt != 0) {
-				register short delta;
+				short delta;
 
 				/*
 				 * srtt is stored as fixed point with 3 bits
@@ -1282,13 +1272,9 @@ drop:
 
 
 static void
-tcp_dooptions(tp, options, option_len, tHdr)
-	struct tcpcb *tp;
-	char         *options;
-	int	      option_len;
-	struct tcphdr *tHdr;
+tcp_dooptions(struct tcpcb *tp, char *options, int option_len, struct tcphdr *tHdr)
 {
-	register u_char *cp;
+	u_char *cp;
 	int opt, optlen, cnt;
 
 	cp = (u_char *)options;
@@ -1325,10 +1311,7 @@ tcp_dooptions(tp, options, option_len, tHdr)
 
 
 static bool
-tcp_pulloobchar( ptr, len, oobc )
-    char	*ptr;
-    VOID	*oobc;
-    long	len;
+tcp_pulloobchar(char *ptr, long len, VOID *oobc)
 {
     xAssert(len >= 1);
     *(char *)oobc = *ptr;
@@ -1343,10 +1326,7 @@ tcp_pulloobchar( ptr, len, oobc )
  * sequencing purposes.
  */
 static void
-tcp_pulloutofband(so, th, m)
-	XObj so;
-	struct tcphdr *th;
-	Msg *m;
+tcp_pulloutofband(XObj so, struct tcphdr *th, Msg *m)
 {
 	Msg firstPart;
 	struct tcpcb *tp = sototcpcb(so);
@@ -1379,8 +1359,7 @@ tcp_pulloutofband(so, th, m)
  *  This is ugly, and doesn't belong at this level, but has to happen somehow.
  */
 int
-tcp_mss(tp)
-	register struct tcpcb *tp;
+tcp_mss(struct tcpcb *tp)
 {
     	XObj tcpSessn;
 	int mss;

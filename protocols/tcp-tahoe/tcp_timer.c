@@ -35,12 +35,10 @@ int	tcpnodelack = 0;
  * Fast timeout routine for processing delayed acks
  */
 void
-tcp_fasttimo( ev, unusedArg )
-    Event	ev;
-    VOID 	*unusedArg;
+tcp_fasttimo(Event ev, VOID *unusedArg)
 {
-	register struct inpcb *inp;
-	register struct tcpcb *tp;
+	struct inpcb *inp;
+	struct tcpcb *tp;
 	/* 
 	 * The original code protected this routine with splnet().  If
 	 * the timeout thread blocks, there could be a problem.
@@ -70,18 +68,16 @@ tcp_fasttimo( ev, unusedArg )
  * causes finite state machine actions if timers expire.
  */
 void
-tcp_slowtimo(ev, unusedArg)
-    Event	ev;
-    VOID 	*unusedArg;
+tcp_slowtimo(Event ev, VOID *unusedArg)
 {
-	register struct inpcb *ip, *ipnxt;
-	register struct tcpcb *tp;
+	struct inpcb *ip, *ipnxt;
+	struct tcpcb *tp;
 	/* 
 	 * The original code protected this routine with splnet().  If
 	 * the timeout thread blocks, there could be a problem.
 	 */
 	/* int s = splnet(); */
-	register int i;
+	int i;
 
 	/*
 	 * Search through tcb's and update active timers.
@@ -141,8 +137,7 @@ tpgone:
  * Cancel all timers for TCP tp.
  */
 void
-tcp_canceltimers(tp)
-	struct tcpcb *tp;
+tcp_canceltimers(struct tcpcb *tp)
 {
         tp->t_timer[0] = 0;
         tp->t_timer[1] = 0;
@@ -158,11 +153,9 @@ int	tcp_backoff[TCP_MAXRXTSHIFT + 1] =
  * TCP timer processing.
  */
 struct tcpcb *
-tcp_timers(tp, timer)
-	register struct tcpcb *tp;
-	int timer;
+tcp_timers(struct tcpcb *tp, int timer)
 {
-	register int rexmt;
+	int rexmt;
 
 	switch (timer) {
 
