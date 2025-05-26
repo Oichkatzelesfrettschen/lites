@@ -15,10 +15,10 @@ int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len,
 ```
 
 `ks_generate_key` creates a random symmetric key and writes it to the specified
-file.  `ks_encrypt` and `ks_decrypt` perform a simple XOR-based transformation
-with that key.  **This method provides no real security and is intended purely
-for demonstration.**  Future work may replace the implementation with a
-standard cipher such as AES, potentially using the OpenSSL library.
+file.  `ks_encrypt` and `ks_decrypt` now use AES‑128 in CTR mode when the
+OpenSSL library is available.  If OpenSSL is not found at compile time, the
+functions fall back to the original XOR transformation.  The AES path provides
+real confidentiality whereas the fallback remains a toy example.
 
 ## Enclave
 
@@ -42,6 +42,7 @@ Two small utilities under `bin/` demonstrate the APIs:
 They can be compiled manually, for example:
 
 ```sh
-cc -I "$LITES_SRC_DIR/include" crypto/keystore.c bin/keystore-demo.c -o keystore-demo
+# link with -lcrypto when OpenSSL is available
+cc -I "$LITES_SRC_DIR/include" crypto/keystore.c bin/keystore-demo.c -o keystore-demo -lcrypto
 cc -I "$LITES_SRC_DIR/include" "$LITES_SRC_DIR/liblites/enclave.c" bin/enclave-demo.c -o enclave-demo
 ```
