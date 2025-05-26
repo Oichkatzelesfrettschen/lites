@@ -122,8 +122,7 @@ static int prog_read_exec(void *handle, vm_offset_t file_ofs, vm_size_t file_siz
 
 	if (mem_size > file_size)
 	{
-		bzero((void*)area_start + (mem_addr + file_size - page_start),
-			mem_size - file_size);
+		memset((void*)area_start + (mem_addr + file_size - page_start), 0, mem_size - file_size);
 	}
 
 	result = vm_allocate(st->user_task, &page_start, page_end - page_start, FALSE);
@@ -193,7 +192,7 @@ int boot_load_program(mach_port_t master_host_port,
 	/*
 	 * Open the file
 	 */
-	bzero((char *)&file, sizeof(file));
+	memset((char *)&file, 0, sizeof(file));
 
 	result = open_file(master_device_port, namebuf, &file);
 	if (result != 0) {
@@ -334,7 +333,7 @@ printf("loaded; entrypoint %08x\n", info.entry);
 		*k_ap++ = u_cp;
 
 		/* copy string */
-		bcopy(arg_ptr, k_cp, arg_item_len);
+		memcpy(k_cp, arg_ptr, arg_item_len);
 		k_cp += arg_item_len;
 		u_cp += arg_item_len;
 	    }

@@ -129,17 +129,10 @@ mp_desc_init(mycpu)
 		/*
 		 * Copy the tables
 		 */
-		bcopy((char *)idt,
-		  (char *)mpt->idt,
-		  sizeof(idt));
-		bcopy((char *)gdt,
-		  (char *)mpt->gdt,
-		  sizeof(gdt));
-		bcopy((char *)ldt,
-		  (char *)mpt->ldt,
-		  sizeof(ldt));
-		bzero((char *)&mpt->ktss,
-		  sizeof(struct i386_tss));
+		memcpy((char *)mpt->idt, (char *)idt, sizeof(idt));
+		memcpy((char *)mpt->gdt, (char *)gdt, sizeof(gdt));
+		memcpy((char *)mpt->ldt, (char *)ldt, sizeof(ldt));
+		memset((char *)&mpt->ktss, 0, sizeof(struct i386_tss));
 
 		/*
 		 * Fix up the entries in the GDT to point to

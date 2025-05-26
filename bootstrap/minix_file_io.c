@@ -681,7 +681,7 @@ minix_read_file(fp, offset, start, size, resid)
 	    if (csize == 0)
 		break;
 
-	    bcopy((char *)buf, (char *)start, csize);
+	    memcpy((char *)start, (char *)buf, csize);
 
 	    offset += csize;
 	    start  += csize;
@@ -818,8 +818,7 @@ minix_add_file_direct(fdp, fp)
 	/* copy old addresses and install the new array */
 
 	if (fdp->fd_blocks != 0) {
-		bcopy((char *) fdp->fd_blocks, (char *) buffer,
-		      fdp->fd_size * sizeof(minix_daddr_t));
+		memcpy((char *) buffer, (char *) fdp->fd_blocks, fdp->fd_size * sizeof(minix_daddr_t));
 
 		(void) vm_deallocate(mach_task_self(),
 				(vm_offset_t) fdp->fd_blocks,

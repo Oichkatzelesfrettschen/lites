@@ -943,9 +943,7 @@ v86_assist(thread, regs)
 #ifdef	gcc_1_36_worked
 		int_vec = ((struct int_vec *)0)[vec];
 #else
-		bcopy((char *) (sizeof(struct int_vec) * vec),
-		      (char *)&int_vec,
-		      sizeof (struct int_vec));
+		memcpy((char *)&int_vec, (char *) (sizeof(struct int_vec) * vec), sizeof (struct int_vec));
 #endif
 		if (copyout((char *)&iret_16,
 			    (char *)Addr8086(regs->ss,sp),

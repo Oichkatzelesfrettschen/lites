@@ -254,7 +254,7 @@ ASSERT_IPL(SPL0);
 	    /*
 	     * Ensure that reserved parts of the environment are 0.
 	     */
-	    bzero((char *)&ifps->fp_save_state, sizeof(struct i386_fp_save));
+	    memset((char *)&ifps->fp_save_state, 0, sizeof(struct i386_fp_save));
 
 	    ifps->fp_save_state.fp_control = user_fp_state->fp_control;
 	    ifps->fp_save_state.fp_status  = user_fp_state->fp_status;
@@ -282,14 +282,10 @@ ASSERT_IPL(SPL0);
 			>> FPS_TOS_SHIFT;	/* physical register
 						   for st(0) */
 		if (i == 0)
-		    bcopy(src, dst, 8 * 10);
+		    memcpy(dst, src, 8 * 10);
 		else {
-		    bcopy(src,
-			  dst + 10 * i,
-			  10 * (8 - i));
-		    bcopy(src + 10 * (8 - i),
-			  dst,
-			  10 * i);
+		    memcpy(dst + 10 * i, src, 10 * (8 - i));
+		    memcpy(dst, src + 10 * (8 - i), 10 * i);
 		}
 	    }
 	    else
@@ -331,7 +327,7 @@ ASSERT_IPL(SPL0);
 	     * No valid floating-point state.
 	     */
 	    simple_unlock(&pcb->lock);
-	    bzero((char *)state, sizeof(struct i386_float_state));
+	    memset((char *)state, 0, sizeof(struct i386_float_state));
 	    return KERN_SUCCESS;
 	}
 
@@ -356,7 +352,7 @@ ASSERT_IPL(SPL0);
 	    /*
 	     * Ensure that reserved parts of the environment are 0.
 	     */
-	    bzero((char *)user_fp_state,  sizeof(struct i386_fp_save));
+	    memset((char *)user_fp_state, 0, sizeof(struct i386_fp_save));
 
 	    user_fp_state->fp_control = ifps->fp_save_state.fp_control;
 	    user_fp_state->fp_status  = ifps->fp_save_state.fp_status;
@@ -384,14 +380,10 @@ ASSERT_IPL(SPL0);
 			>> FPS_TOS_SHIFT;	/* physical register
 						   for st(0) */
 		if (i == 0)
-		    bcopy(src, dst, 8 * 10);
+		    memcpy(dst, src, 8 * 10);
 		else {
-		    bcopy(src + 10 * i,
-			  dst,
-			  10 * (8 - i));
-		    bcopy(src,
-			  dst + 10 * (8 - i),
-			  10 * i);
+		    memcpy(dst, src + 10 * i, 10 * (8 - i));
+		    memcpy(dst + 10 * (8 - i), src, 10 * i);
 		}
 	    }
 	    else
@@ -619,7 +611,7 @@ ASSERT_IPL(SPL0);
 	ifps = pcb->ims.ifps;
 	if (ifps == 0) {
 	    ifps = (struct i386_fpsave_state *) zalloc(ifps_zone);
-	    bzero(ifps, sizeof *ifps);
+	    memset(ifps, 0, sizeof *ifps);
 	    pcb->ims.ifps = ifps;
 	    fpinit();
 #if 1
@@ -662,7 +654,7 @@ fp_state_alloc()
 	struct i386_fpsave_state *ifps;
 
 	ifps = (struct i386_fpsave_state *)zalloc(ifps_zone);
-	bzero(ifps, sizeof *ifps);
+	memset(ifps, 0, sizeof *ifps);
 	pcb->ims.ifps = ifps;
 
 	ifps->fp_valid = TRUE;

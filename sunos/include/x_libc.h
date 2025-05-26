@@ -20,9 +20,6 @@
 #include <string.h>
 
 
-extern void     bcopy( char *, char *, int );
-extern int	bcmp( char *, char *, int );
-extern void     bzero( char *, int );
 extern int	qsort( char *, int, int, int(*)());
 
 extern int	lwp_self();

@@ -177,7 +177,7 @@ void
 rwLockInit( l )
     ReadWriteLock	*l;
 {
-    bzero((char *)l, sizeof(ReadWriteLock));
+    memset((char *)l, 0, sizeof(ReadWriteLock));
     semInit(&l->readersSem, 0);
     semInit(&l->writersSem, 0);
 }

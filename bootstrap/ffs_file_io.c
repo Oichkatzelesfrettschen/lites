@@ -626,7 +626,7 @@ ffs_open_file(master_device_port, path, fp)
 
 #ifdef	IC_FASTLINK
 		if ((fp->i_flags & IC_FASTLINK) != 0) {
-		    bcopy(fp->i_symlink, namebuf, (unsigned) link_len);
+		    memcpy(namebuf, fp->i_symlink, (unsigned) link_len);
 		}
 		else
 #endif	IC_FASTLINK
@@ -645,7 +645,7 @@ ffs_open_file(master_device_port, path, fp)
 		if ((link_len <= MAX_FASTLINK_SIZE && fp->i_ic.ic_db[1] != 0)
 		     || (link_len <= 4))
 		{
-		    bcopy(fp->i_symlink, namebuf, (unsigned) link_len);
+		    memcpy(namebuf, fp->i_symlink, (unsigned) link_len);
 		}
 		else
 #endif        /* !DISABLE_BSD44_FASTLINKS */
@@ -669,7 +669,7 @@ ffs_open_file(master_device_port, path, fp)
 		    if (rc)
 			goto exit;
 
-		    bcopy((char *)buf, namebuf, (unsigned)link_len);
+		    memcpy(namebuf, (char *)buf, (unsigned)link_len);
 		    (void) vm_deallocate(mach_task_self(), buf, buf_size);
 		}
 
@@ -802,7 +802,7 @@ ffs_read_file(fp, offset, start, size, resid)
 	    if (csize == 0)
 		break;
 
-	    bcopy((char *)buf, (char *)start, csize);
+	    memcpy((char *)start, (char *)buf, csize);
 
 	    offset += csize;
 	    start  += csize;
@@ -936,8 +936,7 @@ ffs_add_file_direct(fdp, fp)
 	/* copy old addresses and install the new array */
 
 	if (fdp->fd_blocks != 0) {
-		bcopy((char *) fdp->fd_blocks, (char *) buffer,
-		      fdp->fd_size * sizeof(daddr_t));
+		memcpy((char *) buffer, (char *) fdp->fd_blocks, fdp->fd_size * sizeof(daddr_t));
 
 		(void) vm_deallocate(mach_task_self(),
 				(vm_offset_t) fdp->fd_blocks,

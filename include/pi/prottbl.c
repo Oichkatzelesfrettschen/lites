@@ -100,7 +100,7 @@ mkKey(key, name)
     char *key;
     char *name;
 {
-    bzero(key, MAX_PROT_NAME);
+    memset(key, 0, MAX_PROT_NAME);
     strncpy(key, name, MAX_PROT_NAME);
 }
 

@@ -35,7 +35,7 @@ int dos_tcgetattr(dos_fd_t fd, struct termios *t)
 
 	dos_init_rcd(&real_call_data);
 
-	bzero(t, sizeof(*t));
+	memset(t, 0, sizeof(*t));
 
 	/* First make sure this is actually a character device.  */
 	real_call_data.eax = 0x4400;

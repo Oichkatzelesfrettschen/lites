@@ -81,7 +81,7 @@ mapCreate(nEntries, keySize)
     m->cache = 0;
     m->freelist = 0;
     m->table = (MapElement **)xMalloc(nEntries * sizeof(MapElement *));
-    bzero((char *)m->table, nEntries * sizeof(MapElement *));
+    memset((char *)m->table, 0, nEntries * sizeof(MapElement *));
     if (keySize > 0) {
       if (map_functions[keySize].resolve != 0) {
 	m->resolve = map_functions[keySize].resolve;
@@ -134,7 +134,7 @@ mapVarBind ( table, ext, len, intern )
     prev_elem = elem_posn;
     while (elem_posn != 0) {
 	o_ext = elem_posn->externalid;
-	if (!bcmp(o_ext, (char *)ext, len)) {
+	if (!memcmp(o_ext, (char *)ext, len)) {
 	    if (elem_posn->internalid == intern) {
 		return(elem_posn);
 	    } else {
@@ -152,7 +152,7 @@ mapVarBind ( table, ext, len, intern )
      * beginning for the semantics mapForEach to work properly.
      */
     GETVARMAPELEM(table, new_elem, len);
-    bcopy((char *)ext, (char *)new_elem->externalid, len);
+    memcpy((char *)new_elem->externalid, (char *)ext, len);
     new_elem->internalid = intern;
     new_elem->next = 0;
     new_elem->elmlen = len;
@@ -178,7 +178,7 @@ mapVarResolve ( table, ext, len, resPtr )
     
     if ((elem_posn = table->cache) && elem_posn->elmlen == len) {
 	o_ext = elem_posn->externalid;
-	if (!bcmp(o_ext, (char *)ext, len)) {
+	if (!memcmp(o_ext, (char *)ext, len)) {
 	    if ( resPtr ) {
 		*resPtr = elem_posn->internalid;
 	    }
@@ -189,7 +189,7 @@ mapVarResolve ( table, ext, len, resPtr )
     while (elem_posn != 0) {
 	o_ext = elem_posn->externalid;
 	if (elem_posn->elmlen == len &&
-	    !bcmp(o_ext, (char *)ext, len)) {
+	    !memcmp(o_ext, (char *)ext, len)) {
 	    table->cache = elem_posn;
 	    if ( resPtr ) {
 		*resPtr = elem_posn->internalid;
@@ -280,7 +280,7 @@ mapForEach(m, f, arg)
 		prevElem = 0;
 	    }
 	    if ( elem != 0 ) {
-		bcopy((char *)elem->externalid, key, m->keySize);
+		memcpy(key, (char *)elem->externalid, m->keySize);
 		userResult = f(key, elem->internalid, arg);
 		if ( ! (userResult & MFE_CONTINUE) ) {
 		    return;
@@ -311,8 +311,8 @@ static INLINE int	hash16( void *, int );
 #endif /* __STDC__ */
 
 
-#define GENCOMPBYTES(s1, s2) (!bcmp(s1, s2, table->keySize))
-#define GENCOPYBYTES(s1, s2) bcopy(s2, s1, table->keySize)
+#define GENCOMPBYTES(s1, s2) (!memcmp(s1, s2, table->keySize))
+#define GENCOPYBYTES(s1, s2) memcpy(s1, s2, table->keySize)
 
 #define KEYSIZE 2
 #define BINDNAME m2bind
@@ -626,8 +626,8 @@ generichash(key, tableSize, keySize)
 #define UNBINDNAME mgenericunbind
 #define HASH(K, tblSize, keySize) generichash(K, tblSize, keySize)
 #define GENHASH(K, T, keySize) generichash(K, tblSize, keySize)
-#define COMPBYTES(s1, s2) (!bcmp(s1, s2, table->keySize))
-#define COPYBYTES(s1, s2) bcopy(s2, s1, table->keySize)
+#define COMPBYTES(s1, s2) (!memcmp(s1, s2, table->keySize))
+#define COPYBYTES(s1, s2) memcpy(s1, s2, table->keySize)
 
 #include "idmap_templ.c"
 

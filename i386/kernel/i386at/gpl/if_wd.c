@@ -517,11 +517,11 @@ wd_input(ns, count, buf, ring_offset)
 		/*
 		 * Input move must be wrapped.
 		 */
-		bcopy((char *)phystokv(xfer_start), buf, semi_count);
+		memcpy(buf, (char *)phystokv(xfer_start), semi_count);
 		count -= semi_count;
-		bcopy((char *)phystokv(wd->sc_rmstart),buf+semi_count,count);
+		memcpy(buf+semi_count, (char *)phystokv(wd->sc_rmstart), count);
 	} else
-		bcopy((char *)phystokv(xfer_start), buf, count);
+		memcpy(buf, (char *)phystokv(xfer_start), count);
 	if (ns->sc_word16)
 		outb(port + WD_CMDREG5, wd->sc_reg5);
 }
@@ -542,10 +542,10 @@ wd_output(ns, count, buf, start_page)
 	shmem = (char *)phystokv(wd->sc_mstart+((start_page-WD_START_PG)<<8));
 	if (ns->sc_word16) {
 		outb(port + WD_CMDREG5, ISA16 | wd->sc_reg5);
-		bcopy(buf, shmem, count);
+		memcpy(shmem, buf, count);
 		outb(port + WD_CMDREG5, wd->sc_reg5);
 	} else
-		bcopy(buf, shmem, count);
+		memcpy(shmem, buf, count);
 	while (count <  ETHERMIN + sizeof(struct ether_header)) {
 		*(shmem + count) = 0;
 		count++;

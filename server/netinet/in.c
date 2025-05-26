@@ -209,7 +209,7 @@ in_control(so, cmd, data, ifp)
 				malloc(sizeof *oia, M_IFADDR, M_WAITOK);
 			if (oia == (struct in_ifaddr *)NULL)
 				return (ENOBUFS);
-			bzero((caddr_t)oia, sizeof *oia);
+			memset((caddr_t)oia, 0, sizeof *oia);
 			if (ia = in_ifaddr) {
 				for ( ; ia->ia_next; ia = ia->ia_next)
 					continue;

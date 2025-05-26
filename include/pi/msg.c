@@ -606,11 +606,11 @@ void msgConstructBuffer(this, buf, len)
   this->lastStackTailPtr = this->stackTailPtr;
   this->tailstate.myLastStack = 1;
   /* copy in data */
-  bcopy(buf, this->stackHeadPtr, len);
+  memcpy(this->stackHeadPtr, buf, len);
 #else
   this->length = len;
   this->offset = this->stack->b.leaf.size - roundlen;
-  bcopy(buf, this->stack->b.leaf.data + this->offset, len);
+  memcpy(this->stack->b.leaf.data + this->offset, buf, len);
 #endif MSG_NEW_ALG
   this->attr = 0;
   this->attrLen = 0;
@@ -1136,7 +1136,7 @@ s_copy(buf, len, arg)
   /* bcopy takes an int, so be careful */
   chunki = chunk_size;
   xAssert( (long) chunki == chunk_size);
-  bcopy(buf, a->buf, chunki);
+  memcpy(a->buf, buf, chunki);
   a->buf += chunk_size;
   a->size -= chunk_size;
   return (a->size != 0);
@@ -1520,7 +1520,7 @@ static void msgnrpush(stack, item)
 
     newstack = realloc(stack->bottom, newsize);
     if (newstack != (char *)(stack->bottom)) {
-      bcopy((char *)(stack->bottom), newstack, stack->size);
+      memcpy(newstack, (char *)(stack->bottom), stack->size);
       xFree((char *)stack->bottom);
       stack->top = (MNodePage **)(newstack + ((char *)stack->top - (char *)stack->bottom));
       stack->bottom = (MNodePage **)newstack;
@@ -2139,7 +2139,7 @@ frag2Buf( frag, len, bufPtr )
 {
     xTrace3(msg, TR_FUNCTIONAL_TRACE, "frag2Buf copying %d bytes from %x to %x",
 	    len, (int)frag, (int)(*(char **)bufPtr));
-    bcopy(frag, *(char **)bufPtr, len);
+    memcpy(*(char **)bufPtr, frag, len);
     *(char **)bufPtr += len;
     return TRUE;
 }

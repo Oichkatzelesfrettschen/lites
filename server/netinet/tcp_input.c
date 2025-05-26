@@ -558,7 +558,7 @@ findpcb:
 		sin->sin_len = sizeof(*sin);
 		sin->sin_addr = ti->ti_src;
 		sin->sin_port = ti->ti_sport;
-		bzero((caddr_t)sin->sin_zero, sizeof(sin->sin_zero));
+		memset((caddr_t)sin->sin_zero, 0, sizeof(sin->sin_zero));
 		laddr = inp->inp_laddr;
 		if (inp->inp_laddr.s_addr == INADDR_ANY)
 			inp->inp_laddr = ti->ti_dst;
@@ -1351,7 +1351,7 @@ tcp_dooptions(tp, cp, cnt, ti, ts_present, ts_val, ts_ecr)
 				continue;
 			if (!(ti->ti_flags & TH_SYN))
 				continue;
-			bcopy((char *) cp + 2, (char *) &mss, sizeof(mss));
+			memcpy((char *) &mss, (char *) cp + 2, sizeof(mss));
 			NTOHS(mss);
 			(void) tcp_mss(tp, mss);	/* sets t_maxseg */
 			break;
@@ -1369,9 +1369,9 @@ tcp_dooptions(tp, cp, cnt, ti, ts_present, ts_val, ts_ecr)
 			if (optlen != TCPOLEN_TIMESTAMP)
 				continue;
 			*ts_present = 1;
-			bcopy((char *)cp + 2, (char *) ts_val, sizeof(*ts_val));
+			memcpy((char *) ts_val, (char *)cp + 2, sizeof(*ts_val));
 			NTOHL(*ts_val);
-			bcopy((char *)cp + 6, (char *) ts_ecr, sizeof(*ts_ecr));
+			memcpy((char *) ts_ecr, (char *)cp + 6, sizeof(*ts_ecr));
 			NTOHL(*ts_ecr);
 
 			/* 
@@ -1409,7 +1409,7 @@ tcp_pulloutofband(so, ti, m)
 
 			tp->t_iobc = *cp;
 			tp->t_oobflags |= TCPOOB_HAVEDATA;
-			bcopy(cp+1, cp, (unsigned)(m->m_len - cnt - 1));
+			memcpy(cp, cp+1, (unsigned)(m->m_len - cnt - 1));
 			m->m_len--;
 			return;
 		}

@@ -54,7 +54,7 @@ formKey( char *key, char frag )
     int	i;
 
     for ( i=0; i < keySize; i++ ) {
-	bcopy(&frag, key + i, sizeof(char));
+	memcpy(key + i, &frag, sizeof(char));
     }
 }
 
@@ -199,14 +199,14 @@ main( int argc, char **argv )
     m = mapCreate(11, keySize);
     
     randomKey(key1, keySize);
-    bcopy(key1, offKey, keySize);
+    memcpy(offKey, key1, keySize);
 
     b = mapBind(m, key1, 22);
     xAssert( b != ERR_BIND );
     xkr = mapResolve(m, key1, &ptr);
     xAssert( xkr == XK_SUCCESS );
     xAssert( ptr == (VOID *)22 );
-    bzero(key2, keySize);
+    memset(key2, 0, keySize);
     xkr = mapResolve(m, key2, &ptr);
     xAssert( xkr == XK_FAILURE );
     b = mapBind(m, offKey, 25);

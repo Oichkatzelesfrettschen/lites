@@ -47,9 +47,9 @@ ovbcopy(from, to, bytes)
 {
 	/* Assume that bcopy copies left-to-right (low addr first). */
 	if (from + bytes <= to || to + bytes <= from || to == from)
-		bcopy(from, to, bytes);	/* non-overlapping or no-op*/
+		memcpy(to, from, bytes);	/* non-overlapping or no-op*/
 	else if (from > to)
-		bcopy(from, to, bytes);	/* overlapping but OK */
+		memcpy(to, from, bytes);	/* overlapping but OK */
 	else {
 		/* to > from: overlapping, and must copy right-to-left. */
 		from += bytes - 1;
