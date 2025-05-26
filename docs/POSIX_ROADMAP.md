@@ -9,7 +9,7 @@ missing pieces.
 ## Phase I – Build and Core Infrastructure
 
 * **Unified build system** – The repository already offers
-  `Makefile.new` and CMake support for the `src-lites-1.1-2025` tree.
+  `Makefile.new` and CMake support for the modernised source tree.
   Additional tooling such as Meson is planned but not yet present.
   Cross‑compilation helpers live in `setup.sh`.
 * **Header consolidation** – The `headers_inventory.csv` file and the

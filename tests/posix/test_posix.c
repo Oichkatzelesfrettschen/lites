@@ -1,4 +1,4 @@
-#include "../../src-lites-1.1-2025/include/posix_wrap.h"
+#include "posix_wrap.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <unistd.h>

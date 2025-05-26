@@ -103,8 +103,8 @@ make
 
 For the modernized build system in this repository you can also use
 `Makefile.new` or the provided CMake files.  Both automatically build from
-the `src-lites-1.1-2025` directory when it is present.  Set the `SRCDIR` or
-`LITES_SRC_DIR` variables to override this behaviour.  The tools recognise an
+the directory pointed to by `SRCDIR`/`LITES_SRC_DIR` when it is present.
+Set these variables to override the default location.  The tools recognise an
 `ARCH` variable which selects the target CPU.  Supported values include the
 64‑bit `x86_64` and `riscv64`, 32‑bit `i686`, `arm` and `powerpc`, and the
 16‑bit `ia16`.  The default is `ARCH=x86_64`.
@@ -128,7 +128,7 @@ make -f Makefile.new ARCH=x86_64 SANITIZE=1
 
 # Using CMake (optionally override the source directory)
 cmake -B build -DARCH=i686
-cmake -B build -DARCH=x86_64 -DLITES_SRC_DIR=src-lites-1.1-2025
+cmake -B build -DARCH=x86_64 -DLITES_SRC_DIR=/path/to/lites
 cmake -B build -DARCH=arm
 cmake -B build -DARCH=riscv64
 cmake -B build -DARCH=powerpc
@@ -225,10 +225,10 @@ executed directly.  For example:
 ./tests/vm_fault/test_vm_fault
 ```
 
-A simple user-level pager is provided in `src-lites-1.1-2025/bin/user_pager`.
+A simple user-level pager is provided in `bin/user_pager` within the modern tree.
 Build it with:
 ```sh
-make -C src-lites-1.1-2025/bin/user_pager
+make -C "$LITES_SRC_DIR/bin/user_pager"
 ```
 Run the resulting `user_pager` alongside `lites_server` to service page faults.
 The VM test in `tests/vm_fault` demonstrates this interaction.
@@ -240,7 +240,7 @@ make -f Makefile.new test
 
 ## Header consolidation
 A helper script `scripts/move_all_headers.sh` is provided to move all `*.h` files
-from the repository into `src-lites-1.1-2025/include/all_headers` while
+from the repository into `$LITES_SRC_DIR/include/all_headers` while
 preserving their original relative paths. This operation is destructive and
 should only be run for analysis purposes.
 

@@ -1,4 +1,4 @@
-#include "../../src-lites-1.1-2025/include/posix.h"
+#include "posix.h"
 #include <assert.h>
 #include <string.h>
 

@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/localmach/include"
+SRC_DIR="${LITES_SRC_DIR:-$ROOT/src-lites-1.1-2025}"
 
 copy_headers() {
     local src="$1"
@@ -21,8 +22,8 @@ if [ -d "$ROOT/openmach/include" ]; then
     exit 0
 fi
 
-if [ -d "$ROOT/src-lites-1.1-2025/xkernel" ]; then
-    "$ROOT/scripts/extract-xmach-headers.sh"
+if [ -d "$SRC_DIR/xkernel" ]; then
+    LITES_SRC_DIR="$SRC_DIR" "$ROOT/scripts/extract-xmach-headers.sh"
     exit 0
 fi
 

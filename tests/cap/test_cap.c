@@ -1,4 +1,4 @@
-#include "../../src-lites-1.1-2025/include/cap.h"
+#include "cap.h"
 #include <assert.h>
 #include <stdlib.h>
 #include "../../include/auth.h"

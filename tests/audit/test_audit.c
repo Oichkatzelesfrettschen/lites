@@ -3,7 +3,7 @@
 #include "../../include/auth.h"
 #include "../../include/audit.h"
 #include "../../include/id128.h"
-#include "../../src-lites-1.1-2025/include/cap.h"
+#include "cap.h"
 
 int main(void)
 {

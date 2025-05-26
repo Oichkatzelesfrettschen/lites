@@ -4,7 +4,7 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 #include <sys/types.h>
-#include "../src-lites-1.1-2025/include/cap.h"
+#include "cap.h"
 
 #ifdef __cplusplus
 extern "C" {

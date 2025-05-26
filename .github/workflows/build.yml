@@ -44,7 +44,9 @@ jobs:
 
       - name: Build tests
         run: |
-          make -C src-lites-1.1-2025/bin/user_pager CC=${{ matrix.cc }}
+          if [ -d "${LITES_SRC_DIR:-src-lites-1.1-2025}/bin/user_pager" ]; then
+            make -C "${LITES_SRC_DIR:-src-lites-1.1-2025}/bin/user_pager" CC=${{ matrix.cc }}
+          fi
           make -C tests/audit CC=${{ matrix.cc }}
           make -C tests/cap CC=${{ matrix.cc }}
           make -C tests/iommu CC=${{ matrix.cc }}
