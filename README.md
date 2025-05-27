@@ -181,6 +181,14 @@ The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
 clang-tidy can analyse the sources even before the project has been built.
 
+Alternatively CMake can drive clang-tidy directly.  Enable the optional
+`ENABLE_CLANG_TIDY` flag to add a `clang-tidy` target:
+
+```sh
+cmake -DENABLE_CLANG_TIDY=ON -B build
+cmake --build build --target clang-tidy
+```
+
 To try the built binaries under QEMU use `scripts/run-qemu.sh`.  The script
 launches the `lites_server` (and the optional `lites_emulator` when present)
 inside QEMU for either `x86_64` or `i686`:
