@@ -65,7 +65,7 @@ formKey( char *key, char frag )
     int	i;
 
     for ( i=0; i < keySize; i++ ) {
-	bcopy(&frag, key + i, sizeof(char));
+        memcpy(key + i, &frag, sizeof(char));
     }
 }
 
@@ -143,7 +143,7 @@ main( int argc, char **argv )
     for ( j=0; j < 1000; j++ ) {
 	randomKey(key1, keySize);
 	h = generichash(key1, 511, keySize);
-	bcopy(key1, offKey+1, keySize);
+        memcpy(offKey+1, key1, keySize);
 	if ( (hashFunc && h != hashFunc(key1, 511)) ||
 	     h != generichash(offKey+1, 511, keySize) ) {
 	    for ( i=0; i < keySize; i++ ) {

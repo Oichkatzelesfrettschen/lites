@@ -15,6 +15,7 @@
 #include "gzip.h"
 #include "lzw.h"
 #include "real.h"
+#include <string.h>
 
 #include <linux/config.h>
 #include <linux/segment.h>
@@ -243,7 +244,7 @@ static void flush_rest(void *data, int bytes)
 			size -= (output_ptr + bytes) - (output_start + output_size);
 		}
 
-		bcopy(src, dest, size);
+               memcpy(dest, src, size);
 
 		if (output_start + output_size <= output_ptr + bytes)
 		{

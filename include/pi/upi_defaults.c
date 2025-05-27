@@ -11,16 +11,17 @@
  */
 
 #include "xkernel.h"
+#include <string.h>
 
 extern int	traceprotocol;
 int	traceprotdef = 0;
 
 
 #define savePart(pxx, spxx)	\
-    bcopy((char *)(pxx), (char *)(spxx), sizeof(Part) * partLen(p))
+    memcpy((char *)(spxx), (char *)(pxx), sizeof(Part) * partLen(p))
 
 #define restorePart(pxx, spxx)	\
-    bcopy((char *)(spxx), (char *)(pxx), sizeof(Part) * partLen(p))
+    memcpy((char *)(pxx), (char *)(spxx), sizeof(Part) * partLen(p))
 
 /* 
  * Check for a valid participant list
@@ -146,7 +147,7 @@ findHlpEnable( key, val, arg )
 
     if ( e->hlpRcv == fs->hlpRcv ) {
 	fs->e = e;
-	bcopy(key, fs->key, fs->keySize);
+        memcpy(fs->key, key, fs->keySize);
 	return FALSE;
     } else {
 	return TRUE;
