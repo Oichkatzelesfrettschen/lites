@@ -235,3 +235,9 @@ from the repository into `$LITES_SRC_DIR/include/all_headers` while
 preserving their original relative paths. This operation is destructive and
 should only be run for analysis purposes.
 
+
+## Licensing
+
+All historical source files retain their original license headers.  A summary of
+these legacy notices is recorded in [LICENSE_MAP](LICENSE_MAP).  See the
+[LICENSE](LICENSE) file for an overview of the major terms.
