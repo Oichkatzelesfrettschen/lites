@@ -131,7 +131,7 @@ int checknoretrieve(char *name);
 int path_to_device(char *pathname, char *result);
 void get_quota(char *fs, int uid);
 char *time_quota(long curstate, long softlimit, long timelimit, char *timeleft);
-void fmttime(char *buf, register long time);
+void fmttime(char *buf, long time);
 int file_compare(char *patterns, char *file);
 int remote_compare(char *patterns);
 void throughput_calc(char *name, int *bps, double *bpsmult);
@@ -144,7 +144,7 @@ void CheckSumLastFile(void);
 /*
    ** ftpcmd.c
  */
-char *wu_getline(char *s, int n, register FILE *iop);
+char *wu_getline(char *s, int n, FILE *iop);
 int yyparse(void);
 void upper(char *s);
 char *copy(char *s);
@@ -232,9 +232,9 @@ void fixpath(char *path);
    ** glob.c
  */
 void blkfree(char **);
-char **ftpglob(register char *);
-char *strspl(register char *, register char *);
-char **copyblk(register char **);
+char **ftpglob(char *);
+char *strspl(char *, char *);
+char **copyblk(char **);
 
 /*
    ** hostacc.c
@@ -343,4 +343,4 @@ void endusershell(void);
 /*
    ** support/strcasestr.c
  */
-char *strcasestr(register char *s, register char *find);
+char *strcasestr(char *s, char *find);

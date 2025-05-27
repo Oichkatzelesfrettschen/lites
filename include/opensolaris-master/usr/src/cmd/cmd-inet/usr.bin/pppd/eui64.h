@@ -97,7 +97,7 @@ typedef union
  * Returns ascii representation of ID.  This is at most 20 bytes long;
  * 19 characters plus one NUL.
  */
-char *eui64_ntoa __P((eui64_t));
+char *eui64_ntoa(eui64_t);
 
 #endif /* __EUI64_H__ */
 

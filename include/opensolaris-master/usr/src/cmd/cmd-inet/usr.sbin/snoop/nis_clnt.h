@@ -49,7 +49,6 @@ extern "C" {
 #define	NIS_PROG ((u_long)100300)
 #define	NIS_VERSION ((u_long)3)
 
-#ifdef __STDC__
 #define	NIS_LOOKUP ((u_long)1)
 extern  nis_result * nis_lookup_clnt(ns_request *, CLIENT *);
 extern  nis_result * nis_lookup_svc(ns_request *, struct svc_req *);
@@ -184,7 +183,6 @@ extern  nis_error * nis_rmdir_svc();
 
 /* Now print out the definitions of all the xdr functions */
 
-#ifdef __STDC__
 extern  bool_t xdr_nis_attr(XDR *, nis_attr *);
 extern  bool_t xdr_nis_name(XDR *, nis_name *);
 extern  bool_t xdr_zotypes(XDR *, zotypes *);
@@ -217,41 +215,6 @@ extern  bool_t xdr_dump_args(XDR *, dump_args *);
 extern  bool_t xdr_fd_args(XDR *, fd_args *);
 extern  bool_t xdr_fd_result(XDR *, fd_result *);
 
-#else /* K&R C */
-
-bool_t xdr_nis_attr();
-bool_t xdr_nis_name();
-bool_t xdr_zotypes();
-bool_t xdr_nstype();
-bool_t xdr_oar_mask();
-bool_t xdr_endpoint();
-bool_t xdr_nis_server();
-bool_t xdr_directory_obj();
-bool_t xdr_entry_col();
-bool_t xdr_entry_obj();
-bool_t xdr_group_obj();
-bool_t xdr_link_obj();
-bool_t xdr_table_col();
-bool_t xdr_table_obj();
-bool_t xdr_objdata();
-bool_t xdr_nis_oid();
-bool_t xdr_nis_object();
-bool_t xdr_nis_error();
-bool_t xdr_nis_result();
-bool_t xdr_ns_request();
-bool_t xdr_ib_request();
-bool_t xdr_ping_args();
-bool_t xdr_log_entry_t();
-bool_t xdr_log_entry();
-bool_t xdr_log_result();
-bool_t xdr_cp_result();
-bool_t xdr_nis_tag();
-bool_t xdr_nis_taglist();
-bool_t xdr_dump_args();
-bool_t xdr_fd_args();
-bool_t xdr_fd_result();
-
-#endif /* K&R C */
 
 #ifdef __cplusplus
 }

@@ -60,9 +60,7 @@
  */
 
 #ifndef STDC
-#  if defined(MSDOS) || defined(__STDC__) || defined(__cplusplus)
-#    define STDC
-#  endif
+#define STDC
 #endif
 
 #ifdef	__MWERKS__ /* Metrowerks CodeWarrior declares fileno() in unix.h */

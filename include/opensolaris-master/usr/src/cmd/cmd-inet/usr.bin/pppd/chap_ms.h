@@ -32,12 +32,12 @@
 #define MD4_SIGNATURE_SIZE	16	/* 16 bytes in a MD4 message digest */
 #define MAX_NT_PASSWORD	256	/* Maximum number of (Unicode) chars in an NT password */
 
-void ChapMS __P((chap_state *, u_char *, int, char *, int));
-void ChapMSv2 __P((chap_state *, u_char *, int, char *, int));
-int ChapMSValidate __P((chap_state *cstate, u_char *response, int response_len,
-    char *secret, int secret_len));
-int ChapMSv2Validate __P((chap_state *cstate, char *rhostname,
-    u_char *response, int response_len, char *secret, int secret_len));
+void ChapMS(chap_state *, u_char *, int, char *, int);
+void ChapMSv2(chap_state *, u_char *, int, char *, int);
+int ChapMSValidate(chap_state *cstate, u_char *response, int response_len,
+    char *secret, int secret_len);
+int ChapMSv2Validate(chap_state *cstate, char *rhostname,
+    u_char *response, int response_len, char *secret, int secret_len);
 
 #define __CHAPMS_INCLUDE__
 #endif /* __CHAPMS_INCLUDE__ */
