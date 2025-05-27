@@ -9,7 +9,9 @@ if lites_src_dir == ''
   error('LITES_SRC_DIR must be set')
 endif
 inc = include_directories('.', join_paths(lites_src_dir, 'include'))
+libos = static_library('oslib', 'libos/vm.c')
 executable('ipc-demo',
-           ['ipc.c', 'bin/ipc-demo.c', 'libos/vm.c'],
+           ['ipc.c', 'bin/ipc-demo.c'],
            include_directories : inc,
+           link_with : libos,
            dependencies : rt)
