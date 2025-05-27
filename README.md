@@ -10,6 +10,7 @@ modernization effort and is not part of the original snapshots.  A
 summary of the completed work and future plans can be found in
 [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
 Integration notes for Eigen, MLP and Cap'n Proto live in [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md).
+The overall roadmap is outlined in [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md).
 
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
