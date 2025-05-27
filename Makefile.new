@@ -108,11 +108,18 @@ SERVER_COMMON_DIRS := \
 SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
-KERN_SRC := $(wildcard kern/*.c) $(wildcard $(SRCDIR)/iommu/*.c) \
-            $(wildcard $(SRCDIR)/libos/*.c)
+KERN_SRC := $(wildcard kern/*.c) $(wildcard $(SRCDIR)/iommu/*.c)
 POSIX_SRC := $(wildcard posix/*.c)
 KERN_SRC += $(POSIX_SRC)
-KERN_INCDIRS := -Ikern -I$(SRCDIR)/iommu -Iposix -I$(SRCDIR)/libos
+KERN_INCDIRS := -Ikern -I$(SRCDIR)/iommu -Iposix -Ilibos
+
+# Build libos as a static library
+LIBOS_SRC := $(wildcard libos/*.c)
+LIBOS_OBJ := $(LIBOS_SRC:.c=.o)
+LIBOS_A   := libos/libos.a
+
+$(LIBOS_A): $(LIBOS_OBJ)
+	$(AR) rcs $@ $^
 
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
@@ -127,7 +134,7 @@ endif
 
 TEST_SUBDIRS := $(sort $(dir $(wildcard tests/*/Makefile)))
 
-all: prepare $(TARGETS)
+all: prepare $(LIBOS_A) $(TARGETS)
 
 prepare:
         @if [ ! -e $(SRCDIR)/include/machine ]; then \
@@ -136,12 +143,12 @@ prepare:
           ln -s $$arch_dir $(SRCDIR)/include/machine; \
         fi
 
-lites_server: $(SERVER_SRC) $(KERN_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_server: $(SERVER_SRC) $(KERN_SRC) $(LIBOS_A)
+	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
-lites_emulator: $(EMULATOR_SRC) $(KERN_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_emulator: $(EMULATOR_SRC) $(KERN_SRC) $(LIBOS_A)
+	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
 endif
 
 clean:
