@@ -72,8 +72,8 @@ extern ipcp_options ipcp_gotoptions[];
 extern ipcp_options ipcp_allowoptions[];
 extern ipcp_options ipcp_hisoptions[];
 
-extern char *ip_ntoa __P((u_int32_t));
-extern char *tcp_flag_decode __P((int));
+extern char *ip_ntoa(u_int32_t);
+extern char *tcp_flag_decode(int);
 
 extern struct protent ipcp_protent;
 extern bool ipcp_from_hostname;

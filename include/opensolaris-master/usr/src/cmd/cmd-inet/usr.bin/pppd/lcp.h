@@ -153,19 +153,19 @@ extern lcp_options lcp_allowoptions[];
 extern lcp_options lcp_hisoptions[];
 extern u_int32_t xmit_accm[][8];
 
-void lcp_open __P((int));
-void lcp_close __P((int, char *));
-void lcp_lowerup __P((int));
-void lcp_lowerdown __P((int));
-void lcp_sprotrej __P((int, u_char *, int));	/* send protocol reject */
-void lcp_settimeremaining __P((int, u_int32_t, u_int32_t));
+void lcp_open(int);
+void lcp_close(int, char *);
+void lcp_lowerup(int);
+void lcp_lowerdown(int);
+void lcp_sprotrej(int, u_char *, int);	/* send protocol reject */
+void lcp_settimeremaining(int, u_int32_t, u_int32_t);
 
 /*
  * Procedures exported from multilink.c
  */
-extern char *epdisc_to_str __P((struct epdisc *));
+extern char *epdisc_to_str(struct epdisc *);
 				/* string from endpoint discriminator */
-extern int  str_to_epdisc __P((struct epdisc *, char *));
+extern int  str_to_epdisc(struct epdisc *, char *);
 				/* endpt discriminator from str */
 
 extern struct protent lcp_protent;

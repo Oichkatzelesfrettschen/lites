@@ -32,7 +32,6 @@
 extern "C" {
 #endif
 
-#ifdef __STDC__
 
 extern short net_invoke(char _TKFAR *, char _TKFAR *, char _TKFAR *,
 	char _TKFAR *, u_long, u_long, char _TKFAR *,
@@ -62,32 +61,6 @@ extern void fw_err_set(Op_err _TKFAR * _TKFAR *, Fw_err, u_long, ...);
 extern void net_cleanup(void);
 #endif
 
-#else
-
-extern short net_invoke();
-extern short net_more();
-extern short net_end();
-extern Op_arg _TKFAR *net_arg_init();
-extern short net_arg_set();
-extern short net_arg_markrow();
-extern short net_arg_get();
-extern short net_arg_getnext();
-extern short net_arg_nextrow();
-extern short net_arg_rowstart();
-extern short net_arg_reset();
-extern void net_arg_free();
-extern void net_err_free();
-extern Op_arg _TKFAR *new_Op_arg();
-extern void free_Op_arg();
-extern void free_Op_err();
-extern short append_Op_arg();
-extern void fw_err_set();
-
-#ifdef _WINDOWS
-extern void net_cleanup();
-#endif
-
-#endif	/* __STDC__ */
 
 #ifdef	__cplusplus
 }

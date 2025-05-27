@@ -78,15 +78,7 @@ extern "C" {
 
 #define _PATH_USEROPT	 ".ppprc"
 
-#ifdef __STDC__
-#define _PATH_PPPDB	_ROOT_PATH _PATH_VARRUN "pppd.tdb"
-#else /* __STDC__ */
-#ifdef HAVE_PATHS_H
-#define _PATH_PPPDB	"/var/run/pppd.tdb"
-#else /* HAVE_PATHS_H */
-#define _PATH_PPPDB	"/etc/ppp/pppd.tdb"
-#endif /* HAVE_PATHS_H */
-#endif /* __STDC__ */
+#define _PATH_PPPDB     _ROOT_PATH _PATH_VARRUN "pppd.tdb"
 
 #ifdef	__cplusplus
 }

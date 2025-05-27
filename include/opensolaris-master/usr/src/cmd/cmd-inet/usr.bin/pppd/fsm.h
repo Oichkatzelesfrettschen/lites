@@ -102,34 +102,34 @@ typedef struct fsm {
 
 typedef struct fsm_callbacks {
     void (*resetci)		/* Reset our Configuration Information */
-		__P((fsm *));
+		(fsm *);
     int  (*cilen)		/* Length of our Configuration Information */
-		__P((fsm *));
+		(fsm *);
     void (*addci)		/* Add our Configuration Information */
-		__P((fsm *, u_char *, int *));
+		(fsm *, u_char *, int *);
     int  (*ackci)		/* ACK our Configuration Information */
-		__P((fsm *, u_char *, int));
+		(fsm *, u_char *, int);
     int  (*nakci)		/* NAK our Configuration Information */
-		__P((fsm *, u_char *, int));
+		(fsm *, u_char *, int);
     int  (*rejci)		/* Reject our Configuration Information */
-		__P((fsm *, u_char *, int));
+		(fsm *, u_char *, int);
     int  (*reqci)		/* Request peer's Configuration Information */
-		__P((fsm *, u_char *, int *, int));
+		(fsm *, u_char *, int *, int);
     void (*up)			/* Called when fsm reaches OPENED state */
-		__P((fsm *));
+		(fsm *);
     void (*down)		/* Called when fsm leaves OPENED state */
-		__P((fsm *));
+		(fsm *);
     void (*starting)		/* Called when we want the lower layer */
-		__P((fsm *));
+		(fsm *);
     void (*finished)		/* Called when we don't want the lower layer */
-		__P((fsm *));
+		(fsm *);
     void (*retransmit)		/* Retransmission is necessary */
-		__P((fsm *));
+		(fsm *);
     int  (*extcode)		/* Called when unknown code received */
-		__P((fsm *, int, int, u_char *, int));
+		(fsm *, int, int, u_char *, int);
     char *proto_name;		/* String name for protocol (for messages) */
     int (*codereject)		/* Called when Code-Reject received */
-		__P((fsm *p, int code, int id, u_char *inp, int len));
+		(fsm *p, int code, int id, u_char *inp, int len);
 } fsm_callbacks;
 
 
@@ -171,17 +171,17 @@ typedef struct fsm_callbacks {
 /*
  * Prototypes
  */
-void fsm_init __P((fsm *));
-void fsm_lowerup __P((fsm *));
-void fsm_lowerdown __P((fsm *));
-void fsm_open __P((fsm *));
-void fsm_close __P((fsm *, char *));
-void fsm_input __P((fsm *, u_char *, int));
-void fsm_protreject __P((fsm *));
-void fsm_sdata __P((fsm *, int, int, u_char *, int));
-void fsm_setpeermru __P((int, int));
+void fsm_init (fsm *);
+void fsm_lowerup (fsm *);
+void fsm_lowerdown (fsm *);
+void fsm_open (fsm *);
+void fsm_close (fsm *, char *);
+void fsm_input (fsm *, u_char *, int);
+void fsm_protreject (fsm *);
+void fsm_sdata (fsm *, int, int, u_char *, int);
+void fsm_setpeermru (int, int);
 
-const char *fsm_state __P((int statenum));
+const char *fsm_state (int statenum);
 
 #ifdef	__cplusplus
 }

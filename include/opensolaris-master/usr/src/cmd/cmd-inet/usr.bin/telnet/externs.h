@@ -279,7 +279,7 @@ extern unsigned char *env_getvalue(unsigned char *);
 extern int env_init(void);
 extern int get_status(void);
 extern int init_telnet(void);
-extern int isprefix(register char *, register char *);
+extern int isprefix(char *, char *);
 extern int netflush(void);
 extern int opt_welldefined(char *);
 extern int process_rings(int, int, int, int, int, int);

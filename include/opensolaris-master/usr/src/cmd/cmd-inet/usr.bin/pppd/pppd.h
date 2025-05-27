@@ -43,15 +43,8 @@
 #include <sys/time.h>		/* for struct timeval */
 #include <net/ppp_defs.h>
 
-#if defined(__STDC__)
 #include <stdarg.h>
-#define __V(x)	x
-#else
-#include <varargs.h>
-#define __V(x)	(va_alist) va_dcl
-#define const
-#define volatile
-#endif /* __STDC__ */
+#define __V(x)  x
 
 #ifdef INET6
 #include "eui64.h"
