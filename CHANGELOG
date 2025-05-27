@@ -1,5 +1,9 @@
 # Changelog
 
+## lites-1.2
+- Added `legacy_bsd/` with the imported 4.4BSD userland sources.
+- Introduced a unified virtual memory layer in `libos/vm.c` and `vm.h`.
+
 ## lites-1.1.1
 - Derived from lites-1.1
 - Integrated snapshot lites-1.1.u1
