@@ -152,7 +152,7 @@ mapVarBind ( table, ext, len, intern )
      * beginning for the semantics mapForEach to work properly.
      */
     GETVARMAPELEM(table, new_elem, len);
-    bcopy((char *)ext, (char *)new_elem->externalid, len);
+    memcpy(new_elem->externalid, ext, len);
     new_elem->internalid = intern;
     new_elem->next = 0;
     new_elem->elmlen = len;
@@ -280,7 +280,7 @@ mapForEach(m, f, arg)
 		prevElem = 0;
 	    }
 	    if ( elem != 0 ) {
-		bcopy((char *)elem->externalid, key, m->keySize);
+                memcpy(key, (char *)elem->externalid, m->keySize);
 		userResult = f(key, elem->internalid, arg);
 		if ( ! (userResult & MFE_CONTINUE) ) {
 		    return;

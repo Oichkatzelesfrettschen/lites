@@ -18,6 +18,7 @@
 #include "xk_debug.h"
 #include "event.h"
 #include "event_i.h"
+#include <string.h>
 #include "assert.h"
 #include "x_libc.h"
 
@@ -119,8 +120,8 @@ findEvents( key, val, arg )
     if ( eva->i >= eva->max ) {
 	newSize = eva->max ? eva->max * 2 : MAX_EVENTS;
 	newArray = (Event *)xMalloc(sizeof(Event) * newSize);
-	bzero((char *)newArray, sizeof(Event) * newSize);
-	bcopy((char *)eva->arr, (char *)newArray, sizeof(Event) * eva->max);
+        memset((char *)newArray, 0, sizeof(Event) * newSize);
+        memcpy((char *)newArray, (char *)eva->arr, sizeof(Event) * eva->max);
 	if ( eva->arr ) {
 	    xFree((char *)eva->arr);
 	}

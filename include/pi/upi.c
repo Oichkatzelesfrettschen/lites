@@ -25,6 +25,7 @@
 #include "event.h"
 #ifndef XKMACHKERNEL
 #include "x_stdio.h"
+#include <string.h>
 #include "x_libc.h"
 #endif XKMACHKERNEL
 
@@ -618,8 +619,8 @@ xSetDown( s, i, obj )
 	    newsz = ((n / STD_DOWN) + 1) * STD_DOWN;
 	    newdl = (XObj *) xMalloc(newsz * sizeof(XObj));
 	    if ( s->downlist ) {
-		bcopy((char *)s->downlist, (char *)newdl,
-		      s->downlistsz * sizeof(XObj));
+                memcpy((char *)newdl, (char *)s->downlist,
+                       s->downlistsz * sizeof(XObj));
 		xFree((char *)s->downlist);
 	    }
 	    s->downlist = newdl;

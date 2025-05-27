@@ -55,7 +55,7 @@ formKey( char *key, char frag )
 
 #if 0
     for ( i=0; i < keySize; i++ ) {
-	bcopy(&frag, key + i, sizeof(char)); 
+        memcpy(key + i, &frag, sizeof(char));
 	/* 
 	 * Try to get the same hash values independent of the key size. 
 	 */
