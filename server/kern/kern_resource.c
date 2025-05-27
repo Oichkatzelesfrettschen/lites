@@ -48,7 +48,7 @@
 #include <sys/malloc.h>
 #include <sys/proc.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 /*
  * Resource controls and accounting.

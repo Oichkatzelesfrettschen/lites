@@ -48,7 +48,7 @@
 #include <sys/kernel.h>
 #include <sys/systm.h>
 #include <sys/proc.h>
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/sysctl.h>
 
 void	pffasttimo (void *);

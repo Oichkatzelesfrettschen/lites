@@ -32,7 +32,7 @@
 #include <sys/som.h>
 #include <machine/cpu.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 /*
  * Have to make sure the U-area we dump looks just like the Utah BSD kind.

@@ -56,7 +56,7 @@
 #include <sys/dirent.h>
 #include <sys/resourcevar.h>
 #include <miscfs/procfs/procfs.h>
-#include <vm/vm.h>	/* for PAGE_SIZE */
+#include <libos/vm.h>	/* for PAGE_SIZE */
 
 /*
  * Vnode Operations.

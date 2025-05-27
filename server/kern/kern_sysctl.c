@@ -53,7 +53,7 @@
 #include <sys/buf.h>
 #include <sys/ioctl.h>
 #include <sys/tty.h>
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/sysctl.h>
 
 sysctlfn kern_sysctl;

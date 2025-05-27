@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "vm.h"
+#include <libos/vm.h>
 
 extern kern_return_t vm_fault_entry(aspace_t *, vm_offset_t, vm_prot_t);
 extern kern_return_t unmap_frame(aspace_t *, vm_offset_t);

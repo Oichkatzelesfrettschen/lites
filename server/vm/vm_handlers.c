@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#include "../../include/vm.h"
+#include <libos/vm.h>
 
 /*
  * Basic virtual memory handlers. These are placeholders for

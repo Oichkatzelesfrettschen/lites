@@ -56,7 +56,7 @@
 
 #include <net/netisr.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <machine/cpu.h>
 

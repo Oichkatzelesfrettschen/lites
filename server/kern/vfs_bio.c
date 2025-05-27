@@ -29,7 +29,7 @@
 #include <sys/malloc.h>
 #include <sys/resourcevar.h>
 #include <sys/proc.h>
-#include <vm/vm.h>
+#include <libos/vm.h>
 #ifdef LITES
 #include <serv/server_defs.h>
 #else

@@ -55,7 +55,7 @@
  * Lites to stall, the buffer to be read is also somehow marked busy
  */
 #ifdef DEBUG
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/sysctl.h>
 int doreallocblks = 0;
 struct ctldebug debug13 = { "doreallocblks", &doreallocblks };

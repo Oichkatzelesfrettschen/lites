@@ -54,7 +54,7 @@
 #include <sys/trace.h>
 #include <sys/resourcevar.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <ufs/ufs/quota.h>
 #include <ufs/ufs/inode.h>

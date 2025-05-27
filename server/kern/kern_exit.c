@@ -86,7 +86,7 @@
 
 #include <machine/cpu.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 boolean_t proc_died_debug = FALSE;
 

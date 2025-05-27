@@ -39,7 +39,7 @@
 #include <sys/kernel.h>
 #include <sys/malloc.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <vm/vm_kern.h>
 
 struct kmembuckets bucket[MINBUCKET + 16];

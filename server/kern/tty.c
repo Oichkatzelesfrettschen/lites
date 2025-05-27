@@ -62,7 +62,7 @@
 #include <sys/syslog.h>
 #include <sys/synch.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 static int	proc_compare (struct proc *p1, struct proc *p2);
 static int	ttnread (struct tty *);

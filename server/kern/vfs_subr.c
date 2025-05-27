@@ -60,7 +60,7 @@
 #include <sys/mbuf.h>
 #include <sys/synch.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/sysctl.h>
 
 #include <miscfs/specfs/specdev.h>

@@ -52,7 +52,7 @@
 #include <sys/kernel.h>
 #include <sys/syslog.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <ufs/ufs/quota.h>
 #include <ufs/ufs/inode.h>

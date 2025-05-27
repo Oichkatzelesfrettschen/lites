@@ -54,7 +54,7 @@
 #include <sys/signalvar.h>
 #include <sys/vnode.h>
 #include <miscfs/procfs/procfs.h>
-#include <vm/vm.h>			/* for PAGE_SIZE */
+#include <libos/vm.h>			/* for PAGE_SIZE */
 
 /*
  * VFS Operations.

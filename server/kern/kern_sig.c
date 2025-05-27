@@ -116,7 +116,7 @@
 
 #include <machine/cpu.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/user.h>		/* for coredump */
 
 extern void sigexit(struct proc *p, int signum);

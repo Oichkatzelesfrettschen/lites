@@ -78,7 +78,7 @@
 #include <sys/assert.h>
 #include <sys/zalloc.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 zone_t mbuf_zone;
 zone_t mcl_zone;

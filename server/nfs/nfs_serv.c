@@ -65,7 +65,7 @@
 #include <sys/dirent.h>
 #include <sys/stat.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <nfs/nfsv2.h>
 #include <nfs/rpcv2.h>

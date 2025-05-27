@@ -40,7 +40,7 @@
 #include <sys/kernel.h>
 #include <sys/proc.h>
 #include <sys/reboot.h>
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <sys/sysctl.h>
 
 struct reboot_args {

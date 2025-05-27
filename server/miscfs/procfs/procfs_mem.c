@@ -53,7 +53,7 @@
 #include <sys/proc.h>
 #include <sys/vnode.h>
 #include <miscfs/procfs/procfs.h>
-#include <vm/vm.h>
+#include <libos/vm.h>
 #include <vm/vm_kern.h>
 #include <vm/vm_page.h>
 

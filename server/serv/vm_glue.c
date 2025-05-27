@@ -70,7 +70,7 @@
 #include <sys/user.h>
 #include <sys/assert.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <machine/cpu.h>
 

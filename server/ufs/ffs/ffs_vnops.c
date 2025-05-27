@@ -49,7 +49,7 @@
 #include <sys/vnode.h>
 #include <sys/malloc.h>
 
-#include <vm/vm.h>
+#include <libos/vm.h>
 
 #include <miscfs/specfs/specdev.h>
 #include <miscfs/fifofs/fifo.h>
