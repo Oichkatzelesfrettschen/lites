@@ -46,3 +46,25 @@ already been completed and what is still planned.
   an OpenMach tree or the bundled xkernel sources into `localmach/include` for
   systems without an external Mach source.
 
+## Hybrid kernel strategy
+
+The modernization effort adopts a hybrid approach where Mach continues to
+provide the low‑level scheduler and IPC primitives while most BSD services
+move into user space.  The Lites server becomes a capability‑aware POSIX
+layer running on top of Mach.  Components can be replaced independently,
+reducing the trusted computing base and easing long‑term maintenance.
+
+### Namespace algebra
+
+Objects such as files, tasks and IPC endpoints live inside hierarchical
+namespaces.  A small algebra of operations allows namespaces to be joined,
+cloned and restricted.  Each operation yields a concise description that can
+be reasoned about formally and safely composed with capability checks.
+
+### Future‑proof design
+
+The hybrid kernel strategy is meant to outlast current hardware trends.
+Critical algorithms will gradually be specified in proof assistants like Coq
+or Lean so that behaviour can be verified.  Capabilities ensure that no
+hard‑coded policy is baked into the system, making it possible to extend or
+replace individual modules without breaking the security model.

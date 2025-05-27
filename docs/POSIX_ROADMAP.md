@@ -5,6 +5,8 @@ repository with the proposed POSIX capability‑oriented design.  It
 outlines staged work to reach a usable POSIX layer on top of the Lites
 server.  Each phase summarises existing functionality and identifies
 missing pieces.
+The expanded vision unifies POSIX compatibility with a capability-based security model.  Core components will gradually gain machine-checkable specifications so that namespace operations and IPC paths can be verified with tools such as Coq or Lean.
+
 
 ## Phase I – Build and Core Infrastructure
 
@@ -18,6 +20,7 @@ missing pieces.
   `docs/` with topics such as [`MODERNIZATION.md`](MODERNIZATION.md)
   and [`POSIX.md`](POSIX.md).
   A future step is generating reference material automatically.
+* **Formal specification** – Core capability operations and namespace algebra will be described using proof assistants to guarantee compatibility and security.
 
 ## Phase II – Memory Management
 
@@ -113,4 +116,4 @@ assist with local testing.
 ---
 
 This roadmap should evolve alongside the modernization notes to track
-progress toward a secure POSIX environment with capability enforcement.
+progress toward a secure, capability-enforced POSIX environment.  Formal proofs of the namespace algebra and IPC layers will be added as they mature.
