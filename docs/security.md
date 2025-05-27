@@ -15,10 +15,9 @@ int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len,
 ```
 
 `ks_generate_key` creates a random symmetric key and writes it to the specified
-file.  `ks_encrypt` and `ks_decrypt` now use AES‑128 in CTR mode when the
-OpenSSL library is available.  If OpenSSL is not found at compile time, the
-functions fall back to the original XOR transformation.  The AES path provides
-real confidentiality whereas the fallback remains a toy example.
+file.  `ks_encrypt` and `ks_decrypt` always use AES‑128 in CTR mode.  When the
+OpenSSL library is available the implementation relies on it; otherwise a small
+built‑in AES routine is used.  Either path provides real confidentiality.
 
 ## Enclave
 

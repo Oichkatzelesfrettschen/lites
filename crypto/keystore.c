@@ -12,7 +12,9 @@
 #include <unistd.h>
 
 #if KS_HAVE_OPENSSL
-#  include <openssl/aes.h>
+#include <openssl/aes.h>
+#else
+#include "aes_fallback.h"
 #endif
 
 static int read_key(const char *path, unsigned char **key, size_t *len) {
@@ -120,8 +122,8 @@ int ks_generate_key(const char *path, size_t len) {
     return 0;
 }
 
-int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len,
-               unsigned char *out, size_t *out_len) {
+int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len, unsigned char *out,
+               size_t *out_len) {
     unsigned char *key;
     size_t key_len;
     if (read_key(key_path, &key, &key_len) < 0) {
@@ -142,9 +144,12 @@ int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len,
     unsigned int num = 0;
     AES_ctr128_encrypt(in, out, in_len, &aes, ivec, ecount, &num);
 #else
-    for (size_t i = 0; i < in_len; i++) {
-        out[i] = in[i] ^ key[i % key_len];
+    unsigned char aes_keybuf[16];
+    for (size_t i = 0; i < sizeof(aes_keybuf); i++) {
+        aes_keybuf[i] = key[i % key_len];
     }
+    unsigned char ivec[16] = {0};
+    aes128_ctr_encrypt(aes_keybuf, ivec, in, out, in_len);
 #endif
     *out_len = in_len;
     free(key);

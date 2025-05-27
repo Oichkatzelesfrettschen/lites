@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 #if KS_HAVE_OPENSSL
     printf("Using AES-128 encryption (OpenSSL)\n");
 #else
-    printf("Using XOR fallback encryption\n");
+    printf("Using built-in AES-128 implementation\n");
 #endif
 
     size_t msg_len = strlen(argv[2]);
