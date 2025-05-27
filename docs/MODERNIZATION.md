@@ -34,6 +34,7 @@ already been completed and what is still planned.
   declarations.  `protocols/tcp-tahoe/tcp_output.c`,
   `protocols/tcp-tahoe/tcp_subr.c` and `protocols/pmap/xkpm.c`
   still require modern prototypes.
+- Integrate Eigen, a minimal MLP library and Cap'n Proto for optional machine learning and structured IPC features. See `docs/INTEGRATION_PLAN.md`.
 
 ### Mach-specific TODOs
 
