@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.5)
 project(lites LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+option(ENABLE_CLANG_TIDY "Run clang-tidy during the build" OFF)
+if(ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+    if(CLANG_TIDY_EXE)
+        set(CMAKE_C_CLANG_TIDY ${CLANG_TIDY_EXE})
+        set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE})
+        add_custom_target(clang-tidy
+            COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run-clang-tidy.sh
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Run clang-tidy analysis")
+    endif()
+endif()
 find_package(BISON)
 
 # Allow selecting the build architecture with -DARCH=i686 or ARCH=x86_64
