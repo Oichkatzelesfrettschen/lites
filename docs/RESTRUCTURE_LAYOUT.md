@@ -1,0 +1,42 @@
+# New Source Layout
+
+This note expands upon the repository restructure plan. The goal is to split the tree into clearer components so that kernels, device drivers and libraries can evolve independently.
+
+## Directory layout
+
+```
+core/       - kernel sources and microkernel glue
+drivers/    - hardware drivers and board support
+libs/       - user space libraries used by servers and tests
+servers/    - POSIX and capability-aware services
+third_party/ - external dependencies kept in-tree
+cmake/      - common build system logic
+```
+
+Other existing directories such as `tests/` and `docs/` remain at the top level. Historical archives will move under `Historical Archives/`.
+
+## Header organisation
+
+Public headers will live directly under `include/`. Kernel-only headers move to `core/include` while driver specific headers stay with their respective driver directories. Library headers reside in `libs/<name>/include`.
+
+Build scripts will be updated so that these include paths are automatically added when compiling each component.
+
+## Build file updates
+
+Top level `CMakeLists.txt` and `Makefile.new` will reference the new subdirectories. Each directory gains its own `CMakeLists.txt` describing local targets. Drivers and libraries can be built individually or as part of the whole tree.
+
+## Testing
+
+Once the restructure is complete, unit tests continue to build via
+
+```sh
+make -f Makefile.new test
+```
+
+or with CMake:
+
+```sh
+cmake --build build --target test
+```
+
+Running the above commands should build all tests under `tests/` against the new layout. Ensure the `core`, `drivers` and `libs` directories are listed in the include paths when invoking the compiler.
