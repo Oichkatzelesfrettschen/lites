@@ -2,6 +2,8 @@ CC ?= clang
 # Additional compile flags from the top-level build system are appended.
 CFLAGS += -std=gnu23 -Wall -Wextra -Werror -I$(SRC_DIR)/include
 
+LIBOS := libos.a
+
 all: test_vm_fault
 
 .PHONY: all clean
@@ -17,8 +19,12 @@ else
 VM_PATH := ../../libos/vm.c
 endif
 
-test_vm_fault: test_vm_fault.c $(VM_PATH) ../../posix.c
+$(LIBOS): $(VM_PATH)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o vm.o
+	ar rcs $@ vm.o
+
+test_vm_fault: test_vm_fault.c $(LIBOS) ../../posix.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
-	rm -f test_vm_fault
+	rm -f test_vm_fault vm.o $(LIBOS)
