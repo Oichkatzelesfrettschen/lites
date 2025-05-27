@@ -62,25 +62,25 @@ endif
 ifeq ($(ARCH),i686)
 CFLAGS += -m32
 LDFLAGS += -m32
-ARCH_INCDIR := -I$(SRCDIR)/include/i386
+ARCH_INCDIR := -Iinclude/i386
 else ifeq ($(ARCH),x86_64)
 CFLAGS += -m64
 LDFLAGS += -m64
-ARCH_INCDIR := -I$(SRCDIR)/include/x86_64
+ARCH_INCDIR := -Iinclude/x86_64
 else ifeq ($(ARCH),arm)
 CFLAGS += -marm
-ARCH_INCDIR := -I$(SRCDIR)/include/arm
+ARCH_INCDIR := -Iinclude/arm
 else ifeq ($(ARCH),riscv64)
 CFLAGS += -march=rv64imac -mabi=lp64
-ARCH_INCDIR := -I$(SRCDIR)/include/riscv64
+ARCH_INCDIR := -Iinclude/riscv64
 else ifeq ($(ARCH),powerpc)
 CFLAGS += -m32
 LDFLAGS += -m32
-ARCH_INCDIR := -I$(SRCDIR)/include/powerpc
+ARCH_INCDIR := -Iinclude/powerpc
 else ifeq ($(ARCH),ia16)
 CFLAGS += -m16
 LDFLAGS += -m16
-ARCH_INCDIR := -I$(SRCDIR)/include/ia16
+ARCH_INCDIR := -Iinclude/ia16
 endif
 
 # Map ARCH to the corresponding directory name
@@ -137,22 +137,22 @@ TEST_SUBDIRS := $(sort $(dir $(wildcard tests/*/Makefile)))
 all: prepare $(LIBOS_A) $(TARGETS)
 
 prepare:
-        @if [ ! -e $(SRCDIR)/include/machine ]; then \
-          arch_dir=$(ARCH); \
-          [ "$$arch_dir" = "i686" ] && arch_dir=i386; \
-          ln -s $$arch_dir $(SRCDIR)/include/machine; \
-        fi
+	@if [ ! -e include/machine ]; then \
+	  arch_dir=$(ARCH); \
+	  [ "$$arch_dir" = "i686" ] && arch_dir=i386; \
+	  ln -s $$arch_dir include/machine; \
+	fi
 
 lites_server: $(SERVER_SRC) $(KERN_SRC) $(LIBOS_A)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) -Iinclude $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
 
 ifneq ($(EMULATOR_SRC),)
-lites_emulator: $(EMULATOR_SRC) $(KERN_SRC) $(LIBOS_A)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
+	lites_emulator: $(EMULATOR_SRC) $(KERN_SRC) $(LIBOS_A)
+	$(CC) $(CFLAGS) -Iinclude $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(LIBOS_A) $(MACH_LIBS) $(LDFLAGS) -o $@
 endif
 
 clean:
-	rm -f lites_server lites_emulator
+		rm -f lites_server lites_emulator
 
 test: all
 	@for d in $(TEST_SUBDIRS); do \
