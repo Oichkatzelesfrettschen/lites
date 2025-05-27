@@ -12,6 +12,8 @@ already been completed and what is still planned.
 - Support for 64‑bit (`ARCH=x86_64`) and 32‑bit (`ARCH=i686`) builds.
 - Pre‑commit configuration for consistent formatting and clang‑tidy
   checking.
+- A generated `LICENSE_MAP` summarises the license excerpt, origin and
+  last modification date for every source file via `scripts/gen-license-map.sh`.
 
 ## Open items
 
