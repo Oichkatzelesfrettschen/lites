@@ -199,6 +199,7 @@ Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  The mailbox-based 
 wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers
 for common POSIX operations are documented in
 [docs/POSIX.md](docs/POSIX.md).
+Design notes on the hybrid kernel approach and namespace algebra reside in [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
 
 ## Tests
 
