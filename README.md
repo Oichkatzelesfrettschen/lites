@@ -210,6 +210,15 @@ for common POSIX operations are documented in
 [docs/POSIX.md](docs/POSIX.md).
 Design notes on the hybrid kernel approach and namespace algebra reside in [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
 
+### Repository restructure
+
+The directory layout is being reorganised so the historic snapshots can
+coexist with an actively maintained tree.  Modern sources live under
+`lites-1.1-2025` with shared build scripts at the top level.  The goals
+include isolating legacy archives, consolidating documentation and using
+the same build system across all architectures.  See
+[docs/RESTRUCTURE_PLAN.md](docs/RESTRUCTURE_PLAN.md) for details.
+
 ## Tests
 
 Build all unit tests with:
