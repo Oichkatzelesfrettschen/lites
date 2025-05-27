@@ -106,7 +106,7 @@ register struct pklcd *lcp;
 
 	if ((vp = pkacctp) == 0)
 		return;
-	bzero ((caddr_t)&acbuf, sizeof (acbuf));
+	memset((caddr_t)&acbuf, 0, sizeof (acbuf));
 	if (lcp -> lcd_ceaddr != 0)
 		sa = lcp -> lcd_ceaddr;
 	else if (lcp -> lcd_craddr != 0) {
@@ -134,8 +134,7 @@ register struct pklcd *lcp;
 			*dst = *src++ << 4;
 	acbuf.x25acct_addrlen = len;
 
-	bcopy (sa -> x25_udata, acbuf.x25acct_udata,
-		sizeof (acbuf.x25acct_udata));
+	memcpy(acbuf.x25acct_udata, sa -> x25_udata, sizeof (acbuf.x25acct_udata));
 	acbuf.x25acct_txcnt = lcp -> lcd_txcnt;
 	acbuf.x25acct_rxcnt = lcp -> lcd_rxcnt;
 

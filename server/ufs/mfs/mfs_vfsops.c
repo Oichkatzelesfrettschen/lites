@@ -105,7 +105,7 @@ mfs_mountroot()
 		panic("mfs_mountroot: can't setup bdevvp's");
 
 	mp = malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = &mfs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	mfsp = malloc(sizeof *mfsp, M_MFSNODE, M_WAITOK);
@@ -133,13 +133,12 @@ mfs_mountroot()
 	mp->mnt_vnodecovered = NULLVP;
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	memset(fs->fs_fsmnt, 0, sizeof(fs->fs_fsmnt));
 	fs->fs_fsmnt[0] = '/';
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copystr(ROOTNAME, mp->mnt_stat.f_mntfromname, MNAMELEN - 1,
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)ffs_statfs(mp, &mp->mnt_stat, p);
 	vfs_unlock(mp);
 	inittodr((time_t)0);
@@ -240,12 +239,11 @@ mfs_mount(mp, path, data, ndp, p)
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
 	(void) copyinstr(path, fs->fs_fsmnt, sizeof(fs->fs_fsmnt) - 1, &size);
-	bzero(fs->fs_fsmnt + size, sizeof(fs->fs_fsmnt) - size);
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-		MNAMELEN);
+	memset(fs->fs_fsmnt + size, 0, sizeof(fs->fs_fsmnt) - size);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copyinstr(args.fspec, mp->mnt_stat.f_mntfromname, MNAMELEN - 1,
 		&size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void) mfs_statfs(mp, &mp->mnt_stat, p);
 	return (0);
 }

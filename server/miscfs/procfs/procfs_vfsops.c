@@ -84,11 +84,11 @@ procfs_mount(mp, path, data, ndp, p)
 	getnewfsid(mp, MOUNT_PROCFS);
 
 	(void) copyinstr(path, (caddr_t)mp->mnt_stat.f_mntonname, MNAMELEN, &size);
-	bzero(mp->mnt_stat.f_mntonname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntonname + size, 0, MNAMELEN - size);
 
 	size = sizeof("procfs") - 1;
-	bcopy("procfs", mp->mnt_stat.f_mntfromname, size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memcpy(mp->mnt_stat.f_mntfromname, "procfs", size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 
 	return (0);
 }
@@ -168,9 +168,9 @@ procfs_statfs(mp, sbp, p)
 	sbp->f_ffree = maxproc - nprocs;	/* approx */
 
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(&sbp->f_fsid, &mp->mnt_stat.f_fsid, sizeof(sbp->f_fsid));
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
         strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);

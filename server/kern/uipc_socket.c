@@ -79,7 +79,7 @@ socreate(dom, aso, type, proto)
 	if (prp->pr_type != type)
 		return (EPROTOTYPE);
 	MALLOC(so, struct socket *, sizeof(*so), M_SOCKET, M_WAIT);
-	bzero((caddr_t)so, sizeof(*so));
+	memset((caddr_t)so, 0, sizeof(*so));
 	so->so_type = type;
 	if (p->p_ucred->cr_uid == 0)
 		so->so_state = SS_PRIV;
@@ -817,7 +817,7 @@ sorflush(so)
 	socantrcvmore(so);
 	sbunlock(sb);
 	asb = *sb;
-	bzero((caddr_t)sb, sizeof (*sb));
+	memset((caddr_t)sb, 0, sizeof (*sb));
 	splx(s);
 	if (pr->pr_flags & PR_RIGHTS && pr->pr_domain->dom_dispose)
 		(*pr->pr_domain->dom_dispose)(asb.sb_mb);

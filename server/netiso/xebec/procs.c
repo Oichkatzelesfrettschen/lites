@@ -66,7 +66,7 @@ end_events() {
 	IFDEBUG(N)
 		fprintf(OUT, "bzero addr 0x%x part %d size %d\n",addr, part, size);
 	ENDDEBUG
-		bzero(addr, part);
+		memset(addr, 0, part);
 	IFDEBUG(N)
 		fprintf(OUT, "after bzero addr 0x%x part %d size %d\n",addr, part, size);
 	ENDDEBUG

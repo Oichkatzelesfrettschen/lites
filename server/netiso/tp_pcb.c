@@ -391,7 +391,7 @@ tp_init()
     tp_start_win = 2;
 
 	tp_timerinit();
-	bzero((caddr_t)&tp_stat, sizeof(struct tp_stat));
+	memset((caddr_t)&tp_stat, 0, sizeof(struct tp_stat));
 	return 0;
 }
 
@@ -425,8 +425,8 @@ tp_soisdisconnecting(so)
 		register struct tp_pcb *tpcb = sototpcb(so);
 		u_int 	fsufx, lsufx;
 
-		bcopy ((caddr_t)tpcb->tp_fsuffix, (caddr_t)&fsufx, sizeof(u_int) );
-		bcopy ((caddr_t)tpcb->tp_lsuffix, (caddr_t)&lsufx, sizeof(u_int) );
+		memcpy((caddr_t)&fsufx, (caddr_t)tpcb->tp_fsuffix, sizeof(u_int) );
+		memcpy((caddr_t)&lsufx, (caddr_t)tpcb->tp_lsuffix, sizeof(u_int) );
 
 		tpmeas(tpcb->tp_lref, TPtime_close, &time, fsufx, lsufx, tpcb->tp_fref);
 		tpcb->tp_perf_on = 0; /* turn perf off */
@@ -470,8 +470,8 @@ tp_soisdisconnected(tpcb)
 		u_int 	fsufx, lsufx;
 
 		/* CHOKE */
-		bcopy ((caddr_t)ttpcb->tp_fsuffix, (caddr_t)&fsufx, sizeof(u_int) );
-		bcopy ((caddr_t)ttpcb->tp_lsuffix, (caddr_t)&lsufx, sizeof(u_int) );
+		memcpy((caddr_t)&fsufx, (caddr_t)ttpcb->tp_fsuffix, sizeof(u_int) );
+		memcpy((caddr_t)&lsufx, (caddr_t)ttpcb->tp_lsuffix, sizeof(u_int) );
 
 		tpmeas(ttpcb->tp_lref, TPtime_close, 
 		   &time, &lsufx, &fsufx, ttpcb->tp_fref);
@@ -577,10 +577,10 @@ tp_getref(tpcb)
 		return (--tp_refinfo.tpr_numopen, TP_ENOREF);
 	tp_refinfo.tpr_base = tp_ref = r;
 	tp_refinfo.tpr_size *= 2;
-	bcopy(obase, (caddr_t)r, size);
+	memcpy((caddr_t)r, obase, size);
 	free(obase, M_PCB);
 	r = (struct tp_ref *)(size + (caddr_t)r);
-	bzero((caddr_t)r, size);
+	memset((caddr_t)r, 0, size);
 
 got_one:
 	r->tpr_pcb = tpcb;
@@ -678,7 +678,7 @@ tp_attach(so, protocol)
 		error = ENOBUFS;
 		goto bad2;
 	}
-	bzero( (caddr_t)tpcb, sizeof (struct tp_pcb) );
+	memset((caddr_t)tpcb, 0, sizeof (struct tp_pcb) );
 
 	if ( ((lref = tp_getref(tpcb)) &  TP_ENOREF) != 0 ) { 
 		error = ETOOMANYREFS; 
@@ -907,7 +907,7 @@ register struct sockaddr_iso *siso;
 			t = l; l = t->tp_nextlisten;
 		} else
 			break;
-		if (tlen == t->tp_lsuffixlen && bcmp(tsel, t->tp_lsuffix, tlen) == 0) {
+		if (tlen == t->tp_lsuffixlen && memcmp(tsel, t->tp_lsuffix, tlen) == 0) {
 			if (t->tp_flags & TPF_GENERAL_ADDR) {
 				if (siso == 0 || reuseaddr == 0)
 					return 1;
@@ -979,7 +979,7 @@ register struct mbuf *nam;
 			if (siso) switch (siso->siso_family) {
 #if ISO
 				case AF_ISO:
-					bcopy(tsel, TSEL(siso), tlen);
+					memcpy(TSEL(siso), tsel, tlen);
 					siso->siso_tlen = tlen;
 					break;
 #endif
@@ -989,7 +989,7 @@ register struct mbuf *nam;
 #endif
 				}
 		}
-		bcopy(tsel, tpcb->tp_lsuffix, (tpcb->tp_lsuffixlen = tlen));
+		memcpy(tpcb->tp_lsuffix, tsel, (tpcb->tp_lsuffixlen = tlen));
 		insque(tpcb, &tp_bound_pcbs);
 	} else {
 		if (tlen || siso == 0)

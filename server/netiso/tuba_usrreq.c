@@ -172,7 +172,7 @@ tuba_usrreq(so, req, m, nam, control)
 		if ((error = iso_pcbbind(isop, nam)) || 
 		    (siso = isop->isop_laddr) == 0)
 			break;
-		bcopy(TSEL(siso), &inp->inp_lport, 2);
+		memcpy(&inp->inp_lport, TSEL(siso), 2);
 		if (siso->siso_nlen &&
 		    !(inp->inp_laddr.s_addr = tuba_lookup(siso, M_WAITOK)))
 			error = ENOBUFS;
@@ -186,7 +186,7 @@ tuba_usrreq(so, req, m, nam, control)
 		if (inp->inp_lport == 0 &&
 		    (error = iso_pcbbind(isop, (struct mbuf *)0)))
 			break;
-		bcopy(TSEL(isop->isop_laddr), &inp->inp_lport, 2);
+		memcpy(&inp->inp_lport, TSEL(isop->isop_laddr), 2);
 		if (req == PRU_LISTEN) {
 			tp->t_state = TCPS_LISTEN;
 			break;
@@ -213,7 +213,7 @@ tuba_usrreq(so, req, m, nam, control)
 			error = ENOBUFS;
 			break;
 		}
-		bcopy(TSEL(isop->isop_faddr), &inp->inp_fport, 2);
+		memcpy(&inp->inp_fport, TSEL(isop->isop_faddr), 2);
 		if (inp->inp_laddr.s_addr == 0 &&
 		     (inp->inp_laddr.s_addr = 
 			    tuba_lookup(isop->isop_laddr, M_WAITOK)) == 0)
@@ -252,7 +252,7 @@ tuba_usrreq(so, req, m, nam, control)
 	 * of the peer, storing through addr.
 	 */
 	case PRU_ACCEPT:
-		bcopy((caddr_t)isop->isop_faddr, mtod(nam, caddr_t),
+		memcpy(mtod(nam, (caddr_t)isop->isop_faddr, caddr_t),
 			nam->m_len = isop->isop_faddr->siso_len);
 		break;
 
@@ -278,13 +278,13 @@ tuba_usrreq(so, req, m, nam, control)
 
 	case PRU_SOCKADDR:
 		if (isop->isop_laddr)
-			bcopy((caddr_t)isop->isop_laddr, mtod(nam, caddr_t),
+			memcpy(mtod(nam, (caddr_t)isop->isop_laddr, caddr_t),
 				nam->m_len = isop->isop_laddr->siso_len);
 		break;
 
 	case PRU_PEERADDR:
 		if (isop->isop_faddr)
-			bcopy((caddr_t)isop->isop_faddr, mtod(nam, caddr_t),
+			memcpy(mtod(nam, (caddr_t)isop->isop_faddr, caddr_t),
 				nam->m_len = isop->isop_faddr->siso_len);
 		break;
 

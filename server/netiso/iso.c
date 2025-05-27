@@ -159,7 +159,7 @@ register struct iso_addr *isoaa, *isoab;		/* addresses to check */
 		printf("addrs are equal\n");
 		return (1);
 	ENDDEBUG
-	return (!bcmp(isoaa->isoa_genaddr, isoab->isoa_genaddr, compare_len));
+	return (!memcmp(isoaa->isoa_genaddr, isoab->isoa_genaddr, compare_len));
 }
 
 /*
@@ -209,7 +209,7 @@ struct sockaddr_iso *sisoa, *sisob;
 		dump_buf(bufb, lenb);
 	ENDDEBUG
 
-	return ((lena == lenb) && (!bcmp(bufa, bufb, lena)));
+	return ((lena == lenb) && (!memcmp(bufa, bufb, lena)));
 }
 #endif /* notdef */
 
@@ -285,7 +285,7 @@ struct afhash		*hp;		/* RETURN: hash info here */
 	register int	bufsize;
 
 
-	bzero(buf, sizeof(buf));
+	memset(buf, 0, sizeof(buf));
 
 	bufsize = iso_netof(&siso->siso_addr, buf);
 	hp->afh_nethash = iso_hashchar((caddr_t)buf, bufsize);
@@ -365,7 +365,7 @@ caddr_t			buf;		/* RESULT: network portion of address here */
 				len += ADDRRFC986_IDI_LEN + 1;
 
 				/* get inet addr long aligned */
-				bcopy(o986->o986_inetaddr, &inetaddr, sizeof(inetaddr));
+				memcpy(&inetaddr, o986->o986_inetaddr, sizeof(inetaddr));
 				inetaddr = ntohl(inetaddr);	/* convert to host byte order */
 
 				IFDEBUG(D_ROUTE)
@@ -399,7 +399,7 @@ caddr_t			buf;		/* RESULT: network portion of address here */
 			len = 0;
 	}
 
-	bcopy((caddr_t)isoa, buf, len);
+	memcpy(buf, (caddr_t)isoa, len);
 	IFDEBUG(D_ROUTE)
 		printf("iso_netof: isoa ");
 		dump_buf(isoa, len);
@@ -462,7 +462,7 @@ iso_control(so, cmd, data, ifp)
 				       M_IFADDR, M_WAITOK);
 			if (nia == (struct iso_ifaddr *)0)
 				return (ENOBUFS);
-			bzero((caddr_t)nia, sizeof(*nia));
+			memset((caddr_t)nia, 0, sizeof(*nia));
 			if (ia = iso_ifaddr) {
 				for ( ; ia->ia_next; ia = ia->ia_next)
 					;
@@ -755,7 +755,7 @@ struct iso_addr	*isoab;		/* other addr to check */
 		if (isoaa->isoa_afi == AFI_37)
 			return(1);
 		else 
-			return (!bcmp(&isoaa->isoa_u, &isoab->isoa_u, 2));
+			return (!memcmp(&isoaa->isoa_u, &isoab->isoa_u, 2));
 	}
 	return(0);
 }
@@ -873,7 +873,7 @@ struct mbuf	*m;			/* data for set, buffer for get */
 				printf("iso_nlctloutput: setting x25 crud\n");
 			ENDDEBUG
 
-			bcopy(data, (caddr_t)isop->isop_x25crud, (unsigned)data_len);
+			memcpy((caddr_t)isop->isop_x25crud, data, (unsigned)data_len);
 			isop->isop_x25crud_len = data_len;
 			break;
 #endif	/* TPCONS */

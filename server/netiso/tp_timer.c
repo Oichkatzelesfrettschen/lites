@@ -109,7 +109,7 @@ tp_timerinit()
 	s = sizeof(*tp_ref) * tp_refinfo.tpr_size;
 	if ((tp_ref = (struct tp_ref *) malloc(s, M_PCB, M_NOWAIT)) == 0)
 		panic("tp_timerinit");
-	bzero((caddr_t)tp_ref, (unsigned) s);
+	memset((caddr_t)tp_ref, 0, (unsigned) s);
 	tp_refinfo.tpr_base = tp_ref;
 	tp_rttdiv = hz / PR_SLOWHZ;
 	tp_rttadd = (2 * tp_rttdiv) - 1;

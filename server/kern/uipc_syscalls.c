@@ -450,8 +450,7 @@ mach_error_t s_recvmsg(
 			if (len > from_mbuf->m_len)
 				len = from_mbuf->m_len;
 			/* else if len < from_mbuf->m_len ??? */
-			bcopy (mtod(from_mbuf, caddr_t),
-			       from, (unsigned) len);
+			memcpy(caddr_t), mtod(from_mbuf, from, (unsigned) len);
 		}
 		*fromlen = len;
 	}
@@ -485,7 +484,7 @@ mach_error_t s_recvmsg(
 				len = control->m_len;
 			else
 				*outflags |= MSG_CTRUNC;
-			bcopy((caddr_t) mtod(control, caddr_t), cmsg, len);
+			memcpy(caddr_t), (caddr_t) mtod(control, cmsg, len);
 		}
 		*cmsglen = len;
 	}
@@ -535,7 +534,7 @@ mach_error_t s_setsockopt(
 		m = m_get(M_WAIT, MT_SOOPTS);
 		if (m == NULL)
 			return (ENOBUFS);
-		bcopy(val, mtod(m, caddr_t), (u_int)valsize);
+		memcpy(mtod(m, val, caddr_t), (u_int)valsize);
 		m->m_len = valsize;
 	}
 	return sosetopt((struct socket *)fp->f_data, level, name, m);
@@ -556,7 +555,7 @@ mach_error_t s_getsockopt(
 	if (error = getsock(p->p_fd, s, &fp))
 		return (error);
 	if (val)
-		bcopy((caddr_t)avalsize, (caddr_t)&valsize, sizeof (valsize));
+		memcpy((caddr_t)&valsize, (caddr_t)avalsize, sizeof (valsize));
 	else
 		valsize = 0;
 	if ((error = sogetopt((struct socket *)fp->f_data, level,
@@ -725,7 +724,7 @@ NEWsockargs(mp, buf, buflen, type)
 	if (m == NULL)
 		return (ENOBUFS);
 	m->m_len = buflen;
-	bcopy(buf, mtod(m, caddr_t), (u_int)buflen);
+	memcpy(mtod(m, buf, caddr_t), (u_int)buflen);
 	*mp = m;
 	if (type == MT_SONAME) {
 		sa = mtod(m, struct sockaddr *);
@@ -914,7 +913,7 @@ sendit(p, s, mp, flags, retsize)
 		int iovlen = auio.uio_iovcnt * sizeof (struct iovec);
 
 		MALLOC(ktriov, struct iovec *, iovlen, M_TEMP, M_WAITOK);
-		bcopy((caddr_t)auio.uio_iov, (caddr_t)ktriov, iovlen);
+		memcpy((caddr_t)ktriov, (caddr_t)auio.uio_iov, iovlen);
 	}
 #endif
 	len = auio.uio_resid;
@@ -1024,7 +1023,7 @@ recvit(p, s, mp, namelenp, retsize)
 		int iovlen = auio.uio_iovcnt * sizeof (struct iovec);
 
 		MALLOC(ktriov, struct iovec *, iovlen, M_TEMP, M_WAITOK);
-		bcopy((caddr_t)auio.uio_iov, (caddr_t)ktriov, iovlen);
+		memcpy((caddr_t)ktriov, (caddr_t)auio.uio_iov, iovlen);
 	}
 #endif
 	len = auio.uio_resid;

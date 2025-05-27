@@ -132,7 +132,7 @@ portal_lookup(ap)
 
 	pt->pt_arg = malloc(size+1, M_TEMP, M_WAITOK);
 	pt->pt_size = size+1;
-	bcopy(pname, pt->pt_arg, pt->pt_size);
+	memcpy(pt->pt_arg, pname, pt->pt_size);
 	pt->pt_fileid = portal_fileid++;
 
 	*ap->a_vpp = fvp;
@@ -288,7 +288,7 @@ portal_open(ap)
 	pcred.pcr_flag = ap->a_mode;
 	pcred.pcr_uid = ap->a_cred->cr_uid;
 	pcred.pcr_ngroups = ap->a_cred->cr_ngroups;
-	bcopy(ap->a_cred->cr_groups, pcred.pcr_groups, NGROUPS * sizeof(gid_t));
+	memcpy(pcred.pcr_groups, ap->a_cred->cr_groups, NGROUPS * sizeof(gid_t));
 	aiov[0].iov_base = (caddr_t) &pcred;
 	aiov[0].iov_len = sizeof(pcred);
 	aiov[1].iov_base = pt->pt_arg;
@@ -425,7 +425,7 @@ portal_getattr(ap)
 	struct vnode *vp = ap->a_vp;
 	struct vattr *vap = ap->a_vap;
 
-	bzero(vap, sizeof(*vap));
+	memset(vap, 0, sizeof(*vap));
 	vattr_null(vap);
 	vap->va_uid = 0;
 	vap->va_gid = 0;

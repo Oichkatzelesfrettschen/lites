@@ -119,7 +119,7 @@ void set_emulator_state(
 	struct parisc_thread_state	ts;
 	unsigned int			count;
 
-	bzero((char *)&ts, sizeof(ts));
+	memset((char *)&ts, 0, sizeof(ts));
 	count = PARISC_THREAD_STATE_COUNT;
 	(void) thread_get_state(p->p_thread,
 				PARISC_THREAD_STATE,

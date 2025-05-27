@@ -143,7 +143,7 @@ q_to_b(struct clist *clp, char *cp, int count)
     while (count && clp->c_cc) {
 	register int bytes;
 	bytes = min(count, clpbytestoread(clp));
-	bcopy(clp->c_cf, cp, bytes);
+	memcpy(cp, clp->c_cf, bytes);
 	clp->c_cf += bytes;
 	clp->c_cc -= bytes;
 	count -= bytes;
@@ -278,7 +278,7 @@ b_to_q(char *cp, int count, struct clist *clp)
 		return count;
 	    }
 	    ts = min(clpbytestowrite(clp),count);
-	    bcopy(cp, clp->c_cl, ts);
+	    memcpy(clp->c_cl, cp, ts);
 	    clp->c_cl += ts-1;
 	    clp->c_cc += ts-1;
 	    count -= ts;

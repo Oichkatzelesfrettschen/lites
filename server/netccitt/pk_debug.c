@@ -123,11 +123,11 @@ struct mbuf *m;
 		copy_size = new_size - zero_size;
 		c->mbc_oldsize = c->mbc_size;
 		if (copy_size)
-			bcopy(cache, (caddr_t)c->mbc_cache, copy_size);
+			memcpy((caddr_t)c->mbc_cache, cache, copy_size);
 		if (cache)
 			free(cache, M_MBUF);
 		if (zero_size)
-			bzero(copy_size + (caddr_t)c->mbc_cache, zero_size);
+			memset(copy_size + (caddr_t)c->mbc_cache, 0, zero_size);
 	}
 	if (c->mbc_size == 0)
 		return;

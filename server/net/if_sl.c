@@ -453,7 +453,7 @@ slstart(tp)
 			do {
 				register int mlen = m1->m_len;
 
-				bcopy(mtod(m1, caddr_t), cp, mlen);
+				memcpy(caddr_t), mtod(m1, cp, mlen);
 				cp += mlen;
 				len += mlen;
 			} while (m1 = m1->m_next);
@@ -472,7 +472,7 @@ slstart(tp)
 			 * mbuf.
 			 */
 			bpfbuf[SLX_DIR] = SLIPDIR_OUT;
-			bcopy(mtod(m, caddr_t), &bpfbuf[SLX_CHDR], CHDR_LEN);
+			memcpy(caddr_t), mtod(m, &bpfbuf[SLX_CHDR], CHDR_LEN);
 			bpf_tap(sc->sc_bpf, bpfbuf, len + SLIP_HDRLEN);
 		}
 #endif
@@ -604,7 +604,7 @@ sl_btom(sc, len)
 		m->m_data = (caddr_t)sc->sc_buf;
 		m->m_ext.ext_buf = (caddr_t)((int)sc->sc_buf &~ MCLOFSET);
 	} else
-		bcopy((caddr_t)sc->sc_buf, mtod(m, caddr_t), len);
+		memcpy(mtod(m, (caddr_t)sc->sc_buf, caddr_t), len);
 
 	m->m_len = len;
 	m->m_pkthdr.len = len;
@@ -703,7 +703,7 @@ slinput(c, tp)
 			 * where the buffer started so we can
 			 * compute the new header length.
 			 */
-			bcopy(sc->sc_buf, chdr, CHDR_LEN);
+			memcpy(chdr, sc->sc_buf, CHDR_LEN);
 		}
 #endif
 
@@ -745,7 +745,7 @@ slinput(c, tp)
 			register u_char *hp = sc->sc_buf - SLIP_HDRLEN;
 
 			hp[SLX_DIR] = SLIPDIR_IN;
-			bcopy(chdr, &hp[SLX_CHDR], CHDR_LEN);
+			memcpy(&hp[SLX_CHDR], chdr, CHDR_LEN);
 			bpf_tap(sc->sc_bpf, hp, len + SLIP_HDRLEN);
 		}
 #endif

@@ -682,7 +682,7 @@ lfs_initseg(fs)
 	*sp->cbpp = lfs_newbuf(VTOI(fs->lfs_ivnode)->i_devvp, fs->lfs_offset,
 	     LFS_SUMMARY_SIZE);
 	sp->segsum = (*sp->cbpp)->b_data;
-	bzero(sp->segsum, LFS_SUMMARY_SIZE);
+	memset(sp->segsum, 0, LFS_SUMMARY_SIZE);
 	sp->start_bpp = ++sp->cbpp;
 	fs->lfs_offset += LFS_SUMMARY_SIZE / DEV_BSIZE;
 
@@ -857,7 +857,7 @@ lfs_writeseg(fs, sp)
 				if (copyin(bp->b_saveaddr, p, bp->b_bcount))
 					panic("lfs_writeseg: copyin failed");
 			} else
-				bcopy(bp->b_data, p, bp->b_bcount);
+				memcpy(p, bp->b_data, bp->b_bcount);
 			p += bp->b_bcount;
 			if (bp->b_flags & B_LOCKED)
 				--locked_queue_count;
@@ -1006,7 +1006,7 @@ lfs_newbuf(vp, daddr, size)
 
 	nbytes = roundup(size, DEV_BSIZE);
 	bp = malloc(sizeof(struct buf), M_SEGMENT, M_WAITOK);
-	bzero(bp, sizeof(struct buf));
+	memset(bp, 0, sizeof(struct buf));
 	if (nbytes)
 		bp->b_data = malloc(nbytes, M_SEGMENT, M_WAITOK);
 	bgetvp(vp, bp);

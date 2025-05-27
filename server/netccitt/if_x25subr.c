@@ -778,7 +778,7 @@ struct mbuf *m0;
 		/* Add VC to rtentry */
 		lcp->lcd_so = 0;
 		lcp->lcd_sb = so->so_snd; /* structure copy */
-		bzero((caddr_t)&so->so_snd, sizeof(so->so_snd)); /* XXXXXX */
+		memset((caddr_t)&so->so_snd, 0, sizeof(so->so_snd)); /* XXXXXX */
 		so->so_pcb = 0;
 		x25_rtattach(lcp, rt);
 		transfer_sockbuf(&so->so_rcv, x25_ifinput, lcp);

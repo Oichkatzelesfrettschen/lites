@@ -177,7 +177,7 @@ memrw(dev_t dev, struct uio *uio, int rw)
 				break;
 			}
 			if (!didzero) {
-				bzero(zbuf, ZBUFSIZE);
+				memset(zbuf, 0, ZBUFSIZE);
 				didzero = 1;
 			}
 			c = min(iov->iov_len, ZBUFSIZE);

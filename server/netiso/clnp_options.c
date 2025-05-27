@@ -110,7 +110,7 @@ struct clnp_optidx	*oidx;		/* ptr to option index */
 	}
 
 	len = CLNPSRCRT_CLEN(oidx, options);
-	bcopy(CLNPSRCRT_CADDR(oidx, options), (caddr_t)&isoa, len);
+	memcpy(options), CLNPSRCRT_CADDR(oidx, (caddr_t)&isoa, len);
 	isoa.isoa_len = len;
 		
 	IFDEBUG(D_OPTIONS)
@@ -187,7 +187,7 @@ struct iso_addr		*isoa;		/* ptr to our address for this ifp */
 						rec_start, new_addrlen);
 				ENDDEBUG
 
-				bcopy((caddr_t)isoa, rec_start, new_addrlen);
+				memcpy(rec_start, (caddr_t)isoa, new_addrlen);
 
 				/* update offset field */
 				*(opt + 1) += new_addrlen;
@@ -288,7 +288,7 @@ struct clnp_optidx	*oidx;	/* RETURN: filled in with option idx info */
 	ENDDEBUG
 
 	/* clear option index field if passed */
-	bzero((caddr_t)oidx, sizeof(struct clnp_optidx));
+	memset((caddr_t)oidx, 0, sizeof(struct clnp_optidx));
 
 	/*
 	 *	We need to indicate whether the ER option is present. This is done

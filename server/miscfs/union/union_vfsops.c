@@ -231,7 +231,7 @@ union_mount(mp, path, data, ndp, p)
 	getnewfsid(mp, MOUNT_UNION);
 
 	(void) copyinstr(path, mp->mnt_stat.f_mntonname, MNAMELEN - 1, &size);
-	bzero(mp->mnt_stat.f_mntonname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntonname + size, 0, MNAMELEN - size);
 
 	switch (um->um_op) {
 	case UNMNT_ABOVE:
@@ -245,13 +245,13 @@ union_mount(mp, path, data, ndp, p)
 		break;
 	}
 	len = strlen(cp);
-	bcopy(cp, mp->mnt_stat.f_mntfromname, len);
+	memcpy(mp->mnt_stat.f_mntfromname, cp, len);
 
 	cp = mp->mnt_stat.f_mntfromname + len;
 	len = MNAMELEN - len;
 
 	(void) copyinstr(args.target, cp, len - 1, &size);
-	bzero(cp + size, len - size);
+	memset(cp + size, 0, len - size);
 
 #ifdef UNION_DIAGNOSTIC
 	printf("union_mount: from %s, on %s\n",
@@ -431,7 +431,7 @@ union_statfs(mp, sbp, p)
 	       		um->um_uppervp);
 #endif
 
-	bzero(&mstat, sizeof(mstat));
+	memset(&mstat, 0, sizeof(mstat));
 
 	if (um->um_lowervp) {
 		error = VFS_STATFS(um->um_lowervp->v_mount, &mstat, p);
@@ -480,9 +480,9 @@ union_statfs(mp, sbp, p)
 	sbp->f_ffree += mstat.f_ffree;
 
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(&sbp->f_fsid, &mp->mnt_stat.f_fsid, sizeof(sbp->f_fsid));
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
         strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);

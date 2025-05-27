@@ -330,7 +330,7 @@ udp_saveopt(p, size, type)
 	if ((m = m_get(M_DONTWAIT, MT_CONTROL)) == NULL)
 		return ((struct mbuf *) NULL);
 	cp = (struct cmsghdr *) mtod(m, struct cmsghdr *);
-	bcopy(p, CMSG_DATA(cp), size);
+	memcpy(CMSG_DATA(cp), p, size);
 	size += sizeof(*cp);
 	m->m_len = size;
 	cp->cmsg_len = size;

@@ -145,10 +145,10 @@ nullfs_mount(mp, path, data, ndp, p)
 	getnewfsid(mp, MOUNT_LOFS);
 
 	(void) copyinstr(path, mp->mnt_stat.f_mntonname, MNAMELEN - 1, &size);
-	bzero(mp->mnt_stat.f_mntonname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntonname + size, 0, MNAMELEN - size);
 	(void) copyinstr(args.target, mp->mnt_stat.f_mntfromname, MNAMELEN - 1, 
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 #ifdef NULLFS_DIAGNOSTIC
 	printf("nullfs_mount: lower %s, alias at %s\n",
 		mp->mnt_stat.f_mntfromname, mp->mnt_stat.f_mntonname);
@@ -281,7 +281,7 @@ nullfs_statfs(mp, sbp, p)
 			);
 #endif
 
-	bzero(&mstat, sizeof(mstat));
+	memset(&mstat, 0, sizeof(mstat));
 
 	error = VFS_STATFS(MOUNTTONULLMOUNT(mp)->nullm_vfs, &mstat, p);
 	if (error)
@@ -298,9 +298,9 @@ nullfs_statfs(mp, sbp, p)
 	sbp->f_files = mstat.f_files;
 	sbp->f_ffree = mstat.f_ffree;
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
-		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
-		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
+		memcpy(&sbp->f_fsid, &mp->mnt_stat.f_fsid, sizeof(sbp->f_fsid));
+		memcpy(sbp->f_mntonname, mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy(sbp->f_mntfromname, mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
         strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);

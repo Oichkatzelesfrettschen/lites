@@ -567,7 +567,7 @@ procfs_lookup(ap)
 			struct pfsnames *dp = &procent[i];
 
 			if (cnp->cn_namelen == dp->d_namlen &&
-			    bcmp(pname, dp->d_name, dp->d_namlen) == 0) {
+			    memcmp(pname, dp->d_name, dp->d_namlen) == 0) {
 			    	pfs_type = dp->d_pfstype;
 				goto found;
 			}
@@ -655,7 +655,7 @@ procfs_readdir(ap)
 			dp->d_fileno = PROCFS_FILENO(pfs->pfs_pid, dt->d_pfstype);
 			dp->d_type = DT_REG;
 			dp->d_namlen = dt->d_namlen;
-			bcopy(dt->d_name, dp->d_name, sizeof(dt->d_name)-1);
+			memcpy(dp->d_name, dt->d_name, sizeof(dt->d_name)-1);
 			error = uiomove((caddr_t) dp, UIO_MX, uio);
 			if (error)
 				break;
@@ -689,7 +689,7 @@ procfs_readdir(ap)
 		pcnt = PROCFS_XFILES;
 
 		while (p && uio->uio_resid >= UIO_MX) {
-			bzero((char *) dp, UIO_MX);
+			memset((char *) dp, 0, UIO_MX);
 			dp->d_type = DT_DIR;
 			dp->d_reclen = UIO_MX;
 

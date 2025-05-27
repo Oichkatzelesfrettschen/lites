@@ -82,7 +82,7 @@ procfs_dostatus(curp, p, pfs, uio)
 /* comm pid ppid pgid sid maj,min ctty,sldr start ut st wmsg uid groups ... */
 
 	ps = psbuf;
-	bcopy(p->p_comm, ps, MAXCOMLEN);
+	memcpy(ps, p->p_comm, MAXCOMLEN);
 	ps[MAXCOMLEN] = '\0';
 	ps += strlen(ps);
 	ps += sprintf(ps, " %d %d %d %d ", pid, ppid, pgid, sid);

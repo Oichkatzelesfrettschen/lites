@@ -307,7 +307,7 @@ pppopen(dev, tp)
     }
 
     sc->sc_ilen = 0;
-    bzero(sc->sc_asyncmap, sizeof(sc->sc_asyncmap));
+    memset(sc->sc_asyncmap, 0, sizeof(sc->sc_asyncmap));
     sc->sc_asyncmap[0] = 0xffffffff;
     sc->sc_asyncmap[3] = 0x60000000;
     sc->sc_rasyncmap = 0;
@@ -513,14 +513,14 @@ ppptioctl(tp, cmd, data, flag, p)
     case PPPIOCSXASYNCMAP:
 	if (error = suser(p->p_ucred, &p->p_acflag))
 	    return (error);
-	bcopy(data, sc->sc_asyncmap, sizeof(sc->sc_asyncmap));
+	memcpy(sc->sc_asyncmap, data, sizeof(sc->sc_asyncmap));
 	sc->sc_asyncmap[1] = 0;		    /* mustn't escape 0x20 - 0x3f */
 	sc->sc_asyncmap[2] &= ~0x40000000;  /* mustn't escape 0x5e */
 	sc->sc_asyncmap[3] |= 0x60000000;   /* must escape 0x7d, 0x7e */
 	break;
 
     case PPPIOCGXASYNCMAP:
-	bcopy(sc->sc_asyncmap, data, sizeof(sc->sc_asyncmap));
+	memcpy(data, sc->sc_asyncmap, sizeof(sc->sc_asyncmap));
 	break;
 
     case PPPIOCSMRU:
@@ -1089,7 +1089,7 @@ ppp_btom(sc)
 	if (m == NULL)
 	    return (NULL);
 
-	bcopy(mtod(sc->sc_mc, caddr_t), mtod(m, caddr_t), sc->sc_mc->m_len);
+	memcpy(caddr_t), mtod(sc->sc_mc, mtod(m, caddr_t), sc->sc_mc->m_len);
 	m->m_len = sc->sc_mc->m_len;
 	for (mp = &top; *mp != sc->sc_mc; mp = &(*mp)->m_next)
 	    ;

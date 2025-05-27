@@ -109,7 +109,7 @@ nfs_nget(mntp, fhp, npp)
 loop:
 	for (np = *nhpp; np; np = np->n_forw) {
 		if (mntp != NFSTOV(np)->v_mount ||
-		    bcmp((caddr_t)fhp, (caddr_t)&np->n_fh, NFSX_FH))
+		    memcmp((caddr_t)fhp, (caddr_t)&np->n_fh, NFSX_FH))
 			continue;
 		vp = NFSTOV(np);
 		if (vget(vp, 1))
@@ -135,7 +135,7 @@ loop:
 	np->n_forw = nq;
 	np->n_back = nhpp;
 	*nhpp = np;
-	bcopy((caddr_t)fhp, (caddr_t)&np->n_fh, NFSX_FH);
+	memcpy((caddr_t)&np->n_fh, (caddr_t)fhp, NFSX_FH);
 	np->n_attrstamp = 0;
 	np->n_direofoffset = 0;
 	np->n_sillyrename = (struct sillyrename *)0;

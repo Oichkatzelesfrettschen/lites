@@ -308,7 +308,7 @@ vfs_findname(nm, buf, buflen)
 	int buflen;
 {
 	for (; nm->nm_name; nm++)
-		if (bcmp(buf, (char *) nm->nm_name, buflen+1) == 0)
+		if (memcmp(buf, (char *) nm->nm_name, buflen+1) == 0)
 			return (nm);
 
 	return (0);

@@ -314,7 +314,7 @@ int					flags;		/* flags */
 		IFDEBUG(D_OUTPUT)
 			printf("clnp_output: NEW clcp x%x\n",clcp);
 		ENDDEBUG
-		bzero((caddr_t)clcp, sizeof(struct clnp_cache));
+		memset((caddr_t)clcp, 0, sizeof(struct clnp_cache));
 
 		if (isop->isop_optindex)
 			oidx = mtod(isop->isop_optindex, struct clnp_optidx *);
@@ -461,7 +461,7 @@ int					flags;		/* flags */
 		 *	previously
 		 */
 		if ((m->m_len + sizeof(qos_option)) < MLEN) {
-			bcopy((caddr_t)qos_option, hoff, sizeof(qos_option));
+			memcpy(hoff, (caddr_t)qos_option, sizeof(qos_option));
 			clnp->cnf_hdr_len += sizeof(qos_option);
 			hdrlen += sizeof(qos_option);
 			m->m_len += sizeof(qos_option);
@@ -512,8 +512,7 @@ int					flags;		/* flags */
 		seg_part.cng_id = htons(clnp_id++);
 		seg_part.cng_off = htons(0);
 		seg_part.cng_tot_len = htons(total_len);
-		(void) bcopy((caddr_t)&seg_part, (caddr_t) clnp + clcp->clc_segoff, 
-			sizeof(seg_part));
+		(void) memcpy((caddr_t) clnp + clcp->clc_segoff, (caddr_t)&seg_part, sizeof(seg_part));
 	}
 	if (total_len <= SN_MTU(clcp->clc_ifp, clcp->clc_rt)) {
 		HTOC(clnp->cnf_seglen_msb, clnp->cnf_seglen_lsb, total_len);

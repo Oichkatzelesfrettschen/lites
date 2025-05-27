@@ -694,7 +694,7 @@ nfsmout:
 	 * Handle RENAME case...
 	 */
 	if (cnp->cn_nameiop == RENAME && wantparent && (flags & ISLASTCN)) {
-		if (!bcmp(np->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
+		if (!memcmp(np->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
 			m_freem(mrep);
 			return (EISDIR);
 		}
@@ -715,7 +715,7 @@ nfsmout:
 		return (0);
 	}
 
-	if (!bcmp(np->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
+	if (!memcmp(np->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
 		VREF(dvp);
 		newvp = dvp;
 	} else {
@@ -1790,7 +1790,7 @@ nfs_readdirlookrpc(vp, uiop, cred)
 				fxdr_hyper(tl, &frev);
 			}
 			nfsm_dissect(fhp, nfsv2fh_t *, NFSX_FH);
-			if (!bcmp(VTONFS(vp)->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
+			if (!memcmp(VTONFS(vp)->n_fh.fh_bytes, (caddr_t)fhp, NFSX_FH)) {
 				VREF(vp);
 				newvp = vp;
 				np = VTONFS(vp);
@@ -1928,7 +1928,7 @@ nfs_sillyrename(dvp, vp, cnp)
 
 	/* Fudge together a funny name */
 	pid = cnp->cn_proc->p_pid;
-	bcopy(".nfsAxxxx4.4", sp->s_name, 13);
+	memcpy(sp->s_name, ".nfsAxxxx4.4", 13);
 	sp->s_namlen = 12;
 	sp->s_name[8] = hextoasc[pid & 0xf];
 	sp->s_name[7] = hextoasc[(pid >> 4) & 0xf];
@@ -1993,7 +1993,7 @@ nfs_lookitup(sp, fhp, procp)
 		if (isnq)
 			nfsm_dissect(tl, u_long *, NFSX_UNSIGNED);
 		nfsm_dissect(cp, caddr_t, NFSX_FH);
-		bcopy(cp, (caddr_t)fhp, NFSX_FH);
+		memcpy((caddr_t)fhp, cp, NFSX_FH);
 	}
 	nfsm_reqdone;
 	return (error);
@@ -2007,7 +2007,8 @@ nfs_lookitup(sp, fhp, procp)
  *   nfsiobuf area.
  *   (Maybe I could use the process's page mapping, but I was concerned that
  *    Kernel Write might not be enabled and also figured copyout() would do
- *    a lot more work than bcopy() and also it currently happens in the
+ *    a lot more work than memcpy(queue the request by
+ * calling nfs_asyncio(), ) and also it currently happens in the
  *    context of the swapper process (2).
  */
 int
@@ -2031,8 +2032,7 @@ nfs_bmap(ap)
 
 /*
  * Strategy routine.
- * For async requests when nfsiod(s) are running, queue the request by
- * calling nfs_asyncio(), otherwise just all nfs_doio() to do the
+ * For async requests when nfsiod(s) are running, otherwise just all nfs_doio() to do the
  * request.
  */
 int

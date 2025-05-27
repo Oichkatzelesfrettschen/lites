@@ -132,7 +132,7 @@ ns_control(so, cmd, data, ifp)
 				malloc(sizeof *ia, M_IFADDR, M_WAITOK);
 			if (oia == (struct ns_ifaddr *)NULL)
 				return (ENOBUFS);
-			bzero((caddr_t)oia, sizeof(*oia));
+			memset((caddr_t)oia, 0, sizeof(*oia));
 			if (ia = ns_ifaddr) {
 				for ( ; ia->ia_next; ia = ia->ia_next)
 					;

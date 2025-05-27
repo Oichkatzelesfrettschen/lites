@@ -489,10 +489,10 @@ sysctl_string(oldp, oldlenp, newp, newlen, str, maxlen)
 		return (EINVAL);
 	if (oldp) {
 		*oldlenp = len;
-		bcopy(str, oldp, len);
+		memcpy(oldp, str, len);
 	}
 	if (error == 0 && newp) {
-		bcopy(newp, str, newlen);
+		memcpy(str, newp, newlen);
 		str[newlen] = 0;
 	}
 	return (error);
@@ -516,7 +516,7 @@ sysctl_rdstring(oldp, oldlenp, newp, str)
 		return (EPERM);
 	*oldlenp = len;
 	if (oldp)
-		bcopy(str, oldp, len);
+		memcpy(oldp, str, len);
 	return (error);
 }
 
@@ -540,10 +540,10 @@ sysctl_struct(oldp, oldlenp, newp, newlen, sp, len)
 		return (EINVAL);
 	if (oldp) {
 		*oldlenp = len;
-		bcopy(sp, oldp, len);
+		memcpy(oldp, sp, len);
 	}
 	if (error == 0 && newp)
-		bcopy(newp, sp, len);
+		memcpy(sp, newp, len);
 	return (error);
 }
 
@@ -565,7 +565,7 @@ sysctl_rdstruct(oldp, oldlenp, newp, sp, len)
 		return (EPERM);
 	*oldlenp = len;
 	if (oldp)
-		bcopy(sp, oldp, len);
+		memcpy(oldp, sp, len);
 	return (error);
 }
 
@@ -596,7 +596,7 @@ sysctl_file(where, sizep)
 		*sizep = 0;
 		return (0);
 	}
-	bcopy((caddr_t)&filehead, where, sizeof(filehead));
+	memcpy(where, (caddr_t)&filehead, sizeof(filehead));
 	buflen -= sizeof(filehead);
 	where += sizeof(filehead);
 
@@ -608,7 +608,7 @@ sysctl_file(where, sizep)
 			*sizep = where - start;
 			return (ENOMEM);
 		}
-		bcopy((caddr_t)fp, where, sizeof (struct file));
+		memcpy(where, (caddr_t)fp, sizeof (struct file));
 		buflen -= sizeof(struct file);
 		where += sizeof(struct file);
 	}
@@ -683,8 +683,8 @@ again:
 		}
 		if (buflen >= sizeof(struct kinfo_proc)) {
 			fill_eproc(p, &eproc);
-			bcopy((caddr_t)p, &dp->kp_proc, sizeof (struct proc));
-			bcopy((caddr_t)&eproc, &dp->kp_eproc, sizeof (eproc));
+			memcpy(&dp->kp_proc, (caddr_t)p, sizeof (struct proc));
+			memcpy(&dp->kp_eproc, (caddr_t)&eproc, sizeof (eproc));
 			dp++;
 			buflen -= sizeof(struct kinfo_proc);
 		}

@@ -283,7 +283,7 @@ int keep;
 	ENDDEBUG
 	
 	onew = (struct Object *)Malloc(sizeof (struct Object));
-	bzero(onew, sizeof(struct Object));
+	memset(onew, 0, sizeof(struct Object));
 	onew->obj_name = adr;
 	onew->obj_kind = OBJ_SET;
 	onew->obj_type = type;
@@ -329,7 +329,7 @@ char *struc;
 		exit(-1);
 	} else {
 		onew = (struct Object *)Malloc(sizeof (struct Object));
-		bzero(onew, sizeof(struct Object));
+		memset(onew, 0, sizeof(struct Object));
 		onew->obj_name = stash(adr);
 		onew->obj_kind = OBJ_ITEM;
 		onew->obj_type =  type;
@@ -360,7 +360,7 @@ char *adr;
 		"Warning at line %d: set definition of %s causes definition of\n",
 			lineno, OBJ_NAME(o));
 		fprintf(stderr, "\t (previously undefined) member %s\n", adr);
-		bzero(onew, sizeof(struct Object));
+		memset(onew, 0, sizeof(struct Object));
 		onew->obj_name = stash(adr);
 		onew->obj_kind = OBJ_ITEM;
 		onew->obj_type = o->obj_type;
@@ -371,7 +371,7 @@ char *adr;
 			fprintf(stderr, "Sets cannot be members of sets; %s\n", adr);
 			exit(-1);
 		}
-		bcopy(oold, onew, sizeof(struct Object));
+		memcpy(onew, oold, sizeof(struct Object));
 		onew->obj_members = onew->obj_left = onew->obj_right = NULL;
 	}
 	onew->obj_members = o->obj_members;

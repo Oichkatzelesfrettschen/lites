@@ -329,12 +329,12 @@ rpsleep(int (*rsleep)(), int arg1, int arg2, char *mesg1, char *mesg2)
 	uprintf("[%s: %s%s, pausing ...]\r\n", u.u_comm, mesg1, mesg2);
     }
 
-    bcopy((caddr_t)&u.u_qsave, (caddr_t)&lsave, sizeof(lsave));
+    memcpy((caddr_t)&lsave, (caddr_t)&u.u_qsave, sizeof(lsave));
     if (setjmp(&u.u_qsave) == 0)
 	(*rsleep)(arg1, arg2);
     else
 	ret = FALSE;
-    bcopy((caddr_t)&lsave, (caddr_t)&u.u_qsave, sizeof(lsave));
+    memcpy((caddr_t)&u.u_qsave, (caddr_t)&lsave, sizeof(lsave));
 
     if ((u.u_rpswhich&URPW_NOTIFY) == 0)
 	rpcont();

@@ -125,7 +125,7 @@ lfs_valloc(ap)
 
 	ip = VTOI(vp);
 	/* Zero out the direct and indirect block addresses. */
-	bzero(&ip->i_din, sizeof(struct dinode));
+	memset(&ip->i_din, 0, sizeof(struct dinode));
 	ip->i_din.di_inumber = new_ino;
 
 	/* Set a new generation number for this inode. */

@@ -495,7 +495,7 @@ crget()
 	register struct ucred *cr;
 
 	MALLOC(cr, struct ucred *, sizeof(*cr), M_CRED, M_WAITOK);
-	bzero((caddr_t)cr, sizeof(*cr));
+	memset((caddr_t)cr, 0, sizeof(*cr));
 	cr->cr_ref = 1;
 	return (cr);
 }

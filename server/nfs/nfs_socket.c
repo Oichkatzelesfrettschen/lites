@@ -1530,7 +1530,7 @@ nfs_realign(m, hsiz)
 				}
 				siz = min(mlen, olen);
 				if (tcp != fcp)
-					bcopy(fcp, tcp, siz);
+					memcpy(tcp, fcp, siz);
 				mnew->m_len += siz;
 				mlen -= siz;
 				olen -= siz;
@@ -1697,7 +1697,7 @@ nfsrv_getstream(slp, waitflag)
 		}
 		m = slp->ns_raw;
 		if (m->m_len >= NFSX_UNSIGNED) {
-			bcopy(mtod(m, caddr_t), (caddr_t)&recmark, NFSX_UNSIGNED);
+			memcpy(caddr_t), mtod(m, (caddr_t)&recmark, NFSX_UNSIGNED);
 			m->m_data += NFSX_UNSIGNED;
 			m->m_len -= NFSX_UNSIGNED;
 		} else {

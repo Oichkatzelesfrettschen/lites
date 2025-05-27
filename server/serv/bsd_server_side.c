@@ -1190,7 +1190,7 @@ bsd_set_atexpansion(
 
 	TRACE(("\n[%d] bsd_set_atexpansion", p->p_pid));
 
-	if ((what_count < 4) || bcmp("@bin", what_to_expand, 4)) {
+	if ((what_count < 4) || memcmp("@bin", what_to_expand, 4)) {
 		mutex_unlock(&p->p_lock);
 		return EOPNOTSUPP;
 	}

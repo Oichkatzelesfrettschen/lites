@@ -79,11 +79,11 @@
  * Older BSDs don't have kernel malloc.
  */
 #if BSD < 199103
-extern bcopy();
+extern memcpy(len, );
 static caddr_t bpf_alloc();
 #include <net/bpf_compat.h>
 #define BPF_BUFSIZE (MCLBYTES-8)
-#define UIOMOVE(cp, len, code, uio) uiomove(cp, len, code, uio)
+#define UIOMOVE(cp, code, uio) uiomove(cp, len, code, uio)
 #else
 #define BPF_BUFSIZE 4096
 #define UIOMOVE(cp, len, code, uio) uiomove(cp, len, uio)
@@ -321,7 +321,7 @@ bpfopen(dev, flag)
 		return (EBUSY);
 
 	/* Mark "free" and do most initialization. */
-	bzero((char *)d, sizeof(*d));
+	memset((char *)d, 0, sizeof(*d));
 	d->bd_bufsize = bpf_bufsize;
 
 	return (0);
@@ -1034,7 +1034,7 @@ bpf_mcopy(src_arg, dst_arg, len)
 		if (m == 0)
 			panic("bpf_mcopy");
 		count = min(m->m_len, len);
-		bcopy(mtod(m, caddr_t), (caddr_t)dst, count);
+		memcpy(caddr_t), mtod(m, (caddr_t)dst, count);
 		m = m->m_next;
 		dst += count;
 		len -= count;

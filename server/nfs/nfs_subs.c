@@ -237,7 +237,7 @@ nfsm_rpchead(cr, nqnfs, procid, auth_type, auth_len, auth_str, mrest,
 				bpos = mtod(mb, caddr_t);
 			}
 			i = min(siz, M_TRAILINGSPACE(mb));
-			bcopy(auth_str, bpos, i);
+			memcpy(bpos, auth_str, i);
 			mb->m_len += i;
 			auth_str += i;
 			bpos += i;
@@ -304,7 +304,7 @@ nfsm_mbuftouio(mrep, uiop, siz, dpos)
 			else
 #endif
 			if (uiop->uio_segflg == UIO_SYSSPACE)
-				bcopy(mbufcp, uiocp, xfer);
+				memcpy(uiocp, mbufcp, xfer);
 			else
 				copyout(mbufcp, uiocp, xfer);
 			left -= xfer;
@@ -383,7 +383,7 @@ nfsm_uiotombuf(uiop, mq, siz, bpos)
 			else
 #endif
 			if (uiop->uio_segflg == UIO_SYSSPACE)
-				bcopy(uiocp, mtod(mp, caddr_t)+mp->m_len, xfer);
+				memcpy(mtod(mp, uiocp, caddr_t)+mp->m_len, xfer);
 			else
 				copyin(uiocp, mtod(mp, caddr_t)+mp->m_len, xfer);
 			mp->m_len += xfer;
@@ -457,7 +457,7 @@ nfsm_disct(mdp, dposp, siz, left, cp2)
 		mp->m_len -= left;
 		mp = mp2;
 		*cp2 = p = mtod(mp, caddr_t);
-		bcopy(*dposp, p, left);		/* Copy what was left */
+		memcpy(p, *dposp, left);		/* Copy what was left */
 		siz2 = siz-left;
 		p += left;
 		mp2 = mp->m_next;
@@ -467,7 +467,7 @@ nfsm_disct(mdp, dposp, siz, left, cp2)
 				return (EBADRPC);
 			xfer = (siz2 > mp2->m_len) ? mp2->m_len : siz2;
 			if (xfer > 0) {
-				bcopy(mtod(mp2, caddr_t), p, xfer);
+				memcpy(caddr_t), mtod(mp2, p, xfer);
 				NFSMADV(mp2, xfer);
 				mp2->m_len -= xfer;
 				p += xfer;
@@ -533,7 +533,7 @@ nfsm_strtmbuf(mb, bpos, cp, siz)
 		left -= NFSX_UNSIGNED;
 		m2->m_len += NFSX_UNSIGNED;
 		if (left > 0) {
-			bcopy(cp, (caddr_t) tl, left);
+			memcpy((caddr_t) tl, cp, left);
 			siz -= left;
 			cp += left;
 			m2->m_len += left;
@@ -564,7 +564,7 @@ nfsm_strtmbuf(mb, bpos, cp, siz)
 		} else {
 			xfer = len = m1->m_len;
 		}
-		bcopy(cp, (caddr_t) tl, xfer);
+		memcpy((caddr_t) tl, cp, xfer);
 		m1->m_len = len+tlen;
 		siz -= xfer;
 		cp += xfer;
@@ -780,7 +780,7 @@ nfs_loadattrcache(vpp, mdp, dposp, vaper)
 	*dposp = dpos;
 	*mdp = md;
 	if (vaper != NULL) {
-		bcopy((caddr_t)vap, (caddr_t)vaper, sizeof(*vap));
+		memcpy((caddr_t)vaper, (caddr_t)vap, sizeof(*vap));
 #ifdef notdef
 		if ((np->n_flag & NMODIFIED) && np->n_size > vap->va_size)
 		if (np->n_size > vap->va_size)
@@ -840,7 +840,7 @@ nfs_getattrcache(vp, vaper)
 		} else
 			np->n_size = vap->va_size;
 	}
-	bcopy((caddr_t)vap, (caddr_t)vaper, sizeof(struct vattr));
+	memcpy((caddr_t)vaper, (caddr_t)vap, sizeof(struct vattr));
 #ifdef notdef
 	if ((np->n_flag & NMODIFIED) == 0) {
 		np->n_size = vaper->va_size;

@@ -138,7 +138,7 @@ ip_init()
 #if GATEWAY
 	i = (if_index + 1) * (if_index + 1) * sizeof (u_long);
 	ip_ifmatrix = (u_long *) malloc(i, M_RTABLE, M_WAITOK);
-	bzero((char *)ip_ifmatrix, i);
+	memset((char *)ip_ifmatrix, 0, i);
 #endif
 }
 
@@ -734,8 +734,7 @@ ip_dooptions(m)
 			/*
 			 * locate outgoing interface
 			 */
-			bcopy((caddr_t)(cp + off), (caddr_t)&ipaddr.sin_addr,
-			    sizeof(ipaddr.sin_addr));
+			memcpy((caddr_t)&ipaddr.sin_addr, (caddr_t)(cp + off), sizeof(ipaddr.sin_addr));
 			if (opt == IPOPT_SSRR) {
 #define	INA	struct in_ifaddr *
 #define	SA	struct sockaddr *
@@ -749,8 +748,7 @@ ip_dooptions(m)
 				goto bad;
 			}
 			ip->ip_dst = ipaddr.sin_addr;
-			bcopy((caddr_t)&(IA_SIN(ia)->sin_addr),
-			    (caddr_t)(cp + off), sizeof(struct in_addr));
+			memcpy((caddr_t)(cp + off), (caddr_t)&(IA_SIN(ia)->sin_addr), sizeof(struct in_addr));
 			cp[IPOPT_OFFSET] += sizeof(struct in_addr);
 			/*
 			 * Let ip_intr's mcast routing check handle mcast pkts
@@ -769,8 +767,7 @@ ip_dooptions(m)
 			off--;			/* 0 origin */
 			if (off > optlen - sizeof(struct in_addr))
 				break;
-			bcopy((caddr_t)(&ip->ip_dst), (caddr_t)&ipaddr.sin_addr,
-			    sizeof(ipaddr.sin_addr));
+			memcpy((caddr_t)&ipaddr.sin_addr, (caddr_t)(&ip->ip_dst), sizeof(ipaddr.sin_addr));
 			/*
 			 * locate outgoing interface; if we're the destination,
 			 * use the incoming interface (should be same).
@@ -781,8 +778,7 @@ ip_dooptions(m)
 				code = ICMP_UNREACH_HOST;
 				goto bad;
 			}
-			bcopy((caddr_t)&(IA_SIN(ia)->sin_addr),
-			    (caddr_t)(cp + off), sizeof(struct in_addr));
+			memcpy((caddr_t)(cp + off), (caddr_t)&(IA_SIN(ia)->sin_addr), sizeof(struct in_addr));
 			cp[IPOPT_OFFSET] += sizeof(struct in_addr);
 			break;
 
@@ -811,8 +807,7 @@ ip_dooptions(m)
 							    m->m_pkthdr.rcvif);
 				if (ia == 0)
 					continue;
-				bcopy((caddr_t)&IA_SIN(ia)->sin_addr,
-				    (caddr_t)sin, sizeof(struct in_addr));
+				memcpy((caddr_t)sin, (caddr_t)&IA_SIN(ia)->sin_addr, sizeof(struct in_addr));
 				ipt->ipt_ptr += sizeof(struct in_addr);
 				break;
 
@@ -820,8 +815,7 @@ ip_dooptions(m)
 				if (ipt->ipt_ptr + sizeof(n_time) +
 				    sizeof(struct in_addr) > ipt->ipt_len)
 					goto bad;
-				bcopy((caddr_t)sin, (caddr_t)&ipaddr.sin_addr,
-				    sizeof(struct in_addr));
+				memcpy((caddr_t)&ipaddr.sin_addr, (caddr_t)sin, sizeof(struct in_addr));
 				if (ifa_ifwithaddr((SA)&ipaddr) == 0)
 					continue;
 				ipt->ipt_ptr += sizeof(struct in_addr);
@@ -831,8 +825,7 @@ ip_dooptions(m)
 				goto bad;
 			}
 			ntime = iptime();
-			bcopy((caddr_t)&ntime, (caddr_t)cp + ipt->ipt_ptr - 1,
-			    sizeof(n_time));
+			memcpy((caddr_t)cp + ipt->ipt_ptr - 1, (caddr_t)&ntime, sizeof(n_time));
 			ipt->ipt_ptr += sizeof(n_time);
 		}
 	}
@@ -894,7 +887,7 @@ save_rte(option, dst)
 #endif
 	if (olen > sizeof(ip_srcrt) - (1 + sizeof(dst)))
 		return;
-	bcopy((caddr_t)option, (caddr_t)ip_srcrt.srcopt, olen);
+	memcpy((caddr_t)ip_srcrt.srcopt, (caddr_t)option, olen);
 	ip_nhops = (olen - IPOPT_OFFSET - 1) / sizeof(struct in_addr);
 	ip_srcrt.dst = dst;
 }
@@ -941,8 +934,7 @@ ip_srcroute()
 	 */
 	ip_srcrt.nop = IPOPT_NOP;
 	ip_srcrt.srcopt[IPOPT_OFFSET] = IPOPT_MINOFF;
-	bcopy((caddr_t)&ip_srcrt.nop,
-	    mtod(m, caddr_t) + sizeof(struct in_addr), OPTSIZ);
+	memcpy(mtod(m, (caddr_t)&ip_srcrt.nop, caddr_t) + sizeof(struct in_addr), OPTSIZ);
 	q = (struct in_addr *)(mtod(m, caddr_t) +
 	    sizeof(struct in_addr) + OPTSIZ);
 #undef OPTSIZ
@@ -988,7 +980,7 @@ ip_stripoptions(m, mopt)
 	olen = (ip->ip_hl<<2) - sizeof (struct ip);
 	opts = (caddr_t)(ip + 1);
 	i = m->m_len - (sizeof (struct ip) + olen);
-	bcopy(opts  + olen, opts, (unsigned)i);
+	memcpy(opts, opts  + olen, (unsigned)i);
 	m->m_len -= olen;
 	if (m->m_flags & M_PKTHDR)
 		m->m_pkthdr.len -= olen;

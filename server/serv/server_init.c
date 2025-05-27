@@ -455,14 +455,14 @@ void parse_arguments(
 	} else
 		strcpy(server_dir, argv[1]);
 
-	if (bcmp(server_dir, dev_prefix, strlen(dev_prefix))) {
+	if (memcmp(server_dir, dev_prefix, strlen(dev_prefix))) {
 		dprintf("(lites): server_dir(%s) ignored.  It does not start with %s\r\n",
 			server_dir, dev_prefix);
 		dprintf("(lites): TILT TILT!\r\n");
 	} else {
 		int len = strlen(rootname);
 
-		if (bcmp(server_dir+5, rootname, len)) {
+		if (memcmp(server_dir+5, rootname, len)) {
 			char *cp = server_dir+5;
 			while (*cp++ != '/') ;
 			len = cp - (server_dir + 5) - 1;

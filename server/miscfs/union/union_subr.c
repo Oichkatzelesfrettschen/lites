@@ -69,7 +69,7 @@ union_init()
 
 	for (i = 0; i < NHASH; i++)
 		LIST_INIT(&unhead[i]);
-	bzero((caddr_t) unvplock, sizeof(unvplock));
+	memset((caddr_t) unvplock, 0, sizeof(unvplock));
 }
 
 static int
@@ -357,8 +357,7 @@ loop:
 				un->un_hash = cnp->cn_hash;
 				un->un_path = malloc(cnp->cn_namelen+1,
 						M_TEMP, M_WAITOK);
-				bcopy(cnp->cn_nameptr, un->un_path,
-						cnp->cn_namelen);
+				memcpy(un->un_path, cnp->cn_nameptr, cnp->cn_namelen);
 				un->un_path[cnp->cn_namelen] = '\0';
 				VREF(dvp);
 				un->un_dirvp = dvp;
@@ -418,7 +417,7 @@ loop:
 	if (cnp && (lowervp != NULLVP) && (lowervp->v_type == VREG)) {
 		un->un_hash = cnp->cn_hash;
 		un->un_path = malloc(cnp->cn_namelen+1, M_TEMP, M_WAITOK);
-		bcopy(cnp->cn_nameptr, un->un_path, cnp->cn_namelen);
+		memcpy(un->un_path, cnp->cn_nameptr, cnp->cn_namelen);
 		un->un_path[cnp->cn_namelen] = '\0';
 		VREF(dvp);
 		un->un_dirvp = dvp;
@@ -579,7 +578,7 @@ union_mkshadow(um, dvp, cnp, vpp)
 	 * The pathname buffer will be FREEed by VOP_MKDIR.
 	 */
 	cn.cn_pnbuf = malloc(cnp->cn_namelen+1, M_NAMEI, M_WAITOK);
-	bcopy(cnp->cn_nameptr, cn.cn_pnbuf, cnp->cn_namelen);
+	memcpy(cn.cn_pnbuf, cnp->cn_nameptr, cnp->cn_namelen);
 	cn.cn_pnbuf[cnp->cn_namelen] = '\0';
 
 	cn.cn_nameiop = CREATE;
@@ -655,7 +654,7 @@ union_vn_create(vpp, un, p)
 	 */
 	cn.cn_namelen = strlen(un->un_path);
 	cn.cn_pnbuf = (caddr_t) malloc(cn.cn_namelen, M_NAMEI, M_WAITOK);
-	bcopy(un->un_path, cn.cn_pnbuf, cn.cn_namelen+1);
+	memcpy(cn.cn_pnbuf, un->un_path, cn.cn_namelen+1);
 	cn.cn_nameiop = CREATE;
 	cn.cn_flags = (LOCKPARENT|HASBUF|SAVENAME|SAVESTART|ISLASTCN);
 	cn.cn_proc = p;

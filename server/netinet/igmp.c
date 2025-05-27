@@ -296,7 +296,7 @@ igmp_sendreport(inm)
 	igmp->igmp_cksum = in_cksum(m, IGMP_MINLEN);
 
 	imo = &simo;
-	bzero((caddr_t)imo, sizeof(*imo));
+	memset((caddr_t)imo, 0, sizeof(*imo));
 	imo->imo_multicast_ifp = inm->inm_ifp;
 	imo->imo_multicast_ttl = 1;
 	/*

@@ -111,7 +111,7 @@ mach_error_t uiomove(cp, n, uio)
 		if (uio->uio_segflg == UIO_SYSSPACE || pk->k_reply_msg == 0) {
 		      /* UIO_SYSSPACE */
 			if (uio->uio_rw == UIO_READ) {
-				bcopy((caddr_t)cp, iov->iov_base, cnt);
+				memcpy(iov->iov_base, (caddr_t)cp, cnt);
 			} else {
 				boolean_t on_master = pk->k_master_lock;
 				/*
@@ -119,7 +119,7 @@ mach_error_t uiomove(cp, n, uio)
 				 */
 				if (on_master)
 				    unix_release();
-				bcopy(iov->iov_base, (caddr_t)cp, cnt);
+				memcpy((caddr_t)cp, iov->iov_base, cnt);
 				if (on_master)
 				    unix_master();
 			}
@@ -132,7 +132,7 @@ mach_error_t uiomove(cp, n, uio)
 						(vm_offset_t) iov->iov_base,
 							     cnt,
 							     iov->iov_len);
-				bcopy(cp, (void *) user_addr, cnt);
+				memcpy((void *) user_addr, cp, cnt);
 				extend_current_output(cnt);
 			} else {
 				error = copyin(iov->iov_base, cp, cnt);

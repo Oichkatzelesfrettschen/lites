@@ -332,7 +332,7 @@ nsip_route(m)
 	/*
 	 * Now, determine if we can get to the destination
 	 */
-	bzero((caddr_t)&ro, sizeof (ro));
+	memset((caddr_t)&ro, 0, sizeof (ro));
 	ro.ro_dst = *(struct sockaddr *)ip_dst;
 	rtalloc(&ro);
 	if (ro.ro_rt == 0 || ro.ro_rt->rt_ifp == 0) {

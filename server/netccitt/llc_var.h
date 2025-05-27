@@ -376,13 +376,13 @@ struct sdl_hdr {
 				struct mbuf *_m = (struct mbuf *) (m); \
 				if (_m) { \
 					M_PREPEND(_m, LLC_ISFRAMELEN, M_DONTWAIT); \
-					bzero(mtod(_m, caddr_t), LLC_ISFRAMELEN); \
+					memset(mtod(_m, 0, caddr_t), LLC_ISFRAMELEN); \
 				} else { \
 					MGETHDR (_m, M_DONTWAIT, MT_HEADER); \
 					if (_m != NULL) { \
 						_m->m_pkthdr.len = _m->m_len = LLC_UFRAMELEN; \
 						_m->m_next = _m->m_act = NULL; \
-						bzero(mtod(_m, caddr_t), LLC_UFRAMELEN); \
+						memset(mtod(_m, 0, caddr_t), LLC_UFRAMELEN); \
 					} else return; \
 				} \
 				(m) = _m; \

@@ -91,11 +91,11 @@ tcp_trace(act, ostate, tp, ti, req)
 	if (tp)
 		td->td_cb = *tp;
 	else
-		bzero((caddr_t)&td->td_cb, sizeof (*tp));
+		memset((caddr_t)&td->td_cb, 0, sizeof (*tp));
 	if (ti)
 		td->td_ti = *ti;
 	else
-		bzero((caddr_t)&td->td_ti, sizeof (*ti));
+		memset((caddr_t)&td->td_ti, 0, sizeof (*ti));
 	td->td_req = req;
 #ifdef TCPDEBUG
 	if (tcpconsdebug == 0)

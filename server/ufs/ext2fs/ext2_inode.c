@@ -183,7 +183,7 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 		if (length != 0)
 			panic("ext2_truncate: partial truncate of symlink");
 #endif
-		bzero((char *)&oip->i_shortlink, (u_int)oip->i_size);
+		memset((char *)&oip->i_shortlink, 0, (u_int)oip->i_size);
 		oip->i_size = 0;
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
 		return (VOP_UPDATE(ovp, &tv, &tv, 1));
@@ -245,7 +245,7 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 		oip->i_size = length;
 		size = blksize(fs, oip, lbn);
 		(void) vnode_pager_uncache(ovp);
-		bzero((char *)bp->b_data + offset, (u_int)(size - offset));
+		memset((char *)bp->b_data + offset, 0, (u_int)(size - offset));
 		allocbuf(bp, size);
 		if (aflags & IO_SYNC)
 			bwrite(bp);
@@ -269,7 +269,7 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 	 * will be returned to the free list.  lastiblock values are also
 	 * normalized to -1 for calls to ext2_indirtrunc below.
 	 */
-	bcopy((caddr_t)&oip->i_db[0], (caddr_t)oldblks, sizeof oldblks);
+	memcpy((caddr_t)oldblks, (caddr_t)&oip->i_db[0], sizeof oldblks);
 	for (level = TRIPLE; level >= SINGLE; level--)
 		if (lastiblock[level] < 0) {
 			oip->i_ib[level] = 0;
@@ -286,8 +286,8 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 	 * Note that we save the new block configuration so we can check it
 	 * when we are done.
 	 */
-	bcopy((caddr_t)&oip->i_db[0], (caddr_t)newblks, sizeof newblks);
-	bcopy((caddr_t)oldblks, (caddr_t)&oip->i_db[0], sizeof oldblks);
+	memcpy((caddr_t)newblks, (caddr_t)&oip->i_db[0], sizeof newblks);
+	memcpy((caddr_t)&oip->i_db[0], (caddr_t)oldblks, sizeof oldblks);
 	oip->i_size = osize;
 	vflags = ((length > 0) ? V_SAVE : 0) | V_SAVEMETA;
 	allerror = vinvalbuf(ovp, vflags, ap->a_cred, ap->a_p, 0, 0);
@@ -458,9 +458,8 @@ ext2_indirtrunc(ip, lbn, dbn, lastbn, level, countp)
 
 	bap = (daddr_t *)bp->b_data;
 	MALLOC(copy, daddr_t *, fs->s_blocksize, M_TEMP, M_WAITOK);
-	bcopy((caddr_t)bap, (caddr_t)copy, (u_int)fs->s_blocksize);
-	bzero((caddr_t)&bap[last + 1],
-	  (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t));
+	memcpy((caddr_t)copy, (caddr_t)bap, (u_int)fs->s_blocksize);
+	memset((caddr_t)&bap[last + 1], 0, (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t));
 	if (last == -1)
 		bp->b_flags |= B_INVAL;
 	error = bwrite(bp);

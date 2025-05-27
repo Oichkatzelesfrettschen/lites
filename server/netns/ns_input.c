@@ -430,7 +430,7 @@ struct route *ro;
 	
 	struct sockaddr_ns *dst;
 
-	bzero((caddr_t)ro, sizeof (*ro));
+	memset((caddr_t)ro, 0, sizeof (*ro));
 	dst = (struct sockaddr_ns *)&ro->ro_dst;
 
 	dst->sns_len = sizeof(*dst);

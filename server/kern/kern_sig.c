@@ -1401,7 +1401,7 @@ mach_error_t coredump(struct proc *p)
 	LEASE_CHECK(vp, p, cred, LEASE_WRITE);
 	VOP_SETATTR(vp, &vattr, cred, p);
 	p->p_acflag |= ACORE;
-	bcopy(p, &p->p_addr->u_kproc.kp_proc, sizeof(struct proc));
+	memcpy(&p->p_addr->u_kproc.kp_proc, p, sizeof(struct proc));
 	fill_eproc(p, &p->p_addr->u_kproc.kp_eproc);
 	error = cpu_coredump(p, vp, cred);
 	if (error == 0)
