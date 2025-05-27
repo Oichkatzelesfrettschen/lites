@@ -5,6 +5,9 @@ This document summarises the major phases of the modernisation effort. Each sect
 ## Archaeological Analysis and Inventory
 - Catalog existing source drops and historical patches.
 - Record unique files and configuration fragments to preserve during cleanup.
+- Run `scripts/analysis/inventory.sh` to generate `analysis/bsd_files.txt`,
+  `analysis/mach_files.txt` and `analysis/lites_files.txt` for license
+  classification.
 
 ## Functional Decomposition
 - Identify discrete subsystems in the original code base.
