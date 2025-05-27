@@ -70,7 +70,7 @@
 #include <sys/user.h>
 #include <sys/assert.h>
 
-#include <vm/vm.h>
+#include "../../libos/vm.h"
 
 #include <machine/cpu.h>
 
@@ -87,7 +87,7 @@ static struct vmspace *vmspace_fork(struct vmspace *ovs, struct proc *p2)
 #else
 	vs = &p2->p_realvmspace;
 #endif
-	memcpy(vs, ovs, sizeof(*vs));
+	*vs = *ovs;
 	vs->vm_refcnt = 1;
 	vs->vm_shm = 0;
 	return vs;
