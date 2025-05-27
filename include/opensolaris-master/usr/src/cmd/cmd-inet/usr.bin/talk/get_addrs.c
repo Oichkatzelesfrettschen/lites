@@ -80,8 +80,8 @@ char *rem_machine_name;
 
 	/* if on the same machine, then simply copy */
 
-	if (bcmp((char *)&rem_machine_name, (char *)&my_machine_name,
-		sizeof (rem_machine_name)) == 0) {
+        if (memcmp((char *)&rem_machine_name, (char *)&my_machine_name,
+                sizeof (rem_machine_name)) == 0) {
 	bcopy((char *)&my_machine_addr, (char *)&rem_machine_addr,
 		sizeof (rem_machine_name));
 	} else {

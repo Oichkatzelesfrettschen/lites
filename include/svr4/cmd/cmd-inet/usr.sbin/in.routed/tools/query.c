@@ -208,7 +208,7 @@ rip_input(from, size)
 			struct in_addr subnaddr, inet_makeaddr();
 
 			subnaddr = inet_makeaddr(subnet, INADDR_ANY);
-			if (bcmp(&sin->sin_addr, &subnaddr, sizeof(subnaddr)) == 0)
+                        if (memcmp(&sin->sin_addr, &subnaddr, sizeof(subnaddr)) == 0)
 				name = np->n_name;
 			else
 				goto host;

@@ -429,8 +429,8 @@ rarp_request (r, shost)
 	/* 
 	 * third party lookups are rare and wonderful
 	 */
-	if (bcmp((char *) r->arp_sha, (char *) r->arp_tha, ETHERADDRL) || 
-	    bcmp((char *) r->arp_sha, (char *) shost, ETHERADDRL)) {
+        if (memcmp((char *) r->arp_sha, (char *) r->arp_tha, ETHERADDRL) != 0 ||
+            memcmp((char *) r->arp_sha, (char *) shost, ETHERADDRL) != 0) {
 		if (dflag)
 			debug("weird (3rd party lookup)");
 		weird++;
@@ -539,7 +539,7 @@ arp_request(r, shost)
 	if (dflag)
 		debug("ARPOP_REQUEST");
 
-	if (bcmp((char *) &my_ipaddr, (char *) r->arp_tpa, IPADDRL))
+        if (memcmp((char *) &my_ipaddr, (char *) r->arp_tpa, IPADDRL) != 0)
 		return;
 
 	r->arp_op = ARPOP_REPLY;

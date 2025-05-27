@@ -109,8 +109,9 @@ interpret_rip6(int flags, struct rip6 *rip6, int fraglen)
 					n->rip6_metric = n->rip6_metric;
 				}
 				dst = &n->rip6_prefix;
-				notdefault = bcmp((caddr_t *)dst,
-				    (caddr_t *)&all_zeroes_addr, sizeof (*dst));
+                                notdefault = memcmp((caddr_t *)dst,
+                                    (caddr_t *)&all_zeroes_addr,
+                                    sizeof (*dst)) != 0;
 				(void) inet_ntop(AF_INET6, (char *)dst, dststr,
 				    INET6_ADDRSTRLEN);
 				(void) sprintf(get_line((char *)n - dlc_header,

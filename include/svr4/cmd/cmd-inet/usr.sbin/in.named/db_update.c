@@ -336,7 +336,7 @@ db_cmp(dp1, dp2)
 #ifdef ALLOW_T_UNSPEC
         case T_UNSPEC:
 #endif ALLOW_T_UNSPEC
-		return(bcmp(dp1->d_data, dp2->d_data, dp1->d_size));
+                return(memcmp(dp1->d_data, dp2->d_data, dp1->d_size));
 
 	case T_NS:
 	case T_CNAME:
@@ -370,7 +370,7 @@ db_cmp(dp1, dp2)
 			return(1);
 		cp1 += strlen(cp1) + 1;
 		cp2 += strlen(cp2) + 1;
-		return(bcmp(cp1, cp2, sizeof(u_long) * 5));
+                return(memcmp(cp1, cp2, sizeof(u_long) * 5));
 	
 	case T_MX:
 		cp1 = dp1->d_data;

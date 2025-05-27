@@ -67,7 +67,7 @@
 
 #define	LOOPBACKNET	0x7F000000
 #define equal(a1, a2) \
-	(bcmp((caddr_t)(a1), (caddr_t)(a2), sizeof (struct sockaddr)) == 0)
+        (memcmp((caddr_t)(a1), (caddr_t)(a2), sizeof (struct sockaddr)) == 0)
 #define	min(a,b)	((a)>(b)?(b):(a))
 
 struct	sockaddr_in addr;	/* address of daemon's socket */

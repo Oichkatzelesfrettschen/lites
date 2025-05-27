@@ -460,8 +460,8 @@ fetchns:
 			for (dp = np->n_data; dp != NULL; dp = dp->d_next) {
 				if (!match(dp, class, type))
 					continue;
-				if (dp->d_size != dlen ||
-				    bcmp(dp->d_data, data, dlen))
+                                if (dp->d_size != dlen ||
+                                    memcmp(dp->d_data, data, dlen))
 					continue;
 				getname(np, dnbuf, sizeof(dnbuf));
 #ifdef DEBUG

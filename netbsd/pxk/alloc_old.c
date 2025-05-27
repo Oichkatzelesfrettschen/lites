@@ -726,7 +726,8 @@ int n, x;
   qsort(lblocks, MAXBLOCKS, sizeof(long *), compareblocks);
   for (i = 0, j = 0; i < MAXBLOCKS; i++, j++) {
     b = lblocks[i];
-    if (!b || bcmp(b + MALLOC_CHECK + MALLOC_NPCS, last, n * sizeof(long))) {
+      if (!b || memcmp(b + MALLOC_CHECK + MALLOC_NPCS, last,
+                       n * sizeof(long)) != 0) {
       if (j >= x) {
 	printf("%d at ", j);
 	for (k = 0; k < MALLOC_NPCS; k++) {

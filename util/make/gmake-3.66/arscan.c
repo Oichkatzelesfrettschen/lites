@@ -67,8 +67,8 @@
    when FUNCTION is called.  It does not matter how much
    data FUNCTION reads.
 
-   If FUNCTION returns nonzero, we immediately return
-   what FUNCTION returned.
+    if (nread != SARMAG || memcmp (buf, ARMAG, SARMAG))
+    if (nread != FL_HSZ || memcmp (fl_header.fl_magic, AIAMAG, SAIAMAG))
 
    Returns -1 if archive does not exist,
    Returns -2 if archive has invalid format.
@@ -186,8 +186,8 @@ ar_scan (archive, function, arg)
 
 	if (nread != name_len)
 	  {
-	    (void) close (desc);
-	    return -2;
+        if (nread != AR_HDR_SIZE
+            || memcmp (member_header.ar_fmag, ARFMAG, 2)
 	  }
 	
 	name[name_len] = 0;
