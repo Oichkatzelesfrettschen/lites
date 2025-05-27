@@ -57,7 +57,7 @@ static char *rn_zeros, *rn_ones;
 
 #define rn_masktop (mask_rnhead->rnh_treetop)
 #undef Bcmp
-#define Bcmp(a, b, l) (l == 0 ? 0 : bcmp((caddr_t)(a), (caddr_t)(b), (u_long)l))
+#define Bcmp(a, b, l) (l == 0 ? 0 : memcmp((caddr_t)(a), (caddr_t)(b), (u_long)l))
 /*
  * The data structure for the keys is a radix tree with one way
  * branching removed.  The index rn_b at an internal node n represents a bit

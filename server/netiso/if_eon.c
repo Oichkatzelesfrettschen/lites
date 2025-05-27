@@ -219,12 +219,12 @@ caddr_t loc;
 	struct mbuf mhead;
 	register struct sockaddr_in *sin = (struct sockaddr_in *)&ro->ro_dst;
 	if (zero) {
-		bzero((caddr_t)hdr, sizeof (*hdr));
-		bzero((caddr_t)ro, sizeof (*ro));
+		memset((caddr_t)hdr, 0, sizeof (*hdr));
+		memset((caddr_t)ro, 0, sizeof (*ro));
 	}
 	sin->sin_family = AF_INET;
 	sin->sin_len = sizeof (*sin);
-	bcopy(loc, (caddr_t)&sin->sin_addr, sizeof(struct in_addr));
+	memcpy((caddr_t)&sin->sin_addr, loc, sizeof(struct in_addr));
 	/*
 	 * If there is a cached route,
 	 * check that it is to the same destination
@@ -413,8 +413,7 @@ einval:
 	ro = &el->el_iproute;
 	if (el->el_snpaoffset) {
 		if (dst->siso_family == AF_ISO) {
-			bcopy((caddr_t) &dst->siso_data[el->el_snpaoffset],
-					(caddr_t) &ei->ei_ip.ip_dst, sizeof(ei->ei_ip.ip_dst));
+			memcpy((caddr_t) &ei->ei_ip.ip_dst, (caddr_t) &dst->siso_data[el->el_snpaoffset], sizeof(ei->ei_ip.ip_dst));
 		} else
 			goto einval;
 	}

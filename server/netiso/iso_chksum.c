@@ -333,7 +333,7 @@ m_compress(in, out)
 			IFDEBUG(D_REQUEST)
 				printf("m_compress copying len %d\n", len);
 			ENDDEBUG
-			bcopy(mtod(in, caddr_t), mtod((*out), caddr_t) + (*out)->m_len,
+			memcpy(caddr_t), mtod(in, mtod((*out), caddr_t) + (*out)->m_len,
 						(unsigned)len);
 
 			(*out)->m_len += len;

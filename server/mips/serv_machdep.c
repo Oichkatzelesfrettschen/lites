@@ -107,7 +107,7 @@ void set_emulator_state(
     unsigned int count;
     kern_return_t ret;
 
-    bzero(&ts, sizeof(ts));
+    memset(&ts, 0, sizeof(ts));
     ts.pc  = li->pc;
     ts.r29 = li->sp;
     ts.r6  = li->sp;
@@ -274,5 +274,5 @@ pagemove(from, to, size)
 /* XXX */
 void blkclr(caddr_t addr, size_t count)
 {
-	bzero(addr, count);
+	memset(addr, 0, count);
 }

@@ -197,8 +197,7 @@ nqsrv_getlease(vp, duration, flags, nd, nam, cachablep, frev, cred)
 		for (lp = *lpp; lp; lp = lp->lc_fhnext)
 			if (fh.fh_fsid.val[0] == lp->lc_fsid.val[0] &&
 			    fh.fh_fsid.val[1] == lp->lc_fsid.val[1] &&
-			    !bcmp(fh.fh_fid.fid_data, lp->lc_fiddata,
-				  fh.fh_fid.fid_len - sizeof (long))) {
+			    !memcmp(fh.fh_fid.fid_data, lp->lc_fiddata, fh.fh_fid.fid_len - sizeof (long))) {
 				/* Found it */
 				lp->lc_vp = vp;
 				vp->v_lease = lp;
@@ -244,7 +243,7 @@ nqsrv_getlease(vp, duration, flags, nd, nam, cachablep, frev, cred)
 				*lphp = (struct nqm *)
 					malloc(sizeof (struct nqm),
 						M_NQMHOST, M_WAITOK);
-				bzero((caddr_t)*lphp, sizeof (struct nqm));
+				memset((caddr_t)*lphp, 0, sizeof (struct nqm));
 				lph = (*lphp)->lpm_hosts;
 			}
 			nqsrv_addhost(lph, nd->nd_slp, nam);
@@ -289,13 +288,13 @@ doreply:
 		} while (nfsstats.srvnqnfs_leases > nqsrv_maxnumlease);
 	}
 	MALLOC(lp, struct nqlease *, sizeof (struct nqlease), M_NQLEASE, M_WAITOK);
-	bzero((caddr_t)lp, sizeof (struct nqlease));
+	memset((caddr_t)lp, 0, sizeof (struct nqlease));
 	if (flags & NQL_WRITE)
 		lp->lc_flag |= (LC_WRITE | LC_WRITTEN);
 	nqsrv_addhost(&lp->lc_host, nd->nd_slp, nam);
 	lp->lc_vp = vp;
 	lp->lc_fsid = fh.fh_fsid;
-	bcopy(fh.fh_fid.fid_data, lp->lc_fiddata, fh.fh_fid.fid_len - sizeof (long));
+	memcpy(lp->lc_fiddata, fh.fh_fid.fid_data, fh.fh_fid.fid_len - sizeof (long));
 	if (lq = *lpp)
 		lq->lc_fhprev = &lp->lc_fhnext;
 	lp->lc_fhnext = lq;
@@ -485,7 +484,7 @@ nqsrv_send_eviction(vp, lp, slp, nam, cred)
 			nfsm_reqhead((struct vnode *)0, NQNFSPROC_EVICTED,
 				NFSX_FH);
 			nfsm_build(cp, caddr_t, NFSX_FH);
-			bzero(cp, NFSX_FH);
+			memset(cp, 0, NFSX_FH);
 			fhp = (fhandle_t *)cp;
 			fhp->fh_fsid = vp->v_mount->mnt_stat.f_fsid;
 			VFS_VPTOFH(vp, &fhp->fh_fid);
@@ -756,8 +755,7 @@ nqnfsrv_vacated(nfsd, mrep, md, dpos, cred, nam, mrq)
 	     lp = lp->lc_fhnext)
 		if (fhp->fh_fsid.val[0] == lp->lc_fsid.val[0] &&
 		    fhp->fh_fsid.val[1] == lp->lc_fsid.val[1] &&
-		    !bcmp(fhp->fh_fid.fid_data, lp->lc_fiddata,
-			  MAXFIDSZ)) {
+		    !memcmp(fhp->fh_fid.fid_data, lp->lc_fiddata, MAXFIDSZ)) {
 			/* Found it */
 			tlp = lp;
 			break;

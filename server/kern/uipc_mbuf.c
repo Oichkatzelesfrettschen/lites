@@ -166,7 +166,7 @@ m_getclr(int nowait, int type)
 	MGET(m, nowait, type);
 	if (m == 0)
 		return (0);
-	bzero(mtod(m, caddr_t), MLEN);
+	memset(mtod(m, 0, caddr_t), MLEN);
 	return (m);
 }
 
@@ -290,7 +290,7 @@ m_copym(struct mbuf *m, int off0, int len, int wait)
 			n->m_ext.ext_buf = (caddr_t)new_addr;
 			n->m_flags |= M_EXT;
 		} else {
-			bcopy(mtod(m, caddr_t)+off, mtod(n, caddr_t),
+			memcpy(caddr_t)+off, mtod(m, mtod(n, caddr_t),
 			    (unsigned)n->m_len);
 		}
 		if (len != M_COPYALL)
@@ -331,7 +331,7 @@ m_copydata(struct mbuf *m, int off, int len, caddr_t cp)
 		if (m == 0)
 			panic("m_copydata");
 		count = min(m->m_len - off, len);
-		bcopy(mtod(m, caddr_t) + off, cp, count);
+		memcpy(caddr_t) + off, mtod(m, cp, count);
 		len -= count;
 		cp += count;
 		off = 0;
@@ -357,7 +357,7 @@ m_cat(struct mbuf *m, struct mbuf *n)
 			return;
 		}
 		/* splat the data from one into the other */
-		bcopy(mtod(n, caddr_t), mtod(m, caddr_t) + m->m_len,
+		memcpy(caddr_t), mtod(n, mtod(m, caddr_t) + m->m_len,
 		    (u_int)n->m_len);
 		m->m_len += n->m_len;
 		n = m_free(n);
@@ -480,7 +480,7 @@ m_pullup(struct mbuf *n, int len)
 	space = &m->m_dat[MLEN] - (m->m_data + m->m_len);
 	do {
 		count = min(min(max(len, max_protohdr), space), n->m_len);
-		bcopy(mtod(n, caddr_t), mtod(m, caddr_t) + m->m_len,
+		memcpy(caddr_t), mtod(n, mtod(m, caddr_t) + m->m_len,
 		  (unsigned)count);
 		len -= count;
 		m->m_len += count;
@@ -563,7 +563,7 @@ extpacket:
 		panic("m_split: M_EXT");
 #endif
 	} else {
-		bcopy(mtod(m, caddr_t) + len, mtod(n, caddr_t), remain);
+		memcpy(caddr_t) + len, mtod(m, mtod(n, caddr_t), remain);
 	}
 	n->m_len = remain;
 	m->m_len = len;

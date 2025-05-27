@@ -247,7 +247,7 @@ ns_setsockaddr(nsp, nam)
 	
 	nam->m_len = sizeof (*sns);
 	sns = mtod(nam, struct sockaddr_ns *);
-	bzero((caddr_t)sns, sizeof (*sns));
+	memset((caddr_t)sns, 0, sizeof (*sns));
 	sns->sns_len = sizeof(*sns);
 	sns->sns_family = AF_NS;
 	sns->sns_addr = nsp->nsp_laddr;
@@ -261,7 +261,7 @@ ns_setpeeraddr(nsp, nam)
 	
 	nam->m_len = sizeof (*sns);
 	sns = mtod(nam, struct sockaddr_ns *);
-	bzero((caddr_t)sns, sizeof (*sns));
+	memset((caddr_t)sns, 0, sizeof (*sns));
 	sns->sns_len = sizeof(*sns);
 	sns->sns_family = AF_NS;
 	sns->sns_addr  = nsp->nsp_faddr;

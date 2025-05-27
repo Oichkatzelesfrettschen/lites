@@ -177,7 +177,7 @@ lfs_truncate(ap)
 		if (length != 0)
 			panic("lfs_truncate: partial truncate of symlink");
 #endif
-		bzero((char *)&ip->i_shortlink, (u_int)ip->i_size);
+		memset((char *)&ip->i_shortlink, 0, (u_int)ip->i_size);
 		ip->i_size = 0;
 		ip->i_flag |= IN_CHANGE | IN_UPDATE;
 		return (VOP_UPDATE(vp, &tv, &tv, 0));
@@ -220,7 +220,7 @@ lfs_truncate(ap)
 		ip->i_size = length;
 		size = blksize(fs);
 		(void)vnode_pager_uncache(vp);
-		bzero((char *)bp->b_data + offset, (u_int)(size - offset));
+		memset((char *)bp->b_data + offset, 0, (u_int)(size - offset));
 		allocbuf(bp, size);
 		if (e1 = VOP_BWRITE(bp))
 			return (e1);
@@ -274,8 +274,8 @@ lfs_truncate(ap)
 				if (inp->in_off == 0)
 					brelse (bp);
 				else {
-					bzero((daddr_t *)bp->b_data +
-					    inp->in_off, fs->lfs_bsize - 
+					memset((daddr_t *)bp->b_data +
+					    inp->in_off, 0, fs->lfs_bsize - 
 					    inp->in_off * sizeof(daddr_t));
 					if (e1 = VOP_BWRITE(bp)) 
 						return (e1);

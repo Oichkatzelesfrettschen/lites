@@ -115,7 +115,7 @@ tbopen(dev, tp)
 	tbp->tbflags = TBTIGER|TBPOINT;		/* default */
 	tp->t_cp = tbp->cbuf;
 	tp->t_inbuf = 0;
-	bzero((caddr_t)&tbp->rets, sizeof (tbp->rets));
+	memset((caddr_t)&tbp->rets, 0, sizeof (tbp->rets));
 	tp->T_LINEP = (caddr_t)tbp;
 	tp->t_flags |= LITOUT;
 	return (0);

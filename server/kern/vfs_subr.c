@@ -255,7 +255,7 @@ getnewvnode(tag, mp, vops, vpp)
 	    numvnodes < desiredvnodes) {
 		vp = (struct vnode *)malloc((u_long)sizeof *vp,
 		    M_VNODE, M_WAITOK);
-		bzero((char *)vp, sizeof *vp);
+		memset((char *)vp, 0, sizeof *vp);
 		vp->v_cache_state = VC_FREE;
 		numvnodes++;
 	} else {
@@ -1139,8 +1139,8 @@ again:
 			   (error = copyout((caddr_t)vp, bp + VPTRSZ, VNODESZ)))
 				return (error);
 #else
-			bcopy((caddr_t)&vp, bp, VPTRSZ);
-			bcopy((caddr_t)vp, bp + VPTRSZ, VNODESZ);
+			memcpy(bp, (caddr_t)&vp, VPTRSZ);
+			memcpy(bp + VPTRSZ, (caddr_t)vp, VNODESZ);
 #endif
 			bp += VPTRSZ + VNODESZ;
 		}
@@ -1204,7 +1204,7 @@ vfs_hang_addrlist(mp, nep, argp)
 	}
 	i = sizeof(struct netcred) + argp->ex_addrlen + argp->ex_masklen;
 	np = (struct netcred *)malloc(i, M_NETADDR, M_WAITOK);
-	bzero((caddr_t)np, i);
+	memset((caddr_t)np, 0, i);
 	saddr = (struct sockaddr *)(np + 1);
 	if (error = copyin(argp->ex_addr, (caddr_t)saddr, argp->ex_addrlen))
 		goto out;

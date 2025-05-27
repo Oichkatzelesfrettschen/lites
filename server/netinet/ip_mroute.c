@@ -97,7 +97,7 @@ static	void phyint_send (struct mbuf *, struct vif *);
 static	void tunnel_send (struct mbuf *, struct vif *);
 
 #define INSIZ sizeof(struct in_addr)
-#define	same(a1, a2) (bcmp((caddr_t)(a1), (caddr_t)(a2), INSIZ) == 0)
+#define	same(a1, a2) (memcmp((caddr_t)(a1), (caddr_t)(a2), INSIZ) == 0)
 #define	satosin(sa)	((struct sockaddr_in *)(sa))
 
 /*
@@ -239,7 +239,7 @@ ip_mrouter_done()
 			(*ifp->if_ioctl)(ifp, SIOCDELMULTI, (caddr_t)&ifr);
 		}
 	}
-	bzero((caddr_t)viftable, sizeof(viftable));
+	memset((caddr_t)viftable, 0, sizeof(viftable));
 	numvifs = 0;
 
 	/*
@@ -248,7 +248,7 @@ ip_mrouter_done()
 	for (i = 0; i < MRTHASHSIZ; i++)
 		if (mrttable[i])
 			free(mrttable[i], M_MRTABLE);
-	bzero((caddr_t)mrttable, sizeof(mrttable));
+	memset((caddr_t)mrttable, 0, sizeof(mrttable));
 	cached_mrt = NULL;
 
 	ip_mrouter = NULL;
@@ -347,7 +347,7 @@ del_vif(vifip)
 		(*ifp->if_ioctl)(ifp, SIOCDELMULTI, (caddr_t)&ifr);
 	}
 
-	bzero((caddr_t)vifp, sizeof (*vifp));
+	memset((caddr_t)vifp, 0, sizeof (*vifp));
 
 	/* Adjust numvifs down */
 	for (i = numvifs - 1; i >= 0; i--)
@@ -395,9 +395,8 @@ add_lgrp(gcp)
 			return (ENOBUFS);
 		}
 
-		bzero((caddr_t)ip, num * sizeof(*ip));	/* XXX paranoid */
-		bcopy((caddr_t)vifp->v_lcl_grps, (caddr_t)ip,
-		    vifp->v_lcl_grps_n * sizeof(*ip));
+		memset((caddr_t)ip, 0, num * sizeof(*ip));	/* XXX paranoid */
+		memcpy((caddr_t)ip, (caddr_t)vifp->v_lcl_grps, vifp->v_lcl_grps_n * sizeof(*ip));
 
 		vifp->v_lcl_grps_max = num;
 		if (vifp->v_lcl_grps)
@@ -444,9 +443,7 @@ del_lgrp(gcp)
 		if (same(&gcp->lgc_gaddr, &vifp->v_lcl_grps[i])) {
 			error = 0;
 			vifp->v_lcl_grps_n--;
-			bcopy((caddr_t)&vifp->v_lcl_grps[i + 1],
-			    (caddr_t)&vifp->v_lcl_grps[i],
-			    (vifp->v_lcl_grps_n - i) * sizeof(struct in_addr));
+			memcpy((caddr_t)&vifp->v_lcl_grps[i], (caddr_t)&vifp->v_lcl_grps[i + 1], (vifp->v_lcl_grps_n - i) * sizeof(struct in_addr));
 			error = 0;
 			break;
 		}

@@ -112,7 +112,7 @@ ext2_mountroot()
 		panic("ext2_mountroot: can't setup bdevvp's");
 
 	mp = bsd_malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = &ext2fs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	if (error = ext2_mountfs(rootvp, mp, p)) {
@@ -129,13 +129,12 @@ ext2_mountroot()
 	mp->mnt_vnodecovered = NULLVP;
 	ump = VFSTOUFS(mp);
 	fs = ump->um_e2fs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	memset(fs->fs_fsmnt, 0, sizeof(fs->fs_fsmnt));
 	fs->fs_fsmnt[0] = '/';
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copystr(ROOTNAME, mp->mnt_stat.f_mntfromname, MNAMELEN - 1,
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)ext2_statfs(mp, &mp->mnt_stat, p);
 	vfs_unlock(mp);
 	inittodr(fs->s_es->s_wtime);		/* this helps to set the time */
@@ -231,12 +230,11 @@ ext2_mount(mp, path, data, ndp, p)
 	ump = VFSTOUFS(mp);
 	fs = ump->um_e2fs;
 	(void) copyinstr(path, fs->fs_fsmnt, sizeof(fs->fs_fsmnt) - 1, &size);
-	bzero(fs->fs_fsmnt + size, sizeof(fs->fs_fsmnt) - size);
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memset(fs->fs_fsmnt + size, 0, sizeof(fs->fs_fsmnt) - size);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copyinstr(args.fspec, mp->mnt_stat.f_mntfromname, MNAMELEN - 1, 
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)ext2_statfs(mp, &mp->mnt_stat, p);
 	return (0);
 }
@@ -444,7 +442,7 @@ ext2_reload(mountp, cred, p)
 		return (EIO);		/* XXX needs translation */
 	}
 	fs = VFSTOUFS(mountp)->um_e2fs;
-	bcopy(bp->b_data, fs->s_es, sizeof(struct ext2_super_block));
+	memcpy(fs->s_es, bp->b_data, sizeof(struct ext2_super_block));
 
 	if(error = compute_sb_data(devvp, es, fs)) {
 		brelse(bp);
@@ -559,7 +557,7 @@ ext2_mountfs(devvp, mp, p)
 		goto out;
 	}
 	ump = bsd_malloc(sizeof *ump, M_UFSMNT, M_WAITOK);
-	bzero((caddr_t)ump, sizeof *ump);
+	memset((caddr_t)ump, 0, sizeof *ump);
 	/* I don't know whether this is the right strategy. Note that
 	   we dynamically allocate both a ext2_sb_info and a ext2_super_block
 	   while Linux keeps the super block in a locked buffer
@@ -568,7 +566,7 @@ ext2_mountfs(devvp, mp, p)
 		M_UFSMNT, M_WAITOK);
 	ump->um_e2fs->s_es = bsd_malloc(sizeof(struct ext2_super_block), 
 		M_UFSMNT, M_WAITOK);
-	bcopy(es, ump->um_e2fs->s_es, (u_int)sizeof(struct ext2_super_block));
+	memcpy(ump->um_e2fs->s_es, es, (u_int)sizeof(struct ext2_super_block));
 	if(error = compute_sb_data(devvp, ump->um_e2fs->s_es, ump->um_e2fs)) {
 		brelse(bp);
 		return error;
@@ -749,10 +747,8 @@ ext2_statfs(mp, sbp, p)
 	sbp->f_files = es->s_inodes_count; 
 	sbp->f_ffree = es->s_free_inodes_count; 
 	if (sbp != &mp->mnt_stat) {
-		bcopy((caddr_t)mp->mnt_stat.f_mntonname,
-			(caddr_t)&sbp->f_mntonname[0], MNAMELEN);
-		bcopy((caddr_t)mp->mnt_stat.f_mntfromname,
-			(caddr_t)&sbp->f_mntfromname[0], MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntonname[0], (caddr_t)mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntfromname[0], (caddr_t)mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
 	strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);
@@ -871,7 +867,7 @@ ext2_vget(mp, ino, vpp)
 	type = ump->um_devvp->v_tag == VT_MFS ? M_MFSNODE : M_FFSNODE; /* XXX */
 	MALLOC(ip, struct inode *, sizeof(struct inode), type, M_WAITOK);
 	insmntque(vp, mp);
-	bzero((caddr_t)ip, sizeof(struct inode));
+	memset((caddr_t)ip, 0, sizeof(struct inode));
 	vp->v_data = ip;
 	ip->i_vnode = vp;
 	ip->i_e2fs = fs = ump->um_e2fs;
@@ -1027,7 +1023,7 @@ ext2_sbupdate(mp, waitfor)
 printf("\nupdating superblock, waitfor=%s\n", waitfor == MNT_WAIT ? "yes":"no");
 */
 	bp = getblk(mp->um_devvp, SBLOCK, SBSIZE, 0, 0);
-	bcopy((caddr_t)es, bp->b_data, (u_int)sizeof(struct ext2_super_block));
+	memcpy(bp->b_data, (caddr_t)es, (u_int)sizeof(struct ext2_super_block));
 	if (waitfor == MNT_WAIT)
 		error = bwrite(bp);
 	else

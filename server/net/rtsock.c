@@ -85,7 +85,7 @@ route_usrreq(so, req, m, nam, control)
 	if (req == PRU_ATTACH) {
 		MALLOC(rp, struct rawcb *, sizeof(*rp), M_PCB, M_WAITOK);
 		if (so->so_pcb = (caddr_t)rp)
-			bzero(so->so_pcb, sizeof(*rp));
+			memset(so->so_pcb, 0, sizeof(*rp));
 
 	}
 	if (req == PRU_DETACH && rp) {
@@ -363,7 +363,7 @@ rt_xaddrs(cp, cplim, rtinfo)
 	register struct sockaddr *sa;
 	register int i;
 
-	bzero(rtinfo->rti_info, sizeof(rtinfo->rti_info));
+	memset(rtinfo->rti_info, 0, sizeof(rtinfo->rti_info));
 	for (i = 0; (i < RTAX_MAX) && (cp < cplim); i++) {
 		if ((rtinfo->rti_addrs & (1 << i)) == 0)
 			continue;
@@ -404,7 +404,7 @@ m_copyback(m0, off, len, cp)
 	}
 	while (len > 0) {
 		mlen = min (m->m_len - off, len);
-		bcopy(cp, off + mtod(m, caddr_t), (unsigned)mlen);
+		memcpy(off + mtod(m, cp, caddr_t), (unsigned)mlen);
 		cp += mlen;
 		len -= mlen;
 		mlen += off;
@@ -458,7 +458,7 @@ rt_msg1(type, rtinfo)
 	m->m_pkthdr.len = m->m_len = len;
 	m->m_pkthdr.rcvif = 0;
 	rtm = mtod(m, struct rt_msghdr *);
-	bzero((caddr_t)rtm, len);
+	memset((caddr_t)rtm, 0, len);
 	for (i = 0; i < RTAX_MAX; i++) {
 		if ((sa = rtinfo->rti_info[i]) == NULL)
 			continue;
@@ -514,7 +514,7 @@ again:
 		rtinfo->rti_addrs |= (1 << i);
 		dlen = ROUNDUP(sa->sa_len);
 		if (cp) {
-			bcopy((caddr_t)sa, cp, (unsigned)dlen);
+			memcpy(cp, (caddr_t)sa, (unsigned)dlen);
 			cp += dlen;
 		}
 		len += dlen;
@@ -591,7 +591,7 @@ rt_ifmsg(ifp)
 
 	if (route_cb.any_count == 0)
 		return;
-	bzero((caddr_t)&info, sizeof(info));
+	memset((caddr_t)&info, 0, sizeof(info));
 	m = rt_msg1(RTM_IFINFO, &info);
 	if (m == 0)
 		return;
@@ -627,7 +627,7 @@ rt_newaddrmsg(cmd, ifa, error, rt)
 	if (route_cb.any_count == 0)
 		return;
 	for (pass = 1; pass < 3; pass++) {
-		bzero((caddr_t)&info, sizeof(info));
+		memset((caddr_t)&info, 0, sizeof(info));
 		if ((cmd == RTM_ADD && pass == 1) ||
 		    (cmd == RTM_DELETE && pass == 2)) {
 			register struct ifa_msghdr *ifam;
@@ -681,7 +681,7 @@ sysctl_dumpentry(rn, w)
 
 	if (w->w_op == NET_RT_FLAGS && !(rt->rt_flags & w->w_arg))
 		return 0;
-	bzero((caddr_t)&info, sizeof(info));
+	memset((caddr_t)&info, 0, sizeof(info));
 	dst = rt_key(rt);
 	gate = rt->rt_gateway;
 	netmask = rt_mask(rt);
@@ -702,7 +702,7 @@ sysctl_dumpentry(rn, w)
 		else
 			w->w_where += size;
 #else
-		bcopy((caddr_t)rtm, w->w_where, size);
+		memcpy(w->w_where, (caddr_t)rtm, size);
 		w->w_where += size;
 #endif
 	}
@@ -719,7 +719,7 @@ sysctl_iflist(af, w)
 	struct	rt_addrinfo info;
 	int	len, error = 0;
 
-	bzero((caddr_t)&info, sizeof(info));
+	memset((caddr_t)&info, 0, sizeof(info));
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
 		if (w->w_arg && w->w_arg != ifp->if_index)
 			continue;
@@ -739,7 +739,7 @@ sysctl_iflist(af, w)
 			if (error = copyout((caddr_t)ifm, w->w_where, len))
 				return (error);
 #else
-			bcopy((caddr_t)ifm, w->w_where, len);
+			memcpy(w->w_where, (caddr_t)ifm, len);
 #endif
 			w->w_where += len;
 		}
@@ -762,7 +762,7 @@ sysctl_iflist(af, w)
 				if (error = copyout(w->w_tmem, w->w_where, len))
 					return (error);
 #else
-				bcopy(w->w_tmem, w->w_where, len);
+				memcpy(w->w_where, w->w_tmem, len);
 #endif
 				w->w_where += len;
 			}

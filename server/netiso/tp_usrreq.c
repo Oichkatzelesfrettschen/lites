@@ -230,16 +230,16 @@ restart:
 	/* Assuming at most one xpd tpdu is in the buffer at once */
 	while (n != MNULL) {
 		m->m_len += n->m_len;
-		bcopy(mtod(n, caddr_t), mtod(m, caddr_t), (unsigned)n->m_len);
-		m->m_data += n->m_len; /* so mtod() in bcopy() above gives right addr */
+		memcpy(caddr_t), mtod(n, mtod(m, caddr_t), (unsigned)n->m_len);
+		m->m_data += n->m_len; /* so mtod() in memcpy(m->m_len);
+		dump_mbuf(so->so_rcv.sb_mb, ) above gives right addr */
 		n = n->m_next;
 	}
 	m->m_data = m->m_dat;
 	m->m_flags |= M_EOR;
 
 	IFDEBUG(D_XPD)
-		printf("tp_rcvoob: xpdlen 0x%x\n", m->m_len);
-		dump_mbuf(so->so_rcv.sb_mb, "RCVOOB: Rcv socketbuf");
+		printf("tp_rcvoob: xpdlen 0x%x\n", "RCVOOB: Rcv socketbuf");
 		dump_mbuf(sb->sb_mb, "RCVOOB: Xrcv socketbuf");
 	ENDDEBUG
 

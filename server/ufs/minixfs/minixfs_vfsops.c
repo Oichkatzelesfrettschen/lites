@@ -120,7 +120,7 @@ minixfs_mountroot()
 		panic("minixs_mountroot: can't setup bdevvp's");
 
 	mp = bsd_malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = &minixfs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	if (error = minixfs_mountfs(rootvp, mp, p)) {
@@ -141,13 +141,12 @@ minixfs_mountroot()
 	fs 
             =
         ump->um_minixfs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	memset(fs->fs_fsmnt, 0, sizeof(fs->fs_fsmnt));
 	fs->fs_fsmnt[0] = '/';
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copystr(ROOTNAME, mp->mnt_stat.f_mntfromname, MNAMELEN - 1,
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)minixfs_statfs(mp, &mp->mnt_stat, p);
 	vfs_unlock(mp);
 	/* inittodr(fs->fs_time); XXX: we need this too */
@@ -271,7 +270,7 @@ minixfs_vget(mp, ino, vpp)
  * Dont forget, that the MINIX fs's inode size is less than
  * the inode size of the FFS/LFS!
  */
-	bzero((caddr_t)ip, sizeof(struct inode));
+	memset((caddr_t)ip, 0, sizeof(struct inode));
 	vp->v_data = ip;
 	ip->i_vnode = vp;
 	ip->i_fs = fs = ump->um_fs;
@@ -303,7 +302,7 @@ minixfs_vget(mp, ino, vpp)
 		*vpp = NULL;
 		return (error);
 	}
-	bcopy((struct minix_inode *)bp->b_data + minix_itoo(fs, ino), &ip->i_din, sizeof(struct minix_inode));
+	memcpy(ino), (struct minix_inode *)bp->b_data + minix_itoo(fs, &ip->i_din, sizeof(struct minix_inode));
 	brelse(bp);
 
 	/*
@@ -453,12 +452,11 @@ minixfs_mount(mp, path, data, ndp, p)
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
 	(void) copyinstr(path, fs->fs_fsmnt, sizeof(fs->fs_fsmnt) - 1, &size);
-	bzero(fs->fs_fsmnt + size, sizeof(fs->fs_fsmnt) - size);
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memset(fs->fs_fsmnt + size, 0, sizeof(fs->fs_fsmnt) - size);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copyinstr(args.fspec, mp->mnt_stat.f_mntfromname, MNAMELEN - 1, 
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)minixfs_statfs(mp, &mp->mnt_stat, p);
 	return (0);
 }
@@ -522,13 +520,13 @@ minixfs_mountfs(devvp, mp, p)
 		goto out;
 	}
 	ump = bsd_malloc(sizeof *ump, M_UFSMNT, M_WAITOK);
-	bzero((caddr_t)ump, sizeof *ump);
+	memset((caddr_t)ump, 0, sizeof *ump);
 	ump->um_minixfs = bsd_malloc((u_long)sizeof(*es), M_UFSMNT,
 	    M_WAITOK);
 
 	/* XXX convert es to fs */
 }
-	bcopy(bp->b_data, ump->um_fs, (u_int)(sizeof(*es /* minix_super_block */)));
+	memcpy(ump->um_fs, bp->b_data, (u_int)(sizeof(*es /* minix_super_block */)));
 	brelse(bp);
 	bp = NULL;
 	es = ump->um_fs; /*  we copied it with bcopy */
@@ -626,10 +624,8 @@ minixfs_statfs(mp, sbp, p)
 	sbp->f_files =  fs->s_ninodes - MINIX_ROOTINO; /* NEED MINIX */
 	sbp->f_ffree = 0; /* free file inodes in fs */
 	if (sbp != &mp->mnt_stat) {
-		bcopy((caddr_t)mp->mnt_stat.f_mntonname,
-			(caddr_t)&sbp->f_mntonname[0], MNAMELEN);
-		bcopy((caddr_t)mp->mnt_stat.f_mntfromname,
-			(caddr_t)&sbp->f_mntfromname[0], MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntonname[0], (caddr_t)mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntfromname[0], (caddr_t)mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
 	strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);	
 	return (0);
@@ -731,7 +727,7 @@ minixfs_sbupdate(mp, waitfor)
 	int i, size, error = 0;
 
 	bp = getblk(mp->um_devvp, MINIX_SUPER_BLOCK, MINIX_BLOCK_SIZE, 0, 0);
-	bcopy((caddr_t)fs, bp->b_data, sizeof(struct minix_super_block));
+	memcpy(bp->b_data, (caddr_t)fs, sizeof(struct minix_super_block));
 	if (waitfor == MNT_WAIT)
 		error = bwrite(bp);
 	else

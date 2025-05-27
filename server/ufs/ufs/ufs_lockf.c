@@ -631,7 +631,7 @@ lf_split(lock1, lock2)
 	 * the encompassing lock
 	 */
 	MALLOC(splitlock, struct lockf *, sizeof *splitlock, M_LOCKF, M_WAITOK);
-	bcopy((caddr_t)lock1, (caddr_t)splitlock, sizeof *splitlock);
+	memcpy((caddr_t)splitlock, (caddr_t)lock1, sizeof *splitlock);
 	splitlock->lf_start = lock2->lf_end + 1;
 	splitlock->lf_block = NOLOCKF;
 	lock1->lf_end = lock2->lf_start - 1;

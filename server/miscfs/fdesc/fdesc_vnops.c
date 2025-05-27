@@ -210,7 +210,7 @@ fdesc_lookup(ap)
 		goto bad;
 
 	case Froot:
-		if (ap->a_cnp->cn_namelen == 2 && bcmp(pname, "fd", 2) == 0) {
+		if (ap->a_cnp->cn_namelen == 2 && memcmp(pname, "fd", 2) == 0) {
 			error = fdesc_allocvp(Fdevfd, FD_DEVFD, dvp->v_mount, &fvp);
 			if (error)
 				goto bad;
@@ -220,7 +220,7 @@ fdesc_lookup(ap)
 			return (0);
 		}
 
-		if (ap->a_cnp->cn_namelen == 3 && bcmp(pname, "tty", 3) == 0) {
+		if (ap->a_cnp->cn_namelen == 3 && memcmp(pname, "tty", 3) == 0) {
 			struct vnode *ttyvp = cttyvp(p);
 			if (ttyvp == NULL) {
 				error = ENXIO;
@@ -238,17 +238,17 @@ fdesc_lookup(ap)
 		ln = 0;
 		switch (ap->a_cnp->cn_namelen) {
 		case 5:
-			if (bcmp(pname, "stdin", 5) == 0) {
+			if (memcmp(pname, "stdin", 5) == 0) {
 				ln = "fd/0";
 				fd = FD_STDIN;
 			}
 			break;
 		case 6:
-			if (bcmp(pname, "stdout", 6) == 0) {
+			if (memcmp(pname, "stdout", 6) == 0) {
 				ln = "fd/1";
 				fd = FD_STDOUT;
 			} else
-			if (bcmp(pname, "stderr", 6) == 0) {
+			if (memcmp(pname, "stderr", 6) == 0) {
 				ln = "fd/2";
 				fd = FD_STDERR;
 			}
@@ -272,7 +272,7 @@ fdesc_lookup(ap)
 		/* FALL THROUGH */
 
 	case Fdevfd:
-		if (ap->a_cnp->cn_namelen == 2 && bcmp(pname, "..", 2) == 0) {
+		if (ap->a_cnp->cn_namelen == 2 && memcmp(pname, "..", 2) == 0) {
 			error = fdesc_root(dvp->v_mount, vpp);
 			return (error);
 		}
@@ -423,7 +423,7 @@ fdesc_getattr(ap)
 	case Fdevfd:
 	case Flink:
 	case Fctty:
-		bzero((caddr_t) vap, sizeof(*vap));
+		memset((caddr_t) vap, 0, sizeof(*vap));
 		vattr_null(vap);
 		vap->va_fileid = VTOFDESC(vp)->fd_ix;
 
@@ -605,12 +605,12 @@ fdesc_readdir(ap)
 					continue;
 				break;
 			}
-			bzero((caddr_t) dp, UIO_MX);
+			memset((caddr_t) dp, 0, UIO_MX);
 			dp->d_fileno = dt->d_fileno;
 			dp->d_namlen = dt->d_namlen;
 			dp->d_type = DT_UNKNOWN;
 			dp->d_reclen = dt->d_reclen;
-			bcopy(dt->d_name, dp->d_name, dp->d_namlen+1);
+			memcpy(dp->d_name, dt->d_name, dp->d_namlen+1);
 			error = uiomove((caddr_t) dp, UIO_MX, uio);
 			if (error)
 				break;
@@ -629,7 +629,7 @@ fdesc_readdir(ap)
 			struct dirent d;
 			struct dirent *dp = &d;
 
-			bzero((caddr_t) dp, UIO_MX);
+			memset((caddr_t) dp, 0, UIO_MX);
 
 			dp->d_namlen = sprintf(dp->d_name, "%d", i);
 			dp->d_reclen = UIO_MX;

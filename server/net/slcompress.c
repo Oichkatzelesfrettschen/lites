@@ -62,8 +62,8 @@
 #define INCR(counter)
 #endif
 
-#define BCMP(p1, p2, n) bcmp((char *)(p1), (char *)(p2), (int)(n))
-#define BCOPY(p1, p2, n) bcopy((char *)(p1), (char *)(p2), (int)(n))
+#define BCMP(p1, p2, n) memcmp((char *)(p1), (char *)(p2), (int)(n))
+#define BCOPY(p1, p2, n) memcpy((char *)(p2), (char *)(p1), (int)(n))
 #ifndef KERNEL
 #define ovbcopy bcopy
 #endif
@@ -78,7 +78,7 @@ sl_compress_init(comp)
 	register u_int i;
 	register struct cstate *tstate = comp->tstate;
 
-	bzero((char *)comp, sizeof(*comp));
+	memset((char *)comp, 0, sizeof(*comp));
 	for (i = MAX_STATES - 1; i > 0; --i) {
 		tstate[i].cs_id = i;
 		tstate[i].cs_next = &tstate[i - 1];
@@ -106,7 +106,7 @@ sl_compress_setup(comp, max_state)
 
 	if ((unsigned) max_state > MAX_STATES - 1)
 		max_state = MAX_STATES - 1;
-	bzero((char *)comp, sizeof(*comp));
+	memset((char *)comp, 0, sizeof(*comp));
 	for (i = max_state; i > 0; --i) {
 		tstate[i].cs_id = i;
 		tstate[i].cs_next = &tstate[i - 1];

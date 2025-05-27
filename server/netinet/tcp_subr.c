@@ -212,7 +212,7 @@ tcp_newtcpcb(inp)
 	tp = malloc(sizeof(*tp), M_PCB, M_NOWAIT);
 	if (tp == NULL)
 		return ((struct tcpcb *)0);
-	bzero((char *) tp, sizeof(struct tcpcb));
+	memset((char *) tp, 0, sizeof(struct tcpcb));
 	tp->seg_next = tp->seg_prev = (struct tcpiphdr *)tp;
 	tp->t_maxseg = tcp_mssdflt;
 

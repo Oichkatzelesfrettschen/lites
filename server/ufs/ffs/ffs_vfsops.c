@@ -104,7 +104,7 @@ ffs_mountroot()
 		panic("ffs_mountroot: can't setup bdevvp's");
 
 	mp = bsd_malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = &ufs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	if (error = ffs_mountfs(rootvp, mp, p)) {
@@ -121,13 +121,12 @@ ffs_mountroot()
 	mp->mnt_vnodecovered = NULLVP;
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	memset(fs->fs_fsmnt, 0, sizeof(fs->fs_fsmnt));
 	fs->fs_fsmnt[0] = '/';
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copystr(ROOTNAME, mp->mnt_stat.f_mntfromname, MNAMELEN - 1,
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)ffs_statfs(mp, &mp->mnt_stat, p);
 	vfs_unlock(mp);
 	inittodr(fs->fs_time);
@@ -222,12 +221,11 @@ ffs_mount(mp, path, data, ndp, p)
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
 	(void) copyinstr(path, fs->fs_fsmnt, sizeof(fs->fs_fsmnt) - 1, &size);
-	bzero(fs->fs_fsmnt + size, sizeof(fs->fs_fsmnt) - size);
-	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
-	    MNAMELEN);
+	memset(fs->fs_fsmnt + size, 0, sizeof(fs->fs_fsmnt) - size);
+	memcpy((caddr_t)mp->mnt_stat.f_mntonname, (caddr_t)fs->fs_fsmnt, MNAMELEN);
 	(void) copyinstr(args.fspec, mp->mnt_stat.f_mntfromname, MNAMELEN - 1, 
 	    &size);
-	bzero(mp->mnt_stat.f_mntfromname + size, MNAMELEN - size);
+	memset(mp->mnt_stat.f_mntfromname + size, 0, MNAMELEN - size);
 	(void)ffs_statfs(mp, &mp->mnt_stat, p);
 	return (0);
 }
@@ -277,9 +275,8 @@ ffs_reload(mountp, cred, p)
 		return (EIO);		/* XXX needs translation */
 	}
 	fs = VFSTOUFS(mountp)->um_fs;
-	bcopy(&fs->fs_csp[0], &((struct fs *)bp->b_data)->fs_csp[0],
-	    sizeof(fs->fs_csp));
-	bcopy(bp->b_data, fs, (u_int)fs->fs_sbsize);
+	memcpy(&((struct fs *)bp->b_data)->fs_csp[0], &fs->fs_csp[0], sizeof(fs->fs_csp));
+	memcpy(fs, bp->b_data, (u_int)fs->fs_sbsize);
 	if (fs->fs_sbsize < SBSIZE)
 		bp->b_flags |= B_INVAL;
 	brelse(bp);
@@ -296,7 +293,7 @@ ffs_reload(mountp, cred, p)
 		if (error = bread(devvp, fsbtodb(fs, fs->fs_csaddr + i), size,
 		    NOCRED, &bp))
 			return (error);
-		bcopy(bp->b_data, fs->fs_csp[fragstoblks(fs, i)], (u_int)size);
+		memcpy(fs->fs_csp[fragstoblks(fs, bp->b_data, i)], (u_int)size);
 		brelse(bp);
 	}
 loop:
@@ -390,10 +387,10 @@ ffs_mountfs(devvp, mp, p)
 		goto out;
 	}
 	ump = bsd_malloc(sizeof *ump, M_UFSMNT, M_WAITOK);
-	bzero((caddr_t)ump, sizeof *ump);
+	memset((caddr_t)ump, 0, sizeof *ump);
 	ump->um_fs = bsd_malloc((u_long)fs->fs_sbsize, M_UFSMNT,
 	    M_WAITOK);
-	bcopy(bp->b_data, ump->um_fs, (u_int)fs->fs_sbsize);
+	memcpy(ump->um_fs, bp->b_data, (u_int)fs->fs_sbsize);
 	if (fs->fs_sbsize < SBSIZE)
 		bp->b_flags |= B_INVAL;
 	brelse(bp);
@@ -421,7 +418,7 @@ ffs_mountfs(devvp, mp, p)
 			bsd_free(base, M_UFSMNT);
 			goto out;
 		}
-		bcopy(bp->b_data, space, (u_int)size);
+		memcpy(space, bp->b_data, (u_int)size);
 		fs->fs_csp[fragstoblks(fs, i)] = (struct csum *)space;
 		space += size;
 		brelse(bp);
@@ -586,10 +583,8 @@ ffs_statfs(mp, sbp, p)
 	sbp->f_files =  fs->fs_ncg * fs->fs_ipg - ROOTINO;
 	sbp->f_ffree = fs->fs_cstotal.cs_nifree;
 	if (sbp != &mp->mnt_stat) {
-		bcopy((caddr_t)mp->mnt_stat.f_mntonname,
-			(caddr_t)&sbp->f_mntonname[0], MNAMELEN);
-		bcopy((caddr_t)mp->mnt_stat.f_mntfromname,
-			(caddr_t)&sbp->f_mntfromname[0], MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntonname[0], (caddr_t)mp->mnt_stat.f_mntonname, MNAMELEN);
+		memcpy((caddr_t)&sbp->f_mntfromname[0], (caddr_t)mp->mnt_stat.f_mntfromname, MNAMELEN);
 	}
 	strncpy(sbp->f_fstypename, mp->mnt_op->vfs_name, MFSNAMELEN);
 	return (0);
@@ -703,7 +698,7 @@ ffs_vget(mp, ino, vpp)
 	type = ump->um_devvp->v_tag == VT_MFS ? M_MFSNODE : M_FFSNODE; /* XXX */
 	MALLOC(ip, struct inode *, sizeof(struct inode), type, M_WAITOK);
 	insmntque(vp, mp);
-	bzero((caddr_t)ip, sizeof(struct inode));
+	memset((caddr_t)ip, 0, sizeof(struct inode));
 	vp->v_data = ip;
 	ip->i_vnode = vp;
 	ip->i_fs = fs = ump->um_fs;
@@ -843,7 +838,7 @@ ffs_sbupdate(mp, waitfor)
 	int i, size, error = 0;
 
 	bp = getblk(mp->um_devvp, SBLOCK, (int)fs->fs_sbsize, 0, 0);
-	bcopy((caddr_t)fs, bp->b_data, (u_int)fs->fs_sbsize);
+	memcpy(bp->b_data, (caddr_t)fs, (u_int)fs->fs_sbsize);
 	/* Restore compatibility to old file systems.		   XXX */
 	if (fs->fs_postblformat == FS_42POSTBLFMT)		/* XXX */
 		((struct fs *)bp->b_data)->fs_nrpos = -1;	/* XXX */
@@ -859,7 +854,7 @@ ffs_sbupdate(mp, waitfor)
 			size = (blks - i) * fs->fs_fsize;
 		bp = getblk(mp->um_devvp, fsbtodb(fs, fs->fs_csaddr + i),
 		    size, 0, 0);
-		bcopy(space, bp->b_data, (u_int)size);
+		memcpy(bp->b_data, space, (u_int)size);
 		space += size;
 		if (waitfor == MNT_WAIT)
 			error = bwrite(bp);

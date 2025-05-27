@@ -204,8 +204,7 @@ enterpgrp(p, pgid, mksess)
 			sess->s_count = 1;
 			sess->s_ttyvp = NULL;
 			sess->s_ttyp = NULL;
-			bcopy(p->p_session->s_login, sess->s_login,
-			    sizeof(sess->s_login));
+			memcpy(sess->s_login, p->p_session->s_login, sizeof(sess->s_login));
 			p->p_flag &= ~P_CONTROLT;
 			pgrp->pg_session = sess;
 #if DIAGNOSTIC

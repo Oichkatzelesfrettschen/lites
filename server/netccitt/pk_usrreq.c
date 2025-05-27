@@ -170,7 +170,7 @@ struct mbuf *control;
 	case PRU_ACCEPT: 
 		if (lcp -> lcd_craddr == NULL)
 			break;
-		bcopy ((caddr_t)lcp -> lcd_craddr, mtod (nam, caddr_t),
+		memcpy(mtod (nam, (caddr_t)lcp -> lcd_craddr, caddr_t),
 			sizeof (struct sockaddr_x25));
 		nam -> m_len = sizeof (struct sockaddr_x25);
 		if (lcp -> lcd_flags & X25_OLDSOCKADDR)
@@ -248,7 +248,7 @@ struct mbuf *control;
 		if (lcp -> lcd_ceaddr == 0)
 			return (EADDRNOTAVAIL);
 		nam -> m_len = sizeof (struct sockaddr_x25);
-		bcopy ((caddr_t)lcp -> lcd_ceaddr, mtod (nam, caddr_t),
+		memcpy(mtod (nam, (caddr_t)lcp -> lcd_ceaddr, caddr_t),
 			sizeof (struct sockaddr_x25));
 		if (lcp -> lcd_flags & X25_OLDSOCKADDR)
 			new_to_old (nam);
@@ -258,9 +258,8 @@ struct mbuf *control;
 		if (lcp -> lcd_state != DATA_TRANSFER)
 			return (ENOTCONN);
 		nam -> m_len = sizeof (struct sockaddr_x25);
-		bcopy (lcp -> lcd_craddr ? (caddr_t)lcp -> lcd_craddr :
-			(caddr_t)lcp -> lcd_ceaddr,
-			mtod (nam, caddr_t), sizeof (struct sockaddr_x25));
+		memcpy(mtod (nam, lcp -> lcd_craddr ? (caddr_t)lcp -> lcd_craddr :
+			(caddr_t)lcp -> lcd_ceaddr, caddr_t), sizeof (struct sockaddr_x25));
 		if (lcp -> lcd_flags & X25_OLDSOCKADDR)
 			new_to_old (nam);
 		break;
@@ -278,7 +277,7 @@ struct mbuf *control;
 				    (n = m_pullup (n, len)) == 0)
 					break;
 				m -> m_len = len;
-				bcopy (mtod (m, caddr_t), mtod (n, caddr_t), len);
+				memcpy(caddr_t), mtod (m, mtod (n, caddr_t), len);
 				m_freem (n);
 			}
 			break;
@@ -360,7 +359,7 @@ register struct ifnet *ifp;
 				M_IFADDR, M_WAITOK);
 			if (ia == 0)
 				return (ENOBUFS);
-			bzero ((caddr_t)ia, sizeof (*ia));
+			memset((caddr_t)ia, 0, sizeof (*ia));
 			if (ifa = ifp -> if_addrlist) {
 				for ( ; ifa -> ifa_next; ifa = ifa -> ifa_next)
 					;
@@ -470,7 +469,7 @@ register struct mbuf *m;
 
 	oldp = mtod (m, struct x25_sockaddr *);
 	newp = &new;
-	bzero ((caddr_t)newp, sizeof (*newp));
+	memset((caddr_t)newp, 0, sizeof (*newp));
 
 	newp -> x25_family = AF_CCITT;
 	newp -> x25_len = sizeof(*newp);
@@ -478,10 +477,9 @@ register struct mbuf *m;
 		| X25_MQBIT | X25_OLDSOCKADDR;
 	if (oldp -> xaddr_facilities & XS_HIPRIO)	/* Datapac specific */
 		newp -> x25_opts.op_psize = X25_PS128;
-	bcopy ((caddr_t)oldp -> xaddr_addr, newp -> x25_addr,
-	       (unsigned)min (oldp -> xaddr_len, sizeof (newp -> x25_addr) - 1));
-	if (bcmp ((caddr_t)oldp -> xaddr_proto, newp -> x25_udata, 4) != 0) {
-		bcopy ((caddr_t)oldp -> xaddr_proto, newp -> x25_udata, 4);
+	memcpy(newp -> x25_addr, (caddr_t)oldp -> xaddr_addr, (unsigned)min (oldp -> xaddr_len, sizeof (newp -> x25_addr) - 1));
+	if (memcmp((caddr_t)oldp -> xaddr_proto, newp -> x25_udata, 4) != 0) {
+		memcpy(newp -> x25_udata, (caddr_t)oldp -> xaddr_proto, 4);
 		newp -> x25_udlen = 4;
 	}
 	ocp = (caddr_t)oldp -> xaddr_userdata;
@@ -492,7 +490,7 @@ register struct mbuf *m;
 		*ncp++ = *ocp++;
 		newp -> x25_udlen++;
 	}
-	bcopy ((caddr_t)newp, mtod (m, char *), sizeof (*newp));
+	memcpy(mtod (m, (caddr_t)newp, char *), sizeof (*newp));
 	m -> m_len = sizeof (*newp);
 }
 
@@ -512,7 +510,7 @@ register struct mbuf *m;
 
 	oldp = &old;
 	newp = mtod (m, struct sockaddr_x25 *);
-	bzero ((caddr_t)oldp, sizeof (*oldp));
+	memset((caddr_t)oldp, 0, sizeof (*oldp));
 
 	oldp -> xaddr_facilities = newp -> x25_opts.op_flags & X25_REVERSE_CHARGE;
 	if (newp -> x25_opts.op_psize == X25_PS128)
@@ -524,12 +522,11 @@ register struct mbuf *m;
 		oldp -> xaddr_len++;
 	}
 
-	bcopy (newp -> x25_udata, (caddr_t)oldp -> xaddr_proto, 4);
+	memcpy((caddr_t)oldp -> xaddr_proto, newp -> x25_udata, 4);
 	if (newp -> x25_udlen > 4)
-		bcopy (newp -> x25_udata + 4, (caddr_t)oldp -> xaddr_userdata,
-			(unsigned)(newp -> x25_udlen - 4));
+		memcpy((caddr_t)oldp -> xaddr_userdata, newp -> x25_udata + 4, (unsigned)(newp -> x25_udlen - 4));
 
-	bcopy ((caddr_t)oldp, mtod (m, char *), sizeof (*oldp));
+	memcpy(mtod (m, (caddr_t)oldp, char *), sizeof (*oldp));
 	m -> m_len = sizeof (*oldp);
 }
 

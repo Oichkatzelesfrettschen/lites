@@ -369,7 +369,7 @@ gprof_start_profiling()
 	 * (c) (re)start pc sampling
 	 */
 	
-	bzero(gprof_pchist, gprof_pchist_size * sizeof(CHUNK));
+	memset(gprof_pchist, 0, gprof_pchist_size * sizeof(CHUNK));
 
 	for (i = 0; i < gprof_pchist_size; i++) {
 		carc = gprof_calls[i];
@@ -487,8 +487,7 @@ bsd_mon_dump(mach_port_t proc_port, boolean_t *intr, char **mon_data, int *mon_d
 		+ gprof_pchist_size * sizeof(CHUNK);
 
 	hist = (CHUNK *) (gh + 1);
-	bcopy((char *)gprof_pchist, (char *)hist,
-	      gprof_pchist_size * sizeof(CHUNK));
+	memcpy((char *)hist, (char *)gprof_pchist, gprof_pchist_size * sizeof(CHUNK));
 
  	hist += gprof_pchist_size;
 	{
@@ -504,7 +503,7 @@ bsd_mon_dump(mach_port_t proc_port, boolean_t *intr, char **mon_data, int *mon_d
 				 * We have to use bcopy since gc might
 				 * not be word-aligned.
 				 */
-				bcopy(ca, gc, sizeof(struct gprof_call));
+				memcpy(gc, ca, sizeof(struct gprof_call));
 				gc++;
 			}
 	}

@@ -92,7 +92,7 @@ raw_input(m0, proto, src, dst)
 		 * the comparison will fail at the first byte.
 		 */
 #define	equal(a1, a2) \
-  (bcmp((caddr_t)(a1), (caddr_t)(a2), a1->sa_len) == 0)
+  (memcmp((caddr_t)(a1), (caddr_t)(a2), a1->sa_len) == 0)
 		if (rp->rcb_laddr && !equal(rp->rcb_laddr, dst))
 			continue;
 		if (rp->rcb_faddr && !equal(rp->rcb_faddr, src))
@@ -282,7 +282,7 @@ raw_usrreq(so, req, m, nam, control)
 			break;
 		}
 		len = rp->rcb_laddr->sa_len;
-		bcopy((caddr_t)rp->rcb_laddr, mtod(nam, caddr_t), (unsigned)len);
+		memcpy(mtod(nam, (caddr_t)rp->rcb_laddr, caddr_t), (unsigned)len);
 		nam->m_len = len;
 		break;
 
@@ -292,7 +292,7 @@ raw_usrreq(so, req, m, nam, control)
 			break;
 		}
 		len = rp->rcb_faddr->sa_len;
-		bcopy((caddr_t)rp->rcb_faddr, mtod(nam, caddr_t), (unsigned)len);
+		memcpy(mtod(nam, (caddr_t)rp->rcb_faddr, caddr_t), (unsigned)len);
 		nam->m_len = len;
 		break;
 

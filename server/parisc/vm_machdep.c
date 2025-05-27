@@ -65,7 +65,7 @@ fake_bsd_u(bup, p, thread)
 	struct proc		 *p;
 	register thread_t	 thread;
 {
-	bzero((caddr_t) bup, sizeof(struct bsd_user));
+	memset((caddr_t) bup, 0, sizeof(struct bsd_user));
 	
 	bup->bsdu_pcb.pcb_pgsz = NBPG;
 
@@ -220,7 +220,7 @@ pagemove(from, to, size)
 	 */
 
 	if (dobcopy) {
-		bcopy(from, to, size);
+		memcpy(to, from, size);
 		return;
 	}
 	kr = vm_write(mach_task_self(), (vm_offset_t) to,

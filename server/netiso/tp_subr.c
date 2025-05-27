@@ -912,7 +912,7 @@ register struct tp_pcb *tpcb;
 	if (tpcb->tp_rsyq)
 		tp_rsyflush(tpcb);
 	if (rsyq = (caddr_t)malloc(maxcredit, M_PCB, M_NOWAIT))
-		bzero(rsyq, maxcredit);
+		memset(rsyq, 0, maxcredit);
 	tpcb->tp_rsyq = (struct mbuf **)rsyq;
 }
 

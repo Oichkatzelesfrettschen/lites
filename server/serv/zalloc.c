@@ -371,7 +371,7 @@ kern_return_t bsd_zone_info(
 		used = max_zones * sizeof *names;
 
 		if (used != names_size)
-			bzero((char *) (names_addr + used), names_size - used);
+			memset((char *) (names_addr + used), 0, names_size - used);
 
 		kr = vm_map_copyin(ipc_kernel_map, names_addr, names_size,
 				   TRUE, &copy);
@@ -390,7 +390,7 @@ kern_return_t bsd_zone_info(
 		used = max_zones * sizeof *info;
 
 		if (used != info_size)
-			bzero((char *) (info_addr + used), info_size - used);
+			memset((char *) (info_addr + used), 0, info_size - used);
 
 		kr = vm_map_copyin(ipc_kernel_map, info_addr, info_size,
 				   TRUE, &copy);

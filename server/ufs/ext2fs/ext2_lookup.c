@@ -100,7 +100,7 @@ ext2_dirconv2ffs( e2dir, ffsdir)
 {
 	struct dirent 	de;
 
-	bzero(&de, sizeof(struct dirent));
+	memset(&de, 0, sizeof(struct dirent));
 	de.d_fileno = e2dir->inode;
 	de.d_namlen = e2dir->name_len;
 
@@ -116,7 +116,7 @@ ext2_dirconv2ffs( e2dir, ffsdir)
 	   we think is right
 	 */
 	de.d_reclen = (de.d_namlen+8+1+3) & ~3;
-	bcopy(&de, ffsdir, de.d_reclen);
+	memcpy(ffsdir, &de, de.d_reclen);
 #endif
 
 #if 0
@@ -468,8 +468,7 @@ searchloop:
 		if (ep->inode) {
 			namlen = ep->name_len;
 			if (namlen == cnp->cn_namelen &&
-			    !bcmp(cnp->cn_nameptr, ep->name,
-				(unsigned)namlen)) {
+			    !memcmp(cnp->cn_nameptr, ep->name, (unsigned)namlen)) {
 				/*
 				 * Save directory entry's inode number and
 				 * reclen in ndp->ni_ufs area, and release
@@ -783,7 +782,7 @@ ext2_direnter(ip, dvp, cnp)
 	dp = VTOI(dvp);
 	newdir.inode = ip->i_number;
 	newdir.name_len = cnp->cn_namelen;
-	bcopy(cnp->cn_nameptr, newdir.name, (unsigned)cnp->cn_namelen + 1);
+	memcpy(newdir.name, cnp->cn_nameptr, (unsigned)cnp->cn_namelen + 1);
 	newentrysize = EXT2_DIR_REC_LEN(newdir.name_len);
 	if (dp->i_count == 0) {
 		/*
@@ -862,7 +861,7 @@ ext2_direnter(ip, dvp, cnp)
 		dsize = EXT2_DIR_REC_LEN(ep->name_len);
 		spacefree += nep->rec_len - dsize;
 		loc += nep->rec_len;
-		bcopy((caddr_t)nep, (caddr_t)ep, dsize);
+		memcpy((caddr_t)ep, (caddr_t)nep, dsize);
 	}
 	/*
 	 * Update the pointer fields in the previous entry (if any),
@@ -879,7 +878,7 @@ ext2_direnter(ip, dvp, cnp)
 		ep->rec_len = dsize;
 		ep = (struct ext2_dir_entry *)((char *)ep + dsize);
 	}
-	bcopy((caddr_t)&newdir, (caddr_t)ep, (u_int)newentrysize);
+	memcpy((caddr_t)ep, (caddr_t)&newdir, (u_int)newentrysize);
 	error = VOP_BWRITE(bp);
 	dp->i_flag |= IN_CHANGE | IN_UPDATE;
 	if (!error && dp->i_endoff && dp->i_endoff < dp->i_size)

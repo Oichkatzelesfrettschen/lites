@@ -96,7 +96,7 @@ struct socket *so;
 
 	MALLOC(lcp, struct pklcd *, sizeof (*lcp), M_PCB, M_NOWAIT);
 	if (lcp) {
-		bzero ((caddr_t)lcp, sizeof (*lcp));
+		memset((caddr_t)lcp, 0, sizeof (*lcp));
 		insque (&lcp -> lcd_q, &pklcd_q);
 		lcp -> lcd_state = READY;
 		lcp -> lcd_send = pk_output;
@@ -316,8 +316,7 @@ pk_ifwithaddr (sx)
 		for (ifa = ifp -> if_addrlist; ifa; ifa = ifa -> ifa_next)
 			if (ifa -> ifa_addr -> sa_family == AF_CCITT) {
 				ia = (struct x25_ifaddr *)ifa;
-				if (bcmp (addr, ia -> ia_xc.xc_addr.x25_addr,
-					 16) == 0)
+				if (memcmp(addr, ia -> ia_xc.xc_addr.x25_addr, 16) == 0)
 					return (ia);
 				
 			}
@@ -372,8 +371,7 @@ struct mbuf *nam;
 		register struct sockaddr_x25 *sa2 = pp -> lcd_ceaddr;
 		if ((sa2 -> x25_udlen == sa -> x25_udlen) &&
 		    (sa2 -> x25_udlen == 0 ||
-		     (bcmp (sa2 -> x25_udata, sa -> x25_udata,
-			    min (sa2 -> x25_udlen, sa -> x25_udlen)) == 0)))
+		     (memcmp(sa2 -> x25_udata, sa -> x25_udata, min (sa2 -> x25_udlen, sa -> x25_udlen)) == 0)))
 				return (EADDRINUSE);
 	}
 	lcp -> lcd_laddr = *sa;

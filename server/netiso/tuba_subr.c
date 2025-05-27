@@ -206,7 +206,7 @@ tuba_pcbconnect(inp, nam)
 	siso = isop->isop_laddr = &isop->isop_sladdr;
 	*siso = tuba_table[inp->inp_laddr.s_addr]->tc_siso;
 	siso->siso_tlen = sizeof(inp->inp_lport);
-	bcopy((caddr_t)&inp->inp_lport, TSEL(siso), sizeof(inp->inp_lport));
+	memcpy(TSEL(siso), (caddr_t)&inp->inp_lport, sizeof(inp->inp_lport));
 
 	/* hardwire in_pcbconnect() here without assigning route */
 	inp->inp_fport = sin->sin_port;
@@ -217,7 +217,7 @@ tuba_pcbconnect(inp, nam)
 	siso = mtod(nam, struct sockaddr_iso *);
 	*siso = tuba_table[inp->inp_faddr.s_addr]->tc_siso;
 	siso->siso_tlen = sizeof(inp->inp_fport);
-	bcopy((caddr_t)&inp->inp_fport, TSEL(siso), sizeof(inp->inp_fport));
+	memcpy(TSEL(siso), (caddr_t)&inp->inp_fport, sizeof(inp->inp_fport));
 
 	if ((error = iso_pcbconnect(isop, nam)) == 0)
 		tuba_refcnt(isop, 1);
@@ -303,8 +303,7 @@ tuba_tcpinput(m, src, dst)
 				return;
 			}
 		} else {
-			bcopy(mtod(m0, caddr_t) + sizeof(struct ip),
-			      mtod(m, caddr_t) + sizeof(struct ip),
+			memcpy(caddr_t) + sizeof(struct ip), mtod(m0, mtod(m, caddr_t) + sizeof(struct ip),
 			      sizeof(struct tcphdr));
 			m0->m_len -= sizeof(struct tcpiphdr);
 			m0->m_data += sizeof(struct tcpiphdr);

@@ -67,7 +67,7 @@ in_pcballoc(so, head)
 	MALLOC(inp, struct inpcb *, sizeof(*inp), M_PCB, M_WAITOK);
 	if (inp == NULL)
 		return (ENOBUFS);
-	bzero((caddr_t)inp, sizeof(*inp));
+	memset((caddr_t)inp, 0, sizeof(*inp));
 	inp->inp_head = head;
 	inp->inp_socket = so;
 	insque(inp, head);
@@ -311,7 +311,7 @@ in_setsockaddr(inp, nam)
 	
 	nam->m_len = sizeof (*sin);
 	sin = mtod(nam, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof (*sin));
+	memset((caddr_t)sin, 0, sizeof (*sin));
 	sin->sin_family = AF_INET;
 	sin->sin_len = sizeof(*sin);
 	sin->sin_port = inp->inp_lport;
@@ -327,7 +327,7 @@ in_setpeeraddr(inp, nam)
 	
 	nam->m_len = sizeof (*sin);
 	sin = mtod(nam, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof (*sin));
+	memset((caddr_t)sin, 0, sizeof (*sin));
 	sin->sin_family = AF_INET;
 	sin->sin_len = sizeof(*sin);
 	sin->sin_port = inp->inp_fport;
@@ -412,7 +412,7 @@ in_losing(inp)
 
 	if ((rt = inp->inp_route.ro_rt)) {
 		inp->inp_route.ro_rt = 0;
-		bzero((caddr_t)&info, sizeof(info));
+		memset((caddr_t)&info, 0, sizeof(info));
 		info.rti_info[RTAX_DST] =
 			(struct sockaddr *)&inp->inp_route.ro_dst;
 		info.rti_info[RTAX_GATEWAY] = rt->rt_gateway;

@@ -158,7 +158,7 @@ sonewconn1(head, connstatus)
 	MALLOC(so, struct socket *, sizeof(*so), M_SOCKET, M_DONTWAIT);
 	if (so == NULL) 
 		return ((struct socket *)0);
-	bzero((caddr_t)so, sizeof(*so));
+	memset((caddr_t)so, 0, sizeof(*so));
 	so->so_type = head->so_type;
 	so->so_options = head->so_options &~ SO_ACCEPTCONN;
 	so->so_linger = head->so_linger;
@@ -581,7 +581,7 @@ panic("sbappendaddr");
 	if (m == 0)
 		return (0);
 	m->m_len = asa->sa_len;
-	bcopy((caddr_t)asa, mtod(m, caddr_t), asa->sa_len);
+	memcpy(mtod(m, (caddr_t)asa, caddr_t), asa->sa_len);
 	if (n)
 		n->m_next = m0;		/* concatenate data to control */
 	else
@@ -653,7 +653,7 @@ sbcompress(sb, m, n)
 		if (n && (n->m_flags & (M_EXT | M_EOR)) == 0 &&
 		    (n->m_data + n->m_len + m->m_len) < &n->m_dat[MLEN] &&
 		    n->m_type == m->m_type) {
-			bcopy(mtod(m, caddr_t), mtod(n, caddr_t) + n->m_len,
+			memcpy(caddr_t), mtod(m, mtod(n, caddr_t) + n->m_len,
 			    (unsigned)m->m_len);
 			n->m_len += m->m_len;
 			sb->sb_cc += m->m_len;

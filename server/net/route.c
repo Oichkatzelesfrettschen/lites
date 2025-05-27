@@ -124,7 +124,7 @@ rtalloc1(dst, report)
 	} else {
 		rtstat.rts_unreach++;
 	miss:	if (report) {
-			bzero((caddr_t)&info, sizeof(info));
+			memset((caddr_t)&info, 0, sizeof(info));
 			info.rti_info[RTAX_DST] = dst;
 			rt_missmsg(msgtype, &info, 0, err);
 		}
@@ -202,7 +202,7 @@ rtredirect(dst, gateway, netmask, flags, src, rtp)
 	 * we have a routing loop, perhaps as a result of an interface
 	 * going down recently.
 	 */
-#define	equal(a1, a2) (bcmp((caddr_t)(a1), (caddr_t)(a2), (a1)->sa_len) == 0)
+#define	equal(a1, a2) (memcmp((caddr_t)(a1), (caddr_t)(a2), (a1)->sa_len) == 0)
 	if (!(flags & RTF_DONE) && rt &&
 	     (!equal(src, rt->rt_gateway) || rt->rt_ifa != ifa))
 		error = EINVAL;
@@ -258,7 +258,7 @@ out:
 		rtstat.rts_badredirect++;
 	else if (stat != NULL)
 		(*stat)++;
-	bzero((caddr_t)&info, sizeof(info));
+	memset((caddr_t)&info, 0, sizeof(info));
 	info.rti_info[RTAX_DST] = dst;
 	info.rti_info[RTAX_GATEWAY] = gateway;
 	info.rti_info[RTAX_NETMASK] = netmask;
@@ -473,7 +473,7 @@ rt_maskedcopy(src, dst, netmask)
 	while (cp2 < cplim)
 		*cp2++ = *cp1++ & *cp3++;
 	if (cp2 < cplim2)
-		bzero((caddr_t)cp2, (unsigned)(cplim2 - cp2));
+		memset((caddr_t)cp2, 0, (unsigned)(cplim2 - cp2));
 }
 
 /*

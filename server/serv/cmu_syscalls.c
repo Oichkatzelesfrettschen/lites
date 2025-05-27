@@ -224,13 +224,9 @@ int table(cp, args, retval)
 					 (host_info_t)&load_info,
 					 (mach_msg_type_number_t *)&count);
 			/* XXX Memory leak ? */
-			bcopy((caddr_t)load_info.avenrun,
-			      (caddr_t)&tl.tl_avenrun,
-			      sizeof(tl.tl_avenrun));
+			memcpy((caddr_t)&tl.tl_avenrun, (caddr_t)load_info.avenrun, sizeof(tl.tl_avenrun));
 			tl.tl_lscale = 1000;/*XXXXXXX*/
-			bcopy((caddr_t)load_info.mach_factor,
-			      (caddr_t)&tl.tl_mach_factor,
-			      sizeof(tl.tl_mach_factor));
+			memcpy((caddr_t)&tl.tl_mach_factor, (caddr_t)load_info.mach_factor, sizeof(tl.tl_mach_factor));
 			data = (caddr_t)&tl;
 			size = sizeof (tl);
 			break;
@@ -411,10 +407,10 @@ int table(cp, args, retval)
 			    && (error = suser(cp->p_ucred, &cp->p_acflag)))
 				return (error);
 			if (p == (struct proc *)0) {
-			    bzero((caddr_t)&tp, sizeof(tp));
+			    memset((caddr_t)&tp, 0, sizeof(tp));
 			    tp.pi_status = PI_EMPTY;
 			} else if ((p->p_stat == 0) || (p->p_stat == SIDL)) {
-			    bzero((caddr_t)&tp, sizeof(tp));
+			    memset((caddr_t)&tp, 0, sizeof(tp));
 			    tp.pi_status = PI_EMPTY;
 			} else {
 			    mutex_lock(&p->p_lock);
@@ -466,7 +462,7 @@ int table(cp, args, retval)
                                         tp.pi_tpgrp = 0;
                                     }
                                 }
-				bcopy(p->p_comm, tp.pi_comm, PI_COMLEN);
+				memcpy(tp.pi_comm, p->p_comm, PI_COMLEN);
 				tp.pi_comm[PI_COMLEN] = '\0';
 
 				if (p->p_flag & P_WEXIT)
@@ -540,7 +536,7 @@ int table(cp, args, retval)
 
 			        error = copyin(uap->addr, buff, size);
 				if (error == 0)
-					bcopy(buff, data, size);
+					memcpy(data, buff, size);
 			}
 			else {
 				error = copyout(data, uap->addr, size);

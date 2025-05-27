@@ -145,7 +145,7 @@ tape_open(dev_t dev, int flag, int devtype, struct proc *p)
   
   if (TAPE_REWINDS(dev)) {
     struct tape_status ts;
-    bzero(&ts, sizeof(ts));
+    memset(&ts, 0, sizeof(ts));
     ts.flags = TAPE_FLG_REWIND;
     (void) device_set_status(device_port,
 			     TAPE_STATUS,

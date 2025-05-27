@@ -713,7 +713,7 @@ nfs_doio(bp, cr, p)
 				+ diff);
 			if (len > 0) {
 			    len = min(len, uiop->uio_resid);
-			    bzero((char *)bp->b_data + diff, len);
+			    memset((char *)bp->b_data + diff, 0, len);
 			    bp->b_validend = diff + len;
 			} else
 			    bp->b_validend = diff;

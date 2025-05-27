@@ -136,7 +136,7 @@ icmp_error(n, type, code, dest, destifp)
 	}
 
 	icp->icmp_code = code;
-	bcopy((caddr_t)oip, (caddr_t)&icp->icmp_ip, icmplen);
+	memcpy((caddr_t)&icp->icmp_ip, (caddr_t)oip, icmplen);
 	nip = &icp->icmp_ip;
 	nip->ip_len = htons((u_short)(nip->ip_len + oiplen));
 
@@ -151,7 +151,7 @@ icmp_error(n, type, code, dest, destifp)
 	m->m_pkthdr.len = m->m_len;
 	m->m_pkthdr.rcvif = n->m_pkthdr.rcvif;
 	nip = mtod(m, struct ip *);
-	bcopy((caddr_t)oip, (caddr_t)nip, sizeof(struct ip));
+	memcpy((caddr_t)nip, (caddr_t)oip, sizeof(struct ip));
 	nip->ip_len = m->m_len;
 	nip->ip_hl = sizeof(struct ip) >> 2;
 	nip->ip_p = IPPROTO_ICMP;
@@ -490,8 +490,7 @@ icmp_reflect(m)
 			     */
 			    if (opt == IPOPT_RR || opt == IPOPT_TS || 
 				opt == IPOPT_SECURITY) {
-				    bcopy((caddr_t)cp,
-					mtod(opts, caddr_t) + opts->m_len, len);
+				    memcpy(mtod(opts, (caddr_t)cp, caddr_t) + opts->m_len, len);
 				    opts->m_len += len;
 			    }
 		    }
@@ -518,8 +517,7 @@ icmp_reflect(m)
 		if (m->m_flags & M_PKTHDR)
 			m->m_pkthdr.len -= optlen;
 		optlen += sizeof(struct ip);
-		bcopy((caddr_t)ip + optlen, (caddr_t)(ip + 1),
-			 (unsigned)(m->m_len - sizeof(struct ip)));
+		memcpy((caddr_t)(ip + 1), (caddr_t)ip + optlen, (unsigned)(m->m_len - sizeof(struct ip)));
 	}
 	m->m_flags &= ~(M_BCAST|M_MCAST);
 	icmp_send(m, opts);

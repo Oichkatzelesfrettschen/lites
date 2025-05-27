@@ -135,7 +135,7 @@ mount(p, uap, retval)
 	 */
 	mp = (struct mount *)malloc((u_long)sizeof(struct mount),
 		M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	memset((char *)mp, 0, (u_long)sizeof(struct mount));
 	mp->mnt_op = vfssw[uap->type];
 	if (error = vfs_lock(mp)) {
 		free((caddr_t)mp, M_MOUNT);
@@ -1728,8 +1728,7 @@ rename(p, uap, retval)
 	 */
 	if (fvp == tvp && fromnd.ni_dvp == tdvp &&
 	    fromnd.ni_cnd.cn_namelen == tond.ni_cnd.cn_namelen &&
-	    !bcmp(fromnd.ni_cnd.cn_nameptr, tond.ni_cnd.cn_nameptr,
-	      fromnd.ni_cnd.cn_namelen))
+	    !memcmp(fromnd.ni_cnd.cn_nameptr, tond.ni_cnd.cn_nameptr, fromnd.ni_cnd.cn_namelen))
 		error = -1;
 out:
 	if (!error) {

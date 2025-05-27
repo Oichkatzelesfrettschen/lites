@@ -118,7 +118,7 @@
 			  (struct pkcb *) NULL) : \
 			 (struct pkcb *)((rt)->rt_llinfo))
 
-#define equal(a1, a2) (bcmp((caddr_t)(a1), \
+#define equal(a1, a2) (memcmp((caddr_t)(a1), \
 			       (caddr_t)(a2), \
 			       (a1)->sa_len) == 0)
 #define XIFA(rt) ((struct x25_ifaddr *)((rt)->rt_ifa))
@@ -292,8 +292,7 @@ npaidb_enter(struct sockaddr_dl *key, struct sockaddr *value,
 		 * are zeroed out.
 		 */
 		npdl_netmask.sdl_data[saploc] = NPDL_SAPNETMASK;
-		bzero((caddr_t)&npdl_netmask.sdl_data[saploc+1], 
-		      npdl_datasize-saploc-1);
+		memset((caddr_t)&npdl_netmask.sdl_data[saploc+1], 0, npdl_datasize-saploc-1);
 
 		if (value == 0)
 			value = &npdl_dummy;
@@ -308,7 +307,7 @@ npaidb_enter(struct sockaddr_dl *key, struct sockaddr *value,
 
 		nprt->rt_llinfo = malloc(size , M_PCB, M_WAITOK);
 		if (nprt->rt_llinfo) {
-			bzero (nprt->rt_llinfo, size);
+			memset(nprt->rt_llinfo, 0, size);
 			((struct npaidbentry *) (nprt->rt_llinfo))->np_rt = rt;
 		}
 	} else nprt->rt_refcnt--;

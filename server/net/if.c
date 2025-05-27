@@ -115,7 +115,7 @@ if_attach(ifp)
 		struct ifaddr **q = (struct ifaddr **)
 					bsd_malloc(n, M_IFADDR, M_WAITOK);
 		if (ifnet_addrs) {
-			bcopy((caddr_t)ifnet_addrs, (caddr_t)q, n/2);
+			memcpy((caddr_t)q, (caddr_t)ifnet_addrs, n/2);
 			bsd_free((caddr_t)ifnet_addrs, M_IFADDR);
 		}
 		ifnet_addrs = q;
@@ -136,12 +136,12 @@ if_attach(ifp)
 		socksize = sizeof(*sdl);
 	ifasize = sizeof(*ifa) + 2 * socksize;
 	if (ifa = (struct ifaddr *)bsd_malloc(ifasize, M_IFADDR, M_WAITOK)) {
-		bzero((caddr_t)ifa, ifasize);
+		memset((caddr_t)ifa, 0, ifasize);
 		sdl = (struct sockaddr_dl *)(ifa + 1);
 		sdl->sdl_len = socksize;
 		sdl->sdl_family = AF_LINK;
-		bcopy(ifp->if_name, sdl->sdl_data, namelen);
-		bcopy(unitname, namelen + (caddr_t)sdl->sdl_data, unitlen);
+		memcpy(sdl->sdl_data, ifp->if_name, namelen);
+		memcpy(namelen + (caddr_t)sdl->sdl_data, unitname, unitlen);
 		sdl->sdl_nlen = (namelen += unitlen);
 		sdl->sdl_index = ifp->if_index;
 		sdl->sdl_type = ifp->if_type;
@@ -173,7 +173,7 @@ ifa_ifwithaddr(addr)
 	register struct ifaddr *ifa;
 
 #define	equal(a1, a2) \
-  (bcmp((caddr_t)(a1), (caddr_t)(a2), ((struct sockaddr *)(a1))->sa_len) == 0)
+  (memcmp((caddr_t)(a1), (caddr_t)(a2), ((struct sockaddr *)(a1))->sa_len) == 0)
 	for (ifp = ifnet; ifp; ifp = ifp->if_next)
 	    for (ifa = ifp->if_addrlist; ifa; ifa = ifa->ifa_next) {
 		if (ifa->ifa_addr->sa_family != addr->sa_family)
@@ -444,7 +444,7 @@ ifunit(name)
 		unit = unit * 10 + *cp++ - '0';
 	*ep = 0;
 	for (ifp = ifnet; ifp; ifp = ifp->if_next) {
-		if (bcmp(ifp->if_name, name, len))
+		if (memcmp(ifp->if_name, name, len))
 			continue;
 		if (unit == ifp->if_unit)
 			break;
@@ -642,7 +642,7 @@ ifconf(cmd, data)
 			continue;
 		*cp++ = '0' + ifp->if_unit; *cp = '\0';
 		if ((ifa = ifp->if_addrlist) == 0) {
-			bzero((caddr_t)&ifr.ifr_addr, sizeof(ifr.ifr_addr));
+			memset((caddr_t)&ifr.ifr_addr, 0, sizeof(ifr.ifr_addr));
 			error = copyout((caddr_t)&ifr, (caddr_t)ifrp,
 			    sizeof (ifr));
 			if (error)

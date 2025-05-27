@@ -114,7 +114,7 @@ static struct sockaddr_iso
 static struct sockaddr_dl blank_dl = {sizeof(blank_dl), AF_LINK};
 static struct sockaddr_dl gte_dl;
 #define zap_linkaddr(a, b, c, i) \
-	(*a = blank_dl, bcopy(b, a->sdl_data, a->sdl_alen = c), a->sdl_index = i)
+	(*a = blank_dl, memcpy(a->sdl_data, b, a->sdl_alen = c), a->sdl_index = i)
 
 /*
  *	We only keep track of a single IS at a time.
@@ -208,8 +208,7 @@ struct sockaddr *sa;
 		insque(lc, &llinfo_llc);
 		if (gate->sdl.sdl_alen == sizeof(struct esis_req) + addrlen) {
 			gate->sdl.sdl_alen -= sizeof(struct esis_req);
-			bcopy(addrlen + LLADDR(&gate->sdl),
-				  (caddr_t)&lc->lc_er, sizeof(lc->lc_er));
+			memcpy((caddr_t)&lc->lc_er, addrlen + LLADDR(&gate->sdl), sizeof(lc->lc_er));
 		} else if (gate->sdl.sdl_alen == addrlen)
 			lc->lc_flags = (SNPA_ES | SNPA_VALID | SNPA_PERM);
 		break;
@@ -245,9 +244,9 @@ iso_setmcasts(ifp, req)
 	register caddr_t *cpp;
 	int		doreset = 0;
 
-	bzero((caddr_t)&ifr, sizeof(ifr));
+	memset((caddr_t)&ifr, 0, sizeof(ifr));
 	for (cpp = (caddr_t *)addrlist; *cpp; cpp++) {
-		bcopy(*cpp, (caddr_t)ifr.ifr_addr.sa_data, 6);
+		memcpy((caddr_t)ifr.ifr_addr.sa_data, *cpp, 6);
 		if (req == RTM_ADD)
 			if (ether_addmulti(&ifr, (struct arpcom *)ifp) == ENETRESET)
 				doreset++;
@@ -332,7 +331,7 @@ int		*snpa_len;			/* RESULT: length of snpa */
 		found_snpa = (caddr_t)all_es_snpa;
 	} else
 		return (ENETUNREACH);
-	bcopy(found_snpa, snpa, *snpa_len = addrlen);
+	memcpy(snpa, found_snpa, *snpa_len = addrlen);
 	return (0);
 }
 
@@ -627,9 +626,9 @@ caddr_t	snpa;
 u_int	len;
 {
 	return (((iso_systype & SNPA_ES) &&
-			 (!bcmp(snpa, (caddr_t)all_es_snpa, len))) ||
+			 (!memcmp(snpa, (caddr_t)all_es_snpa, len))) ||
 			((iso_systype & SNPA_IS) &&
-			 (!bcmp(snpa, (caddr_t)all_is_snpa, len))));
+			 (!memcmp(snpa, (caddr_t)all_is_snpa, len))));
 }
 
 /*

@@ -206,7 +206,7 @@ ffs_realloccg(ip, lbprev, bpref, osize, nsize, cred, bpp)
 		ip->i_flag |= IN_CHANGE | IN_UPDATE;
 		allocbuf(bp, nsize);
 		bp->b_flags |= B_DONE;
-		bzero((char *)bp->b_data + osize, (u_int)nsize - osize);
+		memset((char *)bp->b_data + osize, 0, (u_int)nsize - osize);
 		*bpp = bp;
 		return (0);
 	}
@@ -272,7 +272,7 @@ ffs_realloccg(ip, lbprev, bpref, osize, nsize, cred, bpp)
 		ip->i_flag |= IN_CHANGE | IN_UPDATE;
 		allocbuf(bp, nsize);
 		bp->b_flags |= B_DONE;
-		bzero((char *)bp->b_data + osize, (u_int)nsize - osize);
+		memset((char *)bp->b_data + osize, 0, (u_int)nsize - osize);
 		*bpp = bp;
 		return (0);
 	}

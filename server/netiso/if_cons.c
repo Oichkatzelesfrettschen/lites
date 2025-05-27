@@ -573,8 +573,7 @@ make_partial_x25_packet(isop, lcp)
 			/*
 			 *	The user specified something. Stick it in
 			 */
-			bcopy(isop->isop_x25crud, lcp->lcd_faddr.x25_udata,
-					isop->isop_x25crud_len);
+			memcpy(lcp->lcd_faddr.x25_udata, isop->isop_x25crud, isop->isop_x25crud_len);
 			lcp->lcd_faddr.x25_udlen = isop->isop_x25crud_len;
 		}
 	}
@@ -608,7 +607,7 @@ make_partial_x25_packet(isop, lcp)
 				 * high two bits of which indicate full/partial NSAP
 				 */
 		len = isop->isop_laddr->siso_addr.isoa_len;
-		bcopy( isop->isop_laddr->siso_data, ptr, len);
+		memcpy(ptr, isop->isop_laddr->siso_data, len);
 		*(ptr-2) = len+1; /* facil param len in octets */
 		*(ptr-1) = len<<1; /* facil param len in nibbles */
 		ptr += len;
@@ -624,7 +623,7 @@ make_partial_x25_packet(isop, lcp)
 				 * high two bits of which indicate full/partial NSAP
 				 */
 		len = isop->isop_faddr->siso_nlen;
-		bcopy(isop->isop_faddr->siso_data, ptr, len);
+		memcpy(ptr, isop->isop_faddr->siso_data, len);
 		*(ptr-2) = len+1; /* facil param len = addr len + 1 for each of these
 						  * two length fields, in octets */
 		*(ptr-1) = len<<1; /* facil param len in nibbles */
@@ -722,8 +721,7 @@ NSAPtoDTE(siso, sx25)
 		struct sockaddr_iso nsiso;
 
 		nsiso = blank_siso;
-		bcopy(nsiso.siso_data, siso->siso_data,
-				nsiso.siso_nlen = siso->siso_nlen);
+		memcpy(siso->siso_data, nsiso.siso_data, nsiso.siso_nlen = siso->siso_nlen);
 		if (rt = rtalloc1(&nsiso, 1)) {
 			register struct sockaddr_x25 *sxx =
 							(struct sockaddr_x25 *)rt->rt_gateway;
@@ -731,7 +729,7 @@ NSAPtoDTE(siso, sx25)
 
 			rt->rt_use--;
 			if (sxx && sxx->x25_family == AF_CCITT) {
-				bcopy(sx25->x25_addr, sxx->x25_addr, sizeof(sx25->x25_addr));
+				memcpy(sxx->x25_addr, sx25->x25_addr, sizeof(sx25->x25_addr));
 				while (*in++) {}
 				dtelen = in - sxx->x25_addr;
 			}
@@ -771,14 +769,14 @@ FACILtoNSAP(addr, buf)
 	switch (*buf++ & 0xc0) {
 	case 0:
 		/* Entire OSI NSAP address */
-		bcopy((caddr_t)buf, addr->siso_data, addr->siso_nlen = buf_len);
+		memcpy(addr->siso_data, (caddr_t)buf, addr->siso_nlen = buf_len);
 		break;
 
 	case 40:
 		/* Partial OSI NSAP address, assume trailing */
 		if (buf_len + addr->siso_nlen > sizeof(addr->siso_addr))
 			return -1;
-		bcopy((caddr_t)buf, TSEL(addr), buf_len);
+		memcpy(TSEL(addr), (caddr_t)buf, buf_len);
 		addr->siso_nlen += buf_len;
 		break;
 

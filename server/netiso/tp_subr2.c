@@ -328,8 +328,8 @@ void
 tp_recycle_tsuffix(tpcb)
 	struct tp_pcb	*tpcb;
 {
-	bzero((caddr_t)tpcb->tp_lsuffix, sizeof( tpcb->tp_lsuffix));
-	bzero((caddr_t)tpcb->tp_fsuffix, sizeof( tpcb->tp_fsuffix));
+	memset((caddr_t)tpcb->tp_lsuffix, 0, sizeof( tpcb->tp_lsuffix));
+	memset((caddr_t)tpcb->tp_fsuffix, 0, sizeof( tpcb->tp_fsuffix));
 	tpcb->tp_fsuffixlen = tpcb->tp_lsuffixlen = 0;
 
 	(tpcb->tp_nlproto->nlp_recycle_suffix)(tpcb->tp_npcb);
@@ -475,7 +475,7 @@ copyQOSparms(src, dst)
 	/* copy all but the bits stuff at the end */
 #define COPYSIZE (12 * sizeof(short))
 
-	bcopy((caddr_t)src, (caddr_t)dst, COPYSIZE);
+	memcpy((caddr_t)dst, (caddr_t)src, COPYSIZE);
 	dst->p_tpdusize = src->p_tpdusize;
 	dst->p_ack_strat = src->p_ack_strat;
 	dst->p_rx_strat = src->p_rx_strat;
@@ -812,7 +812,7 @@ tp_setup_perf(tpcb)
 		q->m_len = sizeof (struct tp_pmeas);
 		tpcb->tp_p_mbuf = q;
 		tpcb->tp_p_meas = mtod(q, struct tp_pmeas *);
-		bzero( (caddr_t)tpcb->tp_p_meas, sizeof (struct tp_pmeas) );
+		memset((caddr_t)tpcb->tp_p_meas, 0, sizeof (struct tp_pmeas) );
 		IFDEBUG(D_PERF_MEAS)
 			printf(
 			"tpcb 0x%x so 0x%x ref 0x%x tp_p_meas 0x%x tp_perf_on 0x%x\n", 

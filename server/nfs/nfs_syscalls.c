@@ -124,7 +124,7 @@ getfh(p, uap, retval)
 	if (error = namei(&nd))
 		return (error);
 	vp = nd.ni_vp;
-	bzero((caddr_t)&fh, sizeof(fh));
+	memset((caddr_t)&fh, 0, sizeof(fh));
 	fh.fh_fsid = vp->v_mount->mnt_stat.f_fsid;
 	error = VFS_VPTOFH(vp, &fh.fh_fid);
 	vput(vp);
@@ -344,7 +344,7 @@ nfssvc_addsock(fp, mynam)
 	else {
 		slp = (struct nfssvc_sock *)
 			malloc(sizeof (struct nfssvc_sock), M_NFSSVC, M_WAITOK);
-		bzero((caddr_t)slp, sizeof (struct nfssvc_sock));
+		memset((caddr_t)slp, 0, sizeof (struct nfssvc_sock));
 		slp->ns_prev = nfssvc_sockhead.ns_prev;
 		slp->ns_prev->ns_next = slp;
 		slp->ns_next = &nfssvc_sockhead;
@@ -390,7 +390,7 @@ nfssvc_nfsd(nsd, argp, p)
 	if (nd == (struct nfsd *)0) {
 		nsd->nsd_nfsd = nd = (struct nfsd *)
 			malloc(sizeof (struct nfsd), M_NFSD, M_WAITOK);
-		bzero((caddr_t)nd, sizeof (struct nfsd));
+		memset((caddr_t)nd, 0, sizeof (struct nfsd));
 		nd->nd_procp = p;
 		nd->nd_cr.cr_ref = 1;
 		insque(nd, &nfsd_head);
@@ -817,10 +817,10 @@ nfsrv_init(terminating)
 	}
 	nfs_udpsock = (struct nfssvc_sock *)
 	    malloc(sizeof (struct nfssvc_sock), M_NFSSVC, M_WAITOK);
-	bzero((caddr_t)nfs_udpsock, sizeof (struct nfssvc_sock));
+	memset((caddr_t)nfs_udpsock, 0, sizeof (struct nfssvc_sock));
 	nfs_cltpsock = (struct nfssvc_sock *)
 	    malloc(sizeof (struct nfssvc_sock), M_NFSSVC, M_WAITOK);
-	bzero((caddr_t)nfs_cltpsock, sizeof (struct nfssvc_sock));
+	memset((caddr_t)nfs_cltpsock, 0, sizeof (struct nfssvc_sock));
 	nfssvc_sockhead.ns_next = nfs_udpsock;
 	nfs_udpsock->ns_next = nfs_cltpsock;
 	nfs_cltpsock->ns_next = &nfssvc_sockhead;
