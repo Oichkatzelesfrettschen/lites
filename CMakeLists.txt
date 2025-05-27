@@ -95,7 +95,12 @@ else()
     set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3")
 endif()
 set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
-set(LITES_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "Consolidated header directory")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/flattened/include")
+    set(_default_include "${CMAKE_CURRENT_SOURCE_DIR}/flattened/include")
+else()
+    set(_default_include "${CMAKE_CURRENT_SOURCE_DIR}/include")
+endif()
+set(LITES_INCLUDE_DIR "${_default_include}" CACHE PATH "Consolidated header directory")
 
 # Ensure an include/machine symlink exists before collecting sources.
 if(EXISTS "${LITES_INCLUDE_DIR}")
