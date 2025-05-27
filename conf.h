@@ -3,10 +3,12 @@
  * into major (driver designation) and
  * minor (driver parameter) parts.
  */
-struct
-{
-	char	d_minor;
-	char	d_major;
+#ifndef _CONF_H_
+#define _CONF_H_
+
+struct {
+    char d_minor;
+    char d_major;
 };
 
 /*
@@ -18,12 +20,11 @@ struct
  * device switches is in the
  * file conf.c.
  */
-struct	bdevsw
-{
-	int	(*d_open)();
-	int	(*d_close)();
-	int	(*d_strategy)();
-	int	*d_tab;
+struct bdevsw {
+    int (*d_open)();
+    int (*d_close)();
+    int (*d_strategy)();
+    int *d_tab;
 } bdevsw[];
 
 /*
@@ -34,22 +35,22 @@ struct	bdevsw
  * Used in bounds checking on major
  * device numbers.
  */
-int	nblkdev;
+int nblkdev;
 
 /*
  * Character device switch.
  */
-struct	cdevsw
-{
-	int	(*d_open)();
-	int	(*d_close)();
-	int	(*d_read)();
-	int	(*d_write)();
-	int	(*d_sgtty)();
+struct cdevsw {
+    int (*d_open)();
+    int (*d_close)();
+    int (*d_read)();
+    int (*d_write)();
+    int (*d_sgtty)();
 } cdevsw[];
 
 /*
  * Number of character switch entries.
  * Set by cinit/tty.c
  */
-int	nchrdev;
+int nchrdev;
+#endif /* _CONF_H_ */
