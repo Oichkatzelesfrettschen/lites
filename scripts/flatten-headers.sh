@@ -18,7 +18,10 @@ copy_header() {
         enc="${rel//\//_}"
         target="$DEST/$enc"
     fi
-    cp "$src" "$target"
+    if [ ! -e "$src" ]; then
+        return 0
+    fi
+    cp "$src" "$target" || true
 }
 
 if [ -f "$ROOT/headers_inventory.csv" ]; then
