@@ -13,10 +13,14 @@ This document summarises the major phases of the modernisation effort. Each sect
 ## Dependency Graph Construction
 - Build a high-level graph showing which subsystems rely on others.
 - Use the graph to prioritise independent tasks and uncover hidden ties.
+- `scripts/include_graph.sh` generates a simple include dependency map
+  for the modernisation effort.
 
 ## Strategic Flattening
 - Consolidate duplicated headers and utilities across releases.
 - Prepare a single directory structure that new components can target.
+- `scripts/flatten_tree.sh` collects exokernel, microkernel and libOS
+  files into a temporary tree for analysis.
 
 ## Header Dependency Resolution
 - Remove obsolete include guards and outdated macros.
