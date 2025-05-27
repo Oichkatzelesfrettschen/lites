@@ -132,9 +132,10 @@ if(EXISTS "${LITES_SRC_DIR}")
     endforeach()
     file(GLOB _kern_src "${CMAKE_CURRENT_SOURCE_DIR}/kern/*.c")
     file(GLOB _posix_src "${CMAKE_CURRENT_SOURCE_DIR}/posix/*.c")
+    file(GLOB _libos_src "${CMAKE_CURRENT_SOURCE_DIR}/libos/*.c")
     list(APPEND SERVER_SRC ${_kern_src} ${_posix_src})
     file(GLOB _iommu_src "${LITES_SRC_DIR}/iommu/*.c")
-    list(APPEND SERVER_SRC ${_iommu_src})
+    list(APPEND SERVER_SRC ${_iommu_src} ${_libos_src})
 
     if(BISON_FOUND)
         file(GLOB_RECURSE _y_src
@@ -165,7 +166,8 @@ if(EXISTS "${LITES_SRC_DIR}")
             file(GLOB_RECURSE _dir_src "${dir}/*.c" "${dir}/*.S")
             list(APPEND EMULATOR_SRC ${_dir_src})
         endforeach()
-        list(APPEND EMULATOR_SRC ${_kern_src} ${_iommu_src} ${_posix_src})
+        list(APPEND EMULATOR_SRC ${_kern_src} ${_iommu_src} ${_posix_src}
+                                ${_libos_src})
         if(BISON_FOUND)
             foreach(yfile ${_y_src})
                 get_filename_component(_y_name "${yfile}" NAME_WE)
@@ -179,6 +181,7 @@ if(EXISTS "${LITES_SRC_DIR}")
         "${LITES_SRC_DIR}/include"
         "${LITES_SRC_DIR}/server"
         "${LITES_SRC_DIR}/iommu"
+        "${LITES_SRC_DIR}/libos"
         "${MACH_INCLUDE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/kern"
         "${CMAKE_CURRENT_SOURCE_DIR}/posix"
@@ -214,6 +217,7 @@ if(EXISTS "${LITES_SRC_DIR}")
         target_include_directories(lites_emulator PRIVATE
             "${LITES_SRC_DIR}/include"
             "${LITES_SRC_DIR}/emulator"
+            "${LITES_SRC_DIR}/libos"
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
             "${CMAKE_CURRENT_SOURCE_DIR}/posix"
