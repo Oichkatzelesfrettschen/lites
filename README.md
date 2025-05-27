@@ -42,6 +42,17 @@ The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
 detail.
 
+## Directory layout
+
+The modern tree keeps historical and new code in clearly separated
+subdirectories.
+
+- `legacy_bsd/` holds an import of the original 4.4BSD userland sources
+  used as a reference by the build system.
+- `libos/` provides common runtime helpers.  It now contains a unified
+  virtual memory layer implemented in `vm.c` and `vm.h` that is shared by
+  the server and unit tests.
+
 ## Mach kernel headers
 
 Lites relies on headers from a Mach kernel source tree such as the
