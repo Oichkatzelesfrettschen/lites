@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DEST="$ROOT/flattened_include"
+DEST="$ROOT/include"
 
 mkdir -p "$DEST"
 

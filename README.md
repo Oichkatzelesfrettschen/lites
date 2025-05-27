@@ -90,7 +90,7 @@ cmake --build build
 ```
 ## Header inventory
 
-Use `scripts/flatten-headers.sh` to gather all header files from across the repository. The script copies each header into the `flattened_include/` directory and automatically renames duplicates by embedding the original path in the filename.
+Use `scripts/flatten-headers.sh` to gather all header files from across the repository. The script now copies each header into the `include/` directory and automatically renames duplicates by embedding the original path in the filename.
 
 ## Building
 
