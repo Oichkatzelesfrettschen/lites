@@ -45,3 +45,7 @@ This document summarises the major phases of the modernisation effort. Each sect
 - Establish automated tests covering POSIX layers and kernel interfaces.
 - Integrate static checks and runtime tests to validate modernised modules.
 
+- Unit tests under `tests/unit/` will focus on isolated kernel and library routines.
+- Integration suites in `tests/integration/` will exercise interactions between subsystems.
+- Existing examples such as `tests/vm_fault` provide guidance for harness setup.
+
