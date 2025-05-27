@@ -14,3 +14,5 @@ The `docs/` directory contains notes and background information for the project.
 - **technical_notes.md** - Additional technical notes and links to the 'Unix Under Mach' thesis.
 - **INTEGRATION_PLAN.md** - Plan for Eigen, MLP and Cap'n Proto integration.
 - **RESTRUCTURE_PLAN.md** - Proposal for reorganising the repository layout.
+- **RESTRUCTURE_LAYOUT.md** - Details the new `core/`, `drivers/` and `libs/`
+  directories along with testing instructions.
