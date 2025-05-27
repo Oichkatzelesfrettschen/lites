@@ -654,9 +654,9 @@ struct sockaddr_ns *sns;
 		return (mybuf);
 	}
 
-	if (bcmp(ns_bh, work.x_host.c_host, 6) == 0) { 
+        if (memcmp(ns_bh, work.x_host.c_host, 6) == 0) {
 		host = "any";
-	} else if (bcmp(ns_nullh, work.x_host.c_host, 6) == 0) {
+        } else if (memcmp(ns_nullh, work.x_host.c_host, 6) == 0) {
 		host = "*";
 	} else {
 		q = work.x_host.c_host;

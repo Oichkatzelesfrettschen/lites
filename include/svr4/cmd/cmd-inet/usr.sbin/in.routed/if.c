@@ -50,7 +50,7 @@ if_ifwithaddr(addr)
 	register struct interface *ifp;
 
 #define	same(a1, a2) \
-	(bcmp((caddr_t)((a1)->sa_data), (caddr_t)((a2)->sa_data), 14) == 0)
+	(memcmp((caddr_t)((a1)->sa_data), (caddr_t)((a2)->sa_data), 14) == 0)
 	for (ifp = ifnet; ifp; ifp = ifp->int_next) {
 		if (ifp->int_flags & IFF_REMOTE)
 			continue;

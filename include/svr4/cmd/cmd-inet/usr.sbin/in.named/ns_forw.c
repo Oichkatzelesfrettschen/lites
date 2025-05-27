@@ -96,12 +96,12 @@ ns_forw(nsp, msg, msglen, fp, qsp, dfd, qpp)
 	hp->rd = 0;
 	/* Look at them all */
 	for (qp = qhead; qp!=QINFO_NULL; qp = qp->q_link) {
-		if (qp->q_id == id &&
-		    bcmp((char *)&qp->q_from, fp, sizeof(qp->q_from)) == 0 &&
-		    (qp->q_cmsglen == 0 && qp->q_msglen == msglen &&
-		     bcmp((char *)qp->q_msg+2, msg+2, msglen-2) == 0) ||
-		    (qp->q_cmsglen == msglen &&
-		     bcmp((char *)qp->q_cmsg+2, msg+2, msglen-2) == 0)) {
+                if (qp->q_id == id &&
+                    memcmp((char *)&qp->q_from, fp, sizeof(qp->q_from)) == 0 &&
+                    (qp->q_cmsglen == 0 && qp->q_msglen == msglen &&
+                     memcmp((char *)qp->q_msg+2, msg+2, msglen-2) == 0) ||
+                    (qp->q_cmsglen == msglen &&
+                     memcmp((char *)qp->q_cmsg+2, msg+2, msglen-2) == 0)) {
 #ifdef DEBUG
 			if (debug >= 3)
 				fprintf(ddt,"forw: dropped DUP id=%d\n", ntohs(id));
@@ -255,9 +255,9 @@ fprintf(ddt, "skipping used NS w/name %s\n", nsdp->d_data);
 			found_arr++;
 			/* don't put in duplicates */
 			qs = qp->q_addr;
-			for (i = 0; i < n; i++, qs++)
-				if (bcmp((char *)&qs->ns_addr.sin_addr,
-				    dp->d_data, sizeof(struct in_addr)) == 0)
+                        for (i = 0; i < n; i++, qs++)
+                                if (memcmp((char *)&qs->ns_addr.sin_addr,
+                                    dp->d_data, sizeof(struct in_addr)) == 0)
 					goto skipaddr;
 			qs->ns_addr.sin_family = AF_INET;
 			qs->ns_addr.sin_port = (u_short)ns_port;

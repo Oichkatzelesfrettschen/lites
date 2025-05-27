@@ -621,7 +621,7 @@ cap_open_read(const char *name)
 
 	/* Check if new snoop capture file format */
 
-	cap_new = bcmp(cap_buffp, snoop_id, snoop_idlen) == 0;
+        cap_new = memcmp(cap_buffp, snoop_id, snoop_idlen) == 0;
 
 	/*
 	 * If new file - check version and

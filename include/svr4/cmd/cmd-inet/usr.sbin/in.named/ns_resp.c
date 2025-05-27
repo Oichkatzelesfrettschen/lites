@@ -160,9 +160,9 @@ ns_resp(msg, msglen)
 	if (qp->q_fwd == (struct fwdinfo *)0) {
 		struct timeval *stp;
 
-		for (n = 0, qs = qp->q_addr; n < qp->q_naddr; n++, qs++)
-			if (bcmp((char *)&qs->ns_addr.sin_addr,
-			    &from_addr.sin_addr, sizeof(struct in_addr)) == 0)
+                for (n = 0, qs = qp->q_addr; n < qp->q_naddr; n++, qs++)
+                        if (memcmp((char *)&qs->ns_addr.sin_addr,
+                            &from_addr.sin_addr, sizeof(struct in_addr)) == 0)
 				break;
 		if (n >= qp->q_naddr) {
 #ifdef DEBUG
@@ -1186,8 +1186,8 @@ sysquery(dname, class, type)
 
 	/* First check for an already pending query for this data */
 	for (oqp = qhead; oqp!=QINFO_NULL; oqp = oqp->q_link) {
-		if (oqp != qp && oqp->q_msglen == qp->q_msglen &&
-	     bcmp((char *)oqp->q_msg+2, qp->q_msg+2, qp->q_msglen-2) == 0) {
+                if (oqp != qp && oqp->q_msglen == qp->q_msglen &&
+             memcmp((char *)oqp->q_msg+2, qp->q_msg+2, qp->q_msglen-2) == 0) {
 #ifdef DEBUG
 			if (debug >= 3)
 				fprintf(ddt, "sysquery: duplicate\n");

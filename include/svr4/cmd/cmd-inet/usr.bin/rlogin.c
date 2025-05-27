@@ -546,7 +546,7 @@ sigwinch()
 	struct winsize ws;
 
 	if (dosigwinch && ioctl(0, TIOCGWINSZ, &ws) == 0 &&
-	    bcmp(&ws, &winsize, sizeof (ws))) {
+            memcmp(&ws, &winsize, sizeof (ws))) {
 		winsize = ws;
 		sendwindow();
 	}

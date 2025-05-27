@@ -134,7 +134,7 @@ mapVarBind ( table, ext, len, intern )
     prev_elem = elem_posn;
     while (elem_posn != 0) {
 	o_ext = elem_posn->externalid;
-	if (!bcmp(o_ext, (char *)ext, len)) {
+        if (memcmp(o_ext, (char *)ext, len) == 0) {
 	    if (elem_posn->internalid == intern) {
 		return(elem_posn);
 	    } else {
@@ -178,7 +178,7 @@ mapVarResolve ( table, ext, len, resPtr )
     
     if ((elem_posn = table->cache) && elem_posn->elmlen == len) {
 	o_ext = elem_posn->externalid;
-	if (!bcmp(o_ext, (char *)ext, len)) {
+        if (memcmp(o_ext, (char *)ext, len) == 0) {
 	    if ( resPtr ) {
 		*resPtr = elem_posn->internalid;
 	    }
@@ -188,8 +188,8 @@ mapVarResolve ( table, ext, len, resPtr )
     elem_posn = table->table[generichash(ext, table->tableSize, len)];
     while (elem_posn != 0) {
 	o_ext = elem_posn->externalid;
-	if (elem_posn->elmlen == len &&
-	    !bcmp(o_ext, (char *)ext, len)) {
+        if (elem_posn->elmlen == len &&
+            memcmp(o_ext, (char *)ext, len) == 0) {
 	    table->cache = elem_posn;
 	    if ( resPtr ) {
 		*resPtr = elem_posn->internalid;
@@ -311,7 +311,7 @@ static INLINE int	hash16( void *, int );
 #endif /* __STDC__ */
 
 
-#define GENCOMPBYTES(s1, s2) (!bcmp(s1, s2, table->keySize))
+#define GENCOMPBYTES(s1, s2) (memcmp(s1, s2, table->keySize) == 0)
 #define GENCOPYBYTES(s1, s2) bcopy(s2, s1, table->keySize)
 
 #define KEYSIZE 2
@@ -626,7 +626,7 @@ generichash(key, tableSize, keySize)
 #define UNBINDNAME mgenericunbind
 #define HASH(K, tblSize, keySize) generichash(K, tblSize, keySize)
 #define GENHASH(K, T, keySize) generichash(K, tblSize, keySize)
-#define COMPBYTES(s1, s2) (!bcmp(s1, s2, table->keySize))
+#define COMPBYTES(s1, s2) (memcmp(s1, s2, table->keySize) == 0)
 #define COPYBYTES(s1, s2) bcopy(s2, s1, table->keySize)
 
 #include "idmap_templ.c"

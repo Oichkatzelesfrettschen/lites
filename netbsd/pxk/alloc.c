@@ -214,8 +214,8 @@ dumpBlocks( ev, arg )
 	xIfTrace(malloc, verboseDump) {	
 	    displayLine(lblocks, i);
 	}
-	if ( ! b || bcmp((char *)(b + MALLOC_EXTRAS), (char *)last,
-			 MALLOC_NPCS * sizeof(long)) ) {
+        if ( ! b || memcmp((char *)(b + MALLOC_EXTRAS), (char *)last,
+                           MALLOC_NPCS * sizeof(long)) != 0 ) {
 	    /* 
 	     * Found a different block
 	     */

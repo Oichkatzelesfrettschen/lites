@@ -253,8 +253,8 @@ doit(f, fromp)
 		}
 #ifdef h_addr	/* 4.2 hack */
 		for (; hp->h_addr_list[0]; hp->h_addr_list++) {
-			if (!bcmp(hp->h_addr_list[0], (caddr_t)&fromp->sin_addr,
-			    sizeof(fromp->sin_addr)))
+                        if (memcmp(hp->h_addr_list[0], (caddr_t)&fromp->sin_addr,
+                            sizeof(fromp->sin_addr)) == 0)
 				break;
 			if (hp->h_addr_list[0] == NULL) {
 				syslog(LOG_NOTICE,
@@ -266,8 +266,8 @@ doit(f, fromp)
 			}
 		}
 #else
-		if (bcmp(hp->h_addr, (caddr_t)&fromp->sin_addr,
-			sizeof(fromp->sin_addr))) {
+                if (memcmp(hp->h_addr, (caddr_t)&fromp->sin_addr,
+                        sizeof(fromp->sin_addr)) != 0) {
 			syslog(LOG_NOTICE,
 			  "rlogind: Host addr %s not listed for host %s",
 			    inet_ntoa(fromp->sin_addr),
