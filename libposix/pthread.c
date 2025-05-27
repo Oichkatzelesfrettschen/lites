@@ -1,3 +1,4 @@
+/* See LICENSE_MAP for license and origin information */
 #include "pthread.h"
 #include <mach/cthreads.h>
 
