@@ -10,11 +10,11 @@ ifndef LITES_SRC_DIR
 $(error LITES_SRC_DIR must be set)
 endif
 SRC_DIR := $(LITES_SRC_DIR)
-IOMMU_SRC := $(SRC_DIR)/iommu/iommu.c
+IOMMU_SRC := $(SRC_DIR)/../drivers/iommu/iommu.c
 ifneq ($(wildcard $(IOMMU_SRC)),)
 IOMMU_PATH := $(IOMMU_SRC)
 else
-IOMMU_PATH := ../../iommu/iommu.c
+IOMMU_PATH := ../../drivers/iommu/iommu.c
 endif
 
 test_iommu: test_iommu.c $(IOMMU_PATH)

@@ -20,7 +20,7 @@ target_compile_options(test_audit PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 
 add_executable(test_iommu
     iommu/test_iommu.c
-    ${_src_dir}/iommu/iommu.c)
+    ${CMAKE_CURRENT_SOURCE_DIR}/../drivers/iommu/iommu.c)
 target_compile_options(test_iommu PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 
 add_executable(test_vm_fault

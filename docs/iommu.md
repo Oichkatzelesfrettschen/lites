@@ -1,6 +1,6 @@
 # IOMMU helpers
 
-A minimal IOMMU abstraction lives in `iommu/` within the source tree.
+A minimal IOMMU abstraction lives in `drivers/iommu/` within the source tree.
 
 ```c
 struct iommu_dom {
