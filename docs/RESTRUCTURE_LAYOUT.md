@@ -1,4 +1,4 @@
-# New Source Layout
+# Final Source Layout
 
 This note expands upon the repository restructure plan. The goal is to split the tree into clearer components so that kernels, device drivers and libraries can evolve independently.
 
@@ -11,9 +11,14 @@ libs/       - user space libraries used by servers and tests
 servers/    - POSIX and capability-aware services
 third_party/ - external dependencies kept in-tree
 cmake/      - common build system logic
+util/       - small command line utilities
+examples/   - demonstration programs
+Historical Archives/ - preserved snapshots and tarballs
 ```
 
-Other existing directories such as `tests/` and `docs/` remain at the top level. Historical archives will move under `Historical Archives/`.
+Other existing directories such as `tests/` and `docs/` remain at the top level.
+The legacy release trees once stored at the repository root have been moved
+into `Historical Archives/`.
 
 ## Header organisation
 
@@ -40,3 +45,17 @@ cmake --build build --target test
 ```
 
 Running the above commands should build all tests under `tests/` against the new layout. Ensure the `core`, `drivers` and `libs` directories are listed in the include paths when invoking the compiler.
+
+### Follow-up tasks
+
+After relocating the files perform a clean rebuild to regenerate any cached
+objects and configuration:
+
+```sh
+rm -rf build
+cmake -B build
+cmake --build build
+```
+
+Check that utilities in `util/` and the programs under `examples/` still compile
+successfully.
