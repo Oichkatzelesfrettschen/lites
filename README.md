@@ -45,7 +45,8 @@ servers and tests live under `libs/` and the POSIX and capability aware
 services themselves in `servers/`.  Small command line utilities have been
 gathered in `util/` and demonstration programs live in `examples/`.  External
 code that needs to remain in-tree is stored in `third_party/`.  Older release
-snapshots can be found in the top level `Historical Archives/` directory.
+snapshots and archived build files (such as `makefile.legacy`) are located in
+the top level `Historical Archives/` directory.
 Public headers now live in `include/` while kernel-only headers remain in
 `core/include/`.
 

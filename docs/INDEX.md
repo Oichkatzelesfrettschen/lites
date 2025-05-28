@@ -16,8 +16,8 @@ The `docs/` directory contains notes and background information for the project.
 - **RESTRUCTURE_PLAN.md** - Proposal for reorganising the repository layout.
 - **RESTRUCTURE_LAYOUT.md** - Details the final directory scheme and testing
   instructions.
-- **Historical Archives/** - Preserved snapshots and tarballs from earlier
-  releases.
+- **Historical Archives/** - Preserved snapshots, old build files such as
+  `makefile.legacy`, and tarballs from earlier releases.
 - **examples/** - Demonstration programs grouped by topic (`ipc/`, `posix/`,
   `security/`).
 - **util/** - Small command line utilities and helper tools.
