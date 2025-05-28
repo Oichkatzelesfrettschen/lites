@@ -1,5 +1,5 @@
-#ifndef IOMMU_H
-#define IOMMU_H
+#ifndef IOMMU_V2_H
+#define IOMMU_V2_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -31,4 +31,4 @@ int iommu_unmap(struct iommu_dom *, uintptr_t iova, size_t len);
 int iommu_bulk_map(struct iommu_dom *, const uintptr_t *iovas, const uintptr_t *pas,
                    const size_t *lens, const uint32_t *perms, size_t count);
 
-#endif /* IOMMU_H */
+#endif /* IOMMU_V2_H */
