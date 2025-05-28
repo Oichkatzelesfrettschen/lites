@@ -15,7 +15,8 @@ util/       - small command line utilities
 examples/   - demonstration programs
 Historical Archives/ - preserved snapshots and tarballs
 ```
-The directory is now named `mach_kernel`. Kernel headers such as `spinlock.h` now reside in `core/include/`.
+The directory is now named `mach_kernel`. Kernel headers such as `spinlock.h` remain in `core/include/` while
+public headers are provided under `include/`.
 
 Other existing directories such as `tests/` and `docs/` remain at the top level.
 The legacy release trees once stored at the repository root have been moved
@@ -23,7 +24,7 @@ into `Historical Archives/`.
 
 ## Header organisation
 
-Public headers will live directly under `include/`. Kernel-only headers move to `core/include` while driver specific headers stay with their respective driver directories. Library headers reside in `libs/<name>/include`.
+Public headers reside directly under `include/`. Kernel-only headers stay in `core/include` and driver specific headers remain next to their driver sources. Libraries may keep local headers, but those intended for broad use have been moved under `include/`.
 
 Build scripts will be updated so that these include paths are automatically added when compiling each component.
 

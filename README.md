@@ -46,7 +46,8 @@ services themselves in `servers/`.  Small command line utilities have been
 gathered in `util/` and demonstration programs live in `examples/`.  External
 code that needs to remain in-tree is stored in `third_party/`.  Older release
 snapshots can be found in the top level `Historical Archives/` directory.
-Core-specific headers now reside in `core/include/`.
+Public headers now live in `include/` while kernel-only headers remain in
+`core/include/`.
 
 
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
