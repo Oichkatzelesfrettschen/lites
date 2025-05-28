@@ -5,5 +5,5 @@ add_library(posix_helpers STATIC
     ipc.c
 )
 
-target_include_directories(posix_helpers PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(posix_helpers PUBLIC ${CMAKE_SOURCE_DIR}/include)
 

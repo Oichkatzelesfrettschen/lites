@@ -112,7 +112,7 @@ KERN_SRC := $(wildcard kern/*.c) $(wildcard $(SRCDIR)/../drivers/iommu/*.c) \
             $(wildcard $(SRCDIR)/libos/*.c)
 POSIX_SRC := $(wildcard posix/*.c)
 KERN_SRC += $(POSIX_SRC)
-KERN_INCDIRS := -Ikern -I$(SRCDIR)/../drivers/iommu -Iposix -I$(SRCDIR)/libos
+KERN_INCDIRS := -Iinclude -Ikern -I$(SRCDIR)/../drivers/iommu -Iposix -I$(SRCDIR)/libos
 
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
