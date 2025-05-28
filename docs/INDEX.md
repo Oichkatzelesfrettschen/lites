@@ -16,3 +16,5 @@ The `docs/` directory contains notes and background information for the project.
 - **RESTRUCTURE_PLAN.md** - Proposal for reorganising the repository layout.
 - **RESTRUCTURE_LAYOUT.md** - Details the new `core/`, `drivers/` and `libs/`
   directories along with testing instructions.
+- **examples/** - Collection of small demonstration programs grouped by topic
+  (`ipc/`, `posix/`, `security/`).
