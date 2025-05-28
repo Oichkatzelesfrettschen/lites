@@ -49,7 +49,7 @@ Future steps:
 ## Phase IV – Inter‑Process Communication
 
 `docs/IPC.md` describes a mailbox mechanism and capability backed POSIX
-IPC wrappers.  The implementation lives in [`ipc.c`](../ipc.c) and
+IPC wrappers.  The implementation lives in [`examples/ipc/ipc.c`](../examples/ipc/ipc.c) and
 corresponding headers under `include/`.
 Planned improvements include:
 

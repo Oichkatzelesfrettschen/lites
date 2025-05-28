@@ -10,6 +10,6 @@ if lites_src_dir == ''
 endif
 inc = include_directories('.', join_paths(lites_src_dir, 'include'), 'libs/ddekit')
 executable('ipc-demo',
-           ['ipc.c', 'bin/ipc-demo.c', 'libos/vm.c'],
+           ['examples/ipc/ipc.c', 'examples/ipc/ipc-demo.c', 'libos/vm.c'],
            include_directories : inc,
            dependencies : rt)

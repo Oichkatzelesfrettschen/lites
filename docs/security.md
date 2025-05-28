@@ -33,7 +33,7 @@ placeholder for a real secure enclave backend.
 
 ## Command-line utilities
 
-Two small utilities under `bin/` demonstrate the APIs:
+Two small utilities under `examples/security/` demonstrate the APIs:
 
 - `keystore-demo` generates a key, encrypts a message and then decrypts it again.
 - `enclave-demo` creates a dummy enclave and performs an attestation step.
@@ -42,6 +42,6 @@ They can be compiled manually, for example:
 
 ```sh
 # link with -lcrypto when OpenSSL is available
-cc -I "$LITES_SRC_DIR/include" crypto/keystore.c bin/keystore-demo.c -o keystore-demo -lcrypto
-cc -I "$LITES_SRC_DIR/include" "$LITES_SRC_DIR/liblites/enclave.c" bin/enclave-demo.c -o enclave-demo
+cc -I "$LITES_SRC_DIR/include" crypto/keystore.c examples/security/keystore-demo.c -o keystore-demo -lcrypto
+cc -I "$LITES_SRC_DIR/include" "$LITES_SRC_DIR/liblites/enclave.c" examples/security/enclave-demo.c -o enclave-demo
 ```

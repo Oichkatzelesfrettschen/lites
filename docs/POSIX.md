@@ -51,5 +51,5 @@ Compile manually with:
 
 ```sh
 cc -I "$LITES_SRC_DIR/include" \
-    "$LITES_SRC_DIR/liblites/posix_wrap.c" bin/posix-demo.c -o posix-demo
+    "$LITES_SRC_DIR/liblites/posix_wrap.c" examples/posix/posix-demo.c -o posix-demo
 ```
