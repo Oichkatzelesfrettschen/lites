@@ -37,6 +37,16 @@ links that are still reachable, mostly via the Internet Archive.
 
 For an overview of the available releases and a script that can generate diff patches between them, see [docs/HISTORY.md](docs/HISTORY.md).
 
+## Directory layout
+
+The repository now follows a simplified hierarchy.  Core kernel code lives in
+`core/` while hardware drivers reside in `drivers/`.  Libraries shared by the
+servers and tests live under `libs/` and the POSIX and capability aware
+services themselves in `servers/`.  Small command line utilities have been
+gathered in `util/` and demonstration programs live in `examples/`.  External
+code that needs to remain in-tree is stored in `third_party/`.  Older release
+snapshots can be found in the top level `Historical Archives/` directory.
+
 
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
