@@ -1,5 +1,5 @@
 /* See LICENSE_MAP for license and origin information */
-#include "../include/posix.h"
+#include "posix.h"
 #include <errno.h>
 #include <stdarg.h>
 #include <stdlib.h>

@@ -39,7 +39,7 @@ the pager interface used by the tests.
 
 A basic run queue and MCS lock based scheduler are provided in
 `kern/sched.c`.  POSIX process helpers (`posix_spawn`, `posix_waitpid`)
-are implemented in [`posix.c`](../posix.c).
+are implemented in [`spawn.c`](../libs/libposix/spawn.c).
 Future steps:
 
 * Expand the scheduler to support multiple cores and preemption.
@@ -49,7 +49,7 @@ Future steps:
 ## Phase IV – Inter‑Process Communication
 
 `docs/IPC.md` describes a mailbox mechanism and capability backed POSIX
-IPC wrappers.  The implementation lives in [`examples/ipc/ipc.c`](../examples/ipc/ipc.c) and
+IPC wrappers.  The implementation lives in [`libs/libposix/ipc.c`](../libs/libposix/ipc.c) and
 corresponding headers under `include/`.
 Planned improvements include:
 

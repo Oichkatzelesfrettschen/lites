@@ -1,4 +1,4 @@
-#include "../../include/posix.h"
+#include "posix.h"
 #include <assert.h>
 #include <sys/wait.h>
 #include <unistd.h>

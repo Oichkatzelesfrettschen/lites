@@ -1,4 +1,4 @@
-#include "../../include/posix.h"
+#include "posix.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
