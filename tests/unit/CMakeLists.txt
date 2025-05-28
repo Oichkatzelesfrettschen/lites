@@ -24,9 +24,8 @@ add_executable(test_iommu
 target_compile_options(test_iommu PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 
 add_executable(test_pipe
-    pipe/test_pipe.c
-    ../../posix.c)
-target_include_directories(test_pipe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+    pipe/test_pipe.c)
+target_link_libraries(test_pipe PRIVATE posix_helpers)
 target_compile_options(test_pipe PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 
 # The posix_wrap tests depend on full Mach headers which are
