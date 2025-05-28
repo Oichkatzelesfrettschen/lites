@@ -71,7 +71,7 @@ When neither `LITES_MACH_DIR` nor an `openmach` directory are available, run
 `scripts/import-mach-headers.sh` to populate `localmach/include` from either a
 checked out OpenMach tree or the xkernel sources bundled with this repository.
 
-Example using the makefile:
+Example using `Makefile.new`:
 
 ```sh
 git submodule add <mach-repo-url> openmach  # once
@@ -119,7 +119,7 @@ Set `SANITIZE=1` to compile with address sanitizer support, which appends
 Examples:
 
 ```sh
-# Using the makefile
+# Using Makefile.new
 make -f Makefile.new ARCH=i686
 make -f Makefile.new ARCH=x86_64
 make -f Makefile.new ARCH=arm
