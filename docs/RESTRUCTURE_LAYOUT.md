@@ -15,7 +15,7 @@ util/       - small command line utilities
 examples/   - demonstration programs
 Historical Archives/ - preserved snapshots and tarballs
 ```
-The directory previously named "Mach Kernel" has been renamed to `mach_kernel`. Kernel headers such as `spinlock.h` now reside in `core/include/`.
+The directory is now named `mach_kernel`. Kernel headers such as `spinlock.h` now reside in `core/include/`.
 
 Other existing directories such as `tests/` and `docs/` remain at the top level.
 The legacy release trees once stored at the repository root have been moved
