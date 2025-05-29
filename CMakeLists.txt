@@ -259,6 +259,22 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/libposix")
     add_subdirectory(libs/libposix)
 endif()
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/ddekit")
+    add_subdirectory(libs/ddekit)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/libcrypto")
+    add_subdirectory(libs/libcrypto)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/liblites")
+    add_subdirectory(libs/liblites)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/libos")
+    add_subdirectory(libs/libos)
+endif()
+
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
     add_subdirectory(tests)
 endif()
