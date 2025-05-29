@@ -3,7 +3,7 @@
 #include "../../include/auth.h"
 #include "../../include/audit.h"
 #include "../../include/id128.h"
-#include "cap.h"
+#include "posix_ipc.h"
 
 int main(void)
 {
