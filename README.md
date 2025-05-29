@@ -102,8 +102,7 @@ version and build it inside the resulting directory.  For example:
 ```sh
 tar -xzf lites-1.1.u3.tar.gz
 cd lites-1.1.u3
-./conf/configure    # or use the ./configure symlink
-make
+make -f Makefile.new    # or run cmake -B build && cmake --build build
 ```
 
 For the modernized build system in this repository you can also use
