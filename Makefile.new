@@ -11,6 +11,10 @@ MACHDIR ?= $(LITES_MACH_DIR)
 ifeq ($(MACHDIR),)
 ifneq ($(wildcard openmach/include),)
 MACHDIR := openmach
+else
+ifneq ($(wildcard core/mach_kernel/include),)
+MACHDIR := core/mach_kernel
+endif
 endif
 endif
 
