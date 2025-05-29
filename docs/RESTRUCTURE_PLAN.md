@@ -9,7 +9,7 @@ maintain.
 - Separate kernel, user space servers and libraries into clear top level
   directories.
 - Move historical snapshots and old build scripts (e.g. `makefile.legacy`)
-  under `Historical Archives/`.
+  under `archives/`.
 - Provide a common `third_party/` directory for external projects.
 - Consolidate build scripts under a single `cmake/` hierarchy.
 - Collect small utilities in `util/` and place example programs in

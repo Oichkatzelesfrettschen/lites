@@ -46,7 +46,7 @@ services themselves in `servers/`.  Small command line utilities have been
 gathered in `util/` and demonstration programs live in `examples/`.  External
 code that needs to remain in-tree is stored in `third_party/`.  Older release
 snapshots and archived build files (such as `makefile.legacy`) are located in
-the top level `Historical Archives/` directory.
+the top level `archives/` directory.
 Public headers now live in `include/` while kernel-only headers remain in
 `core/include/`.
 

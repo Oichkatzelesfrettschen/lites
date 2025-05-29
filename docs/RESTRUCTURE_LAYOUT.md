@@ -13,7 +13,7 @@ third_party/ - external dependencies kept in-tree
 cmake/      - common build system logic
 util/       - small command line utilities
 examples/   - demonstration programs
-Historical Archives/ - preserved snapshots, tarballs and legacy build files
+archives/ - preserved snapshots, tarballs and legacy build files
   such as `makefile.legacy`
 ```
 The directory is now named `mach_kernel`. Kernel headers such as `spinlock.h` remain in `core/include/` while
@@ -21,7 +21,7 @@ public headers are provided under `include/`.
 
 Other existing directories such as `tests/` and `docs/` remain at the top level.
 The legacy release trees once stored at the repository root have been moved
-into `Historical Archives/` along with old build scripts such as
+into `archives/` along with old build scripts such as
 `makefile.legacy`.
 
 ## Header organisation
