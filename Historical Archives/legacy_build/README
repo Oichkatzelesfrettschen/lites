@@ -1,0 +1,4 @@
+This directory preserves legacy build scripts and makefiles
+from the original Lites project. These files were part of the
+old gmake-based build system and are kept here for historical
+reference only.
