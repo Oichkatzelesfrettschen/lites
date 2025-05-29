@@ -17,7 +17,7 @@ else
 VM_PATH := ../../libos/vm.c
 endif
 
-test_vm_fault: test_vm_fault.c $(VM_PATH) ../../posix.c
+test_vm_fault: test_vm_fault.c $(VM_PATH) ../../libs/libposix/posix.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
