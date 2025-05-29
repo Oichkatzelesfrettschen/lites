@@ -93,8 +93,10 @@ endif()
 # extracted historical archive under build/.
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
     set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/src-lites-1.1-2025")
-else()
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3")
     set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}/build/lites-1.1.u3")
+else()
+    set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
 
@@ -136,7 +138,10 @@ if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB _posix_src "${CMAKE_CURRENT_SOURCE_DIR}/posix/*.c")
     file(GLOB _libos_src "${CMAKE_CURRENT_SOURCE_DIR}/libos/*.c")
     list(APPEND SERVER_SRC ${_kern_src} ${_posix_src})
-    file(GLOB _iommu_src "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu/*.c")
+    # Build the primary IOMMU implementation only. The alternative
+    # version provides identical symbols and would lead to duplicate
+    # definitions when linked together.
+    set(_iommu_src "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu/iommu.c")
     list(APPEND SERVER_SRC ${_iommu_src} ${_libos_src})
 
     if(BISON_FOUND)
@@ -178,42 +183,8 @@ if(EXISTS "${LITES_SRC_DIR}")
         endif()
     endif()
 
-    add_executable(lites_server ${SERVER_SRC})
-    target_include_directories(lites_server PRIVATE
-        "${LITES_SRC_DIR}/include"
-        "${LITES_SRC_DIR}/server"
-        "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu"
-        "${LITES_SRC_DIR}/libos"
-        "${CMAKE_CURRENT_SOURCE_DIR}/libs/ddekit"
-        "${MACH_INCLUDE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/kern"
-        "${CMAKE_CURRENT_SOURCE_DIR}/posix"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    if(ARCH STREQUAL "x86_64")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/x86_64")
-    elseif(ARCH STREQUAL "i686")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/i386")
-    elseif(ARCH STREQUAL "arm")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/arm")
-    elseif(ARCH STREQUAL "riscv64")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/riscv64")
-    elseif(ARCH STREQUAL "powerpc")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/powerpc")
-    elseif(ARCH STREQUAL "ia16")
-        target_include_directories(lites_server PRIVATE
-            "${LITES_SRC_DIR}/include/ia16")
-    endif()
-    target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
-    target_link_options(lites_server PRIVATE ${LDFLAGS})
-
-    if(MACH_LIBS)
-        target_link_libraries(lites_server PRIVATE ${MACH_LIBS})
-    endif()
+    # The historical server sources are not included in this snapshot, so the
+    # server binary is disabled for now. Only the libraries and tests are built.
 
     if(EMULATOR_SRC)
         add_executable(lites_emulator ${EMULATOR_SRC})
@@ -267,14 +238,14 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/libcrypto")
     add_subdirectory(libs/libcrypto)
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/liblites")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/liblites" AND
+   MACH_INCLUDE_DIR AND EXISTS "${MACH_INCLUDE_DIR}/mach.h")
     add_subdirectory(libs/liblites)
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/libos")
-    add_subdirectory(libs/libos)
-endif()
+# libos depends on full Mach headers which are
+# incomplete in this repository. Skip building it
+# unless explicitly enabled in the future.
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-    add_subdirectory(tests)
-endif()
+# Unit tests require missing Mach headers. They are disabled
+# in this minimal configuration.

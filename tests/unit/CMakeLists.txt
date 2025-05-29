@@ -1,20 +1,20 @@
 set(_src_dir "${LITES_SRC_DIR}")
-if(NOT EXISTS "${_src_dir}/server/kern/cap.c")
+if(NOT EXISTS "${_src_dir}/servers/posix/core/cap.c")
     set(_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 endif()
 
 add_executable(test_cap
     cap/test_cap.c
-    ${_src_dir}/server/kern/cap.c
-    ../../kern/auth.c
-    ../../kern/audit.c)
+    ${_src_dir}/servers/posix/core/cap.c
+    ../../core/auth.c
+    ../../core/audit.c)
 target_include_directories(test_cap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 target_compile_options(test_cap PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 
 add_executable(test_audit
     audit/test_audit.c
-    ../../kern/auth.c
-    ../../kern/audit.c)
+    ../../core/auth.c
+    ../../core/audit.c)
 target_include_directories(test_audit PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 target_compile_options(test_audit PRIVATE -std=gnu2x -Wall -Wextra -Werror)
 

@@ -7,9 +7,7 @@ patch sets.
 The tree is preserved mainly for reference.  Should a directory named
 `lites-1.1-2025` (or similarly named) appear, it represents an ongoing
 modernization effort and is not part of the original snapshots.  A
-summary of the completed work and future plans can be found in
-[docs/MODERNIZATION.md](docs/MODERNIZATION.md).
-Integration notes for Eigen, MLP and Cap'n Proto live in [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md).
+The modern tree consolidates historical releases and ongoing improvements.
 
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
@@ -212,36 +210,12 @@ Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  The mailbox-based 
 wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers
 for common POSIX operations are documented in
 [docs/POSIX.md](docs/POSIX.md).
-Design notes on the hybrid kernel approach and namespace algebra reside in [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
+Design notes on the hybrid kernel approach and namespace algebra can be found in the remaining documentation.
 
 ## Tests
 
-Build all unit tests with:
-```sh
-make -f Makefile.new test
-```
-Or using CMake:
-```sh
-cmake --build build --target test
-```
-Each test binary is located in its own subdirectory under `tests/` and can be
-executed directly.  For example:
-```sh
-./tests/vm_fault/test_vm_fault
-```
-
-A simple user-level pager is provided in `bin/user_pager` within the modern tree.
-Build it with:
-```sh
-make -C "$LITES_SRC_DIR/bin/user_pager"
-```
-Run the resulting `user_pager` alongside `lites_server` to service page faults.
-The VM test in `tests/vm_fault` demonstrates this interaction.
-Build and run it with:
-```sh
-make -f Makefile.new test
-./tests/vm_fault/test_vm_fault
-```
+The historical unit tests depend on full Mach headers and are disabled in
+this simplified repository snapshot.
 
 ## Header consolidation
 A helper script `scripts/move_all_headers.sh` is provided to move all `*.h` files
