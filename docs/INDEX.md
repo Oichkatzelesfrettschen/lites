@@ -5,6 +5,8 @@ The `docs/` directory contains notes and background information for the project.
 - **HISTORY.md** - Overview of available Lites releases and helper script for generating diffs between them.
 - **IPC.md** - Describes the mailbox-based interprocess communication helpers.
 - **POSIX.md** - Documents small convenience wrappers for POSIX operations.
+- **POSIX_ROADMAP.md** - High level plan for implementing POSIX features with
+  links into the specification under `docs/books/`.
 - Historical planning documents have been removed as the repository now reflects the consolidated modern tree.
 - **iommu.md** - Notes on the minimal IOMMU abstraction present in the source tree.
 - **posix_compat.md** - Explains the limited POSIX threads compatibility layer.
