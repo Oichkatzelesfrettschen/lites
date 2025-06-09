@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 1993 John Brezak
  *  All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +12,7 @@
  *     documentation and/or other materials provided with the distribution.
  *  3. The name of the author may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR `AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,21 +33,26 @@ static char *rcsid = "$Id: insque.c,v 1.4 1993/10/21 21:08:55 jtc Exp $";
 #include <p_defs.h>
 #include <search.h>
 
+/**
+ * @brief Simple doubly linked list element.
+ */
 struct qelem {
-        struct qelem *q_forw;
-        struct qelem *q_back;
+    struct qelem *q_forw; /**< pointer to the next element */
+    struct qelem *q_back; /**< pointer to the previous element */
 };
 
-void
-insque(entry, pred)
-	void *entry;
-	void *pred;
-{
-	struct qelem *e = (struct qelem *) entry;
-	struct qelem *p = (struct qelem *) pred;
+/**
+ * @brief Insert an element into a doubly linked queue.
+ *
+ * @param entry  New element to insert.
+ * @param pred   Existing element after which @p entry will be placed.
+ */
+void insque(void *entry, void *pred) {
+    struct qelem *e = (struct qelem *)entry;
+    struct qelem *p = (struct qelem *)pred;
 
-	e->q_forw = p->q_forw;
-	e->q_back = p;
-	p->q_forw->q_back = e;
-	p->q_forw = e;
+    e->q_forw = p->q_forw;
+    e->q_back = p;
+    p->q_forw->q_back = e;
+    p->q_forw = e;
 }

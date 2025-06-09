@@ -32,4 +32,4 @@ offline_packages/*.deb
 *.tar.gz
 
 
-.fake
+.fakehtml/

@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 1993 John Brezak
  *  All rights reserved.
- * 
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +12,7 @@
  *     documentation and/or other materials provided with the distribution.
  *  3. The name of the author may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR `AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,16 +33,21 @@ static char *rcsid = "$Id: remque.c,v 1.4 1993/10/21 21:08:57 jtc Exp $";
 #include <p_defs.h>
 #include <search.h>
 
+/**
+ * @brief Simple doubly linked list element.
+ */
 struct qelem {
-        struct qelem *q_forw;
-        struct qelem *q_back;
+    struct qelem *q_forw; /**< pointer to the next element */
+    struct qelem *q_back; /**< pointer to the previous element */
 };
 
-void
-remque(element)
-	void *element;
-{
-	struct qelem *e = (struct qelem *) element;
-	e->q_forw->q_back = e->q_back;
-	e->q_back->q_forw = e->q_forw;
+/**
+ * @brief Remove an element from a doubly linked queue.
+ *
+ * @param element Element to unlink from its neighbors.
+ */
+void remque(void *element) {
+    struct qelem *e = (struct qelem *)element;
+    e->q_forw->q_back = e->q_back;
+    e->q_back->q_forw = e->q_forw;
 }

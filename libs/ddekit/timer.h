@@ -4,7 +4,10 @@
 #include <ddekit/ddekit.h>
 #include <ddekit/thread.h>
 
-/** \defgroup DDEKit_timer 
+/**
+ * \defgroup DDEKit_timer DDEKit timers
+ * Basic timing utilities.
+ */
  *
  * Timer subsystem
  *

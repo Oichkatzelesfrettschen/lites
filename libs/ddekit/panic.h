@@ -3,7 +3,10 @@
 #include <ddekit/ddekit.h>
 #include <stdarg.h>
 
-/** \defgroup DDEKit_util */
+/**
+ * \defgroup DDEKit_util DDEKit utilities
+ * Misc support helpers.
+ */
 
 /** Panic - print error message and enter the kernel debugger.
  * \ingroup DDEKit_util
