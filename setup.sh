@@ -115,7 +115,8 @@ packages=(
   nodejs npm yarnpkg
   coq coqide tla4tools isabelle asda
   afl++ honggfuzz cargo-fuzz   # fuzzing tools
-  qemu-system-x86 valgrind lcov gcovr  # emulation, profiling, coverage
+  qemu-system-x86 qemu-utils qemu-nox valgrind lcov gcovr  # emulation, profiling, coverage
+  tmux cloc                      # session management and code statistics
   meson gdb-multiarch           # build helper and cross-debugging
 )
 
