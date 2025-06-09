@@ -1,7 +1,10 @@
 #ifndef _DDEKIT_THREAD_H
 #define _DDEKIT_THREAD_H
 
-/** \defgroup DDEKit_threads */
+/**
+ * \defgroup DDEKit_threads DDEKit threads
+ * Thread management primitives.
+ */
 #include <ddekit/ddekit.h>
 #include <ddekit/lock.h>
 
@@ -97,7 +100,7 @@ void ddekit_thread_usleep(unsigned long usecs);
  *
  * \ingroup DDEKit_threads
  *
- * \param usecs      time to sleep in ns.
+ * \param nsecs      time to sleep in ns.
  */
 void ddekit_thread_nsleep(unsigned long nsecs);
 

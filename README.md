@@ -228,3 +228,23 @@ should only be run for analysis purposes.
 The script `scripts/gen-license-map.sh` scans all source files and produces `LICENSE_MAP`.
 Each line contains the path, detected license type, origin and last modification timestamp.
 New files contain a short header referring to this map instead of duplicating the full license text.
+
+## Code statistics
+
+The repository contains a mix of historical sources and modernized code. The
+table below summarises the approximate size of the tree using `cloc`:
+
+```
+Language                             files          blank        comment    code
+HTML                                  1869         105058           6103   390749
+C                                     1058          50906         105064   336219
+XML                                    805              6              0   286249
+C/C++ Header                           980          13120          42509    60471
+C++                                     29           4033           7092    24629
+Assembly                               138           3533           7707    18269
+Bourne Shell                            35           1332           1585     8320
+TeX                                     45           1705           1421     5401
+```
+
+Overall the tree spans over **1,142,516** lines of code across more than five
+thousand files.

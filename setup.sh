@@ -109,14 +109,14 @@ packages=(
   clang-tools clang-tidy clang-format clangd
   ccache lldb gdb bolt llvm-bolt
   cmake make ninja-build
-  doxygen graphviz python3-sphinx
+  doxygen graphviz python3-sphinx python3-breathe
   shellcheck yamllint
   python3 python3-pip python3-venv python3-setuptools python3-wheel
   nodejs npm yarnpkg
   coq coqide tla4tools isabelle asda
   afl++ honggfuzz cargo-fuzz   # fuzzing tools
-  qemu-system-x86 qemu-utils qemu-nox valgrind lcov gcovr  # emulation, profiling, coverage
-  tmux cloc                      # session management and code statistics
+  qemu-system-x86 qemu-utils valgrind lcov gcovr  # emulation, profiling, coverage
+  tmux cloc libperl-dev          # session management and code statistics
   meson gdb-multiarch           # build helper and cross-debugging
 )
 

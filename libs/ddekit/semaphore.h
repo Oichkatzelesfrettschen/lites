@@ -4,7 +4,10 @@
 #include <ddekit/ddekit.h>
 
 
-/** \defgroup DDEKit_synchronization */
+/**
+ * \defgroup DDEKit_synchronization DDEKit synchronization
+ * Lightweight semaphore primitives.
+ */
 
 struct ddekit_sem;
 typedef struct ddekit_sem ddekit_sem_t;
