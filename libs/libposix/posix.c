@@ -10,14 +10,22 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+/** Structure describing a named FIFO created by @ref mkfifo. */
 struct fifo_entry {
-    char *path;
-    int fd[2];
-    struct fifo_entry *next;
+    char *path;               /**< Path backing the FIFO. */
+    int fd[2];                /**< Read/write descriptor pair. */
+    struct fifo_entry *next;  /**< Next entry in the list. */
 };
 
+/** Head of the linked list of FIFOs. */
 static struct fifo_entry *fifo_list;
 
+/**
+ * Locate a FIFO entry by path.
+ *
+ * @param path Absolute or relative FIFO path.
+ * @return Pointer to the entry or NULL if not found.
+ */
 static struct fifo_entry *find_fifo(const char *path) {
     for (struct fifo_entry *f = fifo_list; f; f = f->next) {
         if (strcmp(f->path, path) == 0)
@@ -26,6 +34,16 @@ static struct fifo_entry *find_fifo(const char *path) {
     return NULL;
 }
 
+/**
+ * Create an in-memory FIFO for the given path.
+ *
+ * This implementation emulates FIFOs by maintaining an internal
+ * table of pipes. The mode argument is presently ignored.
+ *
+ * @param path Path identifying the FIFO.
+ * @param mode Permission bits (unused).
+ * @return 0 on success or -1 and errno set on failure.
+ */
 int mkfifo(const char *path, mode_t mode) {
     (void)mode;
     if (find_fifo(path)) {
@@ -64,6 +82,11 @@ struct fd_entry {
 static struct fd_entry *fd_table;
 static size_t fd_table_sz;
 
+/**
+ * Ensure the file-descriptor table is large enough for the given index.
+ *
+ * @param fd Index into the descriptor table that must be valid.
+ */
 static void ensure_fd(size_t fd) {
     if (fd >= fd_table_sz) {
         size_t new_sz = fd + 16;
@@ -77,6 +100,18 @@ static void ensure_fd(size_t fd) {
     }
 }
 
+/**
+ * Open a file or emulated FIFO.
+ *
+ * When the path refers to a FIFO created by @ref mkfifo this function
+ * duplicates the pipe descriptors and records them in an internal table.
+ * Otherwise it falls back to the openat system call.
+ *
+ * @param path  File system path.
+ * @param flags Flags as accepted by open(2).
+ * @param ...   Optional mode_t when O_CREAT is supplied.
+ * @return New file descriptor or -1 on error.
+ */
 int open(const char *path, int flags, ...) {
     mode_t mode = 0;
     if (flags & O_CREAT) {
@@ -131,6 +166,14 @@ int open(const char *path, int flags, ...) {
     return fd;
 }
 
+/**
+ * Wrapper around read(2) that understands FIFO descriptors.
+ *
+ * @param fd    Descriptor to read from.
+ * @param buf   Buffer to fill.
+ * @param count Number of bytes to read.
+ * @return Bytes read or -1 on failure.
+ */
 ssize_t read(int fd, void *buf, size_t count) {
     if ((size_t)fd < fd_table_sz) {
         struct fd_entry *e = &fd_table[fd];
@@ -144,6 +187,14 @@ ssize_t read(int fd, void *buf, size_t count) {
     return syscall(SYS_read, fd, buf, count);
 }
 
+/**
+ * Wrapper around write(2) that understands FIFO descriptors.
+ *
+ * @param fd    Descriptor to write to.
+ * @param buf   Data buffer.
+ * @param count Number of bytes to write.
+ * @return Bytes written or -1 on failure.
+ */
 ssize_t write(int fd, const void *buf, size_t count) {
     if ((size_t)fd < fd_table_sz) {
         struct fd_entry *e = &fd_table[fd];
@@ -157,6 +208,12 @@ ssize_t write(int fd, const void *buf, size_t count) {
     return syscall(SYS_write, fd, buf, count);
 }
 
+/**
+ * Duplicate a file descriptor, correctly handling emulated FIFOs.
+ *
+ * @param fd Descriptor to duplicate.
+ * @return New descriptor or -1 on error.
+ */
 int dup(int fd) {
     if ((size_t)fd < fd_table_sz) {
         struct fd_entry *e = &fd_table[fd];
@@ -186,6 +243,12 @@ int dup(int fd) {
     return syscall(SYS_dup, fd);
 }
 
+/**
+ * Close a file descriptor and clean up any associated FIFO state.
+ *
+ * @param fd Descriptor to close.
+ * @return 0 on success or -1 on error.
+ */
 int close(int fd) {
     if ((size_t)fd < fd_table_sz) {
         struct fd_entry *e = &fd_table[fd];
