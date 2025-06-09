@@ -114,7 +114,9 @@ packages=(
   python3 python3-pip python3-venv python3-setuptools python3-wheel
   nodejs npm yarnpkg
   coq coqide tla4tools isabelle asda
-  afl++ honggfuzz cargo-fuzz
+  afl++ honggfuzz cargo-fuzz   # fuzzing tools
+  qemu-system-x86 valgrind lcov gcovr  # emulation, profiling, coverage
+  meson gdb-multiarch           # build helper and cross-debugging
 )
 
 for pkg in "${packages[@]}"; do

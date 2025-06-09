@@ -2,16 +2,22 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <limits.h>
-#include <sys/wait.h>
 #include <sys/socket.h>
 #include <sys/uio.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
-int lx_link(const char *oldpath, const char *newpath)
-{
+/**
+ * POSIX wrapper for link(2) that retries on EINTR.
+ *
+ * @param oldpath Path to existing file.
+ * @param newpath Path of the new hard link.
+ * @return 0 on success, -1 on error with errno set.
+ */
+int lx_link(const char *oldpath, const char *newpath) {
     int r;
     do {
         r = link(oldpath, newpath);
@@ -19,8 +25,13 @@ int lx_link(const char *oldpath, const char *newpath)
     return r;
 }
 
-int lx_unlink(const char *path)
-{
+/**
+ * POSIX wrapper for unlink(2) that retries on EINTR.
+ *
+ * @param path File to remove.
+ * @return 0 on success, -1 on error with errno set.
+ */
+int lx_unlink(const char *path) {
     int r;
     do {
         r = unlink(path);
@@ -28,8 +39,14 @@ int lx_unlink(const char *path)
     return r;
 }
 
-char *lx_getcwd(char *buf, size_t size)
-{
+/**
+ * POSIX wrapper for getcwd(3) that retries on EINTR.
+ *
+ * @param buf  Buffer to store the current directory path.
+ * @param size Size of the buffer.
+ * @return Pointer to buf on success, NULL on failure.
+ */
+char *lx_getcwd(char *buf, size_t size) {
     char *r;
     do {
         r = getcwd(buf, size);
@@ -37,8 +54,13 @@ char *lx_getcwd(char *buf, size_t size)
     return r;
 }
 
-int lx_chdir(const char *path)
-{
+/**
+ * POSIX wrapper for chdir(2) that retries on EINTR.
+ *
+ * @param path Directory to change into.
+ * @return 0 on success, -1 on error with errno set.
+ */
+int lx_chdir(const char *path) {
     int r;
     do {
         r = chdir(path);
@@ -46,8 +68,7 @@ int lx_chdir(const char *path)
     return r;
 }
 
-static const char *find_in_path(const char *file, char *buf, size_t buflen, const char *path)
-{
+static const char *find_in_path(const char *file, char *buf, size_t buflen, const char *path) {
     const char *start = path;
     while (start && *start) {
         const char *colon = strchr(start, ':');
@@ -66,8 +87,7 @@ static const char *find_in_path(const char *file, char *buf, size_t buflen, cons
     return NULL;
 }
 
-static const char *env_lookup(char *const envp[], const char *name)
-{
+static const char *env_lookup(char *const envp[], const char *name) {
     size_t nlen = strlen(name);
     if (envp) {
         for (char *const *p = envp; *p; ++p) {
@@ -79,8 +99,15 @@ static const char *env_lookup(char *const envp[], const char *name)
     return val;
 }
 
-int lx_execvep(const char *file, char *const argv[], char *const envp[])
-{
+/**
+ * Search PATH and execve(2) the first match.
+ *
+ * @param file  Executable name.
+ * @param argv  Argument vector.
+ * @param envp  Environment pointer array.
+ * @return 0 on success, -1 on failure with errno set.
+ */
+int lx_execvep(const char *file, char *const argv[], char *const envp[]) {
     if (strchr(file, '/'))
         return execve(file, argv, envp);
 
@@ -96,8 +123,8 @@ int lx_execvep(const char *file, char *const argv[], char *const envp[])
     return -1;
 }
 
-pid_t lx_waitpid(pid_t pid, int *status, int options)
-{
+/** Retry waitpid(2) on EINTR. */
+pid_t lx_waitpid(pid_t pid, int *status, int options) {
     pid_t r;
     do {
         r = waitpid(pid, status, options);
@@ -105,21 +132,18 @@ pid_t lx_waitpid(pid_t pid, int *status, int options)
     return r;
 }
 
-pid_t lx_wait(int *status)
-{
-    return lx_waitpid(-1, status, 0);
-}
+pid_t lx_wait(int *status) { return lx_waitpid(-1, status, 0); }
 
-static int set_cloexec(int fd)
-{
+/** Set FD_CLOEXEC on a descriptor. */
+static int set_cloexec(int fd) {
     int flags = fcntl(fd, F_GETFD);
     if (flags < 0)
         return -1;
     return fcntl(fd, F_SETFD, flags | FD_CLOEXEC);
 }
 
-int lx_socket_cloexec(int domain, int type, int protocol)
-{
+/** Open a socket with FD_CLOEXEC set when possible. */
+int lx_socket_cloexec(int domain, int type, int protocol) {
 #ifdef SOCK_CLOEXEC
     int fd;
     do {
@@ -137,8 +161,8 @@ int lx_socket_cloexec(int domain, int type, int protocol)
     return fd;
 }
 
-int lx_accept_cloexec(int sockfd, struct sockaddr *addr, socklen_t *len)
-{
+/** Accept a connection and set FD_CLOEXEC on the result. */
+int lx_accept_cloexec(int sockfd, struct sockaddr *addr, socklen_t *len) {
 #ifdef SOCK_CLOEXEC
     int fd;
     do {
@@ -156,8 +180,8 @@ int lx_accept_cloexec(int sockfd, struct sockaddr *addr, socklen_t *len)
     return fd;
 }
 
-int lx_send_fd(int sockfd, int fd)
-{
+/** Send a file descriptor over a Unix domain socket. */
+int lx_send_fd(int sockfd, int fd) {
     struct msghdr msg = {0};
     char buf = 'x';
     struct iovec io = {&buf, 1};
@@ -178,8 +202,8 @@ int lx_send_fd(int sockfd, int fd)
     return n == 1 ? 0 : -1;
 }
 
-int lx_recv_fd(int sockfd)
-{
+/** Receive a file descriptor from a Unix domain socket. */
+int lx_recv_fd(int sockfd) {
     struct msghdr msg = {0};
     char buf;
     struct iovec io = {&buf, 1};
@@ -201,4 +225,3 @@ int lx_recv_fd(int sockfd)
     memcpy(&fd, CMSG_DATA(cmsg), sizeof(int));
     return fd;
 }
-
