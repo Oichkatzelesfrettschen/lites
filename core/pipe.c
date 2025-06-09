@@ -1,6 +1,5 @@
-#
-/*
- */
+
+/** @file pipe.c Legacy UNIX pipe implementation. */
 
 #include "../file.h"
 #include "../inode.h"

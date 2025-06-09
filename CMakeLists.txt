@@ -243,6 +243,10 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libs/liblites" AND
     add_subdirectory(libs/liblites)
 endif()
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arch")
+    add_subdirectory(arch)
+endif()
+
 # libos depends on full Mach headers which are
 # incomplete in this repository. Skip building it
 # unless explicitly enabled in the future.

@@ -1,0 +1,5 @@
+PROJECT_NAME = "Lites"
+OUTPUT_DIRECTORY = html
+INPUT = ../arch ../core ../drivers ../include ../libs
+RECURSIVE = YES
+GENERATE_LATEX = NO
