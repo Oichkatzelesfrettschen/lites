@@ -47,6 +47,15 @@ else
   fi
 fi
 
+##
+# @brief Install a package using common package managers.
+#
+# Attempts apt-get first, then pip and npm, before delegating to package-
+# specific handlers.
+#
+# @param pkg Name of the package to install.
+# @return 0 on success, non-zero otherwise.
+##
 install_pkg() {
   local pkg="$1"
   echo "\n===== Installing $pkg =====" | tee -a "$LOG"
@@ -94,12 +103,6 @@ install_pkg() {
     echo "$pkg installed from archive" >> "$LOG"
     return 0
   fi
-  if [[ "$pkg" == "asda" ]]; then
-    wget -qO /usr/local/bin/asda https://example.com/asda
-    chmod +x /usr/local/bin/asda
-    echo "$pkg installed from custom source" >> "$LOG"
-    return 0
-  fi
   echo "could not install $pkg" | tee -a "$FAIL_LOG" >&2
 }
 
@@ -113,7 +116,7 @@ packages=(
   shellcheck yamllint
   python3 python3-pip python3-venv python3-setuptools python3-wheel
   nodejs npm yarnpkg
-  coq coqide tla4tools isabelle asda
+  coq coqide tla4tools isabelle
   afl++ honggfuzz cargo-fuzz   # fuzzing tools
   qemu-system-x86 qemu-utils valgrind lcov gcovr  # emulation, profiling, coverage
   tmux cloc libperl-dev          # session management and code statistics
