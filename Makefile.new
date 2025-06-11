@@ -45,8 +45,10 @@ ARCH ?= x86_64
 # Base optimisation flags
 C23_FLAG := $(shell $(CC) -std=c23 -E -x c /dev/null >/dev/null 2>&1 && echo -std=c23 || echo -std=c2x)
 CFLAGS ?= -O2 $(C23_FLAG)
-# Harden binaries by disallowing executable stacks
-LDFLAGS += -Wl,-z,noexecstack
+# Harden binaries by disallowing executable stacks by appending the
+# noexecstack flag to the existing linker options. This ensures the
+# generated binaries do not allow execution from the stack.
+LDFLAGS := $(LDFLAGS) -Wl,-z,noexecstack
 
 # Optional address sanitizer
 SANITIZE ?= 0
@@ -159,4 +161,3 @@ test: all
 	done
 
 .PHONY: all prepare clean test
-

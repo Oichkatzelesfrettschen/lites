@@ -165,7 +165,8 @@ packages=(
   nodejs npm yarnpkg
   coq coqide tla4tools isabelle
   afl++ honggfuzz cargo-fuzz
-  qemu-system-x86 qemu-utils valgrind lcov gcovr
+  # QEMU and debugging tools for running the OS in emulation
+  qemu-system-x86 qemu-system-x86_64 qemu-system-i386 qemu-utils valgrind lcov gcovr
   tmux cloc libperl-dev gdb-multiarch
 )
 
@@ -203,7 +204,9 @@ export PATH="/usr/lib/ccache:$PATH"
 export CFLAGS="-Wall -Wextra -Werror -O2"
 export CXXFLAGS="$CFLAGS"
 # Harden binaries by disallowing executable stacks
-export LDFLAGS="-fuse-ld=lld -flto -Wl,-z,noexecstack"
+# Harden binaries by disallowing executable stacks. Add the flag to
+# existing options if needed.
+export LDFLAGS="-fuse-ld=lld -flto ${LDFLAGS:+$LDFLAGS }-Wl,-z,noexecstack"
 export LLVM_PROFILE_FILE="/tmp/profiles/default.profraw"
 export CLANG_EXTRA_FLAGS="-mllvm -polly"
 
