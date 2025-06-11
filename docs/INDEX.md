@@ -13,7 +13,7 @@ The `docs/` directory contains notes and background information for the project.
 - **security.md** - Outlines the keystore and enclave security APIs.
 - **LICENSE_MAP** - Produced by `scripts/gen-license-map.sh` (not version-controlled); maps each source to its license header.
 - **technical_notes.md** - Additional technical notes and links to the 'Unix Under Mach' thesis.
-  instructions.
+- **tmux.md** - Suggested tmux workflow and QEMU troubleshooting tips.
 - **archives/** - Preserved snapshots, old build files such as
   `makefile.legacy`, and tarballs from earlier releases.
 - **examples/** - Demonstration programs grouped by topic (`ipc/`, `posix/`,
