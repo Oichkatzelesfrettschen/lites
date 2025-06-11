@@ -214,6 +214,7 @@ package_available() {
 # Package list
 #-------------------------------------------------------------------------------
 packages=(
+
     build-essential git wget curl
     clang lld llvm-dev libclang-dev polly
     clang-tools clang-tidy clang-format clangd
@@ -267,7 +268,9 @@ export PATH="/usr/lib/ccache:$PATH"
 export CFLAGS="-Wall -Wextra -Werror -O2"
 export CXXFLAGS="$CFLAGS"
 # Harden binaries by disallowing executable stacks
-export LDFLAGS="-fuse-ld=lld -flto -Wl,-z,noexecstack"
+# Harden binaries by disallowing executable stacks. Add the flag to
+# existing options if needed.
+export LDFLAGS="-fuse-ld=lld -flto ${LDFLAGS:+$LDFLAGS }-Wl,-z,noexecstack"
 export LLVM_PROFILE_FILE="/tmp/profiles/default.profraw"
 export CLANG_EXTRA_FLAGS="-mllvm -polly"
 
