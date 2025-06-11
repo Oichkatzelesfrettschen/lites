@@ -174,6 +174,7 @@ so the remainder of the setup can continue.  The script normally requires
 root privileges and network access.  When invoked with `--offline` it
 installs all `.deb` files from the `offline_packages/` directory instead of
 using the network.
+The package list now includes `tmux` for convenient session management.
 Codex CLI can keep `setup.sh` in sync with `.codex/setup.sh` automatically. The `postCreateCommand` in `.devcontainer/devcontainer.json` installs Codex and runs `codex -q 'doctor setup.sh'` after container creation. A sample systemd unit `scripts/codex-setup.service` demonstrates how to do the same early in boot.
 
 
@@ -206,12 +207,19 @@ scripts/run-qemu.sh i686
 The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
 
-Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  The mailbox-based IPC
-wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers
-for common POSIX operations are documented in
-[docs/POSIX.md](docs/POSIX.md).
-Design notes on the hybrid kernel approach and namespace algebra can be found in the remaining documentation.
+### tmux workflow
 
+Run `scripts/tmux-qemu.sh` to start a tmux session with QEMU in the left pane
+and a shell in the right.  The optional architecture parameter is passed
+directly to `scripts/run-qemu.sh`.
+
+### QEMU troubleshooting
+
+If QEMU fails due to an executable stack warning, link `lites_server` with
+`-Wl,-z,noexecstack`.
+
+Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  A detailed tmux example is provided in [docs/tmux.md](docs/tmux.md).  The mailbox-based IPC wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers for common POSIX operations are documented in [docs/POSIX.md](docs/POSIX.md).
+Design notes on the hybrid kernel approach and namespace algebra can be found in the remaining documentation.
 ## Tests
 
 The historical unit tests depend on full Mach headers and are disabled in
