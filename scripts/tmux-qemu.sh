@@ -12,12 +12,22 @@
 ##
 set -euo pipefail
 
-arch="${1:-x86_64}"
-session="lites"
+##
+# @brief Launch QEMU inside a tmux session.
+#
+# @param arch Target architecture. Defaults to `x86_64` when unspecified.
+# @return void
+##
+main() {
+  local arch="${1:-x86_64}"
+  local session="lites"
 
-# Start the session detached, running QEMU in the first pane.
-tmux new-session -d -s "$session" "scripts/run-qemu.sh \"$arch\""
-# Create a second pane for interactive commands.
-tmux split-window -h
-# Attach to the newly created session.
-tmux attach -t "$session"
+  # Start the session detached with QEMU running in the first pane.
+  tmux new-session -d -s "$session" "scripts/run-qemu.sh \"$arch\""
+  # Add a second pane for an interactive shell.
+  tmux split-window -h
+  # Attach to the new session so the user can interact with both panes.
+  tmux attach -t "$session"
+}
+
+main "$@"

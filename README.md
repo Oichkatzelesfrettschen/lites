@@ -206,6 +206,9 @@ scripts/run-qemu.sh i686
 ```
 The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
+For a split view with QEMU and an additional shell, run
+`scripts/tmux-qemu.sh` instead of invoking `scripts/run-qemu.sh`
+directly.
 
 ### tmux workflow
 
