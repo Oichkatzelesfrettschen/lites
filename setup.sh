@@ -202,7 +202,8 @@ export CLANG_TIDY="clang-tidy"
 export PATH="/usr/lib/ccache:$PATH"
 export CFLAGS="-Wall -Wextra -Werror -O2"
 export CXXFLAGS="$CFLAGS"
-export LDFLAGS="-fuse-ld=lld -flto"
+# Harden binaries by disallowing executable stacks
+export LDFLAGS="-fuse-ld=lld -flto -Wl,-z,noexecstack"
 export LLVM_PROFILE_FILE="/tmp/profiles/default.profraw"
 export CLANG_EXTRA_FLAGS="-mllvm -polly"
 

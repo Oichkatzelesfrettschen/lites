@@ -40,3 +40,5 @@ start_session() {
 }
 
 start_session "$arch" "$session"
+
+
