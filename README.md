@@ -212,9 +212,10 @@ directly.
 
 ### tmux workflow
 
-Run `scripts/tmux-qemu.sh` to start a tmux session with QEMU in the left pane
-and a shell in the right.  The optional architecture parameter is passed
-directly to `scripts/run-qemu.sh`.
+Run `scripts/tmux-qemu.sh` to open a tmux session with QEMU in the left pane
+and an interactive shell on the right. The optional architecture argument is
+forwarded directly to `scripts/run-qemu.sh`. See
+[docs/tmux.md](docs/tmux.md) for more tips.
 
 ### QEMU troubleshooting
 
