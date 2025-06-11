@@ -23,5 +23,4 @@ repos:
         name: clang-tidy C++
         entry: scripts/run-clang-tidy.sh --extra-arg=-std=c++17
         language: system
-        types: [c++,cpp]
-
+        types: [c++]

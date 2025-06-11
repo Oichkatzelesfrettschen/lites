@@ -30,3 +30,7 @@ tmux new-session -d -s "$session" "$qemu_script" "$arch"
 tmux split-window -v -t "$session" "$SHELL"
 tmux select-pane -t "$session":0.0
 exec tmux attach-session -t "$session"
+
+}
+
+start_session "$arch" "$session"
