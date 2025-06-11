@@ -204,6 +204,8 @@ scripts/run-qemu.sh
 # explicitly run the 32‑bit build
 scripts/run-qemu.sh i686
 ```
+For a tmux-based setup use `scripts/tmux-qemu.sh`, which opens `run-qemu.sh` in one pane and a shell in another.
+
 The helpers expect the binaries produced by `Makefile.new` in the repository
 root and require the corresponding `qemu-system` binary in `PATH`.
 For a split view with QEMU and an additional shell, run
