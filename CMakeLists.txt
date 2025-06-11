@@ -20,7 +20,8 @@ find_package(BISON)
 # Allow selecting the build architecture with -DARCH=i686 or ARCH=x86_64
 set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
 set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
-set(LDFLAGS "$ENV{LDFLAGS}" CACHE STRING "Additional linker flags")
+# Harden binaries by disallowing executable stacks
+set(LDFLAGS "$ENV{LDFLAGS} -Wl,-z,noexecstack" CACHE STRING "Additional linker flags")
 set(SANITIZE "$ENV{SANITIZE}" CACHE STRING "Enable address sanitizer (1/0)")
 set(MULTICORE_SCHED "$ENV{MULTICORE_SCHED}" CACHE STRING "Enable multicore scheduler (1/0)")
 set(LITES_MACH_LIB_DIR "$ENV{LITES_MACH_LIB_DIR}" CACHE PATH "Directory containing Mach static libraries")
