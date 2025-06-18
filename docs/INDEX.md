@@ -14,6 +14,10 @@ The `docs/` directory contains notes and background information for the project.
 - **LICENSE_MAP** - Produced by `scripts/gen-license-map.sh` (not version-controlled); maps each source to its license header.
 - **technical_notes.md** - Additional technical notes and links to the 'Unix Under Mach' thesis.
 - **tmux.md** - Suggested tmux workflow and QEMU troubleshooting tips.
+- **ARCHITECTURE.md** - Modern architecture, design and implementation
+  roadmap summarising the project state and integration of third party
+  sources such as `asmlib`. Includes statistics from `cloc`, `lizard` and
+  `cscope`.
 - **archives/** - Preserved snapshots, old build files such as
   `makefile.legacy`, and tarballs from earlier releases.
 - **examples/** - Demonstration programs grouped by topic (`ipc/`, `posix/`,

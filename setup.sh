@@ -227,7 +227,7 @@ packages=(
     coq coqide tla4tools isabelle
     afl++ honggfuzz cargo-fuzz
     qemu-system-x86 qemu-utils valgrind lcov gcovr
-    tmux cloc libperl-dev gdb-multiarch
+    tmux cloc cscope libperl-dev gdb-multiarch lizard
 )
 
 #-------------------------------------------------------------------------------
