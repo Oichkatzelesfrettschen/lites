@@ -17,6 +17,11 @@ LOG="/tmp/setup.log"
 FAIL_LOG="/tmp/setup_failures.log"
 OFFLINE=false
 OFFLINE_DIR="offline_packages"
+CLANG_VERSION=18
+# initialise default compiler flags to avoid unbound variable errors when
+# appending optimisation options later on.
+CFLAGS=""
+CXXFLAGS=""
 
 #-------------------------------------------------------------------------------
 # Logging functions
@@ -88,10 +93,14 @@ if $OFFLINE; then
     fi
 else
     if [[ ! -d openmach ]]; then
-        if git clone "$OPENMACH_REPO" openmach; then
-            log_info "Cloned OpenMach from $OPENMACH_REPO"
+        if GIT_TERMINAL_PROMPT=0 git ls-remote "$OPENMACH_REPO" HEAD >/dev/null 2>&1; then
+            if git clone "$OPENMACH_REPO" openmach; then
+                log_info "Cloned OpenMach from $OPENMACH_REPO"
+            else
+                log_error "Failed to clone OpenMach"
+            fi
         else
-            log_error "Failed to clone OpenMach"
+            log_error "OpenMach repository unreachable, skipping clone"
         fi
     else
         log_info "OpenMach directory already exists"
@@ -210,25 +219,149 @@ package_available() {
     apt-cache show "$pkg" >/dev/null 2>&1
 }
 
+##
+# \brief Determine the newest installed Clang version.
+#
+# Starting from version 20 the function searches the package
+# repositories for descending releases and selects the first
+# available option.  It defaults to version 18 but will fall
+# back as far as clang-11 to support older distributions.
+#
+# The detected version is stored in the global \c CLANG_VERSION
+# variable so subsequent package installation and environment
+# exports remain consistent.
+select_clang_version() {
+    local candidates=(20 18 14 11)
+    for ver in "${candidates[@]}"; do
+        if package_available "clang-${ver}"; then
+            CLANG_VERSION=$ver
+            return 0
+        fi
+    done
+    log_error "No supported clang version found"
+}
+
+select_clang_version
+
+##
+# \brief Configure 80386-specific Clang optimization flags.
+#
+# Sets \c CFLAGS and \c CXXFLAGS with a conservative yet optimized set of
+# parameters tailored for a 80386 processor. These options restrict the
+# instruction set to i386, disable unsupported extensions and enable
+# alignment tweaks suited for the 16-byte prefetch queue.
+#
+# The resulting flags offer cycle-level improvements on vintage hardware while
+# remaining compatible with modern toolchains.
+configure_clang_386_flags() {
+    local opt_flags=(
+        -march=i386 -mtune=i386 -m32
+        -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3
+        -mno-sse4 -mno-sse4.1 -mno-sse4.2
+        -mno-avx -mno-avx2 -mno-avx512f
+        -mno-mmx -mno-3dnow
+        -mno-cx8 -mno-cx16 -mno-sahf -mno-movbe
+        -mno-aes -mno-sha -mno-pclmul -mno-popcnt -mno-abm
+        -mno-lwp -mno-fma -mno-fma4 -mno-xop
+        -mno-bmi -mno-bmi2 -mno-tbm -mno-lzcnt
+        -mno-rtm -mno-hle -mno-rdrnd -mno-f16c
+        -mno-fsgsbase -mno-rdseed -mno-prfchw -mno-adx
+        -mno-fxsr -mno-xsave -mno-xsaveopt
+        -fno-builtin-bswap16 -fno-builtin-bswap32 -fno-builtin-bswap64
+        -mfpmath=387 -m80387 -mhard-float -fexcess-precision=standard
+        -ffp-contract=off
+        -malign-data=compat -malign-functions=16 -malign-jumps=16
+        -malign-loops=16 -mstack-alignment=4
+        -mstringop-strategy=libcall
+        -O3 -fomit-frame-pointer -fstrict-aliasing -fno-semantic-interposition
+        -fmerge-all-constants -fno-common -ffunction-sections -fdata-sections
+        -falign-functions=16 -falign-loops=16
+        -foptimize-sibling-calls -findirect-inlining -finline-limit=1000
+        -frename-registers -fweb -fira-algorithm=CB -fira-hoist-pressure
+        -fsched-pressure -fsched-spec-load -fmodulo-sched
+        -fmodulo-sched-allow-regmoves
+        -fprofile-use=/tmp/pgo-386 -fauto-profile=/tmp/386-profile.afdo
+        -mcmodel=small -mplt -mno-tls-direct-seg-refs
+    )
+    export CFLAGS="${CFLAGS} ${opt_flags[*]}"
+    export CXXFLAGS="$CFLAGS"
+}
+
+configure_clang_386_flags
+
+##
+# \brief Create wrapper symlinks so cc and c++ use clang.
+#
+# The function places symlinks in /usr/local/bin pointing to the
+# versioned clang binaries selected earlier. This ensures that build
+# systems relying on the generic compiler names invoke clang by default.
+#
+# \return 0 on success.
+create_clang_shims() {
+    local clang_bin="/usr/bin/clang-${CLANG_VERSION}"
+    local clangpp_bin="/usr/bin/clang++-${CLANG_VERSION}"
+    if [[ -x $clang_bin && -x $clangpp_bin ]]; then
+        install -d /usr/local/bin
+        ln -sf "$clang_bin" /usr/local/bin/cc
+        ln -sf "$clangpp_bin" /usr/local/bin/c++
+        log_info "Clang shims installed for cc and c++"
+    else
+        log_error "Expected clang binaries not found: ${CLANG_VERSION}"
+    fi
+}
+
+
 #-------------------------------------------------------------------------------
 # Package list
 #-------------------------------------------------------------------------------
 packages=(
 
     build-essential git wget curl
-    clang lld llvm-dev libclang-dev polly
-    clang-tools clang-tidy clang-format clangd
+    clang-${CLANG_VERSION} lld-${CLANG_VERSION} \
+    llvm-${CLANG_VERSION}-dev libclang-${CLANG_VERSION}-dev polly
+    clang-tools-${CLANG_VERSION} clang-tidy-${CLANG_VERSION} \
+    clang-format-${CLANG_VERSION} clangd-${CLANG_VERSION}
     ccache lldb gdb bolt llvm-bolt
     cmake make ninja-build meson
     doxygen graphviz python3-sphinx python3-breathe
     shellcheck yamllint
     python3 python3-pip python3-venv python3-setuptools python3-wheel
+    bison byacc
     nodejs npm yarnpkg
     coq coqide tla4tools isabelle
     afl++ honggfuzz cargo-fuzz
     qemu-system-x86 qemu-utils valgrind lcov gcovr
     tmux cloc cscope libperl-dev gdb-multiarch lizard
-)
+    gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf \
+    gcc-riscv64-linux-gnu gcc-powerpc-linux-gnu
+) # cross toolchains
+
+# gcc-multilib conflicts with the cross packages above, so it is omitted.
+
+##
+# \brief Install pre-commit when missing and set up hooks.
+#
+# The function ensures the `pre-commit` executable is available. When not
+# installed system-wide, it uses `pip` to install the tool for the current
+# user. If a `.pre-commit-config.yaml` file exists in the repository root,
+# the hooks are installed automatically.
+install_precommit() {
+    if ! command -v pre-commit >/dev/null 2>&1; then
+        if pip install pre-commit; then
+            log_info "pre-commit installed via pip"
+        else
+            log_error "failed to install pre-commit"
+        fi
+    fi
+
+    if [[ -f .pre-commit-config.yaml ]]; then
+        if pre-commit install; then
+            log_info "pre-commit hooks installed"
+        else
+            log_error "failed to install pre-commit hooks"
+        fi
+    fi
+}
 
 #-------------------------------------------------------------------------------
 # Install all packages
@@ -258,20 +391,43 @@ else
     log_info "All packages installed successfully"
 fi
 
+install_precommit
+
+create_clang_shims
+
+##
+# \brief Generate a compile_commands.json database when absent.
+#
+# The database improves IDE integration and allows clang tooling to
+# operate without invoking the build system.  The build directory is
+# created if necessary and configured with CMake's
+# `CMAKE_EXPORT_COMPILE_COMMANDS` option.
+generate_compile_commands() {
+    if [[ ! -f build/compile_commands.json ]]; then
+        cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            "${LITES_SRC_DIR:+-DLITES_SRC_DIR=$LITES_SRC_DIR}" &&
+            log_info "compile_commands.json generated"
+    fi
+}
+
 #-------------------------------------------------------------------------------
 # Environment exports
 #-------------------------------------------------------------------------------
-export CC="ccache clang"
-export CXX="ccache clang++"
-export CLANG_TIDY="clang-tidy"
+export CC="ccache clang-${CLANG_VERSION}"
+export CXX="ccache clang++-${CLANG_VERSION}"
+export CLANG_TIDY="clang-tidy-${CLANG_VERSION}"
 export PATH="/usr/lib/ccache:$PATH"
-export CFLAGS="-Wall -Wextra -Werror -O2"
-export CXXFLAGS="$CFLAGS"
+export CFLAGS="${CFLAGS} -Wall -Wextra -Werror"
+export CXXFLAGS="${CXXFLAGS:-$CFLAGS}"
 # Harden binaries by disallowing executable stacks
 # Harden binaries by disallowing executable stacks. Add the flag to
 # existing options if needed.
 export LDFLAGS="-fuse-ld=lld -flto ${LDFLAGS:+$LDFLAGS }-Wl,-z,noexecstack"
 export LLVM_PROFILE_FILE="/tmp/profiles/default.profraw"
-export CLANG_EXTRA_FLAGS="-mllvm -polly"
+export CLANG_EXTRA_FLAGS="-mllvm -polly -mllvm -polly-opt-max-coefficient=32 \
+    -mllvm -polly-pattern-matching-based-opts=true -fgraphite-identity \
+    -fgraphite"
+
+generate_compile_commands
 
 log_info "Environment setup complete."

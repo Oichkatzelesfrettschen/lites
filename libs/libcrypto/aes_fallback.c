@@ -57,11 +57,20 @@ struct aes_ctx {
     uint8_t round_key[AES_ROUND_KEY_SIZE];
 };
 
+/**
+ * @brief Expand a 128-bit AES key.
+ *
+ * Generates the round key schedule required for AES encryption.
+ *
+ * @param ctx  Destination context to hold the expanded keys.
+ * @param key  User supplied 128-bit key.
+ * @param sbox Substitution table used during expansion.
+ */
 static void key_expansion(struct aes_ctx *ctx, const uint8_t key[16], const uint8_t sbox[256]) {
     memcpy(ctx->round_key, key, AES_KEYLEN);
     uint8_t rcon = 1;
     uint8_t *rk = ctx->round_key;
-    for (int i = 16, j = 1; i < AES_ROUND_KEY_SIZE; i += 4) {
+    for (int i = 16; i < AES_ROUND_KEY_SIZE; i += 4) {
         uint8_t tmp[4];
         memcpy(tmp, &rk[i - 4], 4);
         if (i % 16 == 0) {

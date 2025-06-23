@@ -4,7 +4,7 @@ SRCDIR ?= src-lites-1.1-2025
 else
 SRCDIR ?= build/lites-1.1.u3
 endif
-CC ?= gcc
+CC ?= clang
 
 # Optional Mach kernel source tree for headers
 MACHDIR ?= $(LITES_MACH_DIR)

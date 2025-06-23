@@ -106,6 +106,7 @@ else()
     set(_default_src "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 set(LITES_SRC_DIR "${_default_src}" CACHE PATH "Lites source directory")
+get_filename_component(LITES_SRC_DIR "${LITES_SRC_DIR}" REALPATH)
 
 # Ensure an include/machine symlink exists before collecting sources.
 if(EXISTS "${LITES_SRC_DIR}/include")
