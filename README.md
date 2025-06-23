@@ -174,7 +174,48 @@ so the remainder of the setup can continue.  The script normally requires
 root privileges and network access.  When invoked with `--offline` it
 installs all `.deb` files from the `offline_packages/` directory instead of
 using the network.
-The package list now includes `tmux` for convenient session management.
+The package list now includes `tmux` for convenient session management. Cross-compilers for AArch64, ARMv7, PowerPC and RISC-V are installed so the tree can be built for a variety of targets. `gcc-multilib` conflicts with these cross toolchains, so it is omitted. `setup.sh` defaults to **clang-18**, switches to **clang-20** when available and falls back to **clang-14** or **clang-11** on older systems.
+Wrapper symlinks named `cc` and `c++` point to the selected clang version so existing build scripts use clang transparently.
+
+### 80386 optimisation flags
+
+`setup.sh` exports a dense suite of options tuned for 80386 silicon. All
+post‑486 instructions are disabled, loops and functions align to 16 bytes
+and Polly/Graphite are enabled via `CLANG_EXTRA_FLAGS`. Unit tests inherit
+these settings through the `CFLAGS` environment variable so the entire
+project builds with `-march=i386 -mtune=i386` and the accompanying feature
+restrictions. The key compiler options include:
+
+```
+-march=i386 -mtune=i386 -m32 \
+-mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 \
+-mno-sse4 -mno-sse4.1 -mno-sse4.2 \
+-mno-avx -mno-avx2 -mno-avx512f \
+-mno-mmx -mno-3dnow \
+-mno-cx8 -mno-cx16 -mno-sahf -mno-movbe \
+-mno-aes -mno-sha -mno-pclmul -mno-popcnt -mno-abm \
+-mno-lwp -mno-fma -mno-fma4 -mno-xop \
+-mno-bmi -mno-bmi2 -mno-tbm -mno-lzcnt \
+-mno-rtm -mno-hle -mno-rdrnd -mno-f16c \
+-mno-fsgsbase -mno-rdseed -mno-prfchw -mno-adx \
+-mno-fxsr -mno-xsave -mno-xsaveopt \
+-fno-builtin-bswap16 -fno-builtin-bswap32 -fno-builtin-bswap64 \
+-mfpmath=387 -m80387 -mhard-float -fexcess-precision=standard \
+-ffp-contract=off \
+-malign-data=compat -malign-functions=16 -malign-jumps=16 \
+-malign-loops=16 -mstack-alignment=4 \
+-mstringop-strategy=libcall \
+-O3 -fomit-frame-pointer -fstrict-aliasing -fno-semantic-interposition \
+-fmerge-all-constants -fno-common -ffunction-sections -fdata-sections \
+-falign-functions=16 -falign-loops=16 \
+-foptimize-sibling-calls -findirect-inlining -finline-limit=1000 \
+-frename-registers -fweb -fira-algorithm=CB -fira-hoist-pressure \
+-fsched-pressure -fsched-spec-load -fmodulo-sched \
+-fmodulo-sched-allow-regmoves \
+-fprofile-use=/tmp/pgo-386 -fauto-profile=/tmp/386-profile.afdo \
+-mcmodel=small -mplt -mno-tls-direct-seg-refs
+```
+
 Codex CLI can keep `setup.sh` in sync with `.codex/setup.sh` automatically. The `postCreateCommand` in `.devcontainer/devcontainer.json` installs Codex and runs `codex -q 'doctor setup.sh'` after container creation. A sample systemd unit `scripts/codex-setup.service` demonstrates how to do the same early in boot.
 
 
