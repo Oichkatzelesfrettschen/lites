@@ -144,39 +144,41 @@ static int set_cloexec(int fd) {
 
 /** Open a socket with FD_CLOEXEC set when possible. */
 int lx_socket_cloexec(int domain, int type, int protocol) {
-#ifdef SOCK_CLOEXEC
     int fd;
+#ifdef SOCK_CLOEXEC
     do {
         fd = socket(domain, type | SOCK_CLOEXEC, protocol);
     } while (fd < 0 && errno == EINTR);
-    if (fd >= 0 || errno != EINVAL)
+    if (fd >= 0 || errno != EINVAL) {
         return fd;
+    }
 #endif
-    int fd;
     do {
         fd = socket(domain, type, protocol);
     } while (fd < 0 && errno == EINTR);
-    if (fd >= 0)
+    if (fd >= 0) {
         set_cloexec(fd);
+    }
     return fd;
 }
 
 /** Accept a connection and set FD_CLOEXEC on the result. */
 int lx_accept_cloexec(int sockfd, struct sockaddr *addr, socklen_t *len) {
-#ifdef SOCK_CLOEXEC
     int fd;
+#ifdef SOCK_CLOEXEC
     do {
         fd = accept4(sockfd, addr, len, SOCK_CLOEXEC);
     } while (fd < 0 && errno == EINTR);
-    if (fd >= 0 || errno != ENOSYS)
+    if (fd >= 0 || errno != ENOSYS) {
         return fd;
+    }
 #endif
-    int fd;
     do {
         fd = accept(sockfd, addr, len);
     } while (fd < 0 && errno == EINTR);
-    if (fd >= 0)
+    if (fd >= 0) {
         set_cloexec(fd);
+    }
     return fd;
 }
 
