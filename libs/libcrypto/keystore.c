@@ -17,50 +17,105 @@
 #include "aes_fallback.h"
 #endif
 
+/**
+ * @brief Read all data from a file descriptor.
+ *
+ * Repeatedly reads until the buffer is filled or an unrecoverable error
+ * occurs.
+ *
+ * @param fd   File descriptor to read from.
+ * @param buf  Destination buffer.
+ * @param len  Number of bytes to read.
+ * @return 0 on success, -1 on failure with errno set.
+ */
+static int fd_read_all(int fd, unsigned char *buf, size_t len) {
+    size_t off = 0;
+    while (off < len) {
+        ssize_t r = read(fd, buf + off, len - off);
+        if (r < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            return -1;
+        }
+        if (r == 0) {
+            errno = EIO;
+            return -1;
+        }
+        off += (size_t)r;
+    }
+    return 0;
+}
+
+/**
+ * @brief Write all data to a file descriptor.
+ *
+ * @param fd   File descriptor to write to.
+ * @param buf  Data to write.
+ * @param len  Number of bytes to write.
+ * @return 0 on success, -1 on failure with errno set.
+ */
+static int fd_write_all(int fd, const unsigned char *buf, size_t len) {
+    size_t off = 0;
+    while (off < len) {
+        ssize_t w = write(fd, buf + off, len - off);
+        if (w < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            return -1;
+        }
+        if (w == 0) {
+            errno = EIO;
+            return -1;
+        }
+        off += (size_t)w;
+    }
+    return 0;
+}
+
+/**
+ * @brief Read a key file into memory.
+ *
+ * The caller must free the returned buffer.
+ *
+ * @param path Path to the key file.
+ * @param key  [out] Allocated buffer with key bytes.
+ * @param len  [out] Length of @p key.
+ * @return 0 on success, -1 on error.
+ */
 static int read_key(const char *path, unsigned char **key, size_t *len) {
     int fd = open(path, O_RDONLY);
     if (fd < 0) {
         return -1;
     }
     off_t sz = lseek(fd, 0, SEEK_END);
-    if (sz <= 0) {
+    if (sz <= 0 || lseek(fd, 0, SEEK_SET) < 0) {
         close(fd);
         return -1;
     }
-    if (lseek(fd, 0, SEEK_SET) < 0) {
-        close(fd);
-        return -1;
-    }
-    *key = malloc(sz);
+    *key = malloc((size_t)sz);
     if (!*key) {
         close(fd);
         return -1;
     }
-    size_t off = 0;
-    while (off < (size_t)sz) {
-        ssize_t r = read(fd, *key + off, (size_t)sz - off);
-        if (r < 0) {
-            if (errno == EINTR) {
-                continue;
-            }
-            free(*key);
-            close(fd);
-            return -1;
-        }
-        if (r == 0) {
-            /* unexpected EOF */
-            free(*key);
-            close(fd);
-            errno = EIO;
-            return -1;
-        }
-        off += (size_t)r;
+    if (fd_read_all(fd, *key, (size_t)sz) < 0) {
+        free(*key);
+        close(fd);
+        return -1;
     }
     close(fd);
-    *len = sz;
+    *len = (size_t)sz;
     return 0;
 }
 
+/**
+ * @brief Generate a random key and store it to disk.
+ *
+ * @param path Destination path for the generated key.
+ * @param len  Desired key length in bytes.
+ * @return 0 on success, -1 on error.
+ */
 int ks_generate_key(const char *path, size_t len) {
     unsigned char *buf = malloc(len);
     if (!buf) {
@@ -71,57 +126,34 @@ int ks_generate_key(const char *path, size_t len) {
         free(buf);
         return -1;
     }
-    size_t off = 0;
-    while (off < len) {
-        ssize_t r = read(fd, buf + off, len - off);
-        if (r < 0) {
-            if (errno == EINTR) {
-                continue;
-            }
-            close(fd);
-            free(buf);
-            return -1;
-        }
-        if (r == 0) {
-            /* unexpected EOF */
-            close(fd);
-            free(buf);
-            errno = EIO;
-            return -1;
-        }
-        off += (size_t)r;
+    if (fd_read_all(fd, buf, len) < 0) {
+        close(fd);
+        free(buf);
+        return -1;
     }
     close(fd);
+
     fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd < 0) {
         free(buf);
         return -1;
     }
-    off = 0;
-    while (off < len) {
-        ssize_t w = write(fd, buf + off, len - off);
-        if (w < 0) {
-            if (errno == EINTR) {
-                continue;
-            }
-            close(fd);
-            free(buf);
-            return -1;
-        }
-        if (w == 0) {
-            /* unexpected short write */
-            close(fd);
-            free(buf);
-            errno = EIO;
-            return -1;
-        }
-        off += (size_t)w;
-    }
+    int ret = fd_write_all(fd, buf, len);
     close(fd);
     free(buf);
-    return 0;
+    return ret;
 }
 
+/**
+ * @brief Encrypt a buffer using AES-128 CTR mode.
+ *
+ * @param key_path Path to the symmetric key file.
+ * @param in       Plaintext input buffer.
+ * @param in_len   Size of the plaintext in bytes.
+ * @param out      Buffer receiving the ciphertext.
+ * @param out_len  [out] Number of bytes written to @p out.
+ * @return 0 on success, -1 on failure.
+ */
 int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len, unsigned char *out,
                size_t *out_len) {
     unsigned char *key;
@@ -156,6 +188,19 @@ int ks_encrypt(const char *key_path, const unsigned char *in, size_t in_len, uns
     return 0;
 }
 
+/**
+ * @brief Decrypt a buffer using AES-128 CTR mode.
+ *
+ * This operation mirrors @ref ks_encrypt since CTR mode uses the same
+ * primitive for both directions.
+ *
+ * @param key_path Path to the symmetric key file.
+ * @param in       Ciphertext input buffer.
+ * @param in_len   Size of the ciphertext in bytes.
+ * @param out      Buffer receiving the plaintext.
+ * @param out_len  [out] Number of bytes written to @p out.
+ * @return 0 on success, -1 on failure.
+ */
 int ks_decrypt(const char *key_path, const unsigned char *in, size_t in_len, unsigned char *out,
                size_t *out_len) {
     return ks_encrypt(key_path, in, in_len, out, out_len);
