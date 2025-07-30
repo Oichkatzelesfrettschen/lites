@@ -138,6 +138,13 @@ cmake -B build -DARCH=ia16
 cmake --build build
 ```
 
+To compile with Clang instead of GCC set the C compiler explicitly:
+
+```sh
+cmake -B build -DCMAKE_C_COMPILER=clang -DCMAKE_C_FLAGS=-O3
+cmake --build build
+```
+
 ### Building with Ninja
 
 Use the Ninja generator for faster incremental builds:
@@ -217,6 +224,28 @@ restrictions. The key compiler options include:
 ```
 
 Codex CLI can keep `setup.sh` in sync with `.codex/setup.sh` automatically. The `postCreateCommand` in `.devcontainer/devcontainer.json` installs Codex and runs `codex -q 'doctor setup.sh'` after container creation. A sample systemd unit `scripts/codex-setup.service` demonstrates how to do the same early in boot.
+
+### Codex environment packages
+
+The [`setup.sh`](setup.sh) helper installs Clang, LLD and auxiliary tools, plus
+debuggers, cross-compilers and QEMU.  The main packages include:
+
+```
+build-essential git wget curl
+clang-<version> lld-<version> llvm-<version>-dev libclang-<version>-dev polly
+clang-tools-<version> clang-tidy-<version> clang-format-<version> clangd-<version>
+ccache lldb gdb bolt llvm-bolt cmake make ninja-build meson
+doxygen graphviz python3-sphinx python3-breathe shellcheck yamllint
+python3 python3-pip python3-venv python3-setuptools python3-wheel
+bison byacc nodejs npm yarnpkg coq coqide tla4tools isabelle
+afl++ honggfuzz cargo-fuzz qemu-system-x86 qemu-utils valgrind lcov gcovr
+tmux cloc cscope libperl-dev gdb-multiarch lizard
+gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf gcc-riscv64-linux-gnu gcc-powerpc-linux-gnu
+```
+
+The script exports 80386-tuned optimisation flags and sets `cc`/`c++` to the
+selected clang version. It also generates `compile_commands.json` so clang tools
+work out of the box.
 
 
 You can also invoke `scripts/run-precommit.sh` which automatically installs

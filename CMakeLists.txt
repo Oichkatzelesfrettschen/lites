@@ -19,6 +19,9 @@ find_package(BISON)
 
 # Allow selecting the build architecture with -DARCH=i686 or ARCH=x86_64
 set(ARCH "$ENV{ARCH}" CACHE STRING "Target architecture (x86_64 or i686)")
+if(NOT ARCH)
+    set(ARCH "x86_64")
+endif()
 set(CFLAGS "$ENV{CFLAGS}" CACHE STRING "Additional compiler flags")
 # Harden binaries by disallowing executable stacks
 # Append the noexecstack flag so that resulting binaries are not
