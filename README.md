@@ -232,7 +232,7 @@ debuggers, cross-compilers and QEMU.  The main packages include:
 
 ```
 build-essential git wget curl
-clang-<version> lld-<version> llvm-<version>-dev libclang-<version>-dev polly
+clang-<version> lld-<version> llvm-<version>-dev libclang-<version>-dev libpolly-<version>-dev
 clang-tools-<version> clang-tidy-<version> clang-format-<version> clangd-<version>
 ccache lldb gdb bolt llvm-bolt cmake make ninja-build meson
 doxygen graphviz python3-sphinx python3-breathe shellcheck yamllint
