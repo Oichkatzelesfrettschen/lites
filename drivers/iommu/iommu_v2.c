@@ -15,6 +15,16 @@ static struct mapping **map_list(struct iommu_dom *d) {
 
 static void tlb_invalidate_domain(uint16_t asid) { (void)asid; }
 
+/**
+ * @brief Map a physical address range into an IOMMU domain.
+ *
+ * @param dom   Target IOMMU domain.
+ * @param iova  IO virtual address where the range begins.
+ * @param pa    Physical address backing the range.
+ * @param len   Length of the region to map in bytes.
+ * @param perms Access permissions for the range.
+ * @return 0 on success or -1 on failure.
+ */
 int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa, size_t len, uint32_t perms) {
     if (!dom || !len)
         return -1;
@@ -34,6 +44,14 @@ int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa, size_t len, u
     return 0;
 }
 
+/**
+ * @brief Remove a previously established mapping.
+ *
+ * @param dom  IOMMU domain containing the mapping.
+ * @param iova IO virtual address to unmap.
+ * @param len  Length of the mapped region.
+ * @return 0 on success or -1 on failure.
+ */
 int iommu_unmap(struct iommu_dom *dom, uintptr_t iova, size_t len) {
     if (!dom || !len)
         return -1;
@@ -55,6 +73,17 @@ int iommu_unmap(struct iommu_dom *dom, uintptr_t iova, size_t len) {
     return -1;
 }
 
+/**
+ * @brief Map multiple ranges into an IOMMU domain.
+ *
+ * @param dom    IOMMU domain to modify.
+ * @param iovas  Array of IO virtual address starts.
+ * @param pas    Array of physical address starts.
+ * @param lens   Array of mapping lengths.
+ * @param perms  Array of permission values.
+ * @param count  Number of entries in each array.
+ * @return 0 on success or -1 on failure.
+ */
 int iommu_bulk_map(struct iommu_dom *dom, const uintptr_t *iovas, const uintptr_t *pas,
                    const size_t *lens, const uint32_t *perms, size_t count) {
     if (!dom)
