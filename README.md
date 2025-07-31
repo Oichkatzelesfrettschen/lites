@@ -332,3 +332,10 @@ TeX                                     45           1705           1421     540
 
 Overall the tree spans over **1,142,516** lines of code across more than five
 thousand files.
+
+## Memory allocation roadmap
+
+The current DDEKit memory API exposes `ddekit_contig_malloc()` for obtaining
+DMA-safe contiguous buffers. Drivers that merely require virtually contiguous
+regions must still rely on this low-level call. A vmalloc-style allocator is
+planned for future versions to handle non-contiguous allocations gracefully.
