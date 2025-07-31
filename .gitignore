@@ -38,3 +38,4 @@ offline_packages/*.deb
 build*/
 builds/
 */CMakeFiles/
+.DS_Store
