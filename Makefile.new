@@ -45,6 +45,10 @@ ARCH ?= x86_64
 # Base optimisation flags
 C23_FLAG := $(shell $(CC) -std=c23 -E -x c /dev/null >/dev/null 2>&1 && echo -std=c23 || echo -std=c2x)
 CFLAGS ?= -O2 $(C23_FLAG)
+# Treat all compiler warnings as errors and enable additional checks
+# to enforce strict ISO compliance and flag potentially problematic
+# constructs across architectures.
+CFLAGS += -Wall -Wextra -Werror -pedantic
 # Harden binaries by disallowing executable stacks by appending the
 # noexecstack flag to the existing linker options. This ensures the
 # generated binaries do not allow execution from the stack.
