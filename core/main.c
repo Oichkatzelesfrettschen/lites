@@ -6,6 +6,7 @@
 #include "../text.h"
 #include "../inode.h"
 #include "../seg.h"
+#include "alloc.h"
 
 #define	CLOCK1	0177546
 #define	CLOCK2	0172540

@@ -9,18 +9,18 @@
 #include "../buf.h"
 #include "../inode.h"
 #include "../user.h"
+#include "alloc.h"
 
-/*
- * iinit is called once (from main)
- * very early in initialization.
- * It reads the root's super block
- * and initializes the current date
- * from the last modified date.
+/**
+ * @brief Initialize the root file system.
  *
- * panic: iinit -- cannot read the super
- * block. Usually because of an IO error.
+ * This routine is invoked once at startup to read the root
+ * super block and to initialize the system time from its
+ * last modification timestamp. It takes no parameters.
+ *
+ * @return void
  */
-iinit()
+void iinit(void)
 {
 	register *cp, *bp;
 
