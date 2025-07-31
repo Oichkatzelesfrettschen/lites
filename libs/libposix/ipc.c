@@ -6,18 +6,30 @@
 #include <string.h>
 #include <unistd.h>
 
-static struct cap *cap_alloc(unsigned long rights)
+/**
+ * \brief Allocate and initialise a new capability structure.
+ *
+ * The returned object has all relationship pointers cleared and the given
+ * rights applied. The caller becomes responsible for freeing the capability
+ * via \c free().
+ *
+ * \param rights Bit mask of permitted operations.
+ * \return Pointer to the newly allocated capability or NULL on failure.
+ */
+static struct cap *cap_create(unsigned long rights)
 {
-    struct cap *c = malloc(sizeof(*c));
-    if (!c)
+    struct cap *cap = malloc(sizeof(*cap));
+    if (!cap) {
         return NULL;
-    c->parent = NULL;
-    c->children = NULL;
-    c->next_sibling = NULL;
-    c->epoch = 0;
-    c->rights = rights;
-    c->flags = 0;
-    return c;
+    }
+
+    cap->parent = NULL;
+    cap->children = NULL;
+    cap->next_sibling = NULL;
+    cap->epoch = 0;
+    cap->rights = rights;
+    cap->flags = 0;
+    return cap;
 }
 
 /* ------------------------ Message queues ------------------------ */
@@ -38,7 +50,7 @@ cap_mq_t *cap_mq_open(const char *name, int oflag, mode_t mode,
         free(q);
         return NULL;
     }
-    q->cap = cap_alloc(MQ_RIGHT_SEND | MQ_RIGHT_RECV | MQ_RIGHT_CLOSE);
+    q->cap = cap_create(MQ_RIGHT_SEND | MQ_RIGHT_RECV | MQ_RIGHT_CLOSE);
     if (!q->cap) {
         mq_close(q->mq);
         free(q);
@@ -88,7 +100,7 @@ cap_sem_t *cap_sem_open(const char *name, int oflag, mode_t mode,
         free(s);
         return NULL;
     }
-    s->cap = cap_alloc(SEM_RIGHT_WAIT | SEM_RIGHT_POST | SEM_RIGHT_CLOSE);
+    s->cap = cap_create(SEM_RIGHT_WAIT | SEM_RIGHT_POST | SEM_RIGHT_CLOSE);
     if (!s->cap) {
         sem_close(s->sem);
         free(s);
@@ -144,7 +156,7 @@ cap_shm_t *cap_shm_open(const char *name, int oflag, mode_t mode, size_t size)
             return NULL;
         }
     }
-    shm->cap = cap_alloc(SHM_RIGHT_MAP | SHM_RIGHT_UNMAP | SHM_RIGHT_CLOSE);
+    shm->cap = cap_create(SHM_RIGHT_MAP | SHM_RIGHT_UNMAP | SHM_RIGHT_CLOSE);
     if (!shm->cap) {
         close(shm->fd);
         free(shm);
