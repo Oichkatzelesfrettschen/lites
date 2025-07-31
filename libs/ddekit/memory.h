@@ -111,11 +111,26 @@ void *ddekit_large_malloc(int size);
  */
 void ddekit_large_free(void *p);
 
-/** FIXME
- * contig_malloc() is the lowest-level allocator interface one could implement.
- * we should consider to provide vmalloc() too. */
+/**
+ * Allocate a physically contiguous memory region.
+ *
+ * This routine is intended for device drivers that require DMA capable
+ * buffers.  Memory is obtained from the memory server such that the block is
+ * contiguous in physical address space.  The caller may limit the address
+ * range, alignment and boundary conditions of the allocation.
+ *
+ * The implementation only supports contiguous mappings.  A vmalloc-style
+ * allocator is planned for future work to cover non-contiguous requests.
+ *
+ * \param size       number of bytes to allocate
+ * \param low        lowest acceptable physical address
+ * \param high       highest acceptable physical address plus one
+ * \param alignment  power-of-two alignment requirement
+ * \param boundary   boundary the block must not cross
+ * \return pointer to the allocated memory or 0 on failure
+ */
 void *ddekit_contig_malloc(unsigned long size, unsigned long low,
-	unsigned long high, unsigned long alignment, unsigned long boundary);
+        unsigned long high, unsigned long alignment, unsigned long boundary);
 
 
 /*****************************
