@@ -54,3 +54,17 @@ valgrind --track-origins=yes --log-file=valgrind.log \
 Missing headers or packages will be reported in the logs mentioned above.
 Ensure `LITES_MACH_DIR` points at a compatible Mach kernel tree if local
 headers are insufficient.
+
+## 5. Pre-commit hooks
+
+Install the local hooks after cloning the repository and run them
+whenever sources are modified.  They enforce formatting and basic lint
+rules using `clang-format`, `clang-tidy` and standard whitespace checks.
+
+```bash
+pre-commit install        # set up git hooks
+pre-commit run -a         # format and lint the entire tree
+```
+
+These hooks rely on the configuration in `.pre-commit-config.yaml` and
+operate automatically during commits.
