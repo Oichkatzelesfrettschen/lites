@@ -32,6 +32,7 @@
 #define _DDEKIT_MEMORY_H
 
 #include <ddekit/ddekit.h>
+#include <ddekit/types.h>
 
 /*******************
  ** Slab facility **
@@ -133,6 +134,25 @@ void *ddekit_contig_malloc(unsigned long size, unsigned long low,
         unsigned long high, unsigned long alignment, unsigned long boundary);
 
 
+/*********************************
+ ** Virtual memory allocator **
+ *********************************/
+
+/**
+ * Allocate a virtually contiguous memory region.
+ *
+ * This function allocates memory that is contiguous in the virtual address
+ * space, but not necessarily in the physical address space.
+ *
+ * \param size      number of bytes to allocate
+ * \return pointer to the allocated memory or 0 on failure
+ */
+void *ddekit_vmalloc(unsigned long size);
+
+/** Free a virtually contiguous memory region. */
+void ddekit_vfree(void *addr);
+
+
 /*****************************
  ** Simple memory allocator **
  *****************************/
@@ -154,5 +174,22 @@ void *ddekit_simple_malloc(unsigned size);
  * \param p  pointer to memory block
  */
 void ddekit_simple_free(void *p);
+
+
+/*******************************
+ ** Physical page allocator **
+ *******************************/
+
+/**
+ * Allocate a physical page.
+ * \return physical address of the allocated page, or 0 on failure.
+ */
+ddekit_addr_t ddekit_phys_pgalloc(void);
+
+/**
+ * Free a physical page.
+ * \param pa physical address of the page to free.
+ */
+void ddekit_phys_pgfree(ddekit_addr_t pa);
 
 #endif

@@ -264,3 +264,8 @@ endif()
 
 # Unit tests require missing Mach headers. They are disabled
 # in this minimal configuration.
+
+option(LITES_BUILD_TESTS "Build the Lites unit tests" OFF)
+if(LITES_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
