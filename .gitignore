@@ -38,4 +38,8 @@ offline_packages/*.deb
 build*/
 builds/
 */CMakeFiles/
+
+# Ignore logs and operating system files
+*.log
+lizard.log
 .DS_Store
