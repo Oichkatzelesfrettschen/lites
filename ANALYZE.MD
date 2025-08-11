@@ -61,3 +61,8 @@ dot -Tpng trace_graph.dot -o trace_graph.png
 ```
 
 These steps provide a reproducible baseline for further static or dynamic trace investigations.
+## Additional Tooling
+The following packages were installed to facilitate building and documentation:
+
+- `bmake` – BSD make implementation enabling legacy makefiles.
+- `doxygen` – documentation generator for C/C++ sources.
