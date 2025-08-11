@@ -1,6 +1,6 @@
 PROJECT_NAME = "Lites"
-# Place generated documentation under docs/html
-OUTPUT_DIRECTORY = html
+# Place generated documentation under docs/html relative to the repository root
+OUTPUT_DIRECTORY = docs/html
 # Source paths are relative to the repository root so Doxygen may be invoked
 # from anywhere.  All main directories are scanned recursively.
 INPUT = arch core drivers include libs
