@@ -1,4 +1,11 @@
 minimum_pre_commit_version: '2.20.0'
+exclude: |
+  ^(
+    archives/|
+    Historical\ Archives/|
+    offline_packages/|
+    third_party/
+  )
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -12,7 +19,7 @@ repos:
         name: clang-format
         entry: clang-format -i --style=file
         language: system
-        files: \.(c|h|cpp|hpp|cc)$
+        types_or: [c, c++]
       - id: clang-tidy-c
         name: clang-tidy C
         entry: scripts/run-clang-tidy.sh --extra-arg=-std=c23
