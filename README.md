@@ -171,16 +171,22 @@ endif()
 
 The optional `setup.sh` script installs a wide range of cross-compilers
 and emulators along with standard build utilities such as build-essential,
-GCC, clang, llvm, m4, CMake and Ninja.  BSD make (`bmake`) and the optional `mk-configure` framework are installed as well.  The script also sets up debugging and profiling tools, installs the pre-commit hooks and generates a
-`compile_commands.json` database for clang tooling.  Run `pre-commit run -a`
-after editing sources to keep formatting consistent.  The script installs `pre-commit` via pip when missing and ensures a `.pre-commit-config.yaml` file exists.  It also verifies
-that `yacc` (via `byacc` or `bison`) and the Swift toolchain
-are available, falling back to additional package installs if necessary.
-Any package failures are recorded in `/tmp/setup_failures.log`
-so the remainder of the setup can continue.  The script normally requires
-root privileges and network access.  When invoked with `--offline` it
-installs all `.deb` files from the `offline_packages/` directory instead of
-using the network.
+GCC, clang, llvm, m4, CMake and Ninja. BSD make (`bmake`) and the optional
+`mk-configure` framework are installed as well. The script also sets up
+debugging and profiling tools, installs the pre-commit hooks and generates a
+`compile_commands.json` database for clang tooling. Run `pre-commit run --files
+<path/to/file.c>` to format or analyse individual changes, or `pre-commit run -a`
+to sweep the entire tree. The configuration invokes `clang-format` and
+`clang-tidy` on tracked C and C++ sources while automatically skipping archival
+directories such as `archives/`, `Historical Archives/`, `offline_packages/` and
+`third_party/`. The script installs `pre-commit` via pip when missing and
+ensures a `.pre-commit-config.yaml` file exists. It also verifies that `yacc`
+(via `byacc` or `bison`) and the Swift toolchain are available, falling back to
+additional package installs if necessary. Any package failures are recorded in
+`/tmp/setup_failures.log` so the remainder of the setup can continue. The script
+normally requires root privileges and network access. When invoked with
+`--offline` it installs all `.deb` files from the `offline_packages/` directory
+instead of using the network.
 The package list now includes `tmux` for convenient session management. Cross-compilers for AArch64, ARMv7, PowerPC and RISC-V are installed so the tree can be built for a variety of targets. `gcc-multilib` conflicts with these cross toolchains, so it is omitted. `setup.sh` defaults to **clang-18**, switches to **clang-20** when available and falls back to **clang-14** or **clang-11** on older systems.
 Wrapper symlinks named `cc` and `c++` point to the selected clang version so existing build scripts use clang transparently.
 
