@@ -1,38 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Parse the list of packages from setup.sh by reading the block starting from
-# the line containing `packages=` up to the closing parenthesis. This ensures
-# that the package list remains accurate even if setup.sh changes.
+# Parse the package list from `docs/setup.md` by scanning the fenced code block
+# that starts with `sudo apt install -y`. This keeps the tool check in sync
+# with the documentation.
 
 SCRIPT_DIR="$(dirname "$0")"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-SETUP_SH="$ROOT_DIR/setup.sh"
+SETUP_DOC="$ROOT_DIR/docs/setup.md"
 
 ##
-# \brief Extract package names from setup.sh.
+# \brief Extract package names from `docs/setup.md`.
 #
-# The function locates the `packages=` block within setup.sh and reads each
-# package name listed until the closing parenthesis. Continuation backslashes
-# are stripped so that the resulting words represent actual package names.
+# The function locates the `sudo apt install -y` block and reads each package
+# name until the closing triple backticks. Continuation backslashes are stripped
+# so the resulting words represent actual package names.
 #
 # \return Populates the global array \c packages with the parsed package names.
 extract_packages() {
-    local line in_list=false
+    local line in_block=false
     packages=()
     while IFS= read -r line; do
-        if [[ $line =~ ^packages=\( ]]; then
-            in_list=true
-            continue
+        if [[ $line =~ ^sudo\ apt\ install ]]; then
+            in_block=true
+            line="${line#*install -y }"
         fi
-        if [[ $in_list == true ]]; then
-            [[ $line =~ ^\) ]] && break
+        if [[ $in_block == true ]]; then
+            if [[ $line == '```' ]]; then
+                break
+            fi
             line="${line%\\}"
             for word in $line; do
                 packages+=("$word")
             done
         fi
-    done < "$SETUP_SH"
+    done < "$SETUP_DOC"
 }
 
 ##

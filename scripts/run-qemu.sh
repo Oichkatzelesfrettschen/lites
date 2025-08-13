@@ -48,7 +48,7 @@ print_usage() {
 ##
 print_build_hint() {
   cat >&2 <<'EOF'
-Run ./setup.sh to install dependencies and clone OpenMach.
+Refer to docs/setup.md to install dependencies and clone OpenMach.
 Then build using:
   make -f Makefile.new ARCH=i686 \
       LITES_MACH_DIR=openmach \
@@ -125,7 +125,7 @@ run_qemu() {
   qemu_cmd=$(select_qemu "$arch")
 
   if ! command -v "$qemu_cmd" >/dev/null 2>&1; then
-    echo "$qemu_cmd not found in PATH. Run ./setup.sh to install QEMU." >&2
+    echo "$qemu_cmd not found in PATH. See docs/setup.md for QEMU installation instructions." >&2
     exit 1
   fi
 

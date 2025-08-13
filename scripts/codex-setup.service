@@ -1,13 +1,13 @@
 # codex-setup.service
 [Unit]
-Description=Heal and run setup.sh before networking
+Description=Validate environment using docs/setup.md before networking
 DefaultDependencies=no
 Before=network-pre.target
 Wants=network-pre.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/codex -q -a full-auto "doctor setup.sh" && /usr/local/bin/setup.sh
+ExecStart=/usr/local/bin/codex -q -a full-auto "doctor docs/setup.md"
 RemainAfterExit=yes
 
 [Install]
