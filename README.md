@@ -61,9 +61,9 @@ headers in the directory specified by the `LITES_MACH_DIR` environment
 variable.  If that variable is unset and a directory named `openmach`
 exists at the repository root, it will be used automatically (a git
 submodule can conveniently provide it).
-Running `setup.sh` will automatically clone the OpenMach repository when
-network access is available.  Pass `--offline` to skip the clone and
-install any `.deb` archives found in `offline_packages/` with `dpkg -i`.
+Follow [docs/setup.md](docs/setup.md) to install prerequisites and
+optionally clone the OpenMach repository. The guide also covers offline
+setups using predownloaded packages placed in `offline_packages/`.
 If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
 location (for example `openmach/lib`).  When the variable is not set and
 `openmach/lib` exists, it will be used automatically.
@@ -95,21 +95,25 @@ Use `scripts/flatten-headers.sh` to gather all header files from across the repo
 
 Lites requires a Mach 3 or Mach 4 kernel and a 4.4BSD userland.  Each
 release is provided as a `*.tar.gz` archive.  Unpack the desired
-version and build it inside the resulting directory.  For example:
+version and build it inside the resulting directory.  The recommended
+path uses CMake with the Ninja generator and the LLVM toolchain:
 
 ```sh
 tar -xzf lites-1.1.u3.tar.gz
 cd lites-1.1.u3
-make -f Makefile.new    # or run cmake -B build && cmake --build build
+cmake -G Ninja -B build \
+      -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_LINKER=lld
+ninja -C build
 ```
 
-For the modernized build system in this repository you can also use
-`Makefile.new` or the provided CMake files.  Both build from the directory
-specified by `SRCDIR`/`LITES_SRC_DIR`.  Set this variable to point at the
-legacy source tree.  The tools recognise an
-`ARCH` variable which selects the target CPU.  Supported values include the
-64‑bit `x86_64` and `riscv64`, 32‑bit `i686`, `arm` and `powerpc`, and the
-16‑bit `ia16`.  The default is `ARCH=x86_64`.
+The legacy `Makefile.new` still exists for historical completeness, but
+the CMake/Ninja path above is the primary entry point.  Both systems
+build from the directory specified by `SRCDIR`/`LITES_SRC_DIR`.  Set this
+variable to point at the legacy source tree.  The tools recognise an
+`ARCH` variable which selects the target CPU.  Supported values include
+the 64‑bit `x86_64` and `riscv64`, 32‑bit `i686`, `arm` and `powerpc`, and
+the 16‑bit `ia16`.  The default is `ARCH=x86_64`.
 
 Use `ARCH=ia16` for 16‑bit builds.  Choose `ARCH=i686`, `ARCH=arm` or
 `ARCH=powerpc` for 32‑bit binaries, and `ARCH=x86_64` or `ARCH=riscv64` for
@@ -169,30 +173,30 @@ if(BISON_FOUND)
 endif()
 ```
 
-The optional `setup.sh` script installs a wide range of cross-compilers
-and emulators along with standard build utilities such as build-essential,
-GCC, clang, llvm, m4, CMake and Ninja. BSD make (`bmake`) and the optional
-`mk-configure` framework are installed as well. The script also sets up
-debugging and profiling tools, installs the pre-commit hooks and generates a
-`compile_commands.json` database for clang tooling. Run `pre-commit run --files
-<path/to/file.c>` to format or analyse individual changes, or `pre-commit run -a`
-to sweep the entire tree. The configuration invokes `clang-format` and
-`clang-tidy` on tracked C and C++ sources while automatically skipping archival
-directories such as `archives/`, `Historical Archives/`, `offline_packages/` and
-`third_party/`. The script installs `pre-commit` via pip when missing and
-ensures a `.pre-commit-config.yaml` file exists. It also verifies that `yacc`
-(via `byacc` or `bison`) and the Swift toolchain are available, falling back to
-additional package installs if necessary. Any package failures are recorded in
-`/tmp/setup_failures.log` so the remainder of the setup can continue. The script
-normally requires root privileges and network access. When invoked with
-`--offline` it installs all `.deb` files from the `offline_packages/` directory
-instead of using the network.
-The package list now includes `tmux` for convenient session management. Cross-compilers for AArch64, ARMv7, PowerPC and RISC-V are installed so the tree can be built for a variety of targets. `gcc-multilib` conflicts with these cross toolchains, so it is omitted. `setup.sh` defaults to **clang-18**, switches to **clang-20** when available and falls back to **clang-14** or **clang-11** on older systems.
+The [environment setup guide](docs/setup.md) installs a wide range of
+cross-compilers and emulators along with standard build utilities such as
+build-essential, GCC, clang, llvm, m4, CMake and Ninja. BSD make (`bmake`) and
+the optional `mk-configure` framework are included as well. The guide also sets
+up debugging and profiling tools, installs the pre-commit hooks and generates a
+`compile_commands.json` database for clang tooling. Run
+`pre-commit run --files <path/to/file.c>` to format or analyse individual
+changes, or `pre-commit run -a` to sweep the entire tree. The configuration
+invokes `clang-format` and `clang-tidy` on tracked C and C++ sources while
+automatically skipping archival directories such as `archives/`, `Historical
+Archives/`, `offline_packages/` and `third_party/`. The guide recommends
+installing `pre-commit` via pip when missing and ensures a
+`.pre-commit-config.yaml` file exists. It also verifies that `yacc` (via
+`byacc` or `bison`) and the Swift toolchain are available, falling back to
+additional package installs if necessary. Any package failures should be
+recorded so the remainder of the setup can continue. The steps normally require
+root privileges and network access. For offline use, install the `.deb` files
+from the `offline_packages/` directory instead of using the network.
+The package list includes `tmux` for convenient session management. Cross-compilers for AArch64, ARMv7, PowerPC and RISC-V are installed so the tree can be built for a variety of targets. `gcc-multilib` conflicts with these cross toolchains, so it is omitted. The guide defaults to **clang-18**, switches to **clang-20** when available and falls back to **clang-14** or **clang-11** on older systems.
 Wrapper symlinks named `cc` and `c++` point to the selected clang version so existing build scripts use clang transparently.
 
 ### 80386 optimisation flags
 
-`setup.sh` exports a dense suite of options tuned for 80386 silicon. All
+The setup guide details a dense suite of options tuned for 80386 silicon. All
 post‑486 instructions are disabled, loops and functions align to 16 bytes
 and Polly/Graphite are enabled via `CLANG_EXTRA_FLAGS`. Unit tests inherit
 these settings through the `CFLAGS` environment variable so the entire
@@ -229,11 +233,16 @@ restrictions. The key compiler options include:
 -mcmodel=small -mplt -mno-tls-direct-seg-refs
 ```
 
-Codex CLI can keep `setup.sh` in sync with `.codex/setup.sh` automatically. The `postCreateCommand` in `.devcontainer/devcontainer.json` installs Codex and runs `codex -q 'doctor setup.sh'` after container creation. A sample systemd unit `scripts/codex-setup.service` demonstrates how to do the same early in boot.
+Codex CLI can keep the environment setup assets in sync with the
+documentation. The `postCreateCommand` in
+`.devcontainer/devcontainer.json` installs Codex and runs
+`codex -q 'doctor docs/setup.md'` after container creation. A sample systemd
+unit `scripts/codex-setup.service` demonstrates how to do the same early in
+boot.
 
 ### Codex environment packages
 
-The [`setup.sh`](setup.sh) helper installs Clang, LLD and auxiliary tools, plus
+The [setup guide](docs/setup.md) installs Clang, LLD and auxiliary tools, plus
 debuggers, cross-compilers and QEMU.  The main packages include:
 
 ```

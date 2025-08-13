@@ -9,8 +9,8 @@ Building older releases often requires a matching Mach kernel. The Utah Flux
 project hosted detailed instructions and patches, many of which are mirrored at
 [archive.org](https://web.archive.org/).
 
-To experiment with cross compilation or multiple architectures, see the
-`setup.sh` script in the repository root. It installs a full toolchain and
+To experiment with cross compilation or multiple architectures, consult the
+[environment setup guide](setup.md). It details a full toolchain and
 qemu-based emulation targets.
 
 The modernized sources require a compiler with full

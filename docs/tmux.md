@@ -1,8 +1,8 @@
 # tmux workflow
 
 This guide explains how to run the Lites server under QEMU using tmux.
-The `setup.sh` script installs tmux together with other development
-tools, making the following workflow available out of the box.
+The [environment setup guide](setup.md) installs tmux together with other
+development tools, making the following workflow available out of the box.
 
 ## Starting QEMU in a tmux session
 

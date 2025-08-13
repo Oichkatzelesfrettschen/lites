@@ -6,35 +6,33 @@ configure the tree and attempt a build with full instrumentation.
 
 ## 1. Environment setup
 
-Run the helper script to install compilers, debuggers and tracing utilities.
-It requires root privileges.
+Follow the [environment setup guide](setup.md) to install compilers,
+debuggers and tracing utilities. The steps require root privileges when
+adding packages.
 
-```bash
-sudo ./setup.sh            # online mode, installs packages via apt
-sudo ./setup.sh --offline  # use predownloaded packages in offline_packages/
-```
-
-The script installs clang, lld, qemu, valgrind, strace, ltrace, perf and
-assorted cross compilers.  Logs are written to `/tmp/setup.log`.
-Use `scripts/check_build_tools.sh` to verify that all core tools were found.
+The guide installs clang, lld, qemu, valgrind, strace, ltrace, perf and
+assorted cross compilers. Use `scripts/check_build_tools.sh` to verify that
+all core tools were found.
 
 ## 2. Configure the source tree
 
-The modernised Makefile expects the legacy sources in `build/lites-1.1.u3`.
-Either extract `lites-1.1.u3.tar.gz` there or set `SRCDIR` to the directory
-containing the snapshot (within this repo it resides under
-`Items1/lites-1.1.u3`).
+Generate a build tree with CMake using the Ninja generator and the LLVM
+toolchain. The legacy sources live under `Items1/lites-1.1.u3`:
 
 ```bash
-make -f Makefile.new ARCH=x86_64 \
-    SRCDIR=Items1/lites-1.1.u3 2>&1 | tee /tmp/build_log.txt
+cmake -G Ninja -B build \
+      -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_LINKER=lld \
+      -DLITES_SRC_DIR=Items1/lites-1.1.u3
+ninja -C build
 ```
 
-The first build will fail because Mach headers are missing.  Populate them
-using `scripts/extract-xmach-headers.sh` and retry:
+The first build may fail because Mach headers are missing. Populate them
+using `scripts/extract-xmach-headers.sh` and rerun `ninja`:
 
 ```bash
 LITES_SRC_DIR=Items1/lites-1.1.u3 scripts/extract-xmach-headers.sh
+ninja -C build
 ```
 
 ## 3. Instrumentation
