@@ -6,6 +6,12 @@ configure the tree and attempt a build with full instrumentation.
 
 ## 1. Environment setup
 
+Before building, ensure your package lists are current:
+
+```bash
+sudo apt update
+```
+
 Follow the [environment setup guide](setup.md) to install compilers,
 debuggers and tracing utilities. The steps require root privileges when
 adding packages.
