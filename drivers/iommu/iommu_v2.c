@@ -16,14 +16,21 @@ static struct mapping **map_list(struct iommu_dom *d) {
 static void tlb_invalidate_domain(uint16_t asid) { (void)asid; }
 
 /**
- * @brief Map a physical address range into an IOMMU domain.
+ * @brief Establish a single I/O mapping in the given domain.
  *
- * @param dom   Target IOMMU domain.
- * @param iova  IO virtual address where the range begins.
- * @param pa    Physical address backing the range.
- * @param len   Length of the region to map in bytes.
- * @param perms Access permissions for the range.
- * @return 0 on success or -1 on failure.
+ * Associates a contiguous physical memory range with an I/O virtual
+ * address range and records it in the domain's bookkeeping. The domain's
+ * epoch counter is incremented and the translation cache is invalidated to
+ * make the new translation visible to devices.
+ *
+ * @param[in]  dom    IOMMU domain to receive the mapping.
+ * @param[in]  iova   Starting I/O virtual address of the region.
+ * @param[in]  pa     Starting physical address backing the region.
+ * @param[in]  len    Length of the region in bytes; must be non-zero.
+ * @param[in]  perms  Access permission flags applied to the mapping.
+ *
+ * @retval 0   Mapping established successfully.
+ * @retval -1  Invalid parameters or memory allocation failure.
  */
 int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa, size_t len, uint32_t perms) {
     if (!dom || !len)
@@ -45,12 +52,19 @@ int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa, size_t len, u
 }
 
 /**
- * @brief Remove a previously established mapping.
+ * @brief Remove an existing mapping from an IOMMU domain.
  *
- * @param dom  IOMMU domain containing the mapping.
- * @param iova IO virtual address to unmap.
- * @param len  Length of the mapped region.
- * @return 0 on success or -1 on failure.
+ * Searches the domain's mapping list for an entry matching the provided
+ * I/O virtual address and length. When found, the entry is removed, the
+ * epoch counter is incremented, and the translation cache is invalidated
+ * so subsequent accesses observe the change.
+ *
+ * @param[in] dom   Domain from which to remove the mapping.
+ * @param[in] iova  Starting I/O virtual address of the mapping.
+ * @param[in] len   Length of the mapping to remove in bytes.
+ *
+ * @retval 0   Mapping removed successfully.
+ * @retval -1  Error occurred or mapping not found.
  */
 int iommu_unmap(struct iommu_dom *dom, uintptr_t iova, size_t len) {
     if (!dom || !len)
@@ -74,15 +88,25 @@ int iommu_unmap(struct iommu_dom *dom, uintptr_t iova, size_t len) {
 }
 
 /**
- * @brief Map multiple ranges into an IOMMU domain.
+ * @brief Map several address ranges in a single operation.
  *
- * @param dom    IOMMU domain to modify.
- * @param iovas  Array of IO virtual address starts.
- * @param pas    Array of physical address starts.
- * @param lens   Array of mapping lengths.
- * @param perms  Array of permission values.
- * @param count  Number of entries in each array.
- * @return 0 on success or -1 on failure.
+ * Convenience wrapper that iteratively invokes @ref iommu_map for each
+ * element of the provided arrays, allowing callers to populate an IOMMU
+ * domain with many mappings efficiently.
+ *
+ * @param[in]  dom    Domain receiving the mappings.
+ * @param[in]  iovas  Array of I/O virtual address starts; must have at
+ *                    least @p count elements.
+ * @param[in]  pas    Array of physical address starts; must have at least
+ *                    @p count elements.
+ * @param[in]  lens   Array of region lengths in bytes; must have at least
+ *                    @p count elements.
+ * @param[in]  perms  Array of permission flags for each region; must have
+ *                    at least @p count elements.
+ * @param[in]  count  Number of mappings to establish.
+ *
+ * @retval 0   All mappings established successfully.
+ * @retval -1  Any individual mapping failed.
  */
 int iommu_bulk_map(struct iommu_dom *dom, const uintptr_t *iovas, const uintptr_t *pas,
                    const size_t *lens, const uint32_t *perms, size_t count) {
