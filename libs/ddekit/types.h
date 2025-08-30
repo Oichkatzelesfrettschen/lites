@@ -4,7 +4,9 @@
  * \author  Christian Helmuth <ch12@os.inf.tu-dresden.de>
  * \date    2006-11-09
  *
- * FIXME This is definitely arch-dependent! Move to ARCH-something
+ * These definitions reflect the assumptions of the original x86 port.
+ * Future architectures should provide their own specialised header
+ * if the widths of these types differ.
  */
 
 #ifndef _DDEKIT_TYPES_H

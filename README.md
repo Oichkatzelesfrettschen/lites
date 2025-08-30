@@ -351,6 +351,8 @@ thousand files.
 ## Memory allocation roadmap
 
 The current DDEKit memory API exposes `ddekit_contig_malloc()` for obtaining
-DMA-safe contiguous buffers. Drivers that merely require virtually contiguous
-regions must still rely on this low-level call. A vmalloc-style allocator is
-planned for future versions to handle non-contiguous allocations gracefully.
+DMA-safe contiguous buffers. Drivers that only need virtual contiguity must
+still rely on this low-level call, which is presently a stub returning no
+memory. A dedicated vmalloc-style allocator is planned for future versions to
+handle non-contiguous requests more gracefully while keeping
+`ddekit_contig_malloc()` for strictly contiguous DMA use cases.
