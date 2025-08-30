@@ -115,13 +115,15 @@ void ddekit_large_free(void *p);
 /**
  * Allocate a physically contiguous memory region.
  *
- * This routine is intended for device drivers that require DMA capable
- * buffers.  Memory is obtained from the memory server such that the block is
- * contiguous in physical address space.  The caller may limit the address
- * range, alignment and boundary conditions of the allocation.
+ * This routine targets device drivers that require DMA-capable buffers.  It is
+ * meant to request memory from the system's memory server such that the block
+ * resides within the physical window \p [low, high), satisfies a power-of-two
+ * \p alignment, and does not cross the specified \p boundary.
  *
- * The implementation only supports contiguous mappings.  A vmalloc-style
- * allocator is planned for future work to cover non-contiguous requests.
+ * The current library only ships a stub implementation and therefore returns
+ * `0`.  A vmalloc-style allocator is planned to handle non-contiguous requests
+ * in the future while this call will continue to serve strictly contiguous
+ * needs.
  *
  * \param size       number of bytes to allocate
  * \param low        lowest acceptable physical address
