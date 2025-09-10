@@ -1,40 +1,60 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Parse the package list from `docs/setup.md` by scanning the fenced code block
-# that starts with `sudo apt install -y`. This keeps the tool check in sync
-# with the documentation.
+# Parse the package list from `setup.sh` by locating the packages array.
+# This approach keeps the tool check aligned with the source of truth used by
+# the setup script itself and avoids reliance on brittle line numbers.
 
 SCRIPT_DIR="$(dirname "$0")"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-SETUP_DOC="$ROOT_DIR/docs/setup.md"
+SETUP_SCRIPT="$ROOT_DIR/setup.sh"
+
+# Abort early if the setup script is missing; without it we cannot determine
+# the expected toolchain packages.
+if [[ ! -f "$SETUP_SCRIPT" ]]; then
+    echo "Setup script not found: $SETUP_SCRIPT" >&2
+    exit 1
+fi
 
 ##
-# \brief Extract package names from `docs/setup.md`.
+# \brief Extract package names from \c setup.sh.
 #
-# The function locates the `sudo apt install -y` block and reads each package
-# name until the closing triple backticks. Continuation backslashes are stripped
-# so the resulting words represent actual package names.
+# The function scans for the \c packages array definition and collects each
+# entry until the closing parenthesis. Inline comments are stripped to avoid
+# accidental inclusion in the package list.
 #
 # \return Populates the global array \c packages with the parsed package names.
 extract_packages() {
     local line in_block=false
     packages=()
+
     while IFS= read -r line; do
-        if [[ $line =~ ^sudo\ apt\ install ]]; then
-            in_block=true
-            line="${line#*install -y }"
-        fi
-        if [[ $in_block == true ]]; then
-            if [[ $line == '```' ]]; then
-                break
+        # Remove inline comments for robust parsing.
+        line="${line%%#*}"
+
+        if [[ $in_block == false ]]; then
+            if [[ $line =~ ^packages=\( ]]; then
+                in_block=true
+                line="${line#packages=(}"
+            else
+                continue
             fi
-            line="${line%\\}"
+        fi
+
+        if [[ $in_block == true ]]; then
+            if [[ $line =~ \) ]]; then
+                line="${line%%\)*}"
+                in_block=false
+            fi
+
             for word in $line; do
+                [[ -z $word ]] && continue
                 packages+=("$word")
             done
+
+            [[ $in_block == false ]] && break
         fi
-    done < "$SETUP_DOC"
+    done < "$SETUP_SCRIPT"
 }
 
 ##
