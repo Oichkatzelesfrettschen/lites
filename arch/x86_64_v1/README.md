@@ -12,7 +12,7 @@ functionality without behavioural changes.
 ## Notes
 
 Basic TLB invalidation routines are currently provided only for the `x86_64`
-architecture. Other targets, including `arm64` and `riscv64`, remain
-unsupported and will need dedicated implementations.
+architecture. Other targets, including `aarch64`, `riscv64`, `powerpc64` and
+others, remain unsupported and will need dedicated implementations.
 
 Further machine specific code will be added over time.
