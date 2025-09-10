@@ -11,15 +11,17 @@
  */
 
 /**
- * @brief Handle a page fault for the given address space.
+ * @brief Handle a page fault that occurs within an address space.
  *
- * Notifies an optional pager about the fault and maps a writable page at the
- * faulting address.
+ * When a fault is received, an optional user-space pager is notified and a
+ * single writable page is mapped to satisfy the access. The current
+ * implementation is intentionally minimal and intended as a placeholder for a
+ * richer pager-driven VM system.
  *
- * @param as   Address space receiving the fault.
- * @param addr Faulting virtual address.
- * @param prot Requested protection for the new mapping.
- * @return KERN_SUCCESS on success, otherwise KERN_FAILURE.
+ * @param as   Address space receiving the fault. Must not be @c NULL.
+ * @param addr Virtual address that triggered the fault.
+ * @param prot Desired protection bits for the new mapping.
+ * @return ::KERN_SUCCESS on success; otherwise ::KERN_FAILURE.
  */
 kern_return_t vm_fault_entry(aspace_t *as, vm_offset_t addr, vm_prot_t prot) {
     if (!as)
@@ -41,16 +43,18 @@ kern_return_t vm_fault_entry(aspace_t *as, vm_offset_t addr, vm_prot_t prot) {
 }
 
 /**
- * @brief Map a frame into an address space.
+ * @brief Map a physical frame into the given address space.
  *
- * Creates a mapping at the specified virtual address.
+ * Establishes a mapping at the supplied virtual address. In this simplified
+ * library build, the @p frame and @p flags arguments are placeholders and an
+ * anonymous page is allocated instead.
  *
- * @param as    Target address space.
- * @param vaddr Desired virtual address; may be 0 for kernel choice.
- * @param frame Frame capability to map (unused placeholder).
- * @param prot  Requested memory protection.
- * @param flags Mapping flags (unused placeholder).
- * @return KERN_SUCCESS on success, otherwise KERN_FAILURE.
+ * @param as    Address space receiving the mapping.
+ * @param vaddr Preferred virtual address or @c 0 to let the kernel choose.
+ * @param frame Capability designating the physical frame to map (unused).
+ * @param prot  Requested protection flags.
+ * @param flags Additional mapping flags (unused).
+ * @return ::KERN_SUCCESS on success; otherwise ::KERN_FAILURE.
  */
 kern_return_t map_frame(aspace_t *as, vm_offset_t vaddr, mach_port_t frame, vm_prot_t prot,
                         int flags) {
@@ -65,11 +69,13 @@ kern_return_t map_frame(aspace_t *as, vm_offset_t vaddr, mach_port_t frame, vm_p
 }
 
 /**
- * @brief Unmap a previously mapped frame.
+ * @brief Remove a previously established mapping.
  *
- * @param as    Address space owning the mapping.
+ * This helper simply unmaps a single page starting at @p vaddr.
+ *
+ * @param as    Address space owning the mapping (unused).
  * @param vaddr Virtual address of the mapping to remove.
- * @return KERN_SUCCESS on success, otherwise KERN_FAILURE.
+ * @return ::KERN_SUCCESS on success; otherwise ::KERN_FAILURE.
  */
 kern_return_t unmap_frame(aspace_t *as, vm_offset_t vaddr) {
     (void)as;
