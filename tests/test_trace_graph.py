@@ -5,6 +5,10 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 import sys
+import pytest
+
+pytest.importorskip("networkx")  # Skip tests if networkx is unavailable
+pytest.importorskip("pydot")     # Skip tests if pydot is unavailable
 
 
 def test_trace_graph_generates_output(tmp_path: Path) -> None:
