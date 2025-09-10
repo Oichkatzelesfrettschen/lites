@@ -3,17 +3,17 @@
 #include <stdio.h>
 
 /**
- * @brief Create a new enclave.
+ * @brief Instantiate a new enclave.
  *
- * @details This stub merely logs creation of an enclave. A production
- * implementation would allocate and initialize a protected execution
- * context and return a unique handle representing it.
+ * @details This placeholder emits a diagnostic message and returns a
+ * static handle. A complete implementation would allocate and initialize
+ * a protected execution context, yielding a unique enclave identifier.
  *
- * @param[in] name Human-readable identifier used for logging and debugging.
- *                 Must not be `NULL`.
+ * @param[in] name Human-readable identifier for the enclave. Must not
+ *                 be `NULL`.
  *
- * @return Positive handle to the newly created enclave on success.
- * @return Negative error code on failure.
+ * @return Positive handle to the newly created enclave.
+ * @retval <0 Negative error code on failure.
  *
  * @todo Replace stub with real enclave creation logic.
  */
@@ -25,15 +25,15 @@ int enclave_create(const char *name) {
 /**
  * @brief Attest to the integrity of an enclave.
  *
- * @details This stub simulates verifying the enclave's measurement. A
- * complete implementation would perform cryptographic checks to ensure
- * the enclave's code and data have not been tampered with.
+ * @details This stub simulates attestation by printing a message. A real
+ * implementation would verify cryptographic measurements to ensure the
+ * enclave's code and data remain unmodified.
  *
- * @param[in] handle Handle returned by enclave_create() identifying the
- *                   enclave to attest.
+ * @param[in] handle Handle returned by enclave_create identifying the
+ *                   enclave subject to attestation.
  *
  * @return 0 when attestation succeeds.
- * @return Negative error code on failure.
+ * @retval <0 Negative error code on failure.
  *
  * @todo Replace stub with real attestation logic.
  */
