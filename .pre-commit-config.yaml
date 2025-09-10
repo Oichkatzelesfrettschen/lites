@@ -1,6 +1,6 @@
 minimum_pre_commit_version: '2.20.0'
 exclude: |
-  ^(
+  (?x)^(
     archives/|
     Historical\ Archives/|
     offline_packages/|
