@@ -262,9 +262,24 @@ The script exports 80386-tuned optimisation flags and sets `cc`/`c++` to the
 selected clang version. It also generates `compile_commands.json` so clang tools
 work out of the box.
 
-
 You can also invoke `scripts/run-precommit.sh` which automatically installs
 `pre-commit` via pip when missing.
+
+### Pre-commit hooks
+
+Install the Git hook once to enable automatic formatting and static analysis:
+
+```sh
+pre-commit install
+```
+
+The configuration in `.pre-commit-config.yaml` registers `clang-format` and
+`clang-tidy` hooks. They operate on all tracked C and C++ sources. Run them
+manually on selected files with:
+
+```sh
+pre-commit run --files path/to/file.c path/to/file.cpp
+```
 
 The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
