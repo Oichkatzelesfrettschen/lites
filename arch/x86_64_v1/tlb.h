@@ -11,9 +11,9 @@ extern "C" {
  * @file tlb.h
  * @brief Architecture-specific TLB invalidation primitives.
  *
- * Only x86_64 implementations are currently provided. Other
- * architectures such as arm64 or riscv64 must supply their own
- * definitions or treat the functions as no-ops.
+ * Only x86_64 implementations are currently provided. Architectures such
+ * as aarch64, riscv64 or powerpc64 remain unsupported and must supply
+ * their own definitions or treat the functions as no-ops.
  */
 
 /**

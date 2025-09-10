@@ -1,6 +1,6 @@
 #include "tlb.h"
 
-#if defined(__x86_64__) || defined(_M_X64)
+#if defined(__x86_64__) || defined(__amd64__) || defined(_M_X64)
 
 /**
  * @brief Invalidate the entire translation lookaside buffer.
@@ -22,6 +22,15 @@ void arch_tlb_invalidate_page(uintptr_t addr) {
 
 #else
 #warning "TLB invalidation not supported on this architecture"
+/**
+ * @brief Fallback no-op for unsupported targets.
+ */
 void arch_tlb_invalidate_all(void) {}
+
+/**
+ * @brief Fallback no-op for unsupported targets.
+ *
+ * @param addr Ignored.
+ */
 void arch_tlb_invalidate_page(uintptr_t addr) { (void)addr; }
 #endif
