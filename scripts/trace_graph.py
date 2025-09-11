@@ -21,7 +21,13 @@ import argparse
 import re
 from pathlib import Path
 
-import networkx as nx
+try:
+    import networkx as nx
+    import pydot  # type: ignore[import-not-found]  # Imported for its GraphViz bindings
+except ModuleNotFoundError as exc:
+    raise SystemExit(
+        "networkx and pydot are required to generate trace graphs; install with 'pip install networkx pydot'."
+    ) from exc
 
 
 def find_trace_files(root: Path, exclude: set[str] | None = None) -> set[Path]:

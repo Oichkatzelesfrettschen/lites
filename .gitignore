@@ -42,4 +42,6 @@ builds/
 # Ignore logs and operating system files
 *.log
 lizard.log
+
+# macOS Finder metadata
 .DS_Store
