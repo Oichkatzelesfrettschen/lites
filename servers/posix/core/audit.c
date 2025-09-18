@@ -21,11 +21,10 @@ static int audit_pos;
  * result code into a circular buffer limited to AUDIT_LOG_SIZE entries.
  * The buffer provides a lightweight audit trail of privileged actions.
  *
- * @param p      Process that triggered the event or NULL.
- * @param op     Name of the audited operation.
+ * @param p Process that triggered the event or NULL.
+ * @param op Name of the audited operation.
  * @param result Non-zero on success, zero on failure.
  */
-
 void
 audit_record(struct proc *p, const char *op, int result)
 {

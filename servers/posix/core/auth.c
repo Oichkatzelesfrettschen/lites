@@ -20,8 +20,8 @@ static int acl_count = 3;
  * operation named by @p op.  Additional entries beyond ACL_MAX are
  * ignored to keep the table bounded.
  *
- * @param uid   User identifier for the rule.
- * @param op    Operation name to match.
+ * @param uid User identifier for the rule.
+ * @param op Operation name to match.
  * @param allow Set to 1 to permit the action, 0 to deny.
  */
 void
@@ -40,11 +40,12 @@ acl_add(uid_t uid, const char *op, int allow)
  *
  * The function scans the ACL table for an entry matching the process's
  * effective user ID and the requested operation.  When no rule exists the
- * action is allowed by default.
+ * action is allowed by default, providing a simple discretionary access
+ * control mechanism.
  *
- * @param p  Process requesting authorisation or NULL.
+ * @param p Process requesting authorisation or NULL.
  * @param op Operation name being attempted.
- * @return   1 if permitted, 0 if denied.
+ * @return 1 if permitted, 0 if denied.
  */
 int
 authorize(struct proc *p, const char *op)
