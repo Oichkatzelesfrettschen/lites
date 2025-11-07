@@ -1,0 +1,94 @@
+FROM debian:bookworm-slim
+
+# Set environment variables for non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Install base development tools and dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc-multilib \
+    g++-multilib \
+    git \
+    wget \
+    curl \
+    cmake \
+    ninja-build \
+    make \
+    autoconf \
+    automake \
+    libtool \
+    pkg-config \
+    flex \
+    bison \
+    gawk \
+    texinfo \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install QEMU for i386 emulation
+RUN apt-get update && apt-get install -y \
+    qemu-system-x86 \
+    qemu-system-i386 \
+    qemu-utils \
+    qemu-user-static \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install GNU Mach and Hurd development packages for MIG
+RUN apt-get update && apt-get install -y \
+    gnumach-dev \
+    hurd-dev \
+    mig \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install additional development tools
+RUN apt-get update && apt-get install -y \
+    clang \
+    lld \
+    llvm \
+    ccache \
+    gdb \
+    gdb-multiarch \
+    tmux \
+    vim \
+    less \
+    file \
+    rsync \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install cross-compilation toolchains
+RUN apt-get update && apt-get install -y \
+    gcc-i686-linux-gnu \
+    g++-i686-linux-gnu \
+    binutils-i686-linux-gnu \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create working directory
+WORKDIR /workspace
+
+# Set up ccache
+ENV PATH=/usr/lib/ccache:$PATH
+ENV CCACHE_DIR=/workspace/.ccache
+
+# Configure environment for i386 builds
+ENV ARCH=i686
+ENV CC="ccache gcc"
+ENV CXX="ccache g++"
+ENV CFLAGS="-m32 -march=i386 -mtune=i386"
+ENV CXXFLAGS="-m32 -march=i386 -mtune=i386"
+ENV LDFLAGS="-m32"
+
+# Add a non-root user for development
+RUN useradd -m -s /bin/bash developer && \
+    mkdir -p /workspace && \
+    chown -R developer:developer /workspace
+
+USER developer
+
+# Set up shell environment
+RUN echo 'export PS1="\[\033[01;32m\]lites-i386-dev\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> ~/.bashrc
+
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]
