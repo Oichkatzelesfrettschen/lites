@@ -50,6 +50,18 @@ Technical details and options:
    - Advanced usage
    - Troubleshooting details
 
+5. **[CI_CD_WORKFLOW.md](CI_CD_WORKFLOW.md)** - CI/CD integration guide
+   - Complete workflow documentation
+   - Build process details
+   - QEMU execution flow
+   - Environment variables
+
+6. **[GITHUB_ACTIONS.md](GITHUB_ACTIONS.md)** - GitHub Actions CI/CD
+   - Automated testing pipeline
+   - Docker Compose v2 usage
+   - Job descriptions
+   - Troubleshooting CI issues
+
 ## File Structure
 
 ```
@@ -59,8 +71,11 @@ docker/
 ├── OVERVIEW.md                  ← Architecture overview
 ├── WORKFLOW.md                  ← Visual diagrams
 ├── README.md                    ← Technical reference
+├── CI_CD_WORKFLOW.md            ← CI/CD integration
+├── GITHUB_ACTIONS.md            ← GitHub Actions setup
 │
 ├── Dockerfile.i386-dev          ← Docker image definition
+├── docker-compose.yml           ← Container orchestration (v2)
 ├── docker-compose.yml           ← Container orchestration
 │
 └── scripts/

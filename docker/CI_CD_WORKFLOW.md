@@ -2,6 +2,8 @@
 
 This document explains the complete CI/CD workflow for building Lites i386 and running it inside QEMU within Docker.
 
+> **Note:** For GitHub Actions CI/CD setup, see [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md)
+
 ## Overview
 
 The workflow follows this execution path:
@@ -9,6 +11,22 @@ The workflow follows this execution path:
 ```
 CI/CD Trigger → Build Docker Image → Build Lites i386 → Run in QEMU i386 → Validate
 ```
+
+## Docker Compose v2
+
+**Important:** This project uses Docker Compose v2 (modern syntax), not the legacy v1.
+
+```bash
+# ✅ Correct (v2)
+docker compose version
+docker compose -f docker/docker-compose.yml build
+
+# ❌ Incorrect (v1, deprecated)
+docker-compose version
+docker-compose -f docker/docker-compose.yml build
+```
+
+All commands in this document use v2 syntax.
 
 ## Detailed Workflow Steps
 

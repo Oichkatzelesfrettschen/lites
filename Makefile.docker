@@ -2,11 +2,13 @@
 #
 # This Makefile provides convenient targets for building and running
 # Lites in a Docker container with QEMU i386 emulation.
+# Uses Docker Compose v2 (docker compose, not docker-compose)
 
 .PHONY: help docker-build docker-shell docker-build-lites docker-run-qemu docker-clean docker-test docker-all
 
-# Docker Compose command detection
-DOCKER_COMPOSE := $(shell command -v docker-compose 2>/dev/null || echo "docker compose")
+# Docker Compose v2 command (space, not hyphen)
+# This explicitly uses the v2 syntax
+DOCKER_COMPOSE := docker compose
 
 # Default target
 help:

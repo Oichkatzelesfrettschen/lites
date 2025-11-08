@@ -64,16 +64,19 @@ check_docker() {
 }
 
 ##
-# @brief Check if Docker Compose is available
+# @brief Check if Docker Compose is available (prefers v2)
 ##
 check_compose() {
+    # Prefer Docker Compose v2 (docker compose)
     if docker compose version >/dev/null 2>&1; then
         echo "docker compose"
+    # Fallback to v1 if v2 not available
     elif command -v docker-compose >/dev/null 2>&1; then
+        echo "Warning: Using legacy docker-compose v1. Consider upgrading to Docker Compose v2." >&2
         echo "docker-compose"
     else
         echo "Error: Docker Compose is not installed" >&2
-        echo "Please install Docker Compose" >&2
+        echo "Please install Docker Compose v2: https://docs.docker.com/compose/install/" >&2
         exit 1
     fi
 }
