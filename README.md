@@ -48,6 +48,10 @@ the top level `archives/` directory.
 Public headers now live in `include/` while kernel-only headers remain in
 `core/include/`.
 
+The `docker/` directory contains a complete Docker-based i386 development
+environment with QEMU emulation. See [docker/OVERVIEW.md](docker/OVERVIEW.md)
+for a comprehensive guide to building and running Lites in nested virtualization.
+
 
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
@@ -141,6 +145,39 @@ cmake -B build -DARCH=powerpc
 cmake -B build -DARCH=ia16
 cmake --build build
 ```
+
+### Docker-based i386 Development
+
+For a complete, pre-configured i386 development environment with QEMU emulation,
+use the Docker-based setup in the `docker/` directory. This provides:
+
+- Complete i386 toolchain with GCC multilib
+- MIG (Mach Interface Generator) from Debian packages
+- QEMU i386 emulation with optional KVM acceleration
+- Pre-configured build scripts and environment
+
+Quick start:
+
+```sh
+# Build Docker image and compile Lites for i386
+make -f Makefile.docker docker-all
+
+# Run in QEMU i386 instance
+make -f Makefile.docker docker-run-qemu
+
+# Enter interactive development container
+make -f Makefile.docker docker-shell
+```
+
+For detailed documentation, see:
+- [docker/GETTING_STARTED.md](docker/GETTING_STARTED.md) - Quick start guide
+- [docker/OVERVIEW.md](docker/OVERVIEW.md) - Complete architecture overview
+- [docker/README.md](docker/README.md) - Detailed reference
+
+The Docker environment supports nested virtualization (QEMU inside Docker)
+and can optionally integrate with GNU/Hurd for native Mach/Hurd development.
+See [docker/scripts/setup-hurd-dev.sh](docker/scripts/setup-hurd-dev.sh) for
+GNU/Hurd integration.
 
 To compile with Clang instead of GCC set the C compiler explicitly:
 
