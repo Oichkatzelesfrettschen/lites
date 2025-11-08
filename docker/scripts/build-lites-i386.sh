@@ -10,6 +10,8 @@ set -euo pipefail
 # and invokes the appropriate build system.
 ##
 
+# Note: SCRIPT_DIR is unused but kept for potential future use
+# shellcheck disable=SC2034
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="${WORKSPACE_ROOT:-/workspace}"
 BUILD_DIR="${BUILD_DIR:-${WORKSPACE_ROOT}/build-i386}"
@@ -137,8 +139,10 @@ build_with_make() {
 ##
 main() {
     local clean=false
-    local jobs="$(nproc)"
+    local jobs
     local build_system="cmake"
+    
+    jobs="$(nproc)"
     
     # Parse arguments
     while [[ $# -gt 0 ]]; do

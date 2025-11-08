@@ -8,14 +8,14 @@ services:
     image: lites-i386-dev:latest
     container_name: lites-i386-dev
     hostname: lites-i386-dev
-    
+
     # Enable privileged mode for QEMU KVM acceleration
     privileged: true
-    
+
     # Mount KVM device for hardware acceleration
     devices:
       - /dev/kvm:/dev/kvm
-    
+
     volumes:
       # Mount the repository root
       - ..:/workspace:rw
@@ -23,7 +23,7 @@ services:
       - ccache-i386:/workspace/.ccache
       # Persistent build artifacts
       - build-i386:/workspace/build
-    
+
     environment:
       - ARCH=i686
       - LITES_MACH_DIR=/workspace/openmach
@@ -31,13 +31,13 @@ services:
       - SRCDIR=/workspace/Items1/lites-1.1.u3
       # Enable KVM if available
       - QEMU_KVM=1
-    
+
     working_dir: /workspace
-    
+
     # Keep container running
     stdin_open: true
     tty: true
-    
+
     command: /bin/bash
 
   # Nested QEMU instance for running Lites i386
@@ -48,24 +48,24 @@ services:
     image: lites-i386-dev:latest
     container_name: lites-qemu-i386
     hostname: lites-qemu-i386
-    
+
     privileged: true
     devices:
       - /dev/kvm:/dev/kvm
-    
+
     volumes:
       - ..:/workspace:ro
       - qemu-images:/workspace/qemu-images
-    
+
     working_dir: /workspace
-    
+
     # Automatically run QEMU when started
     command: >
       bash -c "
         echo 'Starting QEMU i386 instance...' &&
         /workspace/docker/scripts/run-qemu-i386.sh
       "
-    
+
     # Expose QEMU monitor and serial ports
     ports:
       - "2222:22"

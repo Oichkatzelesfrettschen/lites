@@ -10,6 +10,8 @@ set -euo pipefail
 # and provides various options for debugging and development.
 ##
 
+# Note: SCRIPT_DIR is unused but kept for potential future use
+# shellcheck disable=SC2034
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="${WORKSPACE_ROOT:-/workspace}"
 BUILD_DIR="${BUILD_DIR:-${WORKSPACE_ROOT}/build-i386}"
@@ -184,6 +186,7 @@ build_qemu_cmd() {
     
     # Monitor
     if [[ "$use_monitor" == "yes" ]]; then
+        # shellcheck disable=SC2054
         qemu_args+=(-monitor telnet::4444,server,nowait)
         echo "QEMU monitor available on telnet://localhost:4444" >&2
     fi
@@ -198,6 +201,7 @@ build_qemu_cmd() {
     
     # Debug output
     if [[ "$debug" == "yes" ]]; then
+        # shellcheck disable=SC2054
         qemu_args+=(-d guest_errors,unimp)
     fi
     
