@@ -1,0 +1,101 @@
+# Makefile for Docker-based Lites i386 development
+#
+# This Makefile provides convenient targets for building and running
+# Lites in a Docker container with QEMU i386 emulation.
+
+.PHONY: help docker-build docker-shell docker-build-lites docker-run-qemu docker-clean docker-test docker-all
+
+# Docker Compose command detection
+DOCKER_COMPOSE := $(shell command -v docker-compose 2>/dev/null || echo "docker compose")
+
+# Default target
+help:
+	@echo "Lites i386 Docker Development Targets"
+	@echo "======================================"
+	@echo ""
+	@echo "Docker Container Management:"
+	@echo "  docker-build       - Build the Docker development image"
+	@echo "  docker-shell       - Enter the development container"
+	@echo "  docker-clean       - Remove containers and volumes"
+	@echo ""
+	@echo "Build and Run:"
+	@echo "  docker-build-lites - Build Lites i386 inside Docker"
+	@echo "  docker-run-qemu    - Run Lites in QEMU i386 inside Docker"
+	@echo "  docker-test        - Build and test in QEMU"
+	@echo "  docker-all         - Complete workflow: build image, build Lites, run QEMU"
+	@echo ""
+	@echo "Advanced:"
+	@echo "  docker-build-clean - Clean build and rebuild Docker image"
+	@echo "  docker-gdb         - Run QEMU with GDB debugging enabled"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make docker-build       # Build the Docker image"
+	@echo "  make docker-shell       # Interactive shell in container"
+	@echo "  make docker-all         # Complete end-to-end workflow"
+
+# Build the Docker image
+docker-build:
+	@echo "Building Docker image for Lites i386 development..."
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml build lites-i386-dev
+
+# Enter the development container
+docker-shell:
+	@echo "Starting development container..."
+	@docker/scripts/docker-shell.sh
+
+# Build Lites inside Docker
+docker-build-lites:
+	@echo "Building Lites i386 inside Docker..."
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm lites-i386-dev \
+		docker/scripts/build-lites-i386.sh
+
+# Run Lites in QEMU inside Docker
+docker-run-qemu:
+	@echo "Running Lites i386 in QEMU inside Docker..."
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm lites-i386-dev \
+		docker/scripts/run-qemu-i386.sh
+
+# Run with GDB debugging
+docker-gdb:
+	@echo "Running Lites i386 in QEMU with GDB debugging..."
+	@echo "GDB will listen on port 1234"
+	@echo "Connect with: gdb -ex 'target remote localhost:1234'"
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm -p 1234:1234 lites-i386-dev \
+		docker/scripts/run-qemu-i386.sh --gdb 1234
+
+# Build and test
+docker-test: docker-build-lites
+	@echo "Testing Lites build..."
+	@echo "Note: Full QEMU test requires manual verification"
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm lites-i386-dev \
+		bash -c "test -f build-i386/lites_server && echo 'Build successful!' || (echo 'Build failed!' && exit 1)"
+
+# Complete workflow
+docker-all: docker-build docker-build-lites docker-test
+	@echo ""
+	@echo "===================================="
+	@echo "Complete workflow finished!"
+	@echo "===================================="
+	@echo ""
+	@echo "To run Lites in QEMU:"
+	@echo "  make docker-run-qemu"
+	@echo ""
+	@echo "To enter the development container:"
+	@echo "  make docker-shell"
+
+# Clean build and rebuild
+docker-build-clean:
+	@echo "Clean building Docker image..."
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml build --no-cache lites-i386-dev
+
+# Remove Docker containers and volumes
+docker-clean:
+	@echo "Cleaning Docker containers and volumes..."
+	$(DOCKER_COMPOSE) -f docker/docker-compose.yml down -v
+	@echo "Cleaned!"
+
+# Deep clean including images
+docker-distclean: docker-clean
+	@echo "Removing Docker images..."
+	docker rmi lites-i386-dev:latest 2>/dev/null || true
+	@echo "Deep clean complete!"
