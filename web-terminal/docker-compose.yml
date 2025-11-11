@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  lites-web-backend:
+    build: ./backend
+    image: lites-web-backend:latest
+    container_name: lites-web-backend
+    hostname: lites-hurd
+    
+    # Enable privileged mode for KVM acceleration
+    privileged: true
+    
+    # Mount KVM device if available
+    devices:
+      - /dev/kvm:/dev/kvm
+    
+    volumes:
+      # Mount your QEMU image here
+      # Example: ./images/debian-hurd.qcow2:/hurd/hurd.qcow2:ro
+      - ./images:/hurd
+    
+    environment:
+      - HURD_IMG=/hurd/hurd.qcow2
+      - HURD_RAM=4096
+      - HURD_CPUS=2
+      - WS_PORT=7681
+      - SSH_FWD_HOSTPORT=2222
+    
+    ports:
+      # WebSocket serial console
+      - "7681:7681"
+      # SSH forwarding
+      - "2222:2222"
+      # VNC (optional)
+      - "5900:5900"
+    
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "netstat", "-an", "|", "grep", "7681"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

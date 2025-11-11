@@ -1,0 +1,63 @@
+name: Deploy Web Terminal to Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web-terminal/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Create deployment directory
+        run: |
+          mkdir -p _site
+          cp web-terminal/index.html _site/
+          
+          # Create a simple landing page
+          cat > _site/README.md << 'EOF'
+          # Lites i386 Web Terminal
+          
+          Access the live terminal at [index.html](./index.html)
+          
+          ## Setup Instructions
+          
+          1. Deploy the QEMU backend (see [web-terminal/README.md](https://github.com/${{ github.repository }}/tree/main/web-terminal))
+          2. Configure the WebSocket URL in the terminal interface
+          3. Click Connect
+          
+          ## Repository
+          
+          [View Source Code](https://github.com/${{ github.repository }})
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

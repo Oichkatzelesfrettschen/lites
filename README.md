@@ -52,6 +52,11 @@ The `docker/` directory contains a complete Docker-based i386 development
 environment with QEMU emulation. See [docker/OVERVIEW.md](docker/OVERVIEW.md)
 for a comprehensive guide to building and running Lites in nested virtualization.
 
+The `web-terminal/` directory provides a **web-accessible Lites instance** that
+runs in your browser. It uses xterm.js for the frontend (deployable to GitHub Pages)
+and QEMU with WebSocket serial console for the backend. See
+[web-terminal/README.md](web-terminal/README.md) for setup instructions.
+
 
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in

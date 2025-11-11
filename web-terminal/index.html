@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lites i386 - Live Terminal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        header {
+            background: #161b22;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #6e7681;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.connected {
+            background: #3fb950;
+        }
+        
+        .status-dot.connecting {
+            background: #d29922;
+        }
+        
+        .status-dot.disconnected {
+            background: #f85149;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .terminal-container {
+            flex: 1;
+            background: #0d1117;
+            padding: 1rem;
+            overflow: hidden;
+        }
+        
+        #terminal {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .controls {
+            background: #161b22;
+            padding: 1rem;
+            border-left: 1px solid #30363d;
+            width: 300px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .controls h2 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #c9d1d9;
+        }
+        
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #8b949e;
+        }
+        
+        .control-group input {
+            width: 100%;
+            padding: 0.5rem;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 0.875rem;
+        }
+        
+        .control-group input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+        
+        button {
+            width: 100%;
+            padding: 0.625rem;
+            background: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #2ea043;
+        }
+        
+        button:disabled {
+            background: #21262d;
+            color: #484f58;
+            cursor: not-allowed;
+        }
+        
+        button.disconnect {
+            background: #da3633;
+        }
+        
+        button.disconnect:hover {
+            background: #f85149;
+        }
+        
+        .info {
+            padding: 1rem;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-top: 1rem;
+        }
+        
+        .info strong {
+            color: #58a6ff;
+        }
+        
+        .logs {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .log-entry {
+            padding: 0.25rem 0;
+            color: #8b949e;
+        }
+        
+        .log-entry.error {
+            color: #f85149;
+        }
+        
+        .log-entry.success {
+            color: #3fb950;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .controls {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #30363d;
+                max-height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🖥️ Lites i386 - Live Terminal</h1>
+        <div class="status">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Disconnected</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="terminal-container">
+            <div id="terminal"></div>
+        </div>
+        
+        <div class="controls">
+            <h2>Connection</h2>
+            
+            <div class="control-group">
+                <label for="wsUrl">WebSocket URL</label>
+                <input 
+                    type="text" 
+                    id="wsUrl" 
+                    value="ws://localhost:7681"
+                    placeholder="ws://your-server:7681"
+                />
+            </div>
+            
+            <button id="connectBtn">Connect</button>
+            <button id="disconnectBtn" class="disconnect" style="display:none;">Disconnect</button>
+            
+            <div class="info">
+                <strong>Quick Start:</strong><br>
+                1. Start the QEMU backend<br>
+                2. Enter WebSocket URL above<br>
+                3. Click Connect<br>
+                4. Login to Debian GNU/Hurd
+            </div>
+            
+            <h2 style="margin-top: 1.5rem;">Logs</h2>
+            <div class="logs" id="logs"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-web-links@0.9.0/lib/xterm-addon-web-links.js"></script>
+    <script>
+        // Initialize terminal
+        const term = new Terminal({
+            cursorBlink: true,
+            fontSize: 14,
+            fontFamily: '"Cascadia Code", "Courier New", monospace',
+            theme: {
+                background: '#0d1117',
+                foreground: '#c9d1d9',
+                cursor: '#58a6ff',
+                black: '#484f58',
+                red: '#ff7b72',
+                green: '#3fb950',
+                yellow: '#d29922',
+                blue: '#58a6ff',
+                magenta: '#bc8cff',
+                cyan: '#39c5cf',
+                white: '#b1bac4',
+                brightBlack: '#6e7681',
+                brightRed: '#ffa198',
+                brightGreen: '#56d364',
+                brightYellow: '#e3b341',
+                brightBlue: '#79c0ff',
+                brightMagenta: '#d2a8ff',
+                brightCyan: '#56d4dd',
+                brightWhite: '#f0f6fc',
+            }
+        });
+        
+        const fitAddon = new FitAddon.FitAddon();
+        const webLinksAddon = new WebLinksAddon.WebLinksAddon();
+        
+        term.loadAddon(fitAddon);
+        term.loadAddon(webLinksAddon);
+        term.open(document.getElementById('terminal'));
+        fitAddon.fit();
+        
+        // WebSocket connection
+        let ws = null;
+        let isConnected = false;
+        
+        // UI elements
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const wsUrlInput = document.getElementById('wsUrl');
+        const logsContainer = document.getElementById('logs');
+        
+        // Logging
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            entry.textContent = `[${timestamp}] ${message}`;
+            logsContainer.appendChild(entry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+            
+            // Keep only last 100 entries
+            while (logsContainer.children.length > 100) {
+                logsContainer.removeChild(logsContainer.firstChild);
+            }
+        }
+        
+        // Update status
+        function updateStatus(status, text) {
+            statusDot.className = `status-dot ${status}`;
+            statusText.textContent = text;
+        }
+        
+        // Connect to WebSocket
+        function connect() {
+            const url = wsUrlInput.value.trim();
+            
+            if (!url) {
+                addLog('Please enter a WebSocket URL', 'error');
+                return;
+            }
+            
+            addLog(`Connecting to ${url}...`, 'info');
+            updateStatus('connecting', 'Connecting...');
+            
+            try {
+                ws = new WebSocket(url);
+                
+                ws.onopen = () => {
+                    isConnected = true;
+                    addLog('Connected successfully!', 'success');
+                    updateStatus('connected', 'Connected');
+                    connectBtn.style.display = 'none';
+                    disconnectBtn.style.display = 'block';
+                    wsUrlInput.disabled = true;
+                    
+                    term.writeln('\r\n\x1b[32m=== Connected to Lites i386 ==\x1b[0m\r\n');
+                };
+                
+                ws.onmessage = (event) => {
+                    term.write(event.data);
+                };
+                
+                ws.onerror = (error) => {
+                    addLog('Connection error', 'error');
+                    console.error('WebSocket error:', error);
+                };
+                
+                ws.onclose = () => {
+                    isConnected = false;
+                    addLog('Disconnected', 'error');
+                    updateStatus('disconnected', 'Disconnected');
+                    connectBtn.style.display = 'block';
+                    disconnectBtn.style.display = 'none';
+                    wsUrlInput.disabled = false;
+                    
+                    term.writeln('\r\n\x1b[31m=== Disconnected ===\x1b[0m\r\n');
+                };
+                
+            } catch (error) {
+                addLog(`Connection failed: ${error.message}`, 'error');
+                updateStatus('disconnected', 'Disconnected');
+            }
+        }
+        
+        // Disconnect
+        function disconnect() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close();
+                addLog('Disconnecting...', 'info');
+            }
+        }
+        
+        // Terminal input
+        term.onData((data) => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(data);
+            }
+        });
+        
+        // Event listeners
+        connectBtn.addEventListener('click', connect);
+        disconnectBtn.addEventListener('click', disconnect);
+        
+        wsUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                connect();
+            }
+        });
+        
+        // Window resize
+        window.addEventListener('resize', () => {
+            fitAddon.fit();
+        });
+        
+        // Initial welcome message
+        term.writeln('\x1b[36m╔═══════════════════════════════════════════════════════╗\x1b[0m');
+        term.writeln('\x1b[36m║\x1b[0m   \x1b[1mWelcome to Lites i386 - Live Terminal\x1b[0m              \x1b[36m║\x1b[0m');
+        term.writeln('\x1b[36m║\x1b[0m   Debian GNU/Hurd on Mach Microkernel                 \x1b[36m║\x1b[0m');
+        term.writeln('\x1b[36m╚═══════════════════════════════════════════════════════╝\x1b[0m');
+        term.writeln('');
+        term.writeln('Enter the WebSocket URL and click \x1b[32mConnect\x1b[0m to get started.');
+        term.writeln('');
+        
+        addLog('Page loaded', 'success');
+        addLog('Ready to connect', 'info');
+    </script>
+</body>
+</html>

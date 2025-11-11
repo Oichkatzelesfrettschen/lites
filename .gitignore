@@ -58,3 +58,9 @@ docker-compose.override.yml
 
 # GNU/Hurd development environment
 hurd-env/
+
+# Web terminal QEMU images
+web-terminal/images/*.qcow2
+web-terminal/images/*.img
+web-terminal/images/*.tar.gz
+!web-terminal/images/README.md
