@@ -10,9 +10,9 @@ set -euo pipefail
 ##
 
 # Configuration from environment variables
-IMG="${HURD_IMG:-/hurd/hurd.qcow2}"
-RAM="${HURD_RAM:-4096}"
-CPUS="${HURD_CPUS:-1}"
+IMG="${LITES_IMG:-/lites/lites.qcow2}"
+RAM="${LITES_RAM:-4096}"
+CPUS="${LITES_CPUS:-1}"
 WS_PORT="${WS_PORT:-7681}"
 SSH_FWD_HOSTPORT="${SSH_FWD_HOSTPORT:-2222}"
 VNC_PORT="${VNC_PORT:-5900}"
@@ -31,7 +31,7 @@ if [ ! -f "$IMG" ]; then
     echo "Error: QEMU image not found: $IMG"
     echo ""
     echo "Please either:"
-    echo "  1. Mount a volume with your image: -v /path/to/image.qcow2:/hurd/hurd.qcow2"
+    echo "  1. Mount a volume with your image: -v /path/to/image.qcow2:/lites/lites.qcow2"
     echo "  2. Build a custom image with COPY in Dockerfile"
     echo "  3. Download an image at startup (see README)"
     echo ""

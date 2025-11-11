@@ -5,7 +5,7 @@ services:
     build: ./backend
     image: lites-web-backend:latest
     container_name: lites-web-backend
-    hostname: lites-hurd
+    hostname: lites-mach
     
     # Enable privileged mode for KVM acceleration
     privileged: true
@@ -16,13 +16,13 @@ services:
     
     volumes:
       # Mount your QEMU image here
-      # Example: ./images/debian-hurd.qcow2:/hurd/hurd.qcow2:ro
-      - ./images:/hurd
+      # Example: ./images/lites.qcow2:/lites/lites.qcow2:ro
+      - ./images:/lites
     
     environment:
-      - HURD_IMG=/hurd/hurd.qcow2
-      - HURD_RAM=4096
-      - HURD_CPUS=2
+      - LITES_IMG=/lites/lites.qcow2
+      - LITES_RAM=4096
+      - LITES_CPUS=2
       - WS_PORT=7681
       - SSH_FWD_HOSTPORT=2222
     

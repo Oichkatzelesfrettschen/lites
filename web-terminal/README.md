@@ -9,7 +9,7 @@ This directory contains a complete web-accessible Lites i386 instance using GitH
 │  GitHub Pages    │◄──────── (ws://) ─────────►│  QEMU Backend       │
 │  (Static HTML/JS)│                             │  (VPS/Server)       │
 │                  │                             │                     │
-│  - xterm.js      │                             │  - Debian GNU/Hurd  │
+│  - xterm.js      │                             │  - Lites i386       │
 │  - Web UI        │                             │  - Serial Console   │
 │  - Connection    │                             │  - SSH Access       │
 └──────────────────┘                             └─────────────────────┘
@@ -52,8 +52,9 @@ cd web-terminal
 mkdir -p images
 
 # Place your QEMU image
-# Download or build a Debian GNU/Hurd image and place it at:
-# images/hurd.qcow2
+# Build Lites i386 using the docker/ environment, then create a bootable image
+# Or use a pre-built Lites image:
+# images/lites.qcow2
 
 # Start the backend
 docker compose up -d
@@ -73,11 +74,11 @@ docker run -d \
   --name lites-web \
   --privileged \
   --device /dev/kvm:/dev/kvm \
-  -v /path/to/hurd.qcow2:/hurd/hurd.qcow2:ro \
+  -v /path/to/lites.qcow2:/lites/lites.qcow2:ro \
   -p 7681:7681 \
   -p 2222:2222 \
-  -e HURD_RAM=4096 \
-  -e HURD_CPUS=2 \
+  -e LITES_RAM=4096 \
+  -e LITES_CPUS=2 \
   lites-web-backend
 ```
 
@@ -88,7 +89,7 @@ qemu-system-i386 \
   -accel kvm -cpu host \
   -machine pc -m 4096 -smp 2 \
   -device ich9-ahci,id=ach0 \
-  -drive if=none,file=/path/to/hurd.qcow2,format=qcow2,id=d0 \
+  -drive if=none,file=/path/to/lites.qcow2,format=qcow2,id=d0 \
   -device ide-hd,drive=d0,bus=ach0.0 \
   -device e1000,netdev=net0 \
   -netdev user,id=net0,hostfwd=tcp::2222-:22 \
@@ -102,7 +103,7 @@ qemu-system-i386 \
 1. Open the GitHub Pages URL (e.g., `https://yourusername.github.io/lites-terminal.html`)
 2. Enter WebSocket URL: `ws://your-server-ip:7681`
 3. Click "Connect"
-4. Login to Debian GNU/Hurd
+4. Login to Lites i386 system
 
 ## Configuration
 
@@ -110,9 +111,9 @@ qemu-system-i386 \
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `HURD_IMG` | `/hurd/hurd.qcow2` | Path to QEMU image |
-| `HURD_RAM` | `4096` | RAM in MB |
-| `HURD_CPUS` | `1` | Number of CPU cores |
+| `LITES_IMG` | `/lites/lites.qcow2` | Path to QEMU image |
+| `LITES_RAM` | `4096` | RAM in MB |
+| `LITES_CPUS` | `1` | Number of CPU cores |
 | `WS_PORT` | `7681` | WebSocket port |
 | `SSH_FWD_HOSTPORT` | `2222` | SSH forwarding port |
 
@@ -124,27 +125,69 @@ Edit `index.html` to change:
 - Font family and size
 - UI layout and styling
 
-## Creating a Debian GNU/Hurd Image
+## Creating a Lites i386 QEMU Image
 
-If you don't have a QEMU image, create one:
+If you don't have a QEMU image, you have several options:
+
+### Option 1: Build from Docker Environment (Recommended)
+
+Use the existing Docker i386 development environment to build Lites:
 
 ```bash
-# Download Debian GNU/Hurd installer
-wget https://cdimage.debian.org/cdimage/ports/latest/hurd-i386/debian-hurd.img.tar.gz
-tar xzf debian-hurd.img.tar.gz
+# Build Lites using the Docker environment
+cd docker
+make -f ../Makefile.docker docker-build-lites
 
-# Or build from scratch
-qemu-img create -f qcow2 hurd.qcow2 20G
+# The built kernel will be in build-i386/
+# You need to create a bootable QEMU image with this kernel
+# See docker/README.md for details on creating bootable images
+```
 
-# Install from ISO
+### Option 2: Create a Minimal Bootable Image
+
+```bash
+# Create a blank image
+qemu-img create -f qcow2 lites.qcow2 2G
+
+# You'll need to:
+# 1. Install a minimal OS (or use an existing one)
+# 2. Copy the Lites kernel to the image
+# 3. Configure the bootloader to load Lites
+
+# This typically requires mounting the image and setting up:
+# - Mach kernel
+# - Lites server binary
+# - Basic filesystem layout
+```
+
+### Option 3: Use Existing Mach/Lites Distribution
+
+If you have an existing Mach/Lites installation:
+
+```bash
+# Convert existing image to qcow2 format
+qemu-img convert -f raw -O qcow2 input.img lites.qcow2
+
+# Or if you have a VDI image
+qemu-img convert -f vdi -O qcow2 input.vdi lites.qcow2
+```
+
+### Testing the Image
+
+```bash
+# Test boot
 qemu-system-i386 \
   -m 4096 \
-  -cdrom debian-hurd-installer.iso \
-  -hda hurd.qcow2 \
-  -boot d
+  -hda lites.qcow2 \
+  -nographic
 
-# After installation, test it
-qemu-system-i386 -m 4096 -hda hurd.qcow2 -nographic
+# Test with WebSocket serial
+qemu-system-i386 \
+  -m 4096 \
+  -hda lites.qcow2 \
+  -chardev socket,id=ws0,host=0.0.0.0,port=7681,server=on,websocket=on \
+  -serial chardev:ws0 \
+  -nographic
 ```
 
 ## Networking and Security
@@ -242,10 +285,10 @@ ws = new WebSocket(`${url}?token=${authToken}`);
 **Symptom**: Container exits immediately
 
 **Solutions**:
-1. Check image exists: `ls -lh images/hurd.qcow2`
+1. Check image exists: `ls -lh images/lites.qcow2`
 2. View logs: `docker compose logs`
-3. Verify permissions: `chmod 644 images/hurd.qcow2`
-4. Test image: `qemu-img info images/hurd.qcow2`
+3. Verify permissions: `chmod 644 images/lites.qcow2`
+4. Test image: `qemu-img info images/lites.qcow2`
 
 ### No KVM Acceleration
 
@@ -382,7 +425,7 @@ Same as the main Lites repository. See [LICENSE](../LICENSE).
 
 - [xterm.js Documentation](https://xtermjs.org/)
 - [QEMU WebSocket Documentation](https://www.qemu.org/docs/master/interop/live-block-operations.html)
-- [Debian GNU/Hurd](https://www.debian.org/ports/hurd/)
+- [Lites Project](https://github.com/Oichkatzelesfrettschen/lites)
 - [GitHub Pages](https://pages.github.com/)
 - [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
 

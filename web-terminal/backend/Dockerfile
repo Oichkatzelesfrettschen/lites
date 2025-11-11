@@ -10,7 +10,7 @@ RUN apt-get update && \
         && rm -rf /var/lib/apt/lists/*
 
 # Create directory for QEMU images
-RUN mkdir -p /hurd
+RUN mkdir -p /lites
 
 # Copy entrypoint script
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -23,7 +23,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 EXPOSE 7681 2222 5900
 
 # Set working directory
-WORKDIR /hurd
+WORKDIR /lites
 
 # Run entrypoint
 CMD ["/usr/local/bin/entrypoint.sh"]

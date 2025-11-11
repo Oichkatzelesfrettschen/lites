@@ -33,47 +33,28 @@ echo "✓ Docker Compose v2 is available"
 echo ""
 
 # Check for QEMU image
-if [ ! -f "images/hurd.qcow2" ]; then
-    echo "⚠ No QEMU image found at images/hurd.qcow2"
+if [ ! -f "images/lites.qcow2" ]; then
+    echo "⚠ No QEMU image found at images/lites.qcow2"
     echo ""
-    echo "You need a Debian GNU/Hurd QEMU image to continue."
+    echo "You need a Lites i386 QEMU image to continue."
     echo ""
     echo "Options:"
-    echo "  1. Download a pre-built image"
-    echo "  2. Build one from ISO"
-    echo "  3. Convert an existing image"
+    echo "  1. Build using the docker/ i386 environment"
+    echo "  2. Convert an existing Mach/Lites image"
+    echo "  3. Create a custom bootable image"
     echo ""
     echo "See images/README.md for detailed instructions"
     echo ""
-    read -p "Do you want to download a pre-built image? (y/N) " -n 1 -r
+    read -p "Do you want to continue without an image? (y/N) " -n 1 -r
     echo ""
     
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "Downloading Debian GNU/Hurd image..."
-        echo "(This may take several minutes depending on your connection)"
-        echo ""
-        
-        mkdir -p images
-        cd images
-        
-        # Try to download
-        if wget -c https://cdimage.debian.org/cdimage/ports/latest/hurd-i386/debian-hurd.img.tar.gz; then
-            echo "Extracting..."
-            tar xzf debian-hurd.img.tar.gz
-            mv debian-hurd.img hurd.qcow2
-            rm debian-hurd.img.tar.gz
-            echo "✓ Image ready"
-        else
-            echo "Error: Download failed"
-            echo "Please manually place a QEMU image at images/hurd.qcow2"
-            exit 1
-        fi
-        
-        cd "$SCRIPT_DIR"
-    else
-        echo "Please place your QEMU image at images/hurd.qcow2"
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Please place your QEMU image at images/lites.qcow2"
         exit 1
     fi
+    
+    echo "⚠ Warning: Continuing without image - backend will fail to start"
+    echo ""
 fi
 
 echo "✓ QEMU image found"
@@ -110,7 +91,7 @@ echo "Next steps:"
 echo "  1. Open index.html in your browser (or deploy to GitHub Pages)"
 echo "  2. Enter WebSocket URL: ws://localhost:7681"
 echo "  3. Click 'Connect'"
-echo "  4. Login to Debian GNU/Hurd"
+echo "  4. Login to Lites i386"
 echo ""
 echo "Commands:"
 echo "  View logs:  docker compose logs -f"
