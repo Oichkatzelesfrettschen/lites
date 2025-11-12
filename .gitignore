@@ -42,4 +42,25 @@ builds/
 # Ignore logs and operating system files
 *.log
 lizard.log
+
+# macOS Finder metadata
 .DS_Store
+
+# Docker build artifacts and volumes
+docker/.ccache/
+qemu-images/
+*.qcow2
+*.img
+build-i386/
+
+# Docker Compose overrides
+docker-compose.override.yml
+
+# GNU/Hurd development environment
+hurd-env/
+
+# Web terminal QEMU images
+web-terminal/images/*.qcow2
+web-terminal/images/*.img
+web-terminal/images/*.tar.gz
+!web-terminal/images/README.md

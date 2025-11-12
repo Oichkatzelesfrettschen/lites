@@ -1,6 +1,6 @@
 minimum_pre_commit_version: '2.20.0'
 exclude: |
-  ^(
+  (?x)^(
     archives/|
     Historical\ Archives/|
     offline_packages/|
@@ -22,11 +22,11 @@ repos:
         types_or: [c, c++]
       - id: clang-tidy-c
         name: clang-tidy C
-        entry: scripts/run-clang-tidy.sh --extra-arg=-std=c23
+        entry: scripts/run-clang-tidy.sh
         language: system
         types: [c]
       - id: clang-tidy-cpp
         name: clang-tidy C++
-        entry: scripts/run-clang-tidy.sh --extra-arg=-std=c++17
+        entry: scripts/run-clang-tidy.sh
         language: system
-        types: [c++]
+        files: "\\.(cc|cpp|cxx|hpp|hh|hxx)$"

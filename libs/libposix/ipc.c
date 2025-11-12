@@ -34,17 +34,18 @@ static struct cap *cap_create(unsigned long rights)
 
 /* ------------------------ Message queues ------------------------ */
 /**
- * \brief Open or create a POSIX message queue capability.
+ * \brief Open or create a capability-wrapped POSIX message queue.
  *
- * Allocates a new capability and associates it with a message queue
- * obtained via \c mq_open(). A default maximum of eight messages is used
- * when \p maxmsg is zero and each message is limited to 128 bytes.
+ * Allocates a new capability and binds it to the queue obtained via
+ * \c mq_open(). When \p maxmsg is zero a default depth of eight messages is
+ * selected, each limited to 128 bytes. The resulting capability grants send,
+ * receive and close rights over the queue.
  *
  * \param name   Name of the queue.
- * \param oflag  Flags passed to \c mq_open().
- * \param mode   Permissions used when creating the queue.
- * \param maxmsg Requested maximum number of messages.
- * \return Pointer to a new capability queue or NULL on failure.
+ * \param oflag  Flags forwarded to \c mq_open().
+ * \param mode   File permissions used when creating the queue.
+ * \param maxmsg Maximum number of messages; zero selects the default.
+ * \return Pointer to the new capability wrapper or NULL on failure.
  */
 cap_mq_t *cap_mq_open(const char *name, int oflag, mode_t mode,
                       unsigned int maxmsg)
@@ -73,15 +74,16 @@ cap_mq_t *cap_mq_open(const char *name, int oflag, mode_t mode,
 }
 
 /**
- * \brief Send a message through a capability queue.
+ * \brief Send a message through a capability-protected queue.
  *
- * Performs a rights check before delegating to \c mq_send().
+ * Verifies that the capability permits sending before delegating to
+ * \c mq_send().
  *
  * \param q    Capability queue handle.
  * \param msg  Pointer to the message buffer.
- * \param len  Length of the message in bytes.
+ * \param len  Length of \p msg in bytes.
  * \param prio Message priority.
- * \return Zero on success or -1 on failure with \c errno set.
+ * \return 0 on success or -1 on failure with \c errno set.
  */
 int cap_mq_send(cap_mq_t *q, const char *msg, size_t len, unsigned int prio)
 {
@@ -93,12 +95,13 @@ int cap_mq_send(cap_mq_t *q, const char *msg, size_t len, unsigned int prio)
 }
 
 /**
- * \brief Receive a message from a capability queue.
+ * \brief Receive a message from a capability-protected queue.
  *
- * Checks that the queue grants receive rights before calling \c mq_receive().
+ * Ensures the capability grants receive rights and then invokes
+ * \c mq_receive().
  *
  * \param q    Capability queue handle.
- * \param msg  Buffer to store the received message.
+ * \param msg  Destination buffer for the message.
  * \param len  Size of \p msg in bytes.
  * \param prio Optional destination for the message priority.
  * \return Number of bytes received or -1 on failure with \c errno set.
@@ -115,11 +118,11 @@ ssize_t cap_mq_receive(cap_mq_t *q, char *msg, size_t len, unsigned int *prio)
 /**
  * \brief Close a capability message queue.
  *
- * The underlying queue is closed only when the capability grants that right.
- * All allocated resources are then released.
+ * Closes the underlying queue when permitted and releases the capability
+ * wrapper and any associated resources.
  *
  * \param q Queue to close.
- * \return Zero on success or -1 if \p q is NULL.
+ * \return 0 on success or -1 if \p q is NULL.
  */
 int cap_mq_close(cap_mq_t *q)
 {
@@ -134,16 +137,16 @@ int cap_mq_close(cap_mq_t *q)
 
 /* ------------------------ Semaphores ------------------------ */
 /**
- * \brief Open or create a POSIX semaphore capability.
+ * \brief Open or create a capability-wrapped POSIX semaphore.
  *
- * Wraps \c sem_open() and attaches a new capability granting wait, post and
+ * Wraps \c sem_open() and attaches a capability granting wait, post and
  * close rights.
  *
  * \param name  Name of the semaphore.
- * \param oflag Flags passed to \c sem_open().
+ * \param oflag Flags forwarded to \c sem_open().
  * \param mode  Permissions used when creating the semaphore.
- * \param value Initial value if the semaphore is created.
- * \return Pointer to a new semaphore capability or NULL on failure.
+ * \param value Initial value when the semaphore is created.
+ * \return Pointer to the new semaphore capability or NULL on failure.
  */
 cap_sem_t *cap_sem_open(const char *name, int oflag, mode_t mode,
                         unsigned int value)
@@ -166,12 +169,12 @@ cap_sem_t *cap_sem_open(const char *name, int oflag, mode_t mode,
 }
 
 /**
- * \brief Wait on a semaphore capability.
+ * \brief Wait on a capability semaphore.
  *
- * Calls \c sem_wait() after verifying the semaphore allows waiting.
+ * Invokes \c sem_wait() after confirming the capability permits waiting.
  *
  * \param s Semaphore capability handle.
- * \return Zero on success or -1 on failure with \c errno set.
+ * \return 0 on success or -1 on failure with \c errno set.
  */
 int cap_sem_wait(cap_sem_t *s)
 {
@@ -183,12 +186,12 @@ int cap_sem_wait(cap_sem_t *s)
 }
 
 /**
- * \brief Post to a semaphore capability.
+ * \brief Post to a capability semaphore.
  *
  * Verifies posting rights before invoking \c sem_post().
  *
  * \param s Semaphore capability handle.
- * \return Zero on success or -1 on failure with \c errno set.
+ * \return 0 on success or -1 on failure with \c errno set.
  */
 int cap_sem_post(cap_sem_t *s)
 {
@@ -202,11 +205,11 @@ int cap_sem_post(cap_sem_t *s)
 /**
  * \brief Close a semaphore capability.
  *
- * Closes the underlying semaphore if permitted and releases allocated
- * resources.
+ * Closes the underlying semaphore when permitted and releases all
+ * associated resources.
  *
  * \param s Semaphore to close.
- * \return Zero on success or -1 if \p s is NULL.
+ * \return 0 on success or -1 if \p s is NULL.
  */
 int cap_sem_close(cap_sem_t *s)
 {
@@ -221,17 +224,18 @@ int cap_sem_close(cap_sem_t *s)
 
 /* ------------------------ Shared memory ------------------------ */
 /**
- * \brief Open or create a POSIX shared memory capability.
+ * \brief Open or create a capability-wrapped POSIX shared memory object.
  *
- * The shared memory object is opened via \c shm_open() and optionally resized
- * with \c ftruncate() when \p oflag includes \c O_CREAT. A capability granting
- * mapping, unmapping and close rights is then attached.
+ * The object is opened via \c shm_open() and optionally resized with
+ * \c ftruncate() when \p oflag includes \c O_CREAT. A capability granting
+ * mapping, unmapping and close rights is attached to the resulting file
+ * descriptor.
  *
  * \param name  Name of the shared memory object.
- * \param oflag Flags passed to \c shm_open().
+ * \param oflag Flags forwarded to \c shm_open().
  * \param mode  Permissions used when creating the object.
  * \param size  Initial size when creating the object.
- * \return Pointer to a new shared memory capability or NULL on failure.
+ * \return Pointer to the new shared memory capability or NULL on failure.
  */
 cap_shm_t *cap_shm_open(const char *name, int oflag, mode_t mode, size_t size)
 {
@@ -285,7 +289,7 @@ void *cap_shm_map(cap_shm_t *shm, size_t len, int prot, int flags, off_t off)
  *
  * \param addr Address previously returned by \c cap_shm_map().
  * \param len  Length of the mapping.
- * \return Zero on success or -1 on failure with \c errno set.
+ * \return 0 on success or -1 on failure with \c errno set.
  */
 int cap_shm_unmap(void *addr, size_t len)
 {
@@ -299,7 +303,7 @@ int cap_shm_unmap(void *addr, size_t len)
  * associated capability structure.
  *
  * \param shm Shared memory capability to close.
- * \return Zero on success or -1 if \p shm is NULL.
+ * \return 0 on success or -1 if \p shm is NULL.
  */
 int cap_shm_close(cap_shm_t *shm)
 {

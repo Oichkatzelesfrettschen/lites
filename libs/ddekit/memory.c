@@ -115,8 +115,8 @@ void ddekit_vfree(void *addr) {
 }
 
 // Placeholders for existing DDEKit functions
-// These are just to make the library build. The real implementation
-// is somewhere else.
+/* These definitions are placeholders to make the library linkable.
+ * Proper implementations are provided by the hosting environment. */
 struct ddekit_slab * ddekit_slab_init(unsigned size, int contiguous) { return NULL; }
 void ddekit_slab_destroy(struct ddekit_slab * slab) {}
 void *ddekit_slab_alloc(struct ddekit_slab * slab) { return NULL; }
@@ -126,7 +126,35 @@ void *ddekit_slab_get_data(struct ddekit_slab * slab) { return NULL; }
 void ddekit_slab_setup_page_cache(unsigned pages) {}
 void *ddekit_large_malloc(int size) { return NULL; }
 void ddekit_large_free(void *p) {}
-void *ddekit_contig_malloc(unsigned long size, unsigned long low,
-        unsigned long high, unsigned long alignment, unsigned long boundary) { return NULL; }
+
+/**
+ * Allocate a physically contiguous memory region.
+ *
+ * This stub documents the intended semantics for the contiguous allocator used
+ * by device drivers. The final implementation will obtain a DMA-capable buffer
+ * from the memory server such that it lies within the physical address window
+ * \p [low, high), satisfies the power-of-two \p alignment, and does not cross
+ * the \p boundary.
+ *
+ * A vmalloc-style allocator is planned to handle non-contiguous requests in the
+ * future; until then this function is expected to serve only contiguous needs
+ * and currently always returns `NULL`.
+ *
+ * @param size      number of bytes to allocate
+ * @param low       lowest acceptable physical address
+ * @param high      highest acceptable physical address plus one
+ * @param alignment power-of-two alignment requirement
+ * @param boundary  physical boundary the allocation must not cross
+ *
+ * @return Pointer to the allocated memory on success, or `NULL` on failure.
+ */
+void *ddekit_contig_malloc(unsigned long size,
+                           unsigned long low,
+                           unsigned long high,
+                           unsigned long alignment,
+                           unsigned long boundary)
+{
+    return NULL;
+}
 void *ddekit_simple_malloc(unsigned size) { return NULL; }
 void ddekit_simple_free(void *p) {}

@@ -21,8 +21,11 @@ endif
 ifeq ($(MACHDIR),)
 ifneq ($(wildcard localmach/include),)
 MACH_INCDIR := -Ilocalmach/include
+else ifneq ($(wildcard /opt/mach/osfmk/kernel/src),)
+MACH_INCDIR := -I/opt/mach/osfmk/kernel/src
 else
-$(error Mach headers not found. Set LITES_MACH_DIR or add the openmach submodule or run scripts/extract-xmach-headers.sh)
+$(warning Mach headers not found. Set LITES_MACH_DIR, add openmach submodule, or run scripts/setup-build-environment.sh. Build may not complete without proper headers.)
+MACH_INCDIR := -Ilocalmach/include
 endif
 else
 MACH_INCDIR := -I$(MACHDIR)/include

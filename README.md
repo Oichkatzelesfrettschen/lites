@@ -48,6 +48,15 @@ the top level `archives/` directory.
 Public headers now live in `include/` while kernel-only headers remain in
 `core/include/`.
 
+The `docker/` directory contains a complete Docker-based i386 development
+environment with QEMU emulation. See [docker/OVERVIEW.md](docker/OVERVIEW.md)
+for a comprehensive guide to building and running Lites in nested virtualization.
+
+The `web-terminal/` directory provides a **web-accessible Lites instance** that
+runs in your browser. It uses xterm.js for the frontend (deployable to GitHub Pages)
+and QEMU with WebSocket serial console for the backend. See
+[web-terminal/README.md](web-terminal/README.md) for setup instructions.
+
 
 The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
@@ -141,6 +150,39 @@ cmake -B build -DARCH=powerpc
 cmake -B build -DARCH=ia16
 cmake --build build
 ```
+
+### Docker-based i386 Development
+
+For a complete, pre-configured i386 development environment with QEMU emulation,
+use the Docker-based setup in the `docker/` directory. This provides:
+
+- Complete i386 toolchain with GCC multilib
+- MIG (Mach Interface Generator) from Debian packages
+- QEMU i386 emulation with optional KVM acceleration
+- Pre-configured build scripts and environment
+
+Quick start:
+
+```sh
+# Build Docker image and compile Lites for i386
+make -f Makefile.docker docker-all
+
+# Run in QEMU i386 instance
+make -f Makefile.docker docker-run-qemu
+
+# Enter interactive development container
+make -f Makefile.docker docker-shell
+```
+
+For detailed documentation, see:
+- [docker/GETTING_STARTED.md](docker/GETTING_STARTED.md) - Quick start guide
+- [docker/OVERVIEW.md](docker/OVERVIEW.md) - Complete architecture overview
+- [docker/README.md](docker/README.md) - Detailed reference
+
+The Docker environment supports nested virtualization (QEMU inside Docker)
+and can optionally integrate with GNU/Hurd for native Mach/Hurd development.
+See [docker/scripts/setup-hurd-dev.sh](docker/scripts/setup-hurd-dev.sh) for
+GNU/Hurd integration.
 
 To compile with Clang instead of GCC set the C compiler explicitly:
 
@@ -262,9 +304,24 @@ The script exports 80386-tuned optimisation flags and sets `cc`/`c++` to the
 selected clang version. It also generates `compile_commands.json` so clang tools
 work out of the box.
 
-
 You can also invoke `scripts/run-precommit.sh` which automatically installs
 `pre-commit` via pip when missing.
+
+### Pre-commit hooks
+
+Install the Git hook once to enable automatic formatting and static analysis:
+
+```sh
+pre-commit install
+```
+
+The configuration in `.pre-commit-config.yaml` registers `clang-format` and
+`clang-tidy` hooks. They operate on all tracked C and C++ sources. Run them
+manually on selected files with:
+
+```sh
+pre-commit run --files path/to/file.c path/to/file.cpp
+```
 
 The clang-tidy hooks rely on `scripts/run-clang-tidy.sh`.  This helper
 ensures a `compile_commands.json` database is generated on demand so
@@ -351,6 +408,8 @@ thousand files.
 ## Memory allocation roadmap
 
 The current DDEKit memory API exposes `ddekit_contig_malloc()` for obtaining
-DMA-safe contiguous buffers. Drivers that merely require virtually contiguous
-regions must still rely on this low-level call. A vmalloc-style allocator is
-planned for future versions to handle non-contiguous allocations gracefully.
+DMA-safe contiguous buffers. Drivers that only need virtual contiguity must
+still rely on this low-level call, which is presently a stub returning no
+memory. A dedicated vmalloc-style allocator is planned for future versions to
+handle non-contiguous requests more gracefully while keeping
+`ddekit_contig_malloc()` for strictly contiguous DMA use cases.

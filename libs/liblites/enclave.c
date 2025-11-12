@@ -1,3 +1,8 @@
+/**
+ * @file enclave.c
+ * @brief Stub implementations for enclave management routines.
+ */
+
 #include "enclave.h"
 
 #include <stdio.h>
@@ -14,6 +19,14 @@
  *
  * @return Positive handle to the newly created enclave.
  * @retval <0 Negative error code on failure.
+ * This stub logs creation of an enclave. A production implementation would
+ * allocate and initialize a protected execution context and return a unique
+ * handle representing it.
+ *
+ * @param[in] name Human-readable identifier used for logging and debugging.
+ *                 Must not be `NULL`.
+ * @returns Positive handle to the newly created enclave on success; negative
+ *          error code on failure.
  *
  * @todo Replace stub with real enclave creation logic.
  */
@@ -34,6 +47,13 @@ int enclave_create(const char *name) {
  *
  * @return 0 when attestation succeeds.
  * @retval <0 Negative error code on failure.
+ * This stub simulates verifying the enclave's measurement. A complete
+ * implementation would perform cryptographic checks to ensure the enclave's
+ * code and data have not been tampered with.
+ *
+ * @param[in] handle Handle returned by enclave_create() identifying the
+ *                   enclave to attest.
+ * @returns 0 when attestation succeeds; negative error code on failure.
  *
  * @todo Replace stub with real attestation logic.
  */
