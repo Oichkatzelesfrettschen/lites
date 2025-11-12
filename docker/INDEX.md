@@ -62,11 +62,18 @@ Technical details and options:
    - Job descriptions
    - Troubleshooting CI issues
 
-7. **[MACH_HEADERS.md](MACH_HEADERS.md)** - Mach headers setup guide (NEW)
+7. **[MACH_HEADERS.md](MACH_HEADERS.md)** - Mach headers setup guide
    - Header sources and installation
    - Docker image integration
    - Manual setup options
    - Troubleshooting header issues
+
+8. **[QEMU_DISK_GUIDE.md](QEMU_DISK_GUIDE.md)** - **NEW:** QEMU disk images and networking
+   - Disk image creation (QCOW2 best practices)
+   - QEMU configuration and optimization
+   - Network setup (user-mode, TAP, bridge)
+   - Docker+QEMU integration
+   - Complete troubleshooting guide
 
 ## File Structure
 
@@ -79,7 +86,8 @@ docker/
 ├── README.md                    ← Technical reference
 ├── CI_CD_WORKFLOW.md            ← CI/CD integration
 ├── GITHUB_ACTIONS.md            ← GitHub Actions setup
-├── MACH_HEADERS.md              ← Mach headers guide (NEW)
+├── MACH_HEADERS.md              ← Mach headers guide
+├── QEMU_DISK_GUIDE.md           ← QEMU disk images & networking (NEW)
 │
 ├── Dockerfile.i386-dev          ← Docker image definition
 ├── docker-compose.yml           ← Container orchestration (v2)
@@ -88,6 +96,9 @@ docker/
     ├── build-lites-i386.sh      ← Build automation
     ├── run-qemu-i386.sh         ← QEMU launcher
     ├── docker-shell.sh          ← Container entry helper
+    ├── create-lites-disk.sh     ← Disk image creation (NEW)
+    ├── setup-qemu-networking.sh ← Network configuration (NEW)
+    ├── docker-build-and-run.sh  ← Complete workflow automation (NEW)
     ├── test-docker-build.sh     ← Environment validation
     ├── setup-hurd-dev.sh        ← GNU/Hurd setup (optional)
     └── setup-mach-headers.sh    ← Mach headers setup (NEW)
