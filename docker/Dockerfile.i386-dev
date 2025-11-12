@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     bison \
     gawk \
     texinfo \
+    ca-certificates \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install QEMU for i386 emulation
@@ -63,6 +64,17 @@ RUN apt-get update && apt-get install -y \
     binutils-i686-linux-gnu \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Clone Mach headers from nmartin0's osfmk6.1 repository
+# This provides the necessary Mach kernel headers for building Lites
+RUN mkdir -p /opt/mach && \
+    cd /opt/mach && \
+    git clone --depth 1 https://github.com/nmartin0/osfmk6.1.git osfmk && \
+    chmod -R a+rX /opt/mach
+
+# Set Mach directories for Lites build
+ENV LITES_MACH_DIR=/opt/mach/osfmk/kernel/src
+ENV MACH_INCLUDE_DIR=/opt/mach/osfmk/kernel/src
+
 # Create working directory
 WORKDIR /workspace
 
@@ -86,7 +98,9 @@ RUN useradd -m -s /bin/bash developer && \
 USER developer
 
 # Set up shell environment
-RUN echo 'export PS1="\[\033[01;32m\]lites-i386-dev\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> ~/.bashrc
+RUN echo 'export PS1="\[\033[01;32m\]lites-i386-dev\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> ~/.bashrc && \
+    echo 'export LITES_MACH_DIR=/opt/mach/osfmk/kernel/src' >> ~/.bashrc && \
+    echo 'export MACH_INCLUDE_DIR=/opt/mach/osfmk/kernel/src' >> ~/.bashrc
 
 WORKDIR /workspace
 

@@ -82,6 +82,46 @@ check_dependencies() {
 }
 
 ##
+# @brief Check and set up Mach headers
+##
+check_mach_headers() {
+    # Check if LITES_MACH_DIR is set
+    if [[ -n "${LITES_MACH_DIR:-}" ]] && [[ -d "${LITES_MACH_DIR}" ]]; then
+        echo "Using Mach headers from: ${LITES_MACH_DIR}"
+        return 0
+    fi
+    
+    # Check for Docker installation
+    if [[ -d "/opt/mach/osfmk/kernel/src" ]]; then
+        export LITES_MACH_DIR="/opt/mach/osfmk/kernel/src"
+        echo "Using Mach headers from Docker image: ${LITES_MACH_DIR}"
+        return 0
+    fi
+    
+    # Check for localmach
+    if [[ -d "${WORKSPACE_ROOT}/localmach/include" ]]; then
+        export LITES_MACH_DIR="${WORKSPACE_ROOT}/localmach"
+        echo "Using Mach headers from localmach: ${LITES_MACH_DIR}"
+        return 0
+    fi
+    
+    # Check for openmach submodule
+    if [[ -d "${WORKSPACE_ROOT}/openmach/include" ]]; then
+        export LITES_MACH_DIR="${WORKSPACE_ROOT}/openmach"
+        echo "Using Mach headers from openmach: ${LITES_MACH_DIR}"
+        return 0
+    fi
+    
+    echo "Warning: Mach headers not found!" >&2
+    echo "You can set them up with:" >&2
+    echo "  docker/scripts/setup-mach-headers.sh --docker" >&2
+    echo "" >&2
+    echo "The build will attempt to continue, but may fail." >&2
+    echo "Set LITES_MACH_DIR environment variable to specify header location." >&2
+    return 1
+}
+
+##
 # @brief Build using CMake
 ##
 build_with_cmake() {
@@ -177,6 +217,9 @@ main() {
     
     # Check dependencies
     check_dependencies
+    
+    # Check and set up Mach headers
+    check_mach_headers || true
     
     # Clean if requested
     if [[ "$clean" == "true" ]]; then

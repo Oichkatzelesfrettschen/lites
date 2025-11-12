@@ -62,6 +62,12 @@ Technical details and options:
    - Job descriptions
    - Troubleshooting CI issues
 
+7. **[MACH_HEADERS.md](MACH_HEADERS.md)** - Mach headers setup guide (NEW)
+   - Header sources and installation
+   - Docker image integration
+   - Manual setup options
+   - Troubleshooting header issues
+
 ## File Structure
 
 ```
@@ -73,17 +79,18 @@ docker/
 ├── README.md                    ← Technical reference
 ├── CI_CD_WORKFLOW.md            ← CI/CD integration
 ├── GITHUB_ACTIONS.md            ← GitHub Actions setup
+├── MACH_HEADERS.md              ← Mach headers guide (NEW)
 │
 ├── Dockerfile.i386-dev          ← Docker image definition
 ├── docker-compose.yml           ← Container orchestration (v2)
-├── docker-compose.yml           ← Container orchestration
 │
 └── scripts/
     ├── build-lites-i386.sh      ← Build automation
     ├── run-qemu-i386.sh         ← QEMU launcher
     ├── docker-shell.sh          ← Container entry helper
     ├── test-docker-build.sh     ← Environment validation
-    └── setup-hurd-dev.sh        ← GNU/Hurd setup (optional)
+    ├── setup-hurd-dev.sh        ← GNU/Hurd setup (optional)
+    └── setup-mach-headers.sh    ← Mach headers setup (NEW)
 ```
 
 ## Quick Start Commands
@@ -113,6 +120,7 @@ make -f Makefile.docker docker-gdb
 - **Understand the architecture** → [OVERVIEW.md](OVERVIEW.md)
 - **See visual diagrams** → [WORKFLOW.md](WORKFLOW.md)
 - **Find all options** → [README.md](README.md)
+- **Set up Mach headers** → [MACH_HEADERS.md](MACH_HEADERS.md) (NEW)
 - **Debug with GDB** → [README.md#debugging](README.md#debugging)
 - **Use GNU/Hurd** → [scripts/setup-hurd-dev.sh](scripts/setup-hurd-dev.sh)
 - **Validate my setup** → [scripts/test-docker-build.sh](scripts/test-docker-build.sh)
