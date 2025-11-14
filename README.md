@@ -157,6 +157,10 @@ cmake -B build -DARCH=ia16
 cmake --build build
 ```
 
+The optional `setup.sh` script installs a wide range of cross-compilers
+and emulators.  It can be used to reproduce historical build setups, but
+it requires root privileges and network access.
+
 ### Docker-based i386 Development
 
 For a complete, pre-configured i386 development environment with QEMU emulation,
@@ -371,6 +375,12 @@ forwarded directly to `scripts/run-qemu.sh`. See
 
 If QEMU fails due to an executable stack warning, link `lites_server` with
 `-Wl,-z,noexecstack`.
+
+## Tooling
+
+This repository ships `.clang-format`, `.clang-tidy` and a basic
+`pre-commit` configuration.  Running `pre-commit install` will ensure that
+new patches are automatically formatted and checked with `clang-tidy`.
 
 Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  A detailed tmux example is provided in [docs/tmux.md](docs/tmux.md).  The mailbox-based IPC wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers for common POSIX operations are documented in [docs/POSIX.md](docs/POSIX.md).
 Design notes on the hybrid kernel approach and namespace algebra can be found in the remaining documentation.

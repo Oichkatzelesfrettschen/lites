@@ -5,6 +5,8 @@ else
 SRCDIR ?= build/lites-1.1.u3
 endif
 CC ?= clang
+CLANG_TIDY ?= clang-tidy
+TIDY ?= 0
 
 # Optional Mach kernel source tree for headers
 MACHDIR ?= $(LITES_MACH_DIR)
@@ -153,10 +155,16 @@ prepare:
 
 lites_server: $(SERVER_SRC) $(KERN_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+ifeq ($(TIDY),1)
+	$(CLANG_TIDY) $(SERVER_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS)
+endif
 
 ifneq ($(EMULATOR_SRC),)
 lites_emulator: $(EMULATOR_SRC) $(KERN_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+ifeq ($(TIDY),1)
+	$(CLANG_TIDY) $(EMULATOR_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS)
+endif
 endif
 
 clean:
@@ -167,4 +175,7 @@ test: all
 	$(MAKE) -C $$d; \
 	done
 
-.PHONY: all prepare clean test
+tidy:
+	$(CLANG_TIDY) $(SERVER_SRC) $(EMULATOR_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR)
+
+.PHONY: all prepare clean test tidy

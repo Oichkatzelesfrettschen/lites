@@ -37,62 +37,54 @@
  * Error log buffer for kernel printf's.
  */
 
-#include <sys/param.h>
-#include <sys/systm.h>
-#include <sys/proc.h>
-#include <sys/vnode.h>
-#include <sys/ioctl.h>
-#include <sys/msgbuf.h>
 #include <sys/file.h>
+#include <sys/ioctl.h>
 #include <sys/kernel.h>
+#include <sys/msgbuf.h>
+#include <sys/param.h>
+#include <sys/proc.h>
+#include <sys/systm.h>
+#include <sys/vnode.h>
 
-#define LOG_RDPRI	(PZERO + 1)
+#define LOG_RDPRI (PZERO + 1)
 
-#define LOG_ASYNC	0x04
-#define LOG_RDWAIT	0x08
+#define LOG_ASYNC 0x04
+#define LOG_RDWAIT 0x08
 
 struct logsoftc {
-	int	sc_state;		/* see above for possibilities */
-	struct	selinfo sc_selp;	/* process waiting on select call */
-	int	sc_pgid;		/* process/group for async I/O */
+	int sc_state;		/* see above for possibilities */
+	struct selinfo sc_selp; /* process waiting on select call */
+	int sc_pgid;		/* process/group for async I/O */
 } logsoftc;
 
-int	log_open;			/* also used in log() */
+int log_open; /* also used in log() */
 
 /*ARGSUSED*/
-logopen(dev, flags, mode, p)
-	dev_t dev;
-	int flags, mode;
-	struct proc *p;
-{
-	register struct msgbuf *mbp = msgbufp;
+int logopen(dev_t dev, int flags, int mode, struct proc *p) {
+	struct msgbuf *mbp = msgbufp;
 
 	if (log_open)
 		return (EBUSY);
 	log_open = 1;
-	logsoftc.sc_pgid = p->p_pid;		/* signal process only */
+	logsoftc.sc_pgid = p->p_pid; /* signal process only */
 	/*
 	 * Potential race here with putchar() but since putchar should be
 	 * called by autoconf, msg_magic should be initialized by the time
 	 * we get here.
 	 */
 	if (mbp->msg_magic != MSG_MAGIC) {
-		register int i;
+		int i;
 
 		mbp->msg_magic = MSG_MAGIC;
 		mbp->msg_bufx = mbp->msg_bufr = 0;
-		for (i=0; i < MSG_BSIZE; i++)
+		for (i = 0; i < MSG_BSIZE; i++)
 			mbp->msg_bufc[i] = 0;
 	}
 	return (0);
 }
 
 /*ARGSUSED*/
-logclose(dev, flag, mode, p)
-	dev_t dev;
-	int flag, mode;
-	struct proc *p;
-{
+int logclose(dev_t dev, int flag, int mode, struct proc *p) {
 
 	log_open = 0;
 	logsoftc.sc_state = 0;
@@ -100,14 +92,10 @@ logclose(dev, flag, mode, p)
 }
 
 /*ARGSUSED*/
-logread(dev, uio, flag)
-	dev_t dev;
-	struct uio *uio;
-	int flag;
-{
-	register struct msgbuf *mbp = msgbufp;
-	register long l;
-	register int s;
+int logread(dev_t dev, struct uio *uio, int flag) {
+	struct msgbuf *mbp = msgbufp;
+	long l;
+	int s;
 	int error = 0;
 
 	s = splhigh();
@@ -117,8 +105,8 @@ logread(dev, uio, flag)
 			return (EWOULDBLOCK);
 		}
 		logsoftc.sc_state |= LOG_RDWAIT;
-		if (error = tsleep((caddr_t)mbp, LOG_RDPRI | PCATCH,
-		    "klog", 0)) {
+		if (error =
+			tsleep((caddr_t)mbp, LOG_RDPRI | PCATCH, "klog", 0)) {
 			splx(s);
 			return (error);
 		}
@@ -133,8 +121,8 @@ logread(dev, uio, flag)
 		l = min(l, uio->uio_resid);
 		if (l == 0)
 			break;
-		error = uiomove((caddr_t)&mbp->msg_bufc[mbp->msg_bufr],
-			(int)l, uio);
+		error = uiomove((caddr_t)&mbp->msg_bufc[mbp->msg_bufr], (int)l,
+				uio);
 		if (error)
 			break;
 		mbp->msg_bufr += l;
@@ -145,11 +133,7 @@ logread(dev, uio, flag)
 }
 
 /*ARGSUSED*/
-logselect(dev, rw, p)
-	dev_t dev;
-	int rw;
-	struct proc *p;
-{
+int logselect(dev_t dev, int rw, struct proc *p) {
 	int s = splhigh();
 
 	switch (rw) {
@@ -166,8 +150,7 @@ logselect(dev, rw, p)
 	return (0);
 }
 
-logwakeup()
-{
+void logwakeup(void) {
 	struct proc *p;
 
 	if (!log_open)
@@ -175,7 +158,7 @@ logwakeup()
 	selwakeup(&logsoftc.sc_selp);
 	if (logsoftc.sc_state & LOG_ASYNC) {
 		if (logsoftc.sc_pgid < 0)
-			gsignal(-logsoftc.sc_pgid, SIGIO); 
+			gsignal(-logsoftc.sc_pgid, SIGIO);
 		else if (p = pfind(logsoftc.sc_pgid))
 			psignal(p, SIGIO);
 	}
@@ -186,13 +169,7 @@ logwakeup()
 }
 
 /*ARGSUSED*/
-logioctl(dev, com, data, flag, p)
-	dev_t dev;
-	int com;
-	caddr_t data;
-	int flag;
-	struct proc *p;
-{
+int logioctl(dev_t dev, int com, caddr_t data, int flag, struct proc *p) {
 	long l;
 	int s;
 
