@@ -51,6 +51,10 @@ docker/.ccache/
 qemu-images/
 *.qcow2
 *.img
+*.iso
+lites-boot.img
+lites.qcow2
+lites.img
 build-i386/
 
 # Docker Compose overrides

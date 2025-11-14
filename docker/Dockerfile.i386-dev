@@ -35,6 +35,18 @@ RUN apt-get update && apt-get install -y \
     qemu-user-static \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install disk image creation tools
+RUN apt-get update && apt-get install -y \
+    parted \
+    e2fsprogs \
+    dosfstools \
+    mtools \
+    grub-pc-bin \
+    grub2-common \
+    grub-efi-ia32-bin \
+    xorriso \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Install GNU Mach and Hurd development packages for MIG
 RUN apt-get update && apt-get install -y \
     gnumach-dev \

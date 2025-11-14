@@ -48,19 +48,39 @@ build_lites() {
     "
 }
 
-## Create disk image
-create_disk_image() {
-    echo "==> Creating QEMU disk image: $DISK_IMAGE ($DISK_SIZE)"
-    
-    docker compose run --rm dev bash -c "
-        bash docker/scripts/create-lites-disk.sh \
+## Create bootable disk image (.img)
+create_bootable_image() {
+    echo "==> Creating bootable disk image (.img)"
+
+    local raw_image="lites-boot.img"
+
+    # Run with privileged mode for loop device access
+    docker compose run --rm --privileged dev bash -c "
+        bash docker/scripts/create-bootable-image.sh \
             --size $DISK_SIZE \
-            --output $DISK_IMAGE \
-            --format qcow2 \
-            --compression
+            --output $raw_image \
+            --lites build-i386/lites_emulator
     "
-    
-    echo "✅ Disk image created: $DISK_IMAGE"
+
+    echo "✅ Bootable .img created: $raw_image"
+    echo "$raw_image"
+}
+
+## Convert .img to QCOW2
+convert_to_qcow2() {
+    local raw_image="$1"
+
+    echo "==> Converting $raw_image to QCOW2: $DISK_IMAGE"
+
+    docker compose run --rm dev bash -c "
+        bash docker/scripts/convert-img-to-qcow2.sh \
+            --input $raw_image \
+            --output $DISK_IMAGE \
+            --compress \
+            --prealloc metadata
+    "
+
+    echo "✅ QCOW2 image created: $DISK_IMAGE"
 }
 
 ## Run Lites in QEMU
@@ -98,7 +118,9 @@ Usage: $0 [COMMAND]
 Commands:
     build       - Build Docker image
     compile     - Build Lites inside Docker
-    disk        - Create QEMU disk image
+    bootimg     - Create bootable .img file
+    qcow2       - Convert .img to QCOW2
+    disk        - Create bootable .img and convert to QCOW2
     run         - Run Lites in QEMU
     all         - Run complete workflow (default)
     help        - Show this help
@@ -128,8 +150,17 @@ main() {
         compile)
             build_lites
             ;;
+        bootimg)
+            create_bootable_image
+            ;;
+        qcow2)
+            local raw_img="${2:-lites-boot.img}"
+            convert_to_qcow2 "$raw_img"
+            ;;
         disk)
-            create_disk_image
+            local raw_img
+            raw_img=$(create_bootable_image)
+            convert_to_qcow2 "$raw_img"
             ;;
         run)
             run_qemu
@@ -137,7 +168,9 @@ main() {
         all)
             build_docker_image
             build_lites
-            create_disk_image
+            local raw_img
+            raw_img=$(create_bootable_image)
+            convert_to_qcow2 "$raw_img"
             run_qemu
             ;;
         help|--help|-h)

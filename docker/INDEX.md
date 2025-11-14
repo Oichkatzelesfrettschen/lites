@@ -68,12 +68,19 @@ Technical details and options:
    - Manual setup options
    - Troubleshooting header issues
 
-8. **[QEMU_DISK_GUIDE.md](QEMU_DISK_GUIDE.md)** - **NEW:** QEMU disk images and networking
+8. **[QEMU_DISK_GUIDE.md](QEMU_DISK_GUIDE.md)** - QEMU disk images and networking
    - Disk image creation (QCOW2 best practices)
    - QEMU configuration and optimization
    - Network setup (user-mode, TAP, bridge)
    - Docker+QEMU integration
    - Complete troubleshooting guide
+
+9. **[BOOTABLE_IMAGE_GUIDE.md](BOOTABLE_IMAGE_GUIDE.md)** - **NEW:** Creating bootable disk images
+   - Complete .img to qcow2 workflow
+   - GRUB bootloader setup
+   - GNU Mach kernel integration
+   - Image conversion and optimization
+   - Troubleshooting bootable images
 
 ## File Structure
 
@@ -87,7 +94,8 @@ docker/
 ├── CI_CD_WORKFLOW.md            ← CI/CD integration
 ├── GITHUB_ACTIONS.md            ← GitHub Actions setup
 ├── MACH_HEADERS.md              ← Mach headers guide
-├── QEMU_DISK_GUIDE.md           ← QEMU disk images & networking (NEW)
+├── QEMU_DISK_GUIDE.md           ← QEMU disk images & networking
+├── BOOTABLE_IMAGE_GUIDE.md      ← Bootable .img creation workflow (NEW)
 │
 ├── Dockerfile.i386-dev          ← Docker image definition
 ├── docker-compose.yml           ← Container orchestration (v2)
@@ -96,12 +104,14 @@ docker/
     ├── build-lites-i386.sh      ← Build automation
     ├── run-qemu-i386.sh         ← QEMU launcher
     ├── docker-shell.sh          ← Container entry helper
-    ├── create-lites-disk.sh     ← Disk image creation (NEW)
-    ├── setup-qemu-networking.sh ← Network configuration (NEW)
-    ├── docker-build-and-run.sh  ← Complete workflow automation (NEW)
+    ├── create-lites-disk.sh     ← Empty disk image creation
+    ├── create-bootable-image.sh ← Bootable .img with GRUB+Mach (NEW)
+    ├── convert-img-to-qcow2.sh  ← .img to QCOW2 converter (NEW)
+    ├── setup-qemu-networking.sh ← Network configuration
+    ├── docker-build-and-run.sh  ← Complete workflow automation
     ├── test-docker-build.sh     ← Environment validation
     ├── setup-hurd-dev.sh        ← GNU/Hurd setup (optional)
-    └── setup-mach-headers.sh    ← Mach headers setup (NEW)
+    └── setup-mach-headers.sh    ← Mach headers setup
 ```
 
 ## Quick Start Commands
@@ -131,7 +141,8 @@ make -f Makefile.docker docker-gdb
 - **Understand the architecture** → [OVERVIEW.md](OVERVIEW.md)
 - **See visual diagrams** → [WORKFLOW.md](WORKFLOW.md)
 - **Find all options** → [README.md](README.md)
-- **Set up Mach headers** → [MACH_HEADERS.md](MACH_HEADERS.md) (NEW)
+- **Set up Mach headers** → [MACH_HEADERS.md](MACH_HEADERS.md)
+- **Create bootable disk images** → [BOOTABLE_IMAGE_GUIDE.md](BOOTABLE_IMAGE_GUIDE.md) (NEW)
 - **Debug with GDB** → [README.md#debugging](README.md#debugging)
 - **Use GNU/Hurd** → [scripts/setup-hurd-dev.sh](scripts/setup-hurd-dev.sh)
 - **Validate my setup** → [scripts/test-docker-build.sh](scripts/test-docker-build.sh)
