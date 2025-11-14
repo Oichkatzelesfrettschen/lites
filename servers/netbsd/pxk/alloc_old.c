@@ -86,6 +86,7 @@ extern char *xsbrk();
 #define USESPL
 #ifdef GORP
 #include <stdio.h>
+#include <string.h>
 #endif
 
 /*  An implementation of malloc(3), free(3) using the QuickFit method.
@@ -722,11 +723,12 @@ int n, x;
   static long *lblocks[MAXBLOCKS];
   if (n > MALLOC_NPCS) n = MALLOC_NPCS;
   if (n < 1) n = 1;
-  bcopy(blocks, lblocks, sizeof(blocks));
+  memcpy(lblocks, blocks, sizeof(blocks));
   qsort(lblocks, MAXBLOCKS, sizeof(long *), compareblocks);
   for (i = 0, j = 0; i < MAXBLOCKS; i++, j++) {
     b = lblocks[i];
-    if (!b || bcmp(b + MALLOC_CHECK + MALLOC_NPCS, last, n * sizeof(long))) {
+      if (!b || memcmp(b + MALLOC_CHECK + MALLOC_NPCS, last,
+                       n * sizeof(long)) != 0) {
       if (j >= x) {
 	printf("%d at ", j);
 	for (k = 0; k < MALLOC_NPCS; k++) {
@@ -734,7 +736,7 @@ int n, x;
 	}
 	printf("\n");
       }
-      if (b) bcopy(b + MALLOC_CHECK + MALLOC_NPCS, last, MALLOC_NPCS * sizeof(long));
+      if (b) memcpy(last, b + MALLOC_CHECK + MALLOC_NPCS, MALLOC_NPCS * sizeof(long));
       j = 0;
     }
     if (!b) break;

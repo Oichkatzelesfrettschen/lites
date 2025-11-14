@@ -31,6 +31,7 @@
 #include <kern/cpu_number.h>
 #include <mach/machine.h>
 #include <vm/vm_kern.h>
+#include <string.h>
 
 #include <i386/mp_desc.h>
 #include <i386/lock.h>
@@ -129,17 +130,10 @@ mp_desc_init(mycpu)
 		/*
 		 * Copy the tables
 		 */
-		bcopy((char *)idt,
-		  (char *)mpt->idt,
-		  sizeof(idt));
-		bcopy((char *)gdt,
-		  (char *)mpt->gdt,
-		  sizeof(gdt));
-		bcopy((char *)ldt,
-		  (char *)mpt->ldt,
-		  sizeof(ldt));
-		bzero((char *)&mpt->ktss,
-		  sizeof(struct i386_tss));
+               memcpy(mpt->idt, idt, sizeof(idt));
+               memcpy(mpt->gdt, gdt, sizeof(gdt));
+               memcpy(mpt->ldt, ldt, sizeof(ldt));
+               memset(&mpt->ktss, 0, sizeof(struct i386_tss));
 
 		/*
 		 * Fix up the entries in the GDT to point to

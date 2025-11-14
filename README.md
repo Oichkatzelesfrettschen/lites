@@ -7,7 +7,10 @@ patch sets.
 The tree is preserved mainly for reference.  Should a directory named
 `lites-1.1-2025` (or similarly named) appear, it represents an ongoing
 modernization effort and is not part of the original snapshots.  A
-The modern tree consolidates historical releases and ongoing improvements.
+summary of the completed work and future plans can be found in
+[docs/MODERNIZATION.md](docs/MODERNIZATION.md).
+Integration notes for Eigen, MLP and Cap'n Proto live in [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md).
+The overall roadmap is outlined in [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md).
 
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
@@ -62,6 +65,17 @@ The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
 detail.
 
+## Directory layout
+
+The modern tree keeps historical and new code in clearly separated
+subdirectories.
+
+- `legacy_bsd/` holds an import of the original 4.4BSD userland sources
+  used as a reference by the build system.
+- `libos/` provides common runtime helpers.  It now contains a unified
+  virtual memory layer implemented in `vm.c` and `vm.h` that is shared by
+  the server and unit tests.
+
 ## Mach kernel headers
 
 Lites relies on headers from a Mach kernel source tree such as the
@@ -104,7 +118,13 @@ cmake --build build
 ```
 ## Header inventory
 
-Use `scripts/flatten-headers.sh` to gather all header files from across the repository. The script copies each header into the `flattened_include/` directory and automatically renames duplicates by embedding the original path in the filename.
+Use `scripts/flatten-headers.sh` to gather all header files from across the
+repository.  The script copies each header into the `include/` directory and
+renames files that would otherwise clash.  When two headers share the same
+basename, the relative path to the original file is encoded in the new filename
+by replacing `/` with `_`.  For example a header located at
+`i386/include/mach/machine/asm.h` is written as
+`i386_include_mach_machine_asm.h` when a plain `asm.h` already exists.
 
 ## Building
 

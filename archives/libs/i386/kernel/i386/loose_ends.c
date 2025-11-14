@@ -26,6 +26,7 @@
 /*
  */
 #include <mach_assert.h>
+#include <string.h>
 
 
 	/*
@@ -41,22 +42,9 @@ int boothowto = 0;
  * ovbcopy - like bcopy, but recognizes overlapping ranges and handles 
  *           them correctly.
  */
-ovbcopy(from, to, bytes)
-	char *from, *to;
-	int bytes;			/* num bytes to copy */
+ovbcopy(const void *from, void *to, int bytes)
 {
-	/* Assume that bcopy copies left-to-right (low addr first). */
-	if (from + bytes <= to || to + bytes <= from || to == from)
-		bcopy(from, to, bytes);	/* non-overlapping or no-op*/
-	else if (from > to)
-		bcopy(from, to, bytes);	/* overlapping but OK */
-	else {
-		/* to > from: overlapping, and must copy right-to-left. */
-		from += bytes - 1;
-		to += bytes - 1;
-		while (bytes-- > 0)
-			*to-- = *from--;
-	}
+    memmove(to, from, bytes);
 }
 
 /* Someone with time should write code to set cpuspeed automagically */

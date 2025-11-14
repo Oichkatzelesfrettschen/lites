@@ -21,7 +21,7 @@
 
 
 extern void     bcopy( char *, char *, int );
-extern int	bcmp( char *, char *, int );
+extern int memcmp(const void *, const void *, size_t);
 extern void     bzero( char *, int );
 extern int	qsort( char *, int, int, int(*)());
 

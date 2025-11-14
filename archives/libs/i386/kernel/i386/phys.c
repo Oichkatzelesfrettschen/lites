@@ -32,6 +32,7 @@
 #include <mach/vm_prot.h>
 #include <vm/vm_kern.h>
 #include <vm/vm_page.h>
+#include <string.h>
 
 #include <i386/pmap.h>
 #include <mach/machine/vm_param.h>
@@ -43,7 +44,7 @@ pmap_zero_page(p)
 	vm_offset_t p;
 {
 	assert(p != vm_page_fictitious_addr);
-	bzero(phystokv(p), PAGE_SIZE);
+       memset(phystokv(p), 0, PAGE_SIZE);
 }
 
 /*
@@ -55,7 +56,7 @@ pmap_copy_page(src, dst)
 	assert(src != vm_page_fictitious_addr);
 	assert(dst != vm_page_fictitious_addr);
 
-	bcopy(phystokv(src), phystokv(dst), PAGE_SIZE);
+       memcpy(phystokv(dst), phystokv(src), PAGE_SIZE);
 }
 
 /*
@@ -68,7 +69,7 @@ copy_to_phys(src_addr_v, dst_addr_p, count)
 	int count;
 {
 	assert(dst_addr_p != vm_page_fictitious_addr);
-	bcopy(src_addr_v, phystokv(dst_addr_p), count);
+       memcpy(phystokv(dst_addr_p), src_addr_v, count);
 }
 
 /*
@@ -82,7 +83,7 @@ copy_from_phys(src_addr_p, dst_addr_v, count)
 	int count;
 {
 	assert(src_addr_p != vm_page_fictitious_addr);
-	bcopy(phystokv(src_addr_p), dst_addr_v, count);
+       memcpy(dst_addr_v, phystokv(src_addr_p), count);
 }
 
 /*

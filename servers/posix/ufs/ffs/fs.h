@@ -32,6 +32,7 @@
  *
  *	@(#)fs.h	8.7 (Berkeley) 4/19/94
  */
+#include <legacy_bsd/bsd_compat.h>
 
 /*
  * Each disk drive contains some number of file systems.
@@ -254,8 +255,6 @@ struct fs {
  */
 #define	FS_MAGIC	0x011954	/* the fast filesystem magic number */
 #define	FS_OKAY		0x7c269d38	/* superblock checksum */
-#define FS_42INODEFMT	-1		/* 4.2BSD inode format */
-#define FS_44INODEFMT	2		/* 4.4BSD inode format */
 /*
  * Preference for optimization.
  */
@@ -265,8 +264,6 @@ struct fs {
 /*
  * Rotational layout table format types
  */
-#define FS_42POSTBLFMT		-1	/* 4.2BSD rotational table format */
-#define FS_DYNAMICPOSTBLFMT	1	/* dynamic rotational table format */
 /*
  * Macros for access to superblock array structures
  */
