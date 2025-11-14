@@ -75,15 +75,15 @@ struct sl_softc {
 #define	SC_AUTOCOMP	IFF_LINK2	/* auto-enable TCP compression */
 
 #ifdef KERNEL
-void	slattach __P((void));
-void	slclose __P((struct tty *));
-void	slinput __P((int, struct tty *));
-int	slioctl __P((struct ifnet *, int, caddr_t));
-int	slopen __P((dev_t, struct tty *));
-int	sloutput __P((struct ifnet *,
-	    struct mbuf *, struct sockaddr *, struct rtentry *));
-void	slstart __P((struct tty *));
-int	sltioctl __P((struct tty *, int, caddr_t, int));
+void	slattach (void);
+void	slclose (struct tty *);
+void	slinput (int, struct tty *);
+int	slioctl (struct ifnet *, int, caddr_t);
+int	slopen (dev_t, struct tty *);
+int	sloutput (struct ifnet *,
+	    struct mbuf *, struct sockaddr *, struct rtentry *);
+void	slstart (struct tty *);
+int	sltioctl (struct tty *, int, caddr_t, int);
 #endif /* KERNEL */
 
 #endif /* !_NET_IF_SLVAR_H_ */

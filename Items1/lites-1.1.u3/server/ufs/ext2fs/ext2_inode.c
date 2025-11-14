@@ -66,13 +66,13 @@
 #include <ufs/ext2fs/fs.h>
 #include <ufs/ext2fs/ext2_extern.h>
 
-static int ext2_indirtrunc __P((struct inode *, daddr_t, daddr_t, daddr_t, int,
-	    long *));
+static int ext2_indirtrunc (struct inode *, daddr_t, daddr_t, daddr_t, int,
+	    long *);
 
 int
 ext2_init()
 {
-	return (ufs_init());
+	return (ufs_init();
 }
 
 /*
@@ -121,15 +121,15 @@ ext2_update(ap)
 	ip->i_flag &= ~(IN_ACCESS | IN_CHANGE | IN_MODIFIED | IN_UPDATE);
 	fs = ip->i_e2fs;
 	if (error = bread(ip->i_devvp,
-	    fsbtodb(fs, ino_to_fsba(fs, ip->i_number)),
+	    fsbtodb(fs, ino_to_fsba(fs, ip->i_number),
 		(int)fs->s_blocksize, NOCRED, &bp)) {
 		brelse(bp);
 		return (error);
 	}
 	ext2_di2ei( &ip->i_din, (char *)bp->b_data + EXT2_INODE_SIZE *
-	    ino_to_fsbo(fs, ip->i_number));
+	    ino_to_fsbo(fs, ip->i_number);
 	if (ap->a_waitfor)
-		return (bwrite(bp));
+		return (bwrite(bp);
 	else {
 		bdwrite(bp);
 		return (0);
@@ -186,11 +186,11 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 		bzero((char *)&oip->i_shortlink, (u_int)oip->i_size);
 		oip->i_size = 0;
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 1));
+		return (VOP_UPDATE(ovp, &tv, &tv, 1);
 	}
 	if (oip->i_size == length) {
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 0));
+		return (VOP_UPDATE(ovp, &tv, &tv, 0);
 	}
 #if QUOTA
 	if (error = getinoquota(oip))
@@ -221,7 +221,7 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 		else
 			bawrite(bp);
 		oip->i_flag |= IN_CHANGE | IN_UPDATE;
-		return (VOP_UPDATE(ovp, &tv, &tv, 1));
+		return (VOP_UPDATE(ovp, &tv, &tv, 1);
 	}
 	/*
 	 * Shorten the size of the file. If the file is not being
@@ -245,7 +245,7 @@ printf("ext2_truncate called %d to %d\n", VTOI(ovp)->i_number, ap->a_length);
 		oip->i_size = length;
 		size = blksize(fs, oip, lbn);
 		(void) vnode_pager_uncache(ovp);
-		bzero((char *)bp->b_data + offset, (u_int)(size - offset));
+		bzero((char *)bp->b_data + offset, (u_int)(size - offset);
 		allocbuf(bp, size);
 		if (aflags & IO_SYNC)
 			bwrite(bp);
@@ -460,7 +460,7 @@ ext2_indirtrunc(ip, lbn, dbn, lastbn, level, countp)
 	MALLOC(copy, daddr_t *, fs->s_blocksize, M_TEMP, M_WAITOK);
 	bcopy((caddr_t)bap, (caddr_t)copy, (u_int)fs->s_blocksize);
 	bzero((caddr_t)&bap[last + 1],
-	  (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t));
+	  (u_int)(NINDIR(fs) - (last + 1)) * sizeof (daddr_t);
 	if (last == -1)
 		bp->b_flags |= B_INVAL;
 	error = bwrite(bp);
@@ -513,7 +513,7 @@ ext2_inactive(ap)
 		struct vnode *a_vp;
 	} */ *ap;
 {
-	ext2_discard_prealloc(VTOI(ap->a_vp));
+	ext2_discard_prealloc(VTOI(ap->a_vp);
 	return ufs_inactive(ap);
 }
 

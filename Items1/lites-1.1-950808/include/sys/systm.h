@@ -105,57 +105,57 @@ extern int boothowto;		/* reboot flags, from console subsystem */
 /*
  * General function declarations.
  */
-int	nullop __P((void));
-int	enodev __P((void));
-int	enoioctl __P((void));
-int	enxio __P((void));
-int	eopnotsupp __P((void));
-int	seltrue __P((dev_t dev, int which, struct proc *p));
-void	*hashinit __P((int count, int type, u_long *hashmask));
+int	nullop (void);
+int	enodev (void);
+int	enoioctl (void);
+int	enxio (void);
+int	eopnotsupp (void);
+int	seltrue (dev_t dev, int which, struct proc *p);
+void	*hashinit (int count, int type, u_long *hashmask);
 
-void	panic __P((const char *, ...));
-void	tablefull __P((const char *));
-void	addlog __P((const char *, ...));
-void	log __P((int, const char *, ...));
-void	printf __P((const char *, ...));
-int	sprintf __P((char *buf, const char *, ...));
-void	ttyprintf __P((struct tty *, const char *, ...));
+void	panic (const char *, ...);
+void	tablefull (const char *);
+void	addlog (const char *, ...);
+void	log (int, const char *, ...);
+void	printf (const char *, ...);
+int	sprintf (char *buf, const char *, ...);
+void	ttyprintf (struct tty *, const char *, ...);
 
-void	bcopy __P((const void *from, void *to, size_t len));
-void	ovbcopy __P((const void *from, void *to, u_int len));
-void	bzero __P((void *buf, size_t len));
+void	bcopy (const void *from, void *to, size_t len);
+void	ovbcopy (const void *from, void *to, u_int len);
+void	bzero (void *buf, size_t len);
 
-int	copystr __P((void *kfaddr, void *kdaddr, u_int len, u_int *done));
-int	copyinstr __P((void *udaddr, void *kaddr, u_int len, u_int *done));
-int	copyoutstr __P((void *kaddr, void *udaddr, u_int len, u_int *done));
-int	copyin __P((void *udaddr, void *kaddr, u_int len));
-int	copyout __P((void *kaddr, void *udaddr, u_int len));
+int	copystr (void *kfaddr, void *kdaddr, u_int len, u_int *done);
+int	copyinstr (void *udaddr, void *kaddr, u_int len, u_int *done);
+int	copyoutstr (void *kaddr, void *udaddr, u_int len, u_int *done);
+int	copyin (void *udaddr, void *kaddr, u_int len);
+int	copyout (void *kaddr, void *udaddr, u_int len);
 
-int	fubyte __P((void *base));
+int	fubyte (void *base);
 #ifdef notdef
-int	fuibyte __P((void *base));
+int	fuibyte (void *base);
 #endif
-int	subyte __P((void *base, int byte));
-int	suibyte __P((void *base, int byte));
-int	fuword __P((void *base));
-int	fuiword __P((void *base));
-int	suword __P((void *base, int word));
-int	suiword __P((void *base, int word));
+int	subyte (void *base, int byte);
+int	suibyte (void *base, int byte);
+int	fuword (void *base);
+int	fuiword (void *base);
+int	suword (void *base, int word);
+int	suiword (void *base, int word);
 
-int	hzto __P((struct timeval *tv));
-void	timeout __P((void (*func)(void *), void *arg, int ticks));
-void	untimeout __P((void (*func)(void *), void *arg));
-void	realitexpire __P((void *));
+int	hzto (struct timeval *tv);
+void	timeout (void (*func)(void *), void *arg, int ticks);
+void	untimeout (void (*func)(void *), void *arg);
+void	realitexpire (void *);
 
 struct clockframe;
-void	hardclock __P((struct clockframe *frame));
-void	softclock __P((void));
-void	statclock __P((struct clockframe *frame));
+void	hardclock (struct clockframe *frame);
+void	softclock (void);
+void	statclock (struct clockframe *frame);
 
-void	initclocks __P((void));
+void	initclocks (void);
 
-void	startprofclock __P((struct proc *));
-void	stopprofclock __P((struct proc *));
-void	setstatclockrate __P((int hzrate));
+void	startprofclock (struct proc *);
+void	stopprofclock (struct proc *);
+void	setstatclockrate (int hzrate);
 
 #include <libkern/libkern.h>

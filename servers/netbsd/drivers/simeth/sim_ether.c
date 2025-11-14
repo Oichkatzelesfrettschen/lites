@@ -19,6 +19,7 @@
 #include <signal.h>
 
 #include <sys/types.h>
+#include <string.h>
 #include <netinet/in.h>
 #include "x_stdio.h"
 #include "xkernel.h"
@@ -366,7 +367,7 @@ static void
 ethMsgStore( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
-    bcopy(hdr, netHdr, sizeof(ETHhdr));
+    memcpy(netHdr, hdr, sizeof(ETHhdr));
 }
 
 
@@ -374,7 +375,7 @@ static long
 ethMsgLoad( void *hdr, char *netHdr, long len, void *arg )
 {
     xAssert(len == sizeof(ETHhdr));
-    bcopy(netHdr, (char *)hdr, sizeof(ETHhdr));
+    memcpy(hdr, netHdr, sizeof(ETHhdr));
     return sizeof(ETHhdr);
 }
 
@@ -607,7 +608,7 @@ readether2demux( arg )
 static bool
 msg2Buf(char *msgPtr, long len, void *bufPtr)
 {
-  bcopy(msgPtr, *(char **)bufPtr, len);
+  memcpy(*(char **)bufPtr, msgPtr, len);
   *(char **)bufPtr += len;
   return TRUE;
 }
@@ -658,7 +659,7 @@ simethControl( s, op, buf, len )
 
       case GETMYHOST:
 	checkLen(len, sizeof(ETHhost));
-	bcopy((char *) &ps->myHost, buf, sizeof(ETHhost));
+        memcpy(buf, (char *) &ps->myHost, sizeof(ETHhost));
 	return (sizeof(ETHhost));
 
       case SIM_SOCK2ADDR:

@@ -144,14 +144,14 @@ int	boothowto = RB_KDB;	/* XXX should be ifdeffed */
  * hard work is done in the lower-level initialization routines including
  * startup(), which does memory initialization and autoconfiguration.
  */
-noreturn system_setup()
+_Noreturn void system_setup(void)
 {
 	register struct proc *p;
 	register struct filedesc0 *fdp;
 	register struct pdevinit *pdev;
 	register int i;
 	int s;
-	extern int (*mountroot) __P((void));
+	extern int (*mountroot) (void);
 	extern struct pdevinit pdevinit[];
 	kern_return_t	kr;
 	proc_invocation_t pk = get_proc_invocation();
@@ -169,7 +169,7 @@ noreturn system_setup()
 					   &default_pager_port);
 
 	if (kr != KERN_SUCCESS)
-	    panic("getting default pager port: %s", mach_error_string(kr));
+	    panic("getting default pager port: %s", mach_error_string(kr);
 
 	if (default_pager_port == MACH_PORT_NULL) {
 	  dprintf("(lites) Waiting for default pager\n");
@@ -177,16 +177,16 @@ noreturn system_setup()
 	    kr = vm_set_default_memory_manager(privileged_host_port,
 					       &default_pager_port);
 	    if (kr != KERN_SUCCESS)
-	      panic("getting default pager port: %s", mach_error_string(kr));
+	      panic("getting default pager port: %s", mach_error_string(kr);
 	  } while (default_pager_port == MACH_PORT_NULL);
 	}
 
 	kr = default_pager_object_create(default_pager_port,
 					 &shared_memory_port,
-					 4*vm_page_size*(maxproc+1));
+					 4*vm_page_size*(maxproc+1);
 
 	if (kr != KERN_SUCCESS)
-	    panic("getting shared_memory port: %s", mach_error_string(kr));
+	    panic("getting shared_memory port: %s", mach_error_string(kr);
 
 #endif MAP_UAREA
 	init_mapped_timezone();
@@ -231,7 +231,7 @@ noreturn system_setup()
 	p->p_flag = P_INMEM | P_SYSTEM;
 	p->p_stat = SRUN;
 	p->p_nice = NZERO;
-	bcopy("swapper", p->p_comm, sizeof ("swapper"));
+	bcopy("swapper", p->p_comm, sizeof ("swapper");
 
 	/* Create credentials. */
 	cred0.p_refcnt = 1;
@@ -361,19 +361,19 @@ noreturn system_setup()
 #if EXT2FS
 	/* XXX if FFS fails, fall back to EXT2FS */
 	if (kr == EINVAL) {
-		extern int ext2_mountroot __P((void));
+		extern int ext2_mountroot (void);
 
 		kr = ext2_mountroot();
 	}
 #endif
 	if (kr != KERN_SUCCESS)
-		panic("cannot mount root x%x %s", kr, mach_error_string(kr));
+		panic("cannot mount root x%x %s", kr, mach_error_string(kr);
 
 	/* Get the vnode for '/'.  Set fdp->fd_fd.fd_cdir to reference it. */
 	kr = VFS_ROOT(mountlist.tqh_first, &rootvnode);
 	if (kr != KERN_SUCCESS) {
 		panic("cannot find root vnode: x%x %s",
-		      kr, mach_error_string(kr));
+		      kr, mach_error_string(kr);
 	}
 	fdp->fd_fd.fd_cdir = rootvnode;
 	VREF(fdp->fd_fd.fd_cdir);
@@ -408,19 +408,19 @@ noreturn system_setup()
 #endif /* OSFMACH3 */
 	if (kr != KERN_SUCCESS)
 	    panic("system_setup: can't set exception port: %s",
-		  mach_error_string(kr));
+		  mach_error_string(kr);
 
 	/*
 	 * Let ps know what we are
 	 */
-	strncpy(p->p_comm, "Lites server", sizeof(p->p_comm));
+	strncpy(p->p_comm, "Lites server", sizeof(p->p_comm);
 
 #if MACHID_REGISTER && SECOND_SERVER
 	if(second_server) {
 	    kr = netname_look_up(name_server_port, "", "MachID", &mid_server);
 	    if (kr) {
 		dprintf("(lites) No MachID server is running: %s.\n",
-			mach_error_string(kr));
+			mach_error_string(kr);
 		mid_server = MACH_PORT_NULL;
 	    }
 	}
@@ -446,7 +446,7 @@ noreturn system_setup()
 				   arg_addr, arg_size, arg_count, env_count);
 		if (kr != KERN_SUCCESS) {
 			panic("first program (%s) exec failed: x%x %s",
-			      init_program_path, kr, mach_error_string(kr));
+			      init_program_path, kr, mach_error_string(kr);
 		}
 	}
 

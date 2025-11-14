@@ -64,7 +64,7 @@
 if (sp->sum_bytes_left < (s)) {		\
 	(void) lfs_writeseg(fs, sp);	\
 }
-struct buf *lfs_fakebuf __P((struct vnode *, int, size_t, caddr_t));
+struct buf *lfs_fakebuf (struct vnode *, int, size_t, caddr_t);
 
 /*
  * lfs_markv:
@@ -148,7 +148,7 @@ lfs_markv(p, uap, retval)
 			}
 
 			/* Start a new file */
-			CHECK_SEG(sizeof(FINFO));
+			CHECK_SEG(sizeof(FINFO);
 			sp->sum_bytes_left -= sizeof(FINFO) - sizeof(daddr_t);
 			INC_FINFO(sp);
 			sp->start_lbp = &sp->fip->fi_blocks[0];
@@ -209,7 +209,7 @@ lfs_markv(p, uap, retval)
 			if (error = VOP_BWRITE(bp))
 				goto err2;
 		}
-		while (lfs_gatherblock(sp, bp, NULL));
+		while (lfs_gatherblock(sp, bp, NULL);
 	}
 	if (sp->vp) {
 		if (sp->fip->fi_nblocks == 0) {
@@ -303,7 +303,7 @@ lfs_bmapv(p, uap, retval)
 		}
 		blkp->bi_daddr = daddr;
         }
-	copyout(start, uap->blkiov, cnt * sizeof(BLOCK_INFO));
+	copyout(start, uap->blkiov, cnt * sizeof(BLOCK_INFO);
 	free(start, M_SEGMENT);
 	return (0);
 }

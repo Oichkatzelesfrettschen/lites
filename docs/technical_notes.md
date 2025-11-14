@@ -16,8 +16,10 @@ qemu-based emulation targets.
 The modernized sources require a compiler with full
 C23 support. GCC 13 or Clang 17 (or newer) are known to work.
 
-
-Source files are formatted with `clang-format` using the settings in `.clang-format`. The `scripts/format-code.sh` helper applies the formatter to all tracked C and C++ files.
+Source files are formatted with `clang-format` using the settings in `.clang-format`.
+The `scripts/format-code.sh` helper applies the formatter to all tracked C and C++ files.
+Development uses `clang-tidy` via `pre-commit` to maintain code quality and consistency
+across platforms.
 
 A repository-wide `.editorconfig` enforces UTF‑8 encoding, LF line endings and four-space indentation.
 

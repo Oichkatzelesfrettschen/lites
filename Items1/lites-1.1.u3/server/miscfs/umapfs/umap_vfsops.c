@@ -80,7 +80,7 @@ umapfs_mount(mp, path, data, ndp, p)
 	 */
 	if (mp->mnt_flag & MNT_UPDATE) {
 		return (EOPNOTSUPP);
-		/* return (VFS_MOUNT(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, path, data, ndp, p));*/
+		/* return (VFS_MOUNT(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, path, data, ndp, p);*/
 	}
 
 	/*
@@ -209,7 +209,7 @@ umapfs_start(mp, flags, p)
 	struct proc *p;
 {
 	return (0);
-	/* return (VFS_START(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, flags, p)); */
+	/* return (VFS_START(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, flags, p); */
 }
 
 /*
@@ -303,7 +303,7 @@ umapfs_quotactl(mp, cmd, uid, arg, p)
 	caddr_t arg;
 	struct proc *p;
 {
-	return (VFS_QUOTACTL(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, cmd, uid, arg, p));
+	return (VFS_QUOTACTL(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, cmd, uid, arg, p);
 }
 
 int
@@ -322,7 +322,7 @@ umapfs_statfs(mp, sbp, p)
 			);
 #endif
 
-	bzero(&mstat, sizeof(mstat));
+	bzero(&mstat, sizeof(mstat);
 
 	error = VFS_STATFS(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, &mstat, p);
 	if (error)
@@ -339,7 +339,7 @@ umapfs_statfs(mp, sbp, p)
 	sbp->f_files = mstat.f_files;
 	sbp->f_ffree = mstat.f_ffree;
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
+		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid);
 		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
 		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
 	}
@@ -367,7 +367,7 @@ umapfs_vget(mp, ino, vpp)
 	struct vnode **vpp;
 {
 	
-	return (VFS_VGET(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, ino, vpp));
+	return (VFS_VGET(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, ino, vpp);
 }
 
 int
@@ -380,7 +380,7 @@ umapfs_fhtovp(mp, fidp, nam, vpp, exflagsp, credanonp)
 	struct ucred**credanonp;
 {
 
-	return (VFS_FHTOVP(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, fidp, nam, vpp, exflagsp,credanonp));
+	return (VFS_FHTOVP(MOUNTTOUMAPMOUNT(mp)->umapm_vfs, fidp, nam, vpp, exflagsp,credanonp);
 }
 
 int
@@ -388,10 +388,10 @@ umapfs_vptofh(vp, fhp)
 	struct vnode *vp;
 	struct fid *fhp;
 {
-	return (VFS_VPTOFH(UMAPVPTOLOWERVP(vp), fhp));
+	return (VFS_VPTOFH(UMAPVPTOLOWERVP(vp), fhp);
 }
 
-int umapfs_init __P((void));
+int umapfs_init (void);
 
 struct vfsops umap_vfsops = {
 	"umap",

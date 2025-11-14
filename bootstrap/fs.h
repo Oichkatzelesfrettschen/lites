@@ -41,6 +41,7 @@
  *
  *	@(#)fs.h	7.7 (Berkeley) 5/9/89
  */
+#include <legacy_bsd/bsd_compat.h>
 
 /*
  * Each disk drive contains some number of file systems.
@@ -244,7 +245,6 @@ struct	fs
 /*
  * Rotational layout table format types
  */
-#define FS_42POSTBLFMT		-1	/* 4.2BSD rotational table format */
 #define FS_DYNAMICPOSTBLFMT	1	/* dynamic rotational table format */
 /*
  * Macros for access to superblock array structures

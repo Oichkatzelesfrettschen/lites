@@ -61,7 +61,7 @@
 #include <ufs/lfs/lfs.h>
 #include <ufs/lfs/lfs_extern.h>
 
-int lfs_mountfs __P((struct vnode *, struct mount *, struct proc *));
+int lfs_mountfs (struct vnode *, struct mount *, struct proc *);
 
 struct vfsops lfs_vfsops = {
 	"lfs",
@@ -129,7 +129,7 @@ lfs_mount(mp, path, data, ndp, p)
 			/*
 			 * Process export requests.
 			 */
-			return (vfs_export(mp, &ump->um_export, &args.export));
+			return (vfs_export(mp, &ump->um_export, &args.export);
 		}
 	}
 	/*
@@ -251,7 +251,7 @@ lfs_mountfs(devvp, mp, p)
 	/* Allocate the mount structure, copy the superblock into it. */
 	ump = (struct ufsmount *)malloc(sizeof *ump, M_UFSMNT, M_WAITOK);
 	fs = ump->um_lfs = malloc(sizeof(struct lfs), M_UFSMNT, M_WAITOK);
-	bcopy(bp->b_data, fs, sizeof(struct lfs));
+	bcopy(bp->b_data, fs, sizeof(struct lfs);
 	if (sizeof(struct lfs) < LFS_SBPAD)			/* XXX why? */
 		bp->b_flags |= B_INVAL;
 	brelse(bp);
@@ -422,7 +422,7 @@ lfs_sync(mp, waitfor, cred, p)
 	int error;
 
 	/* All syncs must be checkpoints until roll-forward is implemented. */
-	error = lfs_segwrite(mp, SEGM_CKP | (waitfor ? SEGM_SYNC : 0));
+	error = lfs_segwrite(mp, SEGM_CKP | (waitfor ? SEGM_SYNC : 0);
 #if QUOTA
 	qsync(mp);
 #endif
@@ -554,7 +554,7 @@ lfs_fhtovp(mp, fhp, nam, vpp, exflagsp, credanonp)
 	ufhp = (struct ufid *)fhp;
 	if (ufhp->ufid_ino < ROOTINO)
 		return (ESTALE);
-	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp));
+	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp);
 }
 
 /*

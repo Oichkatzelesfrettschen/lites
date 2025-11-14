@@ -8,6 +8,7 @@
 #include "gdt.h"
 #include "boot.h"
 #include "phys_mem.h"
+#include <string.h>
 
 extern char do_boot[], do_boot_end[];
 
@@ -34,8 +35,8 @@ void boot_start(void)
 	   Therefore, we must allocate (non-conflicting) memory for a small stub
 	   to copy the kernel image to its final position and invoke it.  */
 	stub_size = do_boot_end - do_boot;
-	stub = mustmalloc(stub_size);
-	bcopy(do_boot, stub, stub_size);
+       stub = mustmalloc(stub_size);
+       memcpy(stub, do_boot, stub_size);
 
 	ptr.seg = LINEAR_CS;
 	ptr.ofs = kvtophys(stub);

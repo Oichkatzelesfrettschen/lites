@@ -315,24 +315,24 @@ struct omsghdr {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	accept __P((int, struct sockaddr *, int *));
-int	bind __P((int, const struct sockaddr *, int));
-int	connect __P((int, const struct sockaddr *, int));
-int	getpeername __P((int, struct sockaddr *, int *));
-int	getsockname __P((int, struct sockaddr *, int *));
-int	getsockopt __P((int, int, int, void *, int *));
-int	listen __P((int, int));
-ssize_t	recv __P((int, void *, size_t, int));
-ssize_t	recvfrom __P((int, void *, size_t, int, struct sockaddr *, int *));
-ssize_t	recvmsg __P((int, struct msghdr *, int));
-ssize_t	send __P((int, const void *, size_t, int));
-ssize_t	sendto __P((int, const void *,
-	    size_t, int, const struct sockaddr *, int));
-ssize_t	sendmsg __P((int, const struct msghdr *, int));
-int	setsockopt __P((int, int, int, const void *, int));
-int	shutdown __P((int, int));
-int	socket __P((int, int, int));
-int	socketpair __P((int, int, int, int *));
+int	accept (int, struct sockaddr *, int *);
+int	bind (int, const struct sockaddr *, int);
+int	connect (int, const struct sockaddr *, int);
+int	getpeername (int, struct sockaddr *, int *);
+int	getsockname (int, struct sockaddr *, int *);
+int	getsockopt (int, int, int, void *, int *);
+int	listen (int, int);
+ssize_t	recv (int, void *, size_t, int);
+ssize_t	recvfrom (int, void *, size_t, int, struct sockaddr *, int *);
+ssize_t	recvmsg (int, struct msghdr *, int);
+ssize_t	send (int, const void *, size_t, int);
+ssize_t	sendto (int, const void *,
+	    size_t, int, const struct sockaddr *, int);
+ssize_t	sendmsg (int, const struct msghdr *, int);
+int	setsockopt (int, int, int, const void *, int);
+int	shutdown (int, int);
+int	socket (int, int, int);
+int	socketpair (int, int, int, int *);
 __END_DECLS
 
 #endif /* !KERNEL */

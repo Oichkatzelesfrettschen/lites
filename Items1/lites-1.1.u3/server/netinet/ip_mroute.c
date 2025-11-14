@@ -83,18 +83,18 @@ int	ip_mrtproto;				/* for netstat only */
 #define ovbcopy bcopy
 
 /* Static forwards */
-static	int ip_mrouter_init __P((struct socket *));
-static	int add_vif __P((struct vifctl *));
-static	int del_vif __P((vifi_t *vifip));
-static	int add_lgrp __P((struct lgrplctl *));
-static	int del_lgrp __P((struct lgrplctl *));
-static	int grplst_member __P((struct vif *, struct in_addr));
-static	u_long nethash __P((struct in_addr in));
-static	int add_mrt __P((struct mrtctl *));
-static	int del_mrt __P((struct in_addr *));
-static	struct mrt *mrtfind __P((struct in_addr));
-static	void phyint_send __P((struct mbuf *, struct vif *));
-static	void tunnel_send __P((struct mbuf *, struct vif *));
+static	int ip_mrouter_init (struct socket *);
+static	int add_vif (struct vifctl *);
+static	int del_vif (vifi_t *vifip);
+static	int add_lgrp (struct lgrplctl *);
+static	int del_lgrp (struct lgrplctl *);
+static	int grplst_member (struct vif *, struct in_addr);
+static	u_long nethash (struct in_addr in);
+static	int add_mrt (struct mrtctl *);
+static	int del_mrt (struct in_addr *);
+static	struct mrt *mrtfind (struct in_addr);
+static	void phyint_send (struct mbuf *, struct vif *);
+static	void tunnel_send (struct mbuf *, struct vif *);
 
 #define INSIZ sizeof(struct in_addr)
 #define	same(a1, a2) (bcmp((caddr_t)(a1), (caddr_t)(a2), INSIZ) == 0)
@@ -146,42 +146,42 @@ ip_mrouter_cmd(cmd, so, m)
 		if (m == NULL || m->m_len < sizeof(struct vifctl))
 			error = EINVAL;
 		else
-			error = add_vif(mtod(m, struct vifctl *));
+			error = add_vif(mtod(m, struct vifctl *);
 		break;
 
 	case DVMRP_DEL_VIF:
 		if (m == NULL || m->m_len < sizeof(short))
 			error = EINVAL;
 		else
-			error = del_vif(mtod(m, vifi_t *));
+			error = del_vif(mtod(m, vifi_t *);
 		break;
 
 	case DVMRP_ADD_LGRP:
 		if (m == NULL || m->m_len < sizeof(struct lgrplctl))
 			error = EINVAL;
 		else
-			error = add_lgrp(mtod(m, struct lgrplctl *));
+			error = add_lgrp(mtod(m, struct lgrplctl *);
 		break;
 
 	case DVMRP_DEL_LGRP:
 		if (m == NULL || m->m_len < sizeof(struct lgrplctl))
 			error = EINVAL;
 		else
-			error = del_lgrp(mtod(m, struct lgrplctl *));
+			error = del_lgrp(mtod(m, struct lgrplctl *);
 		break;
 
 	case DVMRP_ADD_MRT:
 		if (m == NULL || m->m_len < sizeof(struct mrtctl))
 			error = EINVAL;
 		else
-			error = add_mrt(mtod(m, struct mrtctl *));
+			error = add_mrt(mtod(m, struct mrtctl *);
 		break;
 
 	case DVMRP_DEL_MRT:
 		if (m == NULL || m->m_len < sizeof(struct in_addr))
 			error = EINVAL;
 		else
-			error = del_mrt(mtod(m, struct in_addr *));
+			error = del_mrt(mtod(m, struct in_addr *);
 		break;
 
 	default:
@@ -239,7 +239,7 @@ ip_mrouter_done()
 			(*ifp->if_ioctl)(ifp, SIOCDELMULTI, (caddr_t)&ifr);
 		}
 	}
-	bzero((caddr_t)viftable, sizeof(viftable));
+	bzero((caddr_t)viftable, sizeof(viftable);
 	numvifs = 0;
 
 	/*
@@ -248,7 +248,7 @@ ip_mrouter_done()
 	for (i = 0; i < MRTHASHSIZ; i++)
 		if (mrttable[i])
 			free(mrttable[i], M_MRTABLE);
-	bzero((caddr_t)mrttable, sizeof(mrttable));
+	bzero((caddr_t)mrttable, sizeof(mrttable);
 	cached_mrt = NULL;
 
 	ip_mrouter = NULL;
@@ -347,7 +347,7 @@ del_vif(vifip)
 		(*ifp->if_ioctl)(ifp, SIOCDELMULTI, (caddr_t)&ifr);
 	}
 
-	bzero((caddr_t)vifp, sizeof (*vifp));
+	bzero((caddr_t)vifp, sizeof (*vifp);
 
 	/* Adjust numvifs down */
 	for (i = numvifs - 1; i >= 0; i--)
@@ -395,9 +395,9 @@ add_lgrp(gcp)
 			return (ENOBUFS);
 		}
 
-		bzero((caddr_t)ip, num * sizeof(*ip));	/* XXX paranoid */
+		bzero((caddr_t)ip, num * sizeof(*ip);	/* XXX paranoid */
 		bcopy((caddr_t)vifp->v_lcl_grps, (caddr_t)ip,
-		    vifp->v_lcl_grps_n * sizeof(*ip));
+		    vifp->v_lcl_grps_n * sizeof(*ip);
 
 		vifp->v_lcl_grps_max = num;
 		if (vifp->v_lcl_grps)
@@ -446,7 +446,7 @@ del_lgrp(gcp)
 			vifp->v_lcl_grps_n--;
 			bcopy((caddr_t)&vifp->v_lcl_grps[i + 1],
 			    (caddr_t)&vifp->v_lcl_grps[i],
-			    (vifp->v_lcl_grps_n - i) * sizeof(struct in_addr));
+			    (vifp->v_lcl_grps_n - i) * sizeof(struct in_addr);
 			error = 0;
 			break;
 		}
@@ -502,7 +502,7 @@ nethash(in)
 	n = in_netof(in);
 	while ((n & 0xff) == 0)
 		n >>= 8;
-	return (MRTHASHMOD(n));
+	return (MRTHASHMOD(n);
 }
 
 /*
@@ -685,7 +685,7 @@ ip_mforward(m, ifp)
 		 * Delete the tunnel options from the packet.
 		 */
 		ovbcopy((caddr_t)(ipoptions + TUNNEL_LEN), (caddr_t)ipoptions,
-		    (unsigned)(m->m_len - (IP_HDR_LEN + TUNNEL_LEN)));
+		    (unsigned)(m->m_len - (IP_HDR_LEN + TUNNEL_LEN));
 		m->m_len -= TUNNEL_LEN;
 		ip->ip_len -= TUNNEL_LEN;
 		ip->ip_hl -= TUNNEL_LEN >> 2;

@@ -7,7 +7,10 @@ patch sets.
 The tree is preserved mainly for reference.  Should a directory named
 `lites-1.1-2025` (or similarly named) appear, it represents an ongoing
 modernization effort and is not part of the original snapshots.  A
-The modern tree consolidates historical releases and ongoing improvements.
+summary of the completed work and future plans can be found in
+[docs/MODERNIZATION.md](docs/MODERNIZATION.md).
+Integration notes for Eigen, MLP and Cap'n Proto live in [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md).
+The overall roadmap is outlined in [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md).
 
 Much of the original documentation and source code mirrors have long
 vanished from the Internet.  The list below records a number of archival
@@ -62,6 +65,17 @@ The file `johannes_helander-unix_under_mach-the_lites_server.pdf` in this
 repository contains a comprehensive thesis describing Lites' design in
 detail.
 
+## Directory layout
+
+The modern tree keeps historical and new code in clearly separated
+subdirectories.
+
+- `legacy_bsd/` holds an import of the original 4.4BSD userland sources
+  used as a reference by the build system.
+- `libos/` provides common runtime helpers.  It now contains a unified
+  virtual memory layer implemented in `vm.c` and `vm.h` that is shared by
+  the server and unit tests.
+
 ## Mach kernel headers
 
 Lites relies on headers from a Mach kernel source tree such as the
@@ -69,10 +83,16 @@ OpenMach/Mach4 distribution.  The modern build system looks for these
 headers in the directory specified by the `LITES_MACH_DIR` environment
 variable.  If that variable is unset and a directory named `openmach`
 exists at the repository root, it will be used automatically (a git
-submodule can conveniently provide it).
+submodule can conveniently provide it).  The Mach headers are not bundled
+with this repository, so if `openmach` is missing you must supply them
+manually or via git.
+
 Follow [docs/setup.md](docs/setup.md) to install prerequisites and
 optionally clone the OpenMach repository. The guide also covers offline
-setups using predownloaded packages placed in `offline_packages/`.
+setups using predownloaded packages placed in `offline_packages/`. If the
+clone step fails due to a lack of network connectivity, create the directory
+yourself or set `LITES_MACH_DIR` to point at an existing Mach source tree.
+
 If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
 location (for example `openmach/lib`).  When the variable is not set and
 `openmach/lib` exists, it will be used automatically.
@@ -98,7 +118,13 @@ cmake --build build
 ```
 ## Header inventory
 
-Use `scripts/flatten-headers.sh` to gather all header files from across the repository. The script copies each header into the `flattened_include/` directory and automatically renames duplicates by embedding the original path in the filename.
+Use `scripts/flatten-headers.sh` to gather all header files from across the
+repository.  The script copies each header into the `include/` directory and
+renames files that would otherwise clash.  When two headers share the same
+basename, the relative path to the original file is encoded in the new filename
+by replacing `/` with `_`.  For example a header located at
+`i386/include/mach/machine/asm.h` is written as
+`i386_include_mach_machine_asm.h` when a plain `asm.h` already exists.
 
 ## Building
 
@@ -150,6 +176,10 @@ cmake -B build -DARCH=powerpc
 cmake -B build -DARCH=ia16
 cmake --build build
 ```
+
+The optional `setup.sh` script installs a wide range of cross-compilers
+and emulators.  It can be used to reproduce historical build setups, but
+it requires root privileges and network access.
 
 ### Docker-based i386 Development
 
@@ -365,6 +395,12 @@ forwarded directly to `scripts/run-qemu.sh`. See
 
 If QEMU fails due to an executable stack warning, link `lites_server` with
 `-Wl,-z,noexecstack`.
+
+## Tooling
+
+This repository ships `.clang-format`, `.clang-tidy` and a basic
+`pre-commit` configuration.  Running `pre-commit install` will ensure that
+new patches are automatically formatted and checked with `clang-tidy`.
 
 Additional notes are kept in [docs/INDEX.md](docs/INDEX.md).  A detailed tmux example is provided in [docs/tmux.md](docs/tmux.md).  The mailbox-based IPC wrappers are described in [docs/IPC.md](docs/IPC.md).  Helper wrappers for common POSIX operations are documented in [docs/POSIX.md](docs/POSIX.md).
 Design notes on the hybrid kernel approach and namespace algebra can be found in the remaining documentation.

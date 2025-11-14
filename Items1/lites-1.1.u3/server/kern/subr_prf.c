@@ -126,10 +126,10 @@ extern	cnputc();		/* standard console putc */
 int	(*v_putc)() = cnputc;	/* routine to putc on virtual console */
 #endif
 
-void  logpri __P((int level));
-static void  putchar __P((int ch, int flags, struct tty *tp));
-static char *ksprintn __P((u_long num, int base, int *len));
-void kprintf __P((const char *fmt, int flags, struct tty *tp, va_list ap));
+void  logpri (int level);
+static void  putchar (int ch, int flags, struct tty *tp);
+static char *ksprintn (u_long num, int base, int *len);
+void kprintf (const char *fmt, int flags, struct tty *tp, va_list ap);
 
 int consintr = 1;			/* Ok to handle console interrupts? */
 
@@ -172,7 +172,7 @@ void panic(const char *fmt, ...)
 	if (boothowto & RB_KDB)
 	    Debugger("panic");
 	else
-	    task_suspend(mach_task_self());
+	    task_suspend(mach_task_self();
 	return;
     }
 #endif	/* SECOND_SERVER */
@@ -472,7 +472,7 @@ reswitch:	switch (ch = *(u_char *)fmt++) {
 			break;
 		case 'r':
 			p = va_arg(ap, char *);
-			kprintf(p, flags, tp, va_arg(ap, va_list));
+			kprintf(p, flags, tp, va_arg(ap, va_list);
 			break;
 		case 's':
 			p = va_arg(ap, char *);
@@ -552,7 +552,7 @@ static void putchar(
 	    c != '\0' && c != '\r' && c != 0177 && msgbufmapped) {
 		mbp = msgbufp;	/* XXX locking */
 		if (mbp->msg_magic != MSG_MAGIC) {
-			bzero((caddr_t)mbp, sizeof(*mbp));
+			bzero((caddr_t)mbp, sizeof(*mbp);
 			mbp->msg_magic = MSG_MAGIC;
 		}
 		mbp->msg_bufc[mbp->msg_bufx++] = c;
@@ -572,7 +572,7 @@ cntrap(c)
 		copy    %0,%%r26
 		ldi     -1,%%r25
 		break   0,6"
-		: : "r" (c));
+		: : "r" (c);
 }
 
 cnputs(str, len)
@@ -583,7 +583,7 @@ cnputs(str, len)
 		copy    %0,%%r26
 		copy    %1,%%r25
 		break   0,6"
-		: : "r" (str), "r" (len));
+		: : "r" (str), "r" (len);
 }
 #endif
 
@@ -838,7 +838,7 @@ dgetc()
 				chr, &len);
 	if (rc != KERN_SUCCESS) {
 		panic("dgetc: device_read_inband %x %s",
-		      rc, mach_error_string(rc));
+		      rc, mach_error_string(rc);
 		return -1;
 	}
 	return (len == 1) ? chr[0] : -1;

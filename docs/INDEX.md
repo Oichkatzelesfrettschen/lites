@@ -10,6 +10,7 @@ The `docs/` directory contains notes and background information for the project.
 - Historical planning documents have been removed as the repository now reflects the consolidated modern tree.
 - **iommu.md** - Notes on the minimal IOMMU abstraction present in the source tree.
 - **posix_compat.md** - Explains the limited POSIX threads compatibility layer.
+- **PROJECT_PLAN.md** - Outlines major modernisation phases and related references.
 - **security.md** - Outlines the keystore and enclave security APIs.
 - **LICENSE_MAP** - Produced by `scripts/gen-license-map.sh` (not version-controlled); maps each source to its license header.
 - **technical_notes.md** - Additional technical notes and links to the 'Unix Under Mach' thesis.

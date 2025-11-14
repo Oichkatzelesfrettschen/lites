@@ -171,7 +171,7 @@ in_putsufx(inp, sufxloc, sufxlen, which)
 	int which;
 {
 	if (which == TP_FOREIGN) {
-		bcopy(sufxloc, (caddr_t)&inp->inp_fport, sizeof(inp->inp_fport));
+		bcopy(sufxloc, (caddr_t)&inp->inp_fport, sizeof(inp->inp_fport);
 	}
 }
 
@@ -227,14 +227,14 @@ in_putnetaddr(inp, name, which)
 	switch (which) {
 	case TP_LOCAL:
 		bcopy((caddr_t)&name->sin_addr, 
-			(caddr_t)&inp->inp_laddr, sizeof(struct in_addr));
+			(caddr_t)&inp->inp_laddr, sizeof(struct in_addr);
 			/* won't work if the dst address (name) is INADDR_ANY */
 
 		break;
 	case TP_FOREIGN:
 		if( name != (struct sockaddr_in *)0 ) {
 			bcopy((caddr_t)&name->sin_addr, 
-				(caddr_t)&inp->inp_faddr, sizeof(struct in_addr));
+				(caddr_t)&inp->inp_faddr, sizeof(struct in_addr);
 		}
 	}
 }
@@ -296,7 +296,7 @@ in_getnetaddr( inp, name, which)
 	int which;
 {
 	register struct sockaddr_in *sin = mtod(name, struct sockaddr_in *);
-	bzero((caddr_t)sin, sizeof(*sin));
+	bzero((caddr_t)sin, sizeof(*sin);
 	switch (which) {
 	case TP_LOCAL:
 		sin->sin_addr = inp->inp_laddr;
@@ -342,7 +342,7 @@ register struct tp_pcb *tpcb;
 		printf("tpip_mtu routing to addr 0x%x\n", inp->inp_faddr.s_addr);
 	ENDDEBUG
 	tpcb->tp_routep = &(inp->inp_route.ro_rt);
-	return (sizeof (struct ip));
+	return (sizeof (struct ip);
 
 }
 
@@ -418,7 +418,7 @@ tpip_output_dg(laddr, faddr, m0, datalen, ro, nochksum)
 		goto bad;
 	}
 	m->m_next = m0;
-	MH_ALIGN(m, sizeof(struct ip));
+	MH_ALIGN(m, sizeof(struct ip);
 	m->m_len = sizeof(struct ip);
 
 	ip = mtod(m, struct ip *);
@@ -605,8 +605,8 @@ tpip_ctlinput(cmd, sin)
 {
 	extern mach_error_t inetctlerrmap[];
 	extern struct in_addr zeroin_addr;
-	void tp_quench __P((struct inpcb *,int));
-	void tpin_abort __P((struct inpcb *,int));
+	void tp_quench (struct inpcb *,int);
+	void tpin_abort (struct inpcb *,int);
 
 	if (sin->sin_family != AF_INET && sin->sin_family != AF_IMPLINK)
 		return 0;

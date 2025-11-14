@@ -10,10 +10,8 @@ ifndef LITES_SRC_DIR
 $(error LITES_SRC_DIR must be set)
 endif
 SRC_DIR := $(LITES_SRC_DIR)
-VM_SRC := $(SRC_DIR)/libos/vm.c
-ifneq ($(wildcard $(VM_SRC)),)
-VM_PATH := $(VM_SRC)
-else
+VM_PATH := $(SRC_DIR)/libos/vm.c
+ifneq ($(wildcard ../../libos/vm.c),)
 VM_PATH := ../../libos/vm.c
 endif
 

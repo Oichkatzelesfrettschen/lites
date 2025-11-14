@@ -55,16 +55,16 @@
 
 extern u_long nextgennumber;
 
-static daddr_t	ffs_alloccg __P((struct inode *, int, daddr_t, int));
-static daddr_t	ffs_alloccgblk __P((struct fs *, struct cg *, daddr_t));
-static daddr_t	ffs_clusteralloc __P((struct inode *, int, daddr_t, int));
-static ino_t	ffs_dirpref __P((struct fs *));
-static daddr_t	ffs_fragextend __P((struct inode *, int, long, int, int));
-static void	ffs_fserr __P((struct fs *, u_int, char *));
+static daddr_t	ffs_alloccg (struct inode *, int, daddr_t, int);
+static daddr_t	ffs_alloccgblk (struct fs *, struct cg *, daddr_t);
+static daddr_t	ffs_clusteralloc (struct inode *, int, daddr_t, int);
+static ino_t	ffs_dirpref (struct fs *);
+static daddr_t	ffs_fragextend (struct inode *, int, long, int, int);
+static void	ffs_fserr (struct fs *, u_int, char *);
 static u_long	ffs_hashalloc
-		    __P((struct inode *, int, long, int, u_long (*)()));
-static ino_t	ffs_nodealloccg __P((struct inode *, int, daddr_t, int));
-static daddr_t	ffs_mapsearch __P((struct fs *, struct cg *, daddr_t, int));
+		    (struct inode *, int, long, int, u_long (*)());
+static ino_t	ffs_nodealloccg (struct inode *, int, daddr_t, int);
+static daddr_t	ffs_mapsearch (struct fs *, struct cg *, daddr_t, int);
 
 /*
  * Allocate a block in the file system.
@@ -263,11 +263,11 @@ ffs_realloccg(ip, lbprev, bpref, osize, nsize, cred, bpp)
 	    (u_long (*)())ffs_alloccg);
 	if (bno > 0) {
 		bp->b_blkno = fsbtodb(fs, bno);
-		(void) vnode_pager_uncache(ITOV(ip));
+		(void) vnode_pager_uncache(ITOV(ip);
 		ffs_blkfree(ip, bprev, (long)osize);
 		if (nsize < request)
 			ffs_blkfree(ip, bno + numfrags(fs, nsize),
-			    (long)(request - nsize));
+			    (long)(request - nsize);
 		ip->i_blocks += btodb(nsize - osize);
 		ip->i_flag |= IN_CHANGE | IN_UPDATE;
 		allocbuf(bp, nsize);
@@ -561,7 +561,7 @@ ffs_dirpref(fs)
 			mincg = cg;
 			minndir = fs->fs_cs(fs, cg).cs_ndir;
 		}
-	return ((ino_t)(fs->fs_ipg * mincg));
+	return ((ino_t)(fs->fs_ipg * mincg);
 }
 
 /*
@@ -739,7 +739,7 @@ ffs_fragextend(ip, cg, bprev, osize, nsize)
 		/* cannot extend across a block boundary */
 		return (NULL);
 	}
-	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg)),
+	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg),
 		(int)fs->fs_cgsize, NOCRED, &bp);
 	if (error) {
 		brelse(bp);
@@ -804,7 +804,7 @@ ffs_alloccg(ip, cg, bpref, size)
 	fs = ip->i_fs;
 	if (fs->fs_cs(fs, cg).cs_nbfree == 0 && size == fs->fs_bsize)
 		return (NULL);
-	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg)),
+	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg),
 		(int)fs->fs_cgsize, NOCRED, &bp);
 	if (error) {
 		brelse(bp);
@@ -952,7 +952,7 @@ ffs_alloccgblk(fs, cgp, bpref)
 		}
 		for (i = fs_postbl(fs, pos)[i];; ) {
 			if (ffs_isblock(fs, cg_blksfree(cgp), bno + i)) {
-				bno = blkstofrags(fs, (bno + i));
+				bno = blkstofrags(fs, (bno + i);
 				goto gotit;
 			}
 			delta = fs_rotbl(fs)[i];
@@ -1010,7 +1010,7 @@ ffs_clusteralloc(ip, cg, bpref, len)
 	fs = ip->i_fs;
 	if (fs->fs_cs(fs, cg).cs_nbfree < len)
 		return (NULL);
-	if (bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg)), (int)fs->fs_cgsize,
+	if (bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg), (int)fs->fs_cgsize,
 	    NOCRED, &bp))
 		goto fail;
 	cgp = (struct cg *)bp->b_data;
@@ -1039,7 +1039,7 @@ ffs_clusteralloc(ip, cg, bpref, len)
 	if (dtog(fs, bpref) != cg)
 		bpref = 0;
 	else
-		bpref = fragstoblks(fs, dtogd(fs, blknum(fs, bpref)));
+		bpref = fragstoblks(fs, dtogd(fs, blknum(fs, bpref));
 	mapp = &cg_clustersfree(cgp)[bpref / NBBY];
 	map = *mapp++;
 	bit = 1 << (bpref % NBBY);
@@ -1101,7 +1101,7 @@ ffs_nodealloccg(ip, cg, ipref, mode)
 	fs = ip->i_fs;
 	if (fs->fs_cs(fs, cg).cs_nifree == 0)
 		return (NULL);
-	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg)),
+	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg),
 		(int)fs->fs_cgsize, NOCRED, &bp);
 	if (error) {
 		brelse(bp);
@@ -1191,7 +1191,7 @@ ffs_blkfree(ip, bno, size)
 		ffs_fserr(fs, ip->i_uid, "bad block");
 		return;
 	}
-	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg)),
+	error = bread(ip->i_devvp, fsbtodb(fs, cgtod(fs, cg),
 		(int)fs->fs_cgsize, NOCRED, &bp);
 	if (error) {
 		brelse(bp);
@@ -1295,7 +1295,7 @@ ffs_vfree(ap)
 		panic("ifree: range: dev = 0x%x, ino = %d, fs = %s\n",
 		    pip->i_dev, ino, fs->fs_fsmnt);
 	cg = ino_to_cg(fs, ino);
-	error = bread(pip->i_devvp, fsbtodb(fs, cgtod(fs, cg)),
+	error = bread(pip->i_devvp, fsbtodb(fs, cgtod(fs, cg),
 		(int)fs->fs_cgsize, NOCRED, &bp);
 	if (error) {
 		brelse(bp);
@@ -1359,13 +1359,13 @@ ffs_mapsearch(fs, cgp, bpref, allocsiz)
 	len = howmany(fs->fs_fpg, NBBY) - start;
 	loc = scanc((u_int)len, (u_char *)&cg_blksfree(cgp)[start],
 		(u_char *)fragtbl[fs->fs_frag],
-		(u_char)(1 << (allocsiz - 1 + (fs->fs_frag % NBBY))));
+		(u_char)(1 << (allocsiz - 1 + (fs->fs_frag % NBBY)));
 	if (loc == 0) {
 		len = start + 1;
 		start = 0;
 		loc = scanc((u_int)len, (u_char *)&cg_blksfree(cgp)[0],
 			(u_char *)fragtbl[fs->fs_frag],
-			(u_char)(1 << (allocsiz - 1 + (fs->fs_frag % NBBY))));
+			(u_char)(1 << (allocsiz - 1 + (fs->fs_frag % NBBY)));
 		if (loc == 0) {
 			printf("start = %d, len = %d, fs = %s\n",
 			    start, len, fs->fs_fsmnt);

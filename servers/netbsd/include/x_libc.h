@@ -22,7 +22,7 @@
 
 #ifndef X_NETBSD
 extern void     bcopy( char *, char *, int );
-extern int	bcmp( char *, char *, int );
+extern int memcmp(const void *, const void *, size_t);
 extern void     bzero( char *, int );
 extern int	qsort( char *, int, int, int(*)());
 
@@ -31,7 +31,7 @@ extern int	lwp_self();
 #else
 
 extern void     bcopy();
-extern int	bcmp();
+extern int memcmp();
 extern void     bzero();
 
 

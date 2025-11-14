@@ -17,6 +17,7 @@
 #include "x_util.h"
 #include "x_libc.h"
 #include "event.h"
+#include <string.h>
 
 int	tracemalloc;
 
@@ -201,7 +202,7 @@ dumpBlocks( ev, arg )
     static long	*	lblocks[MAXBLOCKS];
 
     xError("\n\n\nMalloc trace\n");
-    bcopy((char *)blocks, (char *)lblocks, sizeof(blocks));
+    memcpy(lblocks, blocks, sizeof(blocks));
     xIfTrace(malloc, verboseDump) {	
 	for ( i=0; i < MAXBLOCKS; i++, j++ ) {
 	    displayLine(blocks, i);
@@ -214,8 +215,8 @@ dumpBlocks( ev, arg )
 	xIfTrace(malloc, verboseDump) {	
 	    displayLine(lblocks, i);
 	}
-	if ( ! b || bcmp((char *)(b + MALLOC_EXTRAS), (char *)last,
-			 MALLOC_NPCS * sizeof(long)) ) {
+        if ( ! b || memcmp((char *)(b + MALLOC_EXTRAS), (char *)last,
+                           MALLOC_NPCS * sizeof(long)) != 0 ) {
 	    /* 
 	     * Found a different block
 	     */
@@ -230,8 +231,8 @@ dumpBlocks( ev, arg )
 		}
 		xTrace1(malloc, TR_ALWAYS, "%s", buf);
 	    }
-	    if (b) bcopy((char *)(b + MALLOC_EXTRAS), (char *)last,
-			 MALLOC_NPCS * sizeof(long));
+            if (b) memcpy(last, (char *)(b + MALLOC_EXTRAS),
+                         MALLOC_NPCS * sizeof(long));
 	    j = 0;
 	}
 	if (!b) break;

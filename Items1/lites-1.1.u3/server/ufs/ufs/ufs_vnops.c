@@ -78,9 +78,9 @@
 #include <ufs/ufs/ufsmount.h>
 #include <ufs/ufs/ufs_extern.h>
 
-static int ufs_chmod __P((struct vnode *, int, struct ucred *, struct proc *));
+static int ufs_chmod (struct vnode *, int, struct ucred *, struct proc *);
 static int ufs_chown
-	__P((struct vnode *, uid_t, gid_t, struct ucred *, struct proc *));
+	(struct vnode *, uid_t, gid_t, struct ucred *, struct proc *);
 
 #if EXT2FS
 #include <ufs/ext2fs/ext2_extern.h>
@@ -996,7 +996,7 @@ abortit:
 			panic("ufs_rename: lost from startdir");
 		tcnp->cn_nameiop = DELETE;
 		(void) relookup(tdvp, &tvp, tcnp);
-		return (VOP_REMOVE(tdvp, tvp, tcnp));
+		return (VOP_REMOVE(tdvp, tvp, tcnp);
 	}
 	if (error = VOP_LOCK(fvp))
 		goto abortit;
@@ -1309,8 +1309,8 @@ abortit:
 
 bad:
 	if (xp)
-		vput(ITOV(xp));
-	vput(ITOV(dp));
+		vput(ITOV(xp);
+	vput(ITOV(dp);
 out:
 	if (VOP_LOCK(fvp) == 0) {
 		ip->i_nlink--;
@@ -1552,7 +1552,7 @@ ufs_rmdir(ap)
 	ip->i_nlink -= 2;
 	error = VOP_TRUNCATE(vp, (off_t)0, IO_SYNC, cnp->cn_cred,
 	    cnp->cn_proc);
-	cache_purge(ITOV(ip));
+	cache_purge(ITOV(ip);
 out:
 	if (dvp)
 		vput(dvp);
@@ -1694,7 +1694,7 @@ ufs_readlink(ap)
 		uiomove((char *)ip->i_shortlink, isize, ap->a_uio);
 		return (0);
 	}
-	return (VOP_READ(vp, ap->a_uio, 0, ap->a_cred));
+	return (VOP_READ(vp, ap->a_uio, 0, ap->a_cred);
 }
 
 /*
@@ -1859,7 +1859,7 @@ ufs_print(ap)
 	register struct inode *ip = VTOI(vp);
 
 	printf("tag VT_UFS, ino %d, on dev %d, %d", ip->i_number,
-		major(ip->i_dev), minor(ip->i_dev));
+		major(ip->i_dev), minor(ip->i_dev);
 #if FIFO
 	if (vp->v_type == VFIFO)
 		fifo_printinfo(vp);
@@ -1891,7 +1891,7 @@ ufsspec_read(ap)
 	 * Set access flag.
 	 */
 	VTOI(ap->a_vp)->i_flag |= IN_ACCESS;
-	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_read), ap));
+	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_read), ap);
 }
 
 /*
@@ -1911,7 +1911,7 @@ ufsspec_write(ap)
 	 * Set update and change flags.
 	 */
 	VTOI(ap->a_vp)->i_flag |= IN_CHANGE | IN_UPDATE;
-	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_write), ap));
+	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_write), ap);
 }
 
 /*
@@ -1936,7 +1936,7 @@ ufsspec_close(ap)
 
 		ITIMES(ip, &time, &time);
 	}
-	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_close), ap));
+	return (VOCALL (spec_vnodeop_p, VOFFSET(vop_close), ap);
 }
 
 #if FIFO
@@ -1958,7 +1958,7 @@ ufsfifo_read(ap)
 	 * Set access flag.
 	 */
 	VTOI(ap->a_vp)->i_flag |= IN_ACCESS;
-	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_read), ap));
+	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_read), ap);
 }
 
 /*
@@ -1979,7 +1979,7 @@ ufsfifo_write(ap)
 	 * Set update and change flags.
 	 */
 	VTOI(ap->a_vp)->i_flag |= IN_CHANGE | IN_UPDATE;
-	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_write), ap));
+	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_write), ap);
 }
 
 /*
@@ -2004,7 +2004,7 @@ ufsfifo_close(ap)
 
 		ITIMES(ip, &time, &time);
 	}
-	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_close), ap));
+	return (VOCALL (fifo_vnodeop_p, VOFFSET(vop_close), ap);
 }
 #endif /* FIFO */
 
@@ -2116,7 +2116,7 @@ ufs_advlock(ap)
 	 */
 	switch(ap->a_op) {
 	case F_SETLK:
-		return (lf_setlock(lock));
+		return (lf_setlock(lock);
 
 	case F_UNLCK:
 		error = lf_clearlock(lock);

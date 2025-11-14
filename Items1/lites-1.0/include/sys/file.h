@@ -58,15 +58,15 @@ struct file {
 	short	f_msgcount;	/* references from message queue */
 	struct	ucred *f_cred;	/* credentials associated with descriptor */
 	struct	fileops {
-		int	(*fo_read)	__P((struct file *fp, struct uio *uio,
-					    struct ucred *cred));
-		int	(*fo_write)	__P((struct file *fp, struct uio *uio,
-					    struct ucred *cred));
-		int	(*fo_ioctl)	__P((struct file *fp, ioctl_cmd_t com,
-					    caddr_t data, struct proc *p));
-		int	(*fo_select)	__P((struct file *fp, int which,
-					    struct proc *p));
-		int	(*fo_close)	__P((struct file *fp, struct proc *p));
+		int	(*fo_read)	(struct file *fp, struct uio *uio,
+					    struct ucred *cred);
+		int	(*fo_write)	(struct file *fp, struct uio *uio,
+					    struct ucred *cred);
+		int	(*fo_ioctl)	(struct file *fp, ioctl_cmd_t com,
+					    caddr_t data, struct proc *p);
+		int	(*fo_select)	(struct file *fp, int which,
+					    struct proc *p);
+		int	(*fo_close)	(struct file *fp, struct proc *p);
 	} *f_ops;
 	off_t	f_offset;
 	caddr_t	f_data;		/* vnode or socket */

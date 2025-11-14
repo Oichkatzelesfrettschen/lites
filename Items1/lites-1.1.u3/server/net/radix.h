@@ -93,7 +93,7 @@ extern struct radix_mask {
 		m = rn_mkfreelist; \
 		rn_mkfreelist = (m)->rm_mklist; \
 	} else \
-		R_Malloc(m, struct radix_mask *, sizeof (*(m))); }\
+		R_Malloc(m, struct radix_mask *, sizeof (*(m)); }\
 
 #define MKFree(m) { (m)->rm_mklist = rn_mkfreelist; rn_mkfreelist = (m);}
 
@@ -102,52 +102,52 @@ struct radix_node_head {
 	int	rnh_addrsize;		/* permit, but not require fixed keys */
 	int	rnh_pktsize;		/* permit, but not require fixed keys */
 	struct	radix_node *(*rnh_addaddr)	/* add based on sockaddr */
-		__P((void *v, void *mask,
-		     struct radix_node_head *head, struct radix_node nodes[]));
+		(void *v, void *mask,
+		     struct radix_node_head *head, struct radix_node nodes[]);
 	struct	radix_node *(*rnh_addpkt)	/* add based on packet hdr */
-		__P((void *v, void *mask,
-		     struct radix_node_head *head, struct radix_node nodes[]));
+		(void *v, void *mask,
+		     struct radix_node_head *head, struct radix_node nodes[]);
 	struct	radix_node *(*rnh_deladdr)	/* remove based on sockaddr */
-		__P((void *v, void *mask, struct radix_node_head *head));
+		(void *v, void *mask, struct radix_node_head *head);
 	struct	radix_node *(*rnh_delpkt)	/* remove based on packet hdr */
-		__P((void *v, void *mask, struct radix_node_head *head));
+		(void *v, void *mask, struct radix_node_head *head);
 	struct	radix_node *(*rnh_matchaddr)	/* locate based on sockaddr */
-		__P((void *v, struct radix_node_head *head));
+		(void *v, struct radix_node_head *head);
 	struct	radix_node *(*rnh_matchpkt)	/* locate based on packet hdr */
-		__P((void *v, struct radix_node_head *head));
+		(void *v, struct radix_node_head *head);
 	int	(*rnh_walktree)			/* traverse tree */
-		__P((struct radix_node_head *head, int (*f)(), void *w));
+		(struct radix_node_head *head, int (*f)(), void *w);
 	struct	radix_node rnh_nodes[3];	/* empty tree for common case */
 };
 
 
 #ifndef KERNEL
-#define Bcmp(a, b, n) bcmp(((char *)(a)), ((char *)(b)), (n))
-#define Bzero(p, n) bzero((char *)(p), (int)(n));
+#define Bcmp(a, b, n) bcmp(((char *)(a), ((char *)(b), (n))
+#define Bzero(p, n) bzero((char *)(p), (int)(n);
 #define R_Malloc(p, t, n) (p = (t) malloc((unsigned int)(n)))
 #define Free(p) free((char *)p);
 #else
-#define Bcmp(a, b, n) bcmp(((caddr_t)(a)), ((caddr_t)(b)), (unsigned)(n))
-#define Bcopy(a, b, n) bcopy(((caddr_t)(a)), ((caddr_t)(b)), (unsigned)(n))
-#define Bzero(p, n) bzero((caddr_t)(p), (unsigned)(n));
+#define Bcmp(a, b, n) bcmp(((caddr_t)(a), ((caddr_t)(b), (unsigned)(n))
+#define Bcopy(a, b, n) bcopy(((caddr_t)(a), ((caddr_t)(b), (unsigned)(n))
+#define Bzero(p, n) bzero((caddr_t)(p), (unsigned)(n);
 #define R_Malloc(p, t, n) (p = (t) malloc((unsigned long)(n), M_RTABLE, M_DONTWAIT))
 #define Free(p) free((caddr_t)p, M_RTABLE);
 
-void	 rn_init __P((void));
-int	 rn_inithead __P((void **, int));
-int	 rn_refines __P((void *, void *));
-int	 rn_walktree __P((struct radix_node_head *, int (*)(), void *));
+void	 rn_init (void);
+int	 rn_inithead (void **, int);
+int	 rn_refines (void *, void *);
+int	 rn_walktree (struct radix_node_head *, int (*)(), void *);
 struct radix_node
-	 *rn_addmask __P((void *, int, int)),
-	 *rn_addroute __P((void *, void *, struct radix_node_head *,
-			struct radix_node [2])),
-	 *rn_delete __P((void *, void *, struct radix_node_head *)),
-	 *rn_insert __P((void *, struct radix_node_head *, int *,
-			struct radix_node [2])),
-	 *rn_match __P((void *, struct radix_node_head *)),
-	 *rn_newpair __P((void *, int, struct radix_node[2])),
-	 *rn_search __P((void *, struct radix_node *)),
-	 *rn_search_m __P((void *, struct radix_node *, void *));
+	 *rn_addmask (void *, int, int),
+	 *rn_addroute (void *, void *, struct radix_node_head *,
+			struct radix_node [2]),
+	 *rn_delete (void *, void *, struct radix_node_head *),
+	 *rn_insert (void *, struct radix_node_head *, int *,
+			struct radix_node [2]),
+	 *rn_match (void *, struct radix_node_head *),
+	 *rn_newpair (void *, int, struct radix_node[2]),
+	 *rn_search (void *, struct radix_node *),
+	 *rn_search_m (void *, struct radix_node *, void *);
 
 #endif /*KERNEL*/
 #endif /* _RADIX_H_ */

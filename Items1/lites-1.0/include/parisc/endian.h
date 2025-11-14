@@ -62,10 +62,10 @@
 
 #if BYTE_ORDER != BIG_ENDIAN || defined(lint)
 __BEGIN_DECLS
-unsigned long	htonl __P((unsigned long));
-unsigned short	htons __P((unsigned short));
-unsigned long	ntohl __P((unsigned long));
-unsigned short	ntohs __P((unsigned short));
+unsigned long	htonl (unsigned long);
+unsigned short	htons (unsigned short);
+unsigned long	ntohl (unsigned long);
+unsigned short	ntohs (unsigned short);
 __END_DECLS
 #endif
 

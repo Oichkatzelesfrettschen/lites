@@ -136,7 +136,7 @@ struct	sigaction {
 
 #ifndef _POSIX_SOURCE
 #include <sys/cdefs.h>
-typedef	void (*sig_t) __P((int));	/* type of signal function */
+typedef	void (*sig_t) (int);	/* type of signal function */
 
 /*
  * Structure used in sigaltstack call.
@@ -187,6 +187,6 @@ struct	sigstack {
  * defined by <sys/signal.h>.
  */
 __BEGIN_DECLS
-void	(*signal __P((int, void (*) __P((int))))) __P((int));
+void	(*signal (int, void (*) (int))))) (int);
 __END_DECLS
 #endif	/* !_SYS_SIGNAL_H_ */

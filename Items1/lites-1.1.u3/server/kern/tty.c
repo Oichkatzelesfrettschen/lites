@@ -64,11 +64,11 @@
 
 #include <vm/vm.h>
 
-static int	proc_compare __P((struct proc *p1, struct proc *p2));
-static int	ttnread __P((struct tty *));
-static void	ttyblock __P((struct tty *tp));
-static void	ttyecho __P((int, struct tty *tp));
-static void	ttyrubo __P((struct tty *, int));
+static int	proc_compare (struct proc *p1, struct proc *p2);
+static int	ttnread (struct tty *);
+static void	ttyblock (struct tty *tp);
+static void	ttyecho (int, struct tty *tp);
+static void	ttyrubo (struct tty *, int);
 
 /* Symbolic sleep message strings. */
 char ttclos[]	= "ttycls";
@@ -170,7 +170,7 @@ ttyopen(device, tp)
 	tp->t_dev = device;
 	if (!ISSET(tp->t_state, TS_ISOPEN)) {
 		SET(tp->t_state, TS_ISOPEN);
-		bzero(&tp->t_winsize, sizeof(tp->t_winsize));
+		bzero(&tp->t_winsize, sizeof(tp->t_winsize);
 	}
 	CLR(tp->t_state, TS_WOPEN);
 	splx(s);
@@ -445,7 +445,7 @@ parmrk:				(void)putc(0377 | TTY_QUOTE, &tp->t_rawq);
 				if (c == -1)
 					goto endcase;
 			} while (c != ' ' && c != '\t' &&
-			    (alt == 0 || ISALPHA(c) == ctype));
+			    (alt == 0 || ISALPHA(c) == ctype);
 			(void)putc(c, &tp->t_rawq);
 			goto endcase;
 		}
@@ -525,7 +525,7 @@ restartoutput:
 	CLR(tp->t_lflag, FLUSHO);
 	CLR(tp->t_state, TS_TTSTOP);
 startoutput:
-	return (ttstart(tp));
+	return (ttstart(tp);
 }
 
 /*
@@ -719,7 +719,7 @@ ttioctl(
 	case TIOCGETA: {		/* get termios struct */
 		struct termios *t = (struct termios *)data;
 
-		bcopy(&tp->t_termios, t, sizeof(struct termios));
+		bcopy(&tp->t_termios, t, sizeof(struct termios);
 		break;
 	}
 	case TIOCGETD:			/* get line discipline */
@@ -809,7 +809,7 @@ ttioctl(
 		else
 			CLR(t->c_lflag, EXTPROC);
 		tp->t_lflag = t->c_lflag | ISSET(tp->t_lflag, PENDIN);
-		bcopy(t->c_cc, tp->t_cc, sizeof(t->c_cc));
+		bcopy(t->c_cc, tp->t_cc, sizeof(t->c_cc);
 		splx(s);
 		break;
 	}
@@ -892,7 +892,7 @@ ttioctl(
 		break;
 	default:
 #if COMPAT_43 || defined(COMPAT_SUNOS)
-		return (ttcompat(tp, cmd, data, flag));
+		return (ttcompat(tp, cmd, data, flag);
 #else
 		return (-1);
 #endif
@@ -1025,7 +1025,7 @@ ttychars(tp)
 	struct tty *tp;
 {
 
-	bcopy(ttydefchars, tp->t_cc, sizeof(ttydefchars));
+	bcopy(ttydefchars, tp->t_cc, sizeof(ttydefchars);
 }
 
 /*
@@ -1350,7 +1350,7 @@ ttycheckoutq(tp, wait)
 				splx(s);
 				return (0);
 			}
-			timeout((void (*)__P((void *)))wakeup,
+			timeout((void (*)(void *)))wakeup,
 			    (void *)&tp->t_outq, hz);
 			SET(tp->t_state, TS_ASLEEP);
 			sleep((caddr_t)&tp->t_outq, PZERO - 1);
@@ -1605,9 +1605,9 @@ ttyrub(c, tp)
 				break;
 			default:			/* XXX */
 #define	PANICSTR	"ttyrub: would panic c = %d, val = %d\n"
-				(void)printf(PANICSTR, c, CCLASS(c));
+				(void)printf(PANICSTR, c, CCLASS(c);
 #ifdef notdef
-				panic(PANICSTR, c, CCLASS(c));
+				panic(PANICSTR, c, CCLASS(c);
 #endif
 			}
 		}
