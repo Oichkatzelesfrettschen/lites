@@ -68,3 +68,6 @@ web-terminal/images/*.qcow2
 web-terminal/images/*.img
 web-terminal/images/*.tar.gz
 !web-terminal/images/README.md
+*.db
+logs/
+cloc.json
