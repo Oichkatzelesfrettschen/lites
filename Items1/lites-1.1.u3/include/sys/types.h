@@ -85,7 +85,7 @@ typedef	u_int32_t	uid_t;		/* user id */
 #ifndef KERNEL
 #include <sys/cdefs.h>
 __BEGIN_DECLS
-off_t	 lseek __P((int, off_t, int));
+off_t	 lseek (int, off_t, int);
 __END_DECLS
 #endif
 

@@ -61,7 +61,7 @@
 #include <ufs/lfs/lfs.h>
 #include <ufs/lfs/lfs_extern.h>
 
-extern int count_lock_queue __P((void));
+extern int count_lock_queue (void);
 
 #define MAX_ACTIVE	10
 /*
@@ -72,27 +72,27 @@ extern int count_lock_queue __P((void));
 	((fs)->lfs_dbpseg - ((fs)->lfs_offset - (fs)->lfs_curseg) > \
 	1 << (fs)->lfs_fsbtodb)
 
-void	 lfs_callback __P((struct buf *));
-void	 lfs_gather __P((struct lfs *, struct segment *,
-	     struct vnode *, int (*) __P((struct lfs *, struct buf *))));
-int	 lfs_gatherblock __P((struct segment *, struct buf *, int *));
-void	 lfs_iset __P((struct inode *, daddr_t, time_t));
-int	 lfs_match_data __P((struct lfs *, struct buf *));
-int	 lfs_match_dindir __P((struct lfs *, struct buf *));
-int	 lfs_match_indir __P((struct lfs *, struct buf *));
-int	 lfs_match_tindir __P((struct lfs *, struct buf *));
-void	 lfs_newseg __P((struct lfs *));
-void	 lfs_shellsort __P((struct buf **, daddr_t *, register int));
-void	 lfs_supercallback __P((struct buf *));
-void	 lfs_updatemeta __P((struct segment *));
-int	 lfs_vref __P((struct vnode *));
-void	 lfs_vunref __P((struct vnode *));
-void	 lfs_writefile __P((struct lfs *, struct segment *, struct vnode *));
-int	 lfs_writeinode __P((struct lfs *, struct segment *, struct inode *));
-int	 lfs_writeseg __P((struct lfs *, struct segment *));
-void	 lfs_writesuper __P((struct lfs *));
-void	 lfs_writevnodes __P((struct lfs *fs, struct mount *mp,
-	    struct segment *sp, int dirops));
+void	 lfs_callback (struct buf *);
+void	 lfs_gather (struct lfs *, struct segment *,
+	     struct vnode *, int (*) (struct lfs *, struct buf *)));
+int	 lfs_gatherblock (struct segment *, struct buf *, int *);
+void	 lfs_iset (struct inode *, daddr_t, time_t);
+int	 lfs_match_data (struct lfs *, struct buf *);
+int	 lfs_match_dindir (struct lfs *, struct buf *);
+int	 lfs_match_indir (struct lfs *, struct buf *);
+int	 lfs_match_tindir (struct lfs *, struct buf *);
+void	 lfs_newseg (struct lfs *);
+void	 lfs_shellsort (struct buf **, daddr_t *, register int);
+void	 lfs_supercallback (struct buf *);
+void	 lfs_updatemeta (struct segment *);
+int	 lfs_vref (struct vnode *);
+void	 lfs_vunref (struct vnode *);
+void	 lfs_writefile (struct lfs *, struct segment *, struct vnode *);
+int	 lfs_writeinode (struct lfs *, struct segment *, struct inode *);
+int	 lfs_writeseg (struct lfs *, struct segment *);
+void	 lfs_writesuper (struct lfs *);
+void	 lfs_writevnodes (struct lfs *fs, struct mount *mp,
+	    struct segment *sp, int dirops);
 
 int	lfs_allclean_wakeup;		/* Cleaner wakeup address. */
 
@@ -122,7 +122,7 @@ lfs_vflush(vp)
 
 	fs = VFSTOUFS(vp->v_mount)->um_lfs;
 	if (fs->lfs_nactive > MAX_ACTIVE)
-		return(lfs_segwrite(vp->v_mount, SEGM_SYNC|SEGM_CKP));
+		return(lfs_segwrite(vp->v_mount, SEGM_SYNC|SEGM_CKP);
 	lfs_seglock(fs, SEGM_SYNC);
 	sp = fs->lfs_sp;
 
@@ -135,7 +135,7 @@ lfs_vflush(vp)
 		do {
 			if (vp->v_dirtyblkhd.lh_first != NULL)
 				lfs_writefile(fs, sp, vp);
-		} while (lfs_writeinode(fs, sp, ip));
+		} while (lfs_writeinode(fs, sp, ip);
 
 	} while (lfs_writeseg(fs, sp) && ip->i_number == LFS_IFILE_INUM);
 
@@ -244,7 +244,7 @@ lfs_segwrite(mp, flags)
 	 * single summary block.
 	 */
 	do_ckp = flags & SEGM_CKP || fs->lfs_nactive > MAX_ACTIVE;
-	lfs_seglock(fs, flags | (do_ckp ? SEGM_CKP : 0));
+	lfs_seglock(fs, flags | (do_ckp ? SEGM_CKP : 0);
 	sp = fs->lfs_sp;
 
 	lfs_writevnodes(fs, mp, sp, VN_REG);
@@ -284,7 +284,7 @@ lfs_segwrite(mp, flags)
 	if (do_ckp || fs->lfs_doifile) {
 redo:
 		vp = fs->lfs_ivnode;
-		while (vget(vp, 1));
+		while (vget(vp, 1);
 		ip = VTOI(vp);
 		if (vp->v_dirtyblkhd.lh_first != NULL)
 			lfs_writefile(fs, sp, vp);
@@ -359,7 +359,7 @@ lfs_writefile(fs, sp, vp)
 	if (fip->fi_nblocks != 0) {
 		sp->fip =
 		    (struct finfo *)((caddr_t)fip + sizeof(struct finfo) +
-		    sizeof(daddr_t) * (fip->fi_nblocks - 1));
+		    sizeof(daddr_t) * (fip->fi_nblocks - 1);
 		sp->start_lbp = &sp->fip->fi_blocks[0];
 	} else {
 		sp->sum_bytes_left += sizeof(struct finfo) - sizeof(daddr_t);
@@ -454,13 +454,13 @@ lfs_writeinode(fs, sp, ip)
 		if (sup->su_nbytes < sizeof(struct dinode)) {
 			/* XXX -- Change to a panic. */
 			printf("lfs: negative bytes (segment %d)\n",
-			    datosn(fs, daddr));
+			    datosn(fs, daddr);
 			panic("negative bytes");
 		}
 #endif
 		sup->su_nbytes -= sizeof(struct dinode);
 		redo_ifile =
-		    (ino == LFS_IFILE_INUM && !(bp->b_flags & B_GATHERED));
+		    (ino == LFS_IFILE_INUM && !(bp->b_flags & B_GATHERED);
 		error = VOP_BWRITE(bp);
 	}
 	return (redo_ifile);
@@ -520,7 +520,7 @@ lfs_gather(fs, sp, vp, match)
 	struct lfs *fs;
 	struct segment *sp;
 	struct vnode *vp;
-	int (*match) __P((struct lfs *, struct buf *));
+	int (*match) (struct lfs *, struct buf *);
 {
 	struct buf *bp;
 	int s;
@@ -619,7 +619,7 @@ printf ("Updatemeta allocating indirect block: shouldn't happen\n");
 			if (sup->su_nbytes < fs->lfs_bsize) {
 				/* XXX -- Change to a panic. */
 				printf("lfs: negative bytes (segment %d)\n",
-				    datosn(fs, daddr));
+				    datosn(fs, daddr);
 				panic ("Negative Bytes");
 			}
 #endif
@@ -692,7 +692,7 @@ lfs_initseg(fs)
 	ssp->ss_nfinfo = ssp->ss_ninos = 0;
 
 	/* Set pointer to first FINFO, initialize it. */
-	sp->fip = (struct finfo *)(sp->segsum + sizeof(SEGSUM));
+	sp->fip = (struct finfo *)(sp->segsum + sizeof(SEGSUM);
 	sp->fip->fi_nblocks = 0;
 	sp->start_lbp = &sp->fip->fi_blocks[0];
 
@@ -759,7 +759,7 @@ lfs_writeseg(fs, sp)
 	size_t size;
 	u_long *datap, *dp;
 	int ch_per_blk, do_again, i, nblocks, num, s;
-	int (*strategy)__P((struct vop_strategy_args *));
+	int (*strategy)(struct vop_strategy_args *);
 	struct vop_strategy_args vop_strategy_a;
 	u_short ninos;
 	char *p;
@@ -802,9 +802,9 @@ lfs_writeseg(fs, sp)
 			*dp++ = ((u_long *)(*bpp)->b_data)[0];
 	}
 	ssp->ss_create = get_seconds();
-	ssp->ss_datasum = cksum(datap, (nblocks - 1) * sizeof(u_long));
+	ssp->ss_datasum = cksum(datap, (nblocks - 1) * sizeof(u_long);
 	ssp->ss_sumsum =
-	    cksum(&ssp->ss_datasum, LFS_SUMMARY_SIZE - sizeof(ssp->ss_sumsum));
+	    cksum(&ssp->ss_datasum, LFS_SUMMARY_SIZE - sizeof(ssp->ss_sumsum);
 	free(datap, M_SEGMENT);
 #if DIAGNOSTIC
 	if (fs->lfs_bfree < fsbtodb(fs, ninos) + LFS_SUMMARY_SIZE / DEV_BSIZE)
@@ -921,7 +921,7 @@ lfs_writesuper(fs)
 {
 	struct buf *bp;
 	dev_t i_dev;
-	int (*strategy) __P((struct vop_strategy_args *));
+	int (*strategy) (struct vop_strategy_args *);
 	int s;
 	struct vop_strategy_args vop_strategy_a;
 
@@ -929,7 +929,7 @@ lfs_writesuper(fs)
 	strategy = VTOI(fs->lfs_ivnode)->i_devvp->v_op[VOFFSET(vop_strategy)];
 
 	/* Checksum the superblock and copy it into a buffer. */
-	fs->lfs_cksum = cksum(fs, sizeof(struct lfs) - sizeof(fs->lfs_cksum));
+	fs->lfs_cksum = cksum(fs, sizeof(struct lfs) - sizeof(fs->lfs_cksum);
 	bp = lfs_newbuf(VTOI(fs->lfs_ivnode)->i_devvp, fs->lfs_sboffs[0],
 	    LFS_SBPAD);
 	*(struct lfs *)bp->b_data = *fs;
@@ -1006,7 +1006,7 @@ lfs_newbuf(vp, daddr, size)
 
 	nbytes = roundup(size, DEV_BSIZE);
 	bp = malloc(sizeof(struct buf), M_SEGMENT, M_WAITOK);
-	bzero(bp, sizeof(struct buf));
+	bzero(bp, sizeof(struct buf);
 	if (nbytes)
 		bp->b_data = malloc(nbytes, M_SEGMENT, M_WAITOK);
 	bgetvp(vp, bp);
@@ -1097,7 +1097,7 @@ lfs_vref(vp)
 
 	if (vp->v_flag & VXLOCK)
 		return(1);
-	return (vget(vp, 0));
+	return (vget(vp, 0);
 }
 
 void

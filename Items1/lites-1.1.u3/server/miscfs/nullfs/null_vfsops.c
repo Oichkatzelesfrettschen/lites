@@ -281,7 +281,7 @@ nullfs_statfs(mp, sbp, p)
 			);
 #endif
 
-	bzero(&mstat, sizeof(mstat));
+	bzero(&mstat, sizeof(mstat);
 
 	error = VFS_STATFS(MOUNTTONULLMOUNT(mp)->nullm_vfs, &mstat, p);
 	if (error)
@@ -298,7 +298,7 @@ nullfs_statfs(mp, sbp, p)
 	sbp->f_files = mstat.f_files;
 	sbp->f_ffree = mstat.f_ffree;
 	if (sbp != &mp->mnt_stat) {
-		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid));
+		bcopy(&mp->mnt_stat.f_fsid, &sbp->f_fsid, sizeof(sbp->f_fsid);
 		bcopy(mp->mnt_stat.f_mntonname, sbp->f_mntonname, MNAMELEN);
 		bcopy(mp->mnt_stat.f_mntfromname, sbp->f_mntfromname, MNAMELEN);
 	}
@@ -350,7 +350,7 @@ nullfs_vptofh(vp, fhp)
 	return VFS_VPTOFH(NULLVPTOLOWERVP(vp), fhp);
 }
 
-int nullfs_init __P((void));
+int nullfs_init (void);
 
 struct vfsops null_vfsops = {
 	"null",

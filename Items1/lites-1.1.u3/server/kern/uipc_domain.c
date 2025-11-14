@@ -51,8 +51,8 @@
 #include <vm/vm.h>
 #include <sys/sysctl.h>
 
-void	pffasttimo __P((void *));
-void	pfslowtimo __P((void *));
+void	pffasttimo (void *);
+void	pfslowtimo (void *);
 
 #define	ADDDOMAIN(x)	{ \
 	extern struct domain __CONCAT(x,domain); \
@@ -179,7 +179,7 @@ found:
 	for (pr = dp->dom_protosw; pr < dp->dom_protoswNPROTOSW; pr++)
 		if (pr->pr_protocol == protocol && pr->pr_sysctl)
 			return ((*pr->pr_sysctl)(name + 2, namelen - 2,
-			    oldp, oldlenp, newp, newlen));
+			    oldp, oldlenp, newp, newlen);
 	return (ENOPROTOOPT);
 }
 

@@ -61,7 +61,7 @@
 #include <ufs/ffs/fs.h>
 #include <ufs/ffs/ffs_extern.h>
 
-int ffs_sbupdate __P((struct ufsmount *, int));
+int ffs_sbupdate (struct ufsmount *, int);
 
 struct vfsops ufs_vfsops = {
 	"ffs",
@@ -104,7 +104,7 @@ ffs_mountroot()
 		panic("ffs_mountroot: can't setup bdevvp's");
 
 	mp = bsd_malloc((u_long)sizeof(struct mount), M_MOUNT, M_WAITOK);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	bzero((char *)mp, (u_long)sizeof(struct mount);
 	mp->mnt_op = &ufs_vfsops;
 	mp->mnt_flag = MNT_RDONLY;
 	if (error = ffs_mountfs(rootvp, mp, p)) {
@@ -121,7 +121,7 @@ ffs_mountroot()
 	mp->mnt_vnodecovered = NULLVP;
 	ump = VFSTOUFS(mp);
 	fs = ump->um_fs;
-	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt));
+	bzero(fs->fs_fsmnt, sizeof(fs->fs_fsmnt);
 	fs->fs_fsmnt[0] = '/';
 	bcopy((caddr_t)fs->fs_fsmnt, (caddr_t)mp->mnt_stat.f_mntonname,
 	    MNAMELEN);
@@ -187,7 +187,7 @@ ffs_mount(mp, path, data, ndp, p)
 			/*
 			 * Process export requests.
 			 */
-			return (vfs_export(mp, &ump->um_export, &args.export));
+			return (vfs_export(mp, &ump->um_export, &args.export);
 		}
 	}
 	/*
@@ -278,7 +278,7 @@ ffs_reload(mountp, cred, p)
 	}
 	fs = VFSTOUFS(mountp)->um_fs;
 	bcopy(&fs->fs_csp[0], &((struct fs *)bp->b_data)->fs_csp[0],
-	    sizeof(fs->fs_csp));
+	    sizeof(fs->fs_csp);
 	bcopy(bp->b_data, fs, (u_int)fs->fs_sbsize);
 	if (fs->fs_sbsize < SBSIZE)
 		bp->b_flags |= B_INVAL;
@@ -321,13 +321,13 @@ loop:
 		 */
 		ip = VTOI(vp);
 		if (error =
-		    bread(devvp, fsbtodb(fs, ino_to_fsba(fs, ip->i_number)),
+		    bread(devvp, fsbtodb(fs, ino_to_fsba(fs, ip->i_number),
 		    (int)fs->fs_bsize, NOCRED, &bp)) {
 			vput(vp);
 			return (error);
 		}
 		ip->i_din = *((struct dinode *)bp->b_data +
-		    ino_to_fsbo(fs, ip->i_number));
+		    ino_to_fsbo(fs, ip->i_number);
 		brelse(bp);
 		vput(vp);
 		if (vp->v_mount != mountp)
@@ -703,7 +703,7 @@ ffs_vget(mp, ino, vpp)
 	type = ump->um_devvp->v_tag == VT_MFS ? M_MFSNODE : M_FFSNODE; /* XXX */
 	MALLOC(ip, struct inode *, sizeof(struct inode), type, M_WAITOK);
 	insmntque(vp, mp);
-	bzero((caddr_t)ip, sizeof(struct inode));
+	bzero((caddr_t)ip, sizeof(struct inode);
 	vp->v_data = ip;
 	ip->i_vnode = vp;
 	ip->i_fs = fs = ump->um_fs;
@@ -722,7 +722,7 @@ ffs_vget(mp, ino, vpp)
 	ufs_ihashins(ip);
 
 	/* Read in the disk contents for the inode, copy into the inode. */
-	if (error = bread(ump->um_devvp, fsbtodb(fs, ino_to_fsba(fs, ino)),
+	if (error = bread(ump->um_devvp, fsbtodb(fs, ino_to_fsba(fs, ino),
 	    (int)fs->fs_bsize, NOCRED, &bp)) {
 		/*
 		 * The inode does not contain anything useful, so it would
@@ -735,7 +735,7 @@ ffs_vget(mp, ino, vpp)
 		*vpp = NULL;
 		return (error);
 	}
-	ip->i_din = *((struct dinode *)bp->b_data + ino_to_fsbo(fs, ino));
+	ip->i_din = *((struct dinode *)bp->b_data + ino_to_fsbo(fs, ino);
 	brelse(bp);
 
 	/*
@@ -806,7 +806,7 @@ ffs_fhtovp(mp, fhp, nam, vpp, exflagsp, credanonp)
 	if (ufhp->ufid_ino < ROOTINO ||
 	    ufhp->ufid_ino >= fs->fs_ncg * fs->fs_ipg)
 		return (ESTALE);
-	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp));
+	return (ufs_check_export(mp, ufhp, nam, vpp, exflagsp, credanonp);
 }
 
 /*

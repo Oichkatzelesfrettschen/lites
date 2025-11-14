@@ -150,7 +150,7 @@ struct ktr_csw {
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	ktrace __P((const char *, int, int, pid_t));
+int	ktrace (const char *, int, int, pid_t);
 __END_DECLS
 
 #endif	/* !KERNEL */

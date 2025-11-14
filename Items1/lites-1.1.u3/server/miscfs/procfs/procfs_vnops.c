@@ -87,7 +87,7 @@ static struct pfsnames {
 };
 #define Nprocent (sizeof(procent)/sizeof(procent[0]))
 
-static pid_t atopid __P((const char *, u_int));
+static pid_t atopid (const char *, u_int);
 
 /*
  * set things up for doing i/o on
@@ -353,7 +353,7 @@ procfs_getattr(ap)
 		if (procp->p_flag & P_SUGID)
 			vap->va_mode &= ~((VREAD|VWRITE)|
 					  ((VREAD|VWRITE)>>3)|
-					  ((VREAD|VWRITE)>>6));
+					  ((VREAD|VWRITE)>>6);
 		break;
 	}
 

@@ -91,10 +91,10 @@ struct nfs_diskless nfs_diskless = { 0 };
 
 extern u_long nfs_procids[NFS_NPROCS];
 extern u_long nfs_prog, nfs_vers;
-void nfs_disconnect __P((struct nfsmount *));
-void nfsargs_ntoh __P((struct nfs_args *));
-static struct mount *nfs_mountdiskless __P((char *, char *, int,
-    struct sockaddr_in *, struct nfs_args *, register struct vnode **));
+void nfs_disconnect (struct nfsmount *);
+void nfsargs_ntoh (struct nfs_args *);
+static struct mount *nfs_mountdiskless (char *, char *, int,
+    struct sockaddr_in *, struct nfs_args *, register struct vnode **);
 
 /*
  * nfs statfs call
@@ -127,7 +127,7 @@ nfs_statfs(mp, sbp, p)
 	nfsm_reqhead(vp, NFSPROC_STATFS, NFSX_FH);
 	nfsm_fhtom(vp);
 	nfsm_request(vp, NFSPROC_STATFS, p, cred);
-	nfsm_dissect(sfp, struct nfsv2_statfs *, NFSX_STATFS(isnq));
+	nfsm_dissect(sfp, struct nfsv2_statfs *, NFSX_STATFS(isnq);
 	sbp->f_type = MOUNT_NFS;
 	sbp->f_flags = nmp->nm_flag;
 	sbp->f_iosize = NFS_MAXDGRAMDATA;
@@ -213,7 +213,7 @@ nfs_mountroot()
 	if (nd->mygateway.sin_len != 0) {
 		struct sockaddr_in mask, sin;
 
-		bzero((caddr_t)&mask, sizeof(mask));
+		bzero((caddr_t)&mask, sizeof(mask);
 		sin = mask;
 		sin.sin_family = AF_INET;
 		sin.sin_len = sizeof(sin);
@@ -276,7 +276,7 @@ nfs_mountroot()
 		if (hostname[i] == '\0')
 			break;
 	hostnamelen = i;
-	inittodr(ntohl(nd->root_time));
+	inittodr(ntohl(nd->root_time);
 	return (0);
 }
 
@@ -300,7 +300,7 @@ nfs_mountdiskless(path, which, mountflag, sin, args, vpp)
 	    M_MOUNT, M_NOWAIT);
 	if (mp == NULL)
 		panic("nfs_mountroot: %s mount malloc", which);
-	bzero((char *)mp, (u_long)sizeof(struct mount));
+	bzero((char *)mp, (u_long)sizeof(struct mount);
 	mp->mnt_op = &nfs_vfsops;
 	mp->mnt_flag = mountflag;
 
@@ -406,7 +406,7 @@ mountnfs(argp, mp, nam, pth, hst, vpp)
 	} else {
 		MALLOC(nmp, struct nfsmount *, sizeof (struct nfsmount),
 		    M_NFSMNT, M_WAITOK);
-		bzero((caddr_t)nmp, sizeof (struct nfsmount));
+		bzero((caddr_t)nmp, sizeof (struct nfsmount);
 		mp->mnt_data = (qaddr_t)nmp;
 	}
 	getnewfsid(mp, MOUNT_NFS);
@@ -436,7 +436,7 @@ mountnfs(argp, mp, nam, pth, hst, vpp)
 	nmp->nm_tnext = (struct nfsnode *)nmp;
 	nmp->nm_tprev = (struct nfsnode *)nmp;
 	nmp->nm_inprog = NULLVP;
-	bcopy((caddr_t)argp->fh, (caddr_t)&nmp->nm_fh, sizeof(nfsv2fh_t));
+	bcopy((caddr_t)argp->fh, (caddr_t)&nmp->nm_fh, sizeof(nfsv2fh_t);
 	mp->mnt_stat.f_type = MOUNT_NFS;
 	strncpy(&mp->mnt_stat.f_fstypename[0], mp->mnt_op->vfs_name, MFSNAMELEN);
 	bcopy(hst, mp->mnt_stat.f_mntfromname, MNAMELEN);

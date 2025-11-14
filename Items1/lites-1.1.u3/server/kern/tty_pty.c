@@ -78,7 +78,7 @@ int	npty = NPTY;		/* for pstat -t */
 #define	PF_NOSTOP	0x40
 #define PF_UCNTL	0x80		/* user control mode */
 
-void	ptsstop __P((struct tty *, int));
+void	ptsstop (struct tty *, int);
 
 /* Lookup pty */
 struct tty *
@@ -230,7 +230,7 @@ ptswrite(dev, uio, flag)
 	tp = &pt_tty[minor(dev)];
 	if (tp->t_oproc == 0)
 		return (EIO);
-	return ((*linesw[tp->t_line].l_write)(tp, uio, flag));
+	return ((*linesw[tp->t_line].l_write)(tp, uio, flag);
 }
 
 /*
@@ -336,7 +336,7 @@ ptcread(dev, uio, flag)
 					return (error);
 				if (pti->pt_send & TIOCPKT_IOCTL) {
 					cc = min(uio->uio_resid,
-						sizeof(tp->t_termios));
+						sizeof(tp->t_termios);
 					uiomove(&tp->t_termios, cc, uio);
 				}
 				pti->pt_send = 0;
@@ -363,7 +363,7 @@ ptcread(dev, uio, flag)
 	if (pti->pt_flags & (PF_PKT|PF_UCNTL))
 		error = ureadc(0, uio);
 	while (uio->uio_resid > 0 && error == 0) {
-		cc = q_to_b(&tp->t_outq, buf, min(uio->uio_resid, BUFSIZ));
+		cc = q_to_b(&tp->t_outq, buf, min(uio->uio_resid, BUFSIZ);
 		if (cc <= 0)
 			break;
 		error = uiomove(buf, cc, uio);
@@ -681,7 +681,7 @@ ptyioctl(dev, cmd, data, flag, p)
 		}
 	}
 	stop = (tp->t_iflag & IXON) && CCEQ(cc[VSTOP], CTRL('s')) 
-		&& CCEQ(cc[VSTART], CTRL('q'));
+		&& CCEQ(cc[VSTART], CTRL('q');
 	if (pti->pt_flags & PF_NOSTOP) {
 		if (stop) {
 			pti->pt_send &= ~TIOCPKT_NOSTOP;

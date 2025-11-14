@@ -77,9 +77,9 @@ struct igmpstat igmpstat;
 	  % (IGMP_MAX_HOST_REPORT_DELAY * PR_FASTHZ) + 1 \
 	)
 
-void	igmp_init __P(());
-void	igmp_input __P((struct mbuf *, int));
-void	igmp_joingroup __P((struct in_multi *));
-void	igmp_leavegroup __P((struct in_multi *));
-void	igmp_fasttimo __P(());
+void	igmp_init ();
+void	igmp_input (struct mbuf *, int);
+void	igmp_joingroup (struct in_multi *);
+void	igmp_leavegroup (struct in_multi *);
+void	igmp_fasttimo ();
 #endif

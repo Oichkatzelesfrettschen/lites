@@ -138,7 +138,7 @@ icmp_error(n, type, code, dest, destifp)
 	icp->icmp_code = code;
 	bcopy((caddr_t)oip, (caddr_t)&icp->icmp_ip, icmplen);
 	nip = &icp->icmp_ip;
-	nip->ip_len = htons((u_short)(nip->ip_len + oiplen));
+	nip->ip_len = htons((u_short)(nip->ip_len + oiplen);
 
 	/*
 	 * Now, copy old ip header (without options)
@@ -151,7 +151,7 @@ icmp_error(n, type, code, dest, destifp)
 	m->m_pkthdr.len = m->m_len;
 	m->m_pkthdr.rcvif = n->m_pkthdr.rcvif;
 	nip = mtod(m, struct ip *);
-	bcopy((caddr_t)oip, (caddr_t)nip, sizeof(struct ip));
+	bcopy((caddr_t)oip, (caddr_t)nip, sizeof(struct ip);
 	nip->ip_len = m->m_len;
 	nip->ip_hl = sizeof(struct ip) >> 2;
 	nip->ip_p = IPPROTO_ICMP;
@@ -180,7 +180,7 @@ icmp_input(m, hlen)
 	int icmplen = ip->ip_len;
 	register int i;
 	struct in_ifaddr *ia;
-	void (*ctlfunc) __P((int, struct sockaddr *, struct ip *));
+	void (*ctlfunc) (int, struct sockaddr *, struct ip *);
 	int code;
 	extern u_char ip_protox[];
 
@@ -519,7 +519,7 @@ icmp_reflect(m)
 			m->m_pkthdr.len -= optlen;
 		optlen += sizeof(struct ip);
 		bcopy((caddr_t)ip + optlen, (caddr_t)(ip + 1),
-			 (unsigned)(m->m_len - sizeof(struct ip)));
+			 (unsigned)(m->m_len - sizeof(struct ip));
 	}
 	m->m_flags &= ~(M_BCAST|M_MCAST);
 	icmp_send(m, opts);
@@ -564,7 +564,7 @@ iptime()
 
 	microtime(&atv);
 	t = (atv.tv_sec % (24*60*60)) * 1000 + atv.tv_usec / 1000;
-	return (htonl(t));
+	return (htonl(t);
 }
 
 int
@@ -583,7 +583,7 @@ icmp_sysctl(name, namelen, oldp, oldlenp, newp, newlen)
 
 	switch (name[0]) {
 	case ICMPCTL_MASKREPL:
-		return (sysctl_int(oldp, oldlenp, newp, newlen, &icmpmaskrepl));
+		return (sysctl_int(oldp, oldlenp, newp, newlen, &icmpmaskrepl);
 	default:
 		return (ENOPROTOOPT);
 	}

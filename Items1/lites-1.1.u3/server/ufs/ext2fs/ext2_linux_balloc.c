@@ -47,7 +47,7 @@
 #error Provide an bitops.h file, please !
 #endif
 
-unsigned long ext2_count_free __P((struct buffer_head *, unsigned int));
+unsigned long ext2_count_free (struct buffer_head *, unsigned int);
 
 #define in_range(b, first, len)		((b) >= (first) && (b) <= (first) + (len) - 1)
 
@@ -279,7 +279,7 @@ repeat:
 	i = (goal - es->s_first_data_block) / EXT2_BLOCKS_PER_GROUP(sb);
 	gdp = get_group_desc (mp, i, &bh2);
 	if (gdp->bg_free_blocks_count > 0) {
-		j = ((goal - es->s_first_data_block) % EXT2_BLOCKS_PER_GROUP(sb));
+		j = ((goal - es->s_first_data_block) % EXT2_BLOCKS_PER_GROUP(sb);
 #ifdef EXT2FS_DEBUG
 		if (j)
 			goal_attempts++;
@@ -365,7 +365,7 @@ repeat:
 		goto search_back;
 	else
 		j = find_first_zero_bit ((unsigned long *) bh->b_data,
-					 EXT2_BLOCKS_PER_GROUP(sb));
+					 EXT2_BLOCKS_PER_GROUP(sb);
 	if (j >= EXT2_BLOCKS_PER_GROUP(sb)) {
 		printf ( "ext2_new_block: "
 			 "Free blocks count corrupted for block group %d", i);

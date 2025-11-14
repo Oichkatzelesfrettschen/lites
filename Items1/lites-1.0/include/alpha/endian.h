@@ -62,10 +62,10 @@
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-unsigned int	htonl __P((unsigned int));
-unsigned short	htons __P((unsigned short));
-unsigned int	ntohl __P((unsigned int));
-unsigned short	ntohs __P((unsigned short));
+unsigned int	htonl (unsigned int);
+unsigned short	htons (unsigned short);
+unsigned int	ntohl (unsigned int);
+unsigned short	ntohs (unsigned short);
 __END_DECLS
 
 /*

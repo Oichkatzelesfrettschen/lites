@@ -196,7 +196,7 @@ spec_open(ap)
 		 */
 		if (error = vfs_mountedon(vp))
 			return (error);
-		return ((*bdevsw[maj].d_open)(dev, ap->a_mode, S_IFBLK, ap->a_p));
+		return ((*bdevsw[maj].d_open)(dev, ap->a_mode, S_IFBLK, ap->a_p);
 	}
 	return (0);
 }
@@ -383,7 +383,7 @@ spec_ioctl(ap)
 
 	case VCHR:
 		return ((*cdevsw[major(dev)].d_ioctl)(dev, ap->a_command, ap->a_data,
-		    ap->a_fflag, ap->a_p));
+		    ap->a_fflag, ap->a_p);
 
 	case VBLK:
 		if (ap->a_command == 0 && (natural_t)ap->a_data == B_TAPE)
@@ -392,7 +392,7 @@ spec_ioctl(ap)
 			else
 				return (1);
 		return ((*bdevsw[major(dev)].d_ioctl)(dev, ap->a_command, ap->a_data,
-		   ap->a_fflag, ap->a_p));
+		   ap->a_fflag, ap->a_p);
 
 	default:
 		panic("spec_ioctl");
@@ -544,7 +544,7 @@ spec_close(ap)
 {
 	register struct vnode *vp = ap->a_vp;
 	dev_t dev = vp->v_rdev;
-	int (*devclose) __P((dev_t, int, int, struct proc *));
+	int (*devclose) (dev_t, int, int, struct proc *);
 	int mode, error;
 
 	switch (vp->v_type) {
@@ -602,7 +602,7 @@ spec_close(ap)
 		panic("spec_close: not special");
 	}
 
-	return ((*devclose)(dev, ap->a_fflag, mode, ap->a_p));
+	return ((*devclose)(dev, ap->a_fflag, mode, ap->a_p);
 }
 
 /*
@@ -615,7 +615,7 @@ spec_print(ap)
 {
 
 	printf("tag VT_NON, dev %d, %d\n", major(ap->a_vp->v_rdev),
-		minor(ap->a_vp->v_rdev));
+		minor(ap->a_vp->v_rdev);
 }
 
 /*
