@@ -1,45 +1,66 @@
-# IOMMU helpers
+# IOMMU Module
 
-A minimal IOMMU abstraction lives in `drivers/iommu/` within the source tree.
+This module provides a simple in-memory implementation of an IOMMU domain.
+It allows mapping I/O virtual addresses (IOVA) to physical addresses. The
+interface is defined in `include/iommu.h`.
+
+## Location
+
+The IOMMU implementation is organized as follows:
+- Header: `include/iommu.h`
+- Implementation: `core/iommu/iommu.c`
+
+## Data Structures
 
 ```c
-struct iommu_dom {
-    uintptr_t    pml_root; /* internal mapping list head */
-    uint16_t     asid;     /* address space identifier */
-    unsigned long epoch;   /* incremented on updates */
-    uint32_t     flags;
-    spinlock_t   lock;
+struct iommu_map_entry {
+    uintptr_t iova;
+    uintptr_t pa;
+    size_t len;
 };
+
+typedef struct iommu_dom {
+    pthread_mutex_t lock;
+    struct iommu_mapping *mappings;
+} iommu_dom_t;
 ```
 
 ## Functions
 
 ```c
-int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa,
-              size_t len, uint32_t perms);
+void iommu_dom_init(struct iommu_dom *dom);
+int iommu_map(struct iommu_dom *dom, uintptr_t iova, uintptr_t pa, size_t len);
 int iommu_unmap(struct iommu_dom *dom, uintptr_t iova, size_t len);
-int iommu_bulk_map(struct iommu_dom *dom, const uintptr_t *iovas,
-                   const uintptr_t *pas, const size_t *lens,
-                   const uint32_t *perms, size_t count);
+int iommu_bulk_map(struct iommu_dom *dom, const struct iommu_map_entry *list, size_t count);
 ```
 
-`iommu_map` installs a single mapping. `iommu_unmap` removes it. `iommu_bulk_map`
-conveniently installs multiple mappings using the same semantics as the single
-call. Every change increments `dom.epoch` and triggers a domain TLB flush via
-`tlb_invalidate_domain()`.
+## Usage
 
-## Example
+1. Initialize a domain:
+   ```c
+   iommu_dom_t dom;
+   iommu_dom_init(&dom);
+   ```
 
-```c
-struct iommu_dom dom = { .asid = 1 };
-spin_lock_init(&dom.lock);
+2. Map or unmap regions:
+   ```c
+   iommu_map(&dom, iova, phys_addr, length);
+   iommu_unmap(&dom, iova, length);
+   ```
 
-iommu_map(&dom, 0x1000, 0x2000, 4096, 0);
-iommu_unmap(&dom, 0x1000, 4096);
+3. Bulk mappings are possible with `iommu_bulk_map` which takes an array of
+   `iommu_map_entry` structures:
+   ```c
+   struct iommu_map_entry entries[2] = {
+       {.iova = 0x1000, .pa = 0x2000, .len = 4096},
+       {.iova = 0x3000, .pa = 0x4000, .len = 4096}
+   };
+   iommu_bulk_map(&dom, entries, 2);
+   ```
 
-uintptr_t iovas[2] = {0x3000, 0x4000};
-uintptr_t pas[2] = {0x5000, 0x6000};
-size_t lens[2] = {4096, 4096};
-uint32_t perms[2] = {0, 0};
-iommu_bulk_map(&dom, iovas, pas, lens, perms, 2);
-```
+## Implementation Details
+
+Mappings are protected by an internal mutex (`pthread_mutex_t`). The current
+implementation stores entries in a linked list and checks for overlaps on each
+map operation. Returns -1 on error (overlapping mappings, allocation failure,
+or invalid parameters), 0 on success.

@@ -125,12 +125,10 @@ SERVER_COMMON_DIRS := \
 SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 SERVER_INCDIRS := $(addprefix -I,$(SERVER_DIRS))
-KERN_SRC := $(wildcard kern/*.c) $(wildcard $(SRCDIR)/../drivers/iommu/*.c) \
-	    $(wildcard $(SRCDIR)/libos/*.c)
-POSIX_SRC := $(wildcard posix/*.c)
-KERN_SRC += $(POSIX_SRC)
-KERN_INCDIRS := -Iinclude -Ikern -I$(SRCDIR)/../drivers/iommu -Iposix -I$(SRCDIR)/libos
-
+KERN_SRC := $(wildcard kern/*.c) $(wildcard posix/*.c)
+IOMMU_SRC := $(wildcard core/iommu/*.c)
+LIBOS_SRC := $(wildcard libos/*.c)
+KERN_INCDIRS := -Iinclude -Ikern -Icore/iommu -Iposix -Ilibos
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')
@@ -153,17 +151,17 @@ prepare:
 	  ln -s $$arch_dir $(SRCDIR)/include/machine; \
 	fi
 
-lites_server: $(SERVER_SRC) $(KERN_SRC)
+lites_server: $(SERVER_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 ifeq ($(TIDY),1)
-	$(CLANG_TIDY) $(SERVER_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS)
+	$(CLANG_TIDY) $(SERVER_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS)
 endif
 
 ifneq ($(EMULATOR_SRC),)
-lites_emulator: $(EMULATOR_SRC) $(KERN_SRC)
+lites_emulator: $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC)
 	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 ifeq ($(TIDY),1)
-	$(CLANG_TIDY) $(EMULATOR_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS)
+	$(CLANG_TIDY) $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS)
 endif
 endif
 
@@ -176,6 +174,6 @@ test: all
 	done
 
 tidy:
-	$(CLANG_TIDY) $(SERVER_SRC) $(EMULATOR_SRC) $(KERN_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR)
+	$(CLANG_TIDY) $(SERVER_SRC) $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR)
 
 .PHONY: all prepare clean test tidy

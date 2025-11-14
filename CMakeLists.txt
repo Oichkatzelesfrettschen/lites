@@ -153,10 +153,8 @@ if(EXISTS "${LITES_SRC_DIR}")
     file(GLOB _posix_src "${CMAKE_CURRENT_SOURCE_DIR}/posix/*.c")
     file(GLOB _libos_src "${CMAKE_CURRENT_SOURCE_DIR}/libos/*.c")
     list(APPEND SERVER_SRC ${_kern_src} ${_posix_src})
-    # Build the primary IOMMU implementation only. The alternative
-    # version provides identical symbols and would lead to duplicate
-    # definitions when linked together.
-    set(_iommu_src "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu/iommu.c")
+    # Build the IOMMU implementation from the modern core/iommu directory
+    file(GLOB _iommu_src "${CMAKE_CURRENT_SOURCE_DIR}/core/iommu/*.c")
     list(APPEND SERVER_SRC ${_iommu_src} ${_libos_src})
 
     if(BISON_FOUND)
@@ -209,7 +207,7 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
             "${CMAKE_CURRENT_SOURCE_DIR}/posix"
-            "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu"
+            "${CMAKE_CURRENT_SOURCE_DIR}/core/iommu"
             "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
         if(ARCH STREQUAL "x86_64")
@@ -238,7 +236,7 @@ if(EXISTS "${LITES_SRC_DIR}")
             "${MACH_INCLUDE_DIR}"
             "${CMAKE_CURRENT_SOURCE_DIR}/kern"
             "${CMAKE_CURRENT_SOURCE_DIR}/posix"
-            "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu"
+            "${CMAKE_CURRENT_SOURCE_DIR}/core/iommu"
             "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
         if(ARCH STREQUAL "x86_64")
