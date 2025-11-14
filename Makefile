@@ -1,9 +1,7 @@
-# Prefer the modernised source tree if present
-ifeq ($(wildcard src-lites-1.1-2025),src-lites-1.1-2025)
-SRCDIR ?= src-lites-1.1-2025
-else
-SRCDIR ?= build/lites-1.1.u3
-endif
+# Use the modern POSIX server source tree
+# servers/posix/ contains the harmonized source code with proper structure:
+#   core/, serv/, net/, netinet/, ufs/, nfs/, miscfs/, etc.
+SRCDIR ?= servers/posix
 CC ?= clang
 CLANG_TIDY ?= clang-tidy
 TIDY ?= 0
@@ -110,40 +108,49 @@ else ifeq ($(ARCH),ia16)
 ARCH_DIR := ia16
 endif
 
-# Directories under server that are architecture independent
+# Directories in the modern POSIX server tree (architecture independent)
+# Note: core/ contains kern_*.c files (modern organized kernel code)
 SERVER_COMMON_DIRS := \
-  $(SRCDIR)/server/kern \
-  $(SRCDIR)/server/miscfs \
-  $(SRCDIR)/server/netiso \
-  $(SRCDIR)/server/serv \
-  $(SRCDIR)/server/netinet \
-  $(SRCDIR)/server/ufs \
-  $(SRCDIR)/server/nfs \
-  $(SRCDIR)/server/netccitt \
-  $(SRCDIR)/server/net \
-  $(SRCDIR)/server/netns
+  $(SRCDIR)/core \
+  $(SRCDIR)/miscfs \
+  $(SRCDIR)/netiso \
+  $(SRCDIR)/serv \
+  $(SRCDIR)/netinet \
+  $(SRCDIR)/ufs \
+  $(SRCDIR)/nfs \
+  $(SRCDIR)/netccitt \
+  $(SRCDIR)/net \
+  $(SRCDIR)/netns
 
 # Source files and include directories for the selected architecture
-SERVER_DIRS := $(SRCDIR)/server/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
+SERVER_DIRS := $(SRCDIR)/$(ARCH_DIR) $(SERVER_COMMON_DIRS)
 SERVER_SRC_ALL := $(foreach d,$(SERVER_DIRS),$(shell find $(d) -name \*.c -o -name \*.S))
 # Exclude problematic files with K&R function declarations that don't compile with modern C
 # Exclude entire netns/ directory (Xerox NS protocol) due to header parsing issues with cthreads/setjmp
 EXCLUDE_PATTERNS := libc.opendir.c
 SERVER_SRC := $(filter-out $(foreach p,$(EXCLUDE_PATTERNS),$(filter %$(p),$(SERVER_SRC_ALL))),$(SERVER_SRC_ALL))
 SERVER_SRC := $(filter-out $(filter %/netns/%,$(SERVER_SRC)),$(SERVER_SRC))
-# Add server/ directory itself to include path for <serv/header.h> style includes
-SERVER_INCDIRS := -I$(SRCDIR)/include -I$(SRCDIR)/server $(addprefix -I,$(SERVER_DIRS))
-KERN_SRC := $(wildcard kern/*.c) $(wildcard posix/*.c)
-# IOMMU disabled for legacy i686 build - modern code from merged branches
+# Add SRCDIR to include path for <serv/header.h> style includes
+# Also add repository root include/ and each source directory
+SERVER_INCDIRS := -Iinclude -I$(SRCDIR) $(addprefix -I,$(SERVER_DIRS))
+# Scattered core/ files (38 files identified in audit) plus subdirectories
+CORE_SCATTERED_SRC := $(wildcard core/*.c) $(wildcard core/*.S)
+CORE_PROTOCOLS_SRC := $(wildcard core/protocols/*.c)
+CORE_MACH_KERNEL_SRC := $(wildcard core/mach_kernel/*.c)
+# IOMMU enabled for x86_64 architecture - modern code from merged branches
 ifeq ($(ARCH),x86_64)
-IOMMU_SRC := $(wildcard core/iommu/*.c)
-IOMMU_INCDIR := -Icore/iommu
+CORE_IOMMU_SRC := $(wildcard core/iommu/*.c)
+CORE_IOMMU_INCDIR := -Icore/iommu
 else
-IOMMU_SRC :=
-IOMMU_INCDIR :=
+CORE_IOMMU_SRC :=
+CORE_IOMMU_INCDIR :=
 endif
+# Legacy kern/ and posix/ directories (if they exist at repository root)
+KERN_SRC := $(wildcard kern/*.c) $(wildcard posix/*.c)
 LIBOS_SRC := $(wildcard libos/*.c)
-KERN_INCDIRS := -Iinclude -Ikern $(IOMMU_INCDIR) -Iposix -Ilibos
+# Combined core sources
+CORE_SRC := $(CORE_SCATTERED_SRC) $(CORE_PROTOCOLS_SRC) $(CORE_MACH_KERNEL_SRC) $(CORE_IOMMU_SRC) $(KERN_SRC)
+CORE_INCDIRS := -Iinclude -Icore -Icore/protocols -Icore/mach_kernel $(CORE_IOMMU_INCDIR) -Ikern -Iposix -Ilibos
 
 ifneq ($(wildcard $(SRCDIR)/emulator),)
 EMULATOR_SRC := $(shell find $(SRCDIR)/emulator -name '*.c' -o -name '*.S')
@@ -160,23 +167,23 @@ TEST_SUBDIRS := $(sort $(dir $(wildcard tests/*/Makefile)))
 all: prepare $(TARGETS)
 
 prepare:
-	@if [ ! -e $(SRCDIR)/include/machine ]; then \
+	@if [ ! -e include/machine ]; then \
 	  arch_dir=$(ARCH); \
 	  [ "$$arch_dir" = "i686" ] && arch_dir=i386; \
-	  ln -s $$arch_dir $(SRCDIR)/include/machine; \
+	  ln -s $$arch_dir include/machine; \
 	fi
 
-lites_server: $(SERVER_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_server: $(SERVER_SRC) $(CORE_SRC) $(LIBOS_SRC)
+	$(CC) $(CFLAGS) $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(CORE_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 ifeq ($(TIDY),1)
-	$(CLANG_TIDY) $(SERVER_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(KERN_INCDIRS)
+	$(CLANG_TIDY) $(SERVER_SRC) $(CORE_SRC) $(LIBOS_SRC) -- $(CFLAGS) $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(CORE_INCDIRS)
 endif
 
 ifneq ($(EMULATOR_SRC),)
-lites_emulator: $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC)
-	$(CC) $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
+lites_emulator: $(EMULATOR_SRC) $(CORE_SRC) $(LIBOS_SRC)
+	$(CC) $(CFLAGS) $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(CORE_INCDIRS) $^ $(MACH_LIBS) $(LDFLAGS) -o $@
 ifeq ($(TIDY),1)
-	$(CLANG_TIDY) $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(KERN_INCDIRS)
+	$(CLANG_TIDY) $(EMULATOR_SRC) $(CORE_SRC) $(LIBOS_SRC) -- $(CFLAGS) $(ARCH_INCDIR) $(MACH_INCDIR) $(EMULATOR_INCDIRS) $(CORE_INCDIRS)
 endif
 endif
 
@@ -189,6 +196,6 @@ test: all
 	done
 
 tidy:
-	$(CLANG_TIDY) $(SERVER_SRC) $(EMULATOR_SRC) $(KERN_SRC) $(IOMMU_SRC) $(LIBOS_SRC) -- $(CFLAGS) -I$(SRCDIR)/include $(ARCH_INCDIR) $(MACH_INCDIR)
+	$(CLANG_TIDY) $(SERVER_SRC) $(EMULATOR_SRC) $(CORE_SRC) $(LIBOS_SRC) -- $(CFLAGS) $(ARCH_INCDIR) $(MACH_INCDIR) $(SERVER_INCDIRS) $(CORE_INCDIRS)
 
 .PHONY: all prepare clean test tidy
