@@ -62,7 +62,7 @@
 #include <sys/vnode.h>
 
 /* TYPES */
-typedef volatile void noreturn;
+#include <stdnoreturn.h>
 
 /* PROTOTYPES */
 

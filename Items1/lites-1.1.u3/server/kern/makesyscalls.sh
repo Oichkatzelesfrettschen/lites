@@ -240,12 +240,12 @@ awk < $1 "
 		} else {
 			printf("extern %s %s", returntype, sname) > sysproto
 		}
-		if (returntype == "noreturn") {
-			libfile= "/dev/null"
-			jacket= "/dev/null"
-			printf("extern noreturn %s", sname) > eproto
-			printf("noreturn %s", sname) > elib
-			printf("noreturn dev_null_%s", sname) > jacket
+               if (returntype == "noreturn") {
+                       libfile= "/dev/null"
+                       jacket= "/dev/null"
+                       printf("_Noreturn void %s", sname) > eproto
+                       printf("_Noreturn void %s", sname) > elib
+                       printf("_Noreturn void dev_null_%s", sname) > jacket
 		} else {
 			libfile=syslibdir "/" sname ".c"
 			jacket= jacketdir "/e_" iname ".c"
