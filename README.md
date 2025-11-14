@@ -69,10 +69,16 @@ OpenMach/Mach4 distribution.  The modern build system looks for these
 headers in the directory specified by the `LITES_MACH_DIR` environment
 variable.  If that variable is unset and a directory named `openmach`
 exists at the repository root, it will be used automatically (a git
-submodule can conveniently provide it).
+submodule can conveniently provide it).  The Mach headers are not bundled
+with this repository, so if `openmach` is missing you must supply them
+manually or via git.
+
 Follow [docs/setup.md](docs/setup.md) to install prerequisites and
 optionally clone the OpenMach repository. The guide also covers offline
-setups using predownloaded packages placed in `offline_packages/`.
+setups using predownloaded packages placed in `offline_packages/`. If the
+clone step fails due to a lack of network connectivity, create the directory
+yourself or set `LITES_MACH_DIR` to point at an existing Mach source tree.
+
 If prebuilt Mach libraries are present, set `LITES_MACH_LIB_DIR` to their
 location (for example `openmach/lib`).  When the variable is not set and
 `openmach/lib` exists, it will be used automatically.
