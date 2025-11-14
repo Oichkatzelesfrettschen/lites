@@ -86,27 +86,10 @@ convert_to_qcow2() {
 ## Run Lites in QEMU
 run_qemu() {
     echo "==> Running Lites in QEMU (memory: $MEMORY)"
-    
-    # Detect KVM support
-    KVM_ARGS=""
-    if [[ $ENABLE_KVM -eq 1 ]] && [[ -e /dev/kvm ]]; then
-        echo "KVM acceleration enabled"
-        KVM_ARGS="-enable-kvm -cpu host"
-    else
-        echo "KVM not available, using emulation"
-        KVM_ARGS="-cpu qemu32"
-    fi
-    
+
+    # Use the run-qemu-i386.sh script which auto-detects boot mode
     docker compose run --rm --device=/dev/kvm:/dev/kvm dev bash -c "
-        qemu-system-i386 \
-            $KVM_ARGS \
-            -m $MEMORY \
-            -drive file=$DISK_IMAGE,format=qcow2,if=ide \
-            -netdev user,id=net0,hostfwd=tcp::2222-:22 \
-            -device e1000,netdev=net0 \
-            -serial stdio \
-            -nographic \
-            -no-reboot
+        docker/scripts/run-qemu-i386.sh --memory $MEMORY
     " || echo "QEMU exited"
 }
 

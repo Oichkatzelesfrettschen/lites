@@ -55,9 +55,10 @@ docker-build-lites:
 	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm lites-i386-dev \
 		docker/scripts/build-lites-i386.sh
 
-# Run Lites in QEMU inside Docker
+# Run Lites in QEMU inside Docker (boots from disk image if available)
 docker-run-qemu:
 	@echo "Running Lites i386 in QEMU inside Docker..."
+	@echo "Note: Will auto-detect lites.qcow2 or fall back to direct kernel boot"
 	$(DOCKER_COMPOSE) -f docker/docker-compose.yml run --rm lites-i386-dev \
 		docker/scripts/run-qemu-i386.sh
 

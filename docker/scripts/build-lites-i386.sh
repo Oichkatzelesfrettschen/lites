@@ -157,21 +157,34 @@ build_with_cmake() {
 ##
 build_with_make() {
     local jobs="${1:-$(nproc)}"
-    
+
     echo "Building Lites i386 with Makefile.new..."
     echo "  Architecture: ${ARCH}"
     echo "  Jobs: ${jobs}"
-    
+
     cd "${WORKSPACE_ROOT}"
-    
+
+    # Build with Makefile.new
     make -f Makefile.new \
         -j "${jobs}" \
         ARCH="${ARCH}" \
         ${LITES_MACH_DIR:+LITES_MACH_DIR="${LITES_MACH_DIR}"} \
         ${LITES_MACH_LIB_DIR:+LITES_MACH_LIB_DIR="${LITES_MACH_LIB_DIR}"} \
         ${SRCDIR:+SRCDIR="${SRCDIR}"}
-    
+
+    # Makefile.new outputs to root, copy to build-i386 for consistency
+    mkdir -p "${BUILD_DIR}"
+    if [[ -f "lites_server" ]]; then
+        cp lites_server "${BUILD_DIR}/lites_emulator"
+        echo "Copied lites_server -> ${BUILD_DIR}/lites_emulator"
+    fi
+    if [[ -f "lites_emulator" ]]; then
+        cp lites_emulator "${BUILD_DIR}/lites_emulator"
+        echo "Copied lites_emulator -> ${BUILD_DIR}/lites_emulator"
+    fi
+
     echo "Build completed successfully!"
+    echo "Output: ${BUILD_DIR}/lites_emulator"
 }
 
 ##
@@ -180,8 +193,8 @@ build_with_make() {
 main() {
     local clean=false
     local jobs
-    local build_system="cmake"
-    
+    local build_system="make"  # Default to Makefile.new for i386 (known working)
+
     jobs="$(nproc)"
     
     # Parse arguments

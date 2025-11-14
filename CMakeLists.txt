@@ -198,9 +198,36 @@ if(EXISTS "${LITES_SRC_DIR}")
         endif()
     endif()
 
-    # The historical server sources are not included in this snapshot, so the
-    # server binary is disabled for now. Only the libraries and tests are built.
+    # Build the server binary (lites_server) if SERVER_SRC is available
+    if(SERVER_SRC)
+        add_executable(lites_server ${SERVER_SRC})
+        target_include_directories(lites_server PRIVATE
+            "${LITES_SRC_DIR}/include"
+            "${LITES_SRC_DIR}/server"
+            "${LITES_SRC_DIR}/libos"
+            "${CMAKE_CURRENT_SOURCE_DIR}/libs/ddekit"
+            "${MACH_INCLUDE_DIR}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/kern"
+            "${CMAKE_CURRENT_SOURCE_DIR}/posix"
+            "${CMAKE_CURRENT_SOURCE_DIR}/drivers/iommu"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+        if(ARCH STREQUAL "x86_64")
+            target_include_directories(lites_server PRIVATE
+                "${LITES_SRC_DIR}/include/x86_64")
+        elseif(ARCH STREQUAL "i686")
+            target_include_directories(lites_server PRIVATE
+                "${LITES_SRC_DIR}/include/i386")
+        endif()
+
+        target_compile_options(lites_server PRIVATE ${C23_FLAG} ${CFLAGS})
+        target_link_options(lites_server PRIVATE ${LDFLAGS})
+        if(MACH_LIBS)
+            target_link_libraries(lites_server PRIVATE ${MACH_LIBS})
+        endif()
+    endif()
+
+    # Also build emulator if available
     if(EMULATOR_SRC)
         add_executable(lites_emulator ${EMULATOR_SRC})
         target_include_directories(lites_emulator PRIVATE
