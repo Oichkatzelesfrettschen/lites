@@ -44,7 +44,15 @@
       "Bash(md5sum:*)",
       "Bash(tee:*)",
       "Bash(/tmp/build-mig.sh)",
-      "Bash(mig:*)"
+      "Bash(mig:*)",
+      "Bash(ln:*)",
+      "WebFetch(domain:ftp.gnu.org)",
+      "WebFetch(domain:www.cs.cmu.edu)",
+      "Bash(curl:*)",
+      "Bash(test:*)",
+      "Bash(SRCDIR=Items1/lites-1.1.u3 ARCH=i686 make:*)",
+      "Bash(export SRCDIR=Items1/lites-1.1.u3)",
+      "Bash(export ARCH=i686)"
     ],
     "deny": [],
     "ask": []

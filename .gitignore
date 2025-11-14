@@ -71,3 +71,29 @@ web-terminal/images/*.tar.gz
 *.db
 logs/
 cloc.json
+
+# Build artifacts (added 2025-11-14)
+build/
+*.o
+*.a
+*.so
+*.so.*
+*.obj
+*.lib
+*.dll
+*.dylib
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# Runtime artifacts
+.logs/
+.cache/
+*.db
+*.sqlite
+
+# Tool-specific
+.claude/
+.codex/
+

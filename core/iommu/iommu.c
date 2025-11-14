@@ -1,5 +1,8 @@
+#include <stddef.h>   /* size_t */
+#include <stdbool.h>  /* bool */
+#include <stdint.h>   /* uintptr_t */
+#include <stdlib.h>   /* malloc, free */
 #include <iommu.h>
-#include <stdlib.h>
 
 static struct iommu_mapping *find_mapping(struct iommu_dom *dom, uintptr_t iova, size_t len,
                                           struct iommu_mapping ***prev) {

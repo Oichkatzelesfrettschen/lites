@@ -35,7 +35,7 @@
 #define _MACHINE_VM_TYPES_H_	1
 
 #ifdef	ASSEMBLER
-#else	ASSEMBLER
+#else	/* ASSEMBLER */
 
 /*
  * A natural_t is the type for the native
