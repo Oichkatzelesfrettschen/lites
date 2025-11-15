@@ -82,7 +82,7 @@ loop:
             rp->f_offset[1] = 0;
             ip->i_size1 = 0;
             if (ip->i_mode & IWRITE) {
-                ip->i_mode = &~IWRITE;
+                ip->i_mode &= ~IWRITE;
                 wakeup(ip + 1);
             }
         }
@@ -96,7 +96,7 @@ loop:
         prele(ip);
         if (ip->i_count < 2)
             return;
-        ip->i_mode = | IREAD;
+        ip->i_mode |= IREAD;
         sleep(ip + 2, PPIPE);
         goto loop;
     }
@@ -155,7 +155,7 @@ loop:
      */
 
     if (ip->i_size1 == PIPSIZ) {
-        ip->i_mode = | IWRITE;
+        ip->i_mode |= IWRITE;
         prele(ip);
         sleep(ip + 1, PPIPE);
         goto loop;
@@ -173,7 +173,7 @@ loop:
     writei(ip);
     prele(ip);
     if (ip->i_mode & IREAD) {
-        ip->i_mode = &~IREAD;
+        ip->i_mode &= ~IREAD;
         wakeup(ip + 2);
     }
     goto loop;
@@ -190,10 +190,10 @@ plock(ip) int *ip;
 
     rp = ip;
     while (rp->i_flag & ILOCK) {
-        rp->i_flag = | IWANT;
+        rp->i_flag |= IWANT;
         sleep(rp, PPIPE);
     }
-    rp->i_flag = | ILOCK;
+    rp->i_flag |= ILOCK;
 }
 
 /*
@@ -208,9 +208,9 @@ prele(ip) int *ip;
     register *rp;
 
     rp = ip;
-    rp->i_flag = &~ILOCK;
+    rp->i_flag &= ~ILOCK;
     if (rp->i_flag & IWANT) {
-        rp->i_flag = &~IWANT;
+        rp->i_flag &= ~IWANT;
         wakeup(rp);
     }
 }

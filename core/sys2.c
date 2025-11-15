@@ -204,7 +204,7 @@ link() {
     /*
      * unlock to avoid possibly hanging the namei
      */
-    ip->i_flag = &~ILOCK;
+    ip->i_flag &= ~ILOCK;
     u.u_dirp = u.u_arg[1];
     xp = namei(&uchar, 1);
     if (xp != NULL) {
@@ -220,7 +220,7 @@ link() {
     }
     wdir(ip);
     ip->i_nlink++;
-    ip->i_flag = | IUPD;
+    ip->i_flag |= IUPD;
 
 out:
     iput(ip);

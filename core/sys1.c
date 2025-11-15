@@ -226,7 +226,7 @@ exit() {
     register int *q, a;
     register struct proc *p;
 
-    u.u_procp->p_flag = &~STRC;
+    u.u_procp->p_flag &= ~STRC;
     for (q = &u.u_signal[0]; q < &u.u_signal[NSIG];)
         *q++ = 1;
     for (q = &u.u_ofile[0]; q < &u.u_ofile[NOFILE]; q++)
@@ -305,12 +305,12 @@ loop:
             }
             if (p->p_stat == SSTOP) {
                 if ((p->p_flag & SWTED) == 0) {
-                    p->p_flag = | SWTED;
+                    p->p_flag |= SWTED;
                     u.u_ar0[R0] = p->p_pid;
                     u.u_ar0[R1] = (p->p_sig << 8) | 0177;
                     return;
                 }
-                p->p_flag = &~(STRC | SWTED);
+                p->p_flag &= ~(STRC | SWTED);
                 setrun(p);
             }
         }

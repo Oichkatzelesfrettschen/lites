@@ -46,7 +46,7 @@ closef(fp) int *fp;
     rfp = fp;
     if (rfp->f_flag & FPIPE) {
         ip = rfp->f_inode;
-        ip->i_mode = &~(IREAD | IWRITE);
+        ip->i_mode &= ~(IREAD | IWRITE);
         wakeup(ip + 1);
         wakeup(ip + 2);
     }

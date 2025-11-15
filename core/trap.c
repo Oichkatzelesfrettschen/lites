@@ -24,7 +24,7 @@ struct sysent {
  * Offsets of the user's registers relative to
  * the saved r0. See reg.h
  */
-char regloc[9]{R0, R1, R2, R3, R4, R5, R6, R7, RPS};
+char regloc[9] = {R0, R1, R2, R3, R4, R5, R6, R7, RPS};
 
 /*
  * Called from l40.s or l45.s when a processor trap occurs.
@@ -42,7 +42,7 @@ trap(dev, sp, r1, nps, r0, pc, ps) {
 
     savfp();
     if ((ps & UMODE) == UMODE)
-        dev = | USER;
+        dev |= USER;
     u.u_ar0 = &r0;
     switch (dev) {
 
@@ -95,7 +95,7 @@ trap(dev, sp, r1, nps, r0, pc, ps) {
 
     case 6 + USER: /* sys call */
         u.u_error = 0;
-        ps = &~EBIT;
+        ps &= ~EBIT;
         callp = &sysent[fuiword(pc - 2) & 077];
         if (callp == sysent) { /* indirect */
             a = fuiword(pc);
@@ -118,7 +118,7 @@ trap(dev, sp, r1, nps, r0, pc, ps) {
             u.u_error = EINTR;
         if (u.u_error < 100) {
             if (u.u_error) {
-                ps = | EBIT;
+                ps |= EBIT;
                 r0 = u.u_error;
             }
             goto out;

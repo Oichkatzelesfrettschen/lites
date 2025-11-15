@@ -101,7 +101,7 @@ unlink() {
     u.u_dent.u_ino = 0;
     writei(pp);
     ip->i_nlink--;
-    ip->i_flag = | IUPD;
+    ip->i_flag |= IUPD;
 
 out:
     iput(pp);
@@ -133,11 +133,11 @@ chmod() {
 
     if ((ip = owner()) == NULL)
         return;
-    ip->i_mode = &~07777;
+    ip->i_mode &= ~07777;
     if (u.u_uid)
-        u.u_arg[1] = &~ISVTX;
-    ip->i_mode = | u.u_arg[1] & 07777;
-    ip->i_flag = | IUPD;
+        u.u_arg[1] &= ~ISVTX;
+    ip->i_mode |= u.u_arg[1] & 07777;
+    ip->i_flag |= IUPD;
     iput(ip);
 }
 
@@ -148,7 +148,7 @@ chown() {
         return;
     ip->i_uid = u.u_arg[1].lobyte;
     ip->i_gid = u.u_arg[1].hibyte;
-    ip->i_flag = | IUPD;
+    ip->i_flag |= IUPD;
     iput(ip);
 }
 

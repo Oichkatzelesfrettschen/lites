@@ -121,7 +121,7 @@ smount() {
     smp->s_flock = 0;
     smp->s_ronly = u.u_arg[2] & 1;
     brelse(mp);
-    ip->i_flag = | IMOUNT;
+    ip->i_flag |= IMOUNT;
     prele(ip);
     return;
 
@@ -157,7 +157,7 @@ found:
         }
     (*bdevsw[d.d_major].d_close)(d, 0);
     ip = mp->m_inodp;
-    ip->i_flag = &~IMOUNT;
+    ip->i_flag &= ~IMOUNT;
     iput(ip);
     ip = mp->m_bufp;
     mp->m_bufp = NULL;

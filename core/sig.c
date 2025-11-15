@@ -145,7 +145,7 @@ psig() {
         suword(n + 2, u.u_ar0[RPS]);
         suword(n, u.u_ar0[R7]);
         u.u_ar0[R6] = n;
-        u.u_ar0[RPS] = &~TBIT;
+        u.u_ar0[RPS] &= ~TBIT;
         u.u_ar0[R7] = p;
         return;
     }
@@ -246,7 +246,7 @@ ptrace() {
     register struct proc *p;
 
     if (u.u_arg[2] <= 0) {
-        u.u_procp->p_flag = | STRC;
+        u.u_procp->p_flag |= STRC;
         return;
     }
     for (p = proc; p < &proc[NPROC]; p++)
@@ -262,7 +262,7 @@ found:
     ipc.ip_data = u.u_ar0[R0];
     ipc.ip_addr = u.u_arg[1] & ~01;
     ipc.ip_req = u.u_arg[2];
-    p->p_flag = &~SWTED;
+    p->p_flag &= ~SWTED;
     setrun(p);
     while (ipc.ip_req > 0)
         sleep(&ipc, IPCPRI);
@@ -336,8 +336,8 @@ procxmt() {
         goto error;
     ok:
         if (p == &u.u_ar0[RPS]) {
-            ipc.ip_data = | 0170000; /* assure user space */
-            ipc.ip_data = &~0340;    /* priority 0 */
+            ipc.ip_data |= 0170000; /* assure user space */
+            ipc.ip_data &= ~0340;    /* priority 0 */
         }
         *p = ipc.ip_data;
         break;
