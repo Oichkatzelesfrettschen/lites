@@ -69,11 +69,26 @@ typedef	long		segsz_t;	/* segment size */
 typedef	long		swblk_t;	/* swap offset */
 typedef	unsigned long	uid_t;		/* user id */
 
-/* Time types */
+/* Time types - guard against system header conflicts */
+#ifndef _CLOCK_T_DEFINED_
+#define _CLOCK_T_DEFINED_
 typedef	long		clock_t;	/* clock ticks */
+#endif
+
+#ifndef _SIZE_T_DEFINED_
+#define _SIZE_T_DEFINED_
 typedef	unsigned long	size_t;		/* size of objects */
+#endif
+
+#ifndef _SSIZE_T_DEFINED_
+#define _SSIZE_T_DEFINED_
 typedef	long		ssize_t;	/* signed size */
+#endif
+
+#ifndef _TIME_T_DEFINED_
+#define _TIME_T_DEFINED_
 typedef	long		time_t;		/* time in seconds */
+#endif
 
 #ifndef _POSIX_SOURCE
 /* Bit manipulation for device numbers */
