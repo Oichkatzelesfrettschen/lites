@@ -1,399 +1,282 @@
 # Docker Development Environment for Lites i386
 
-This directory contains Docker-based development environment for building and running Lites on i386 architecture inside QEMU, all within a Docker container.
+WHY: Containerized development environment provides reproducible builds across
+     platforms with all dependencies pre-configured.
 
-## Overview
+WHAT: Complete Docker-based toolchain for building and testing Lites on i386
+      architecture with QEMU emulation.
 
-The Docker environment provides:
+HOW: Use docker compose v2 with provided scripts and Make targets.
 
-- **Complete i386 toolchain** with GCC multilib support
-- **GNU Mach and Hurd development tools** including MIG (Mach Interface Generator)
-- **QEMU i386 emulation** with optional KVM acceleration
-- **Pre-configured build environment** optimized for i386 builds
-- **Convenient scripts** for building and running Lites
+---
+
+## Quick Start
+
+```bash
+# Complete workflow (5 minutes)
+make -f Makefile.docker docker-all
+
+# Individual steps
+make -f Makefile.docker docker-build        # Build image (first time only)
+make -f Makefile.docker docker-build-lites  # Compile Lites
+make -f Makefile.docker docker-run-qemu     # Run in QEMU
+
+# Development shell
+make -f Makefile.docker docker-shell
+```
+
+## What This Provides
+
+- **Pre-configured i386 toolchain**: GCC multilib, MIG, QEMU, CMake/Ninja
+- **Nested virtualization**: QEMU i386 runs inside Docker container
+- **Automated build scripts**: One command to build and test
+- **KVM acceleration support**: 10-50x faster emulation when available
+- **Persistent caching**: ccache for faster incremental builds
+- **Cross-platform**: Works on Linux, macOS, Windows with Docker Desktop
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│           Host Machine                      │
-│                                             │
-│  ┌───────────────────────────────────────┐ │
-│  │   Docker Container                    │ │
-│  │                                       │ │
-│  │  ┌─────────────────────────────────┐ │ │
-│  │  │  QEMU i386 Instance             │ │ │
-│  │  │                                 │ │ │
-│  │  │  ┌───────────────────────────┐ │ │ │
-│  │  │  │  Lites i386 Kernel        │ │ │ │
-│  │  │  │  (Built with MIG)         │ │ │ │
-│  │  │  └───────────────────────────┘ │ │ │
-│  │  └─────────────────────────────────┘ │ │
-│  │                                       │ │
-│  │  Build Tools:                         │ │
-│  │  - GCC i686-linux-gnu                │ │
-│  │  - MIG (Mach Interface Generator)    │ │
-│  │  - CMake/Ninja                       │ │
-│  │  - QEMU system-i386                  │ │
-│  └───────────────────────────────────────┘ │
-└─────────────────────────────────────────────┘
+Host System
+  └─ Docker Container (Debian Bookworm)
+      ├─ i686-linux-gnu toolchain (GCC 12+)
+      ├─ MIG (Mach Interface Generator)
+      ├─ QEMU system-i386
+      └─ QEMU i386 Virtual Machine
+          └─ Lites Kernel (4.4BSD on Mach)
 ```
 
-## Quick Start
-
-### Prerequisites
-
-- Docker Engine 20.10 or later
-- Docker Compose v2 or later (or docker-compose)
-- At least 4GB of free disk space
-- Optional: KVM support for hardware acceleration
-
-### Build and Run
-
-1. **Build the Docker image:**
-   ```bash
-   docker compose -f docker/docker-compose.yml build
-   ```
-
-2. **Enter the development container:**
-   ```bash
-   docker/scripts/docker-shell.sh
-   ```
-
-3. **Build Lites for i386:**
-   ```bash
-   # Inside the container
-   docker/scripts/build-lites-i386.sh
-   ```
-
-4. **Run in QEMU:**
-   ```bash
-   # Inside the container
-   docker/scripts/run-qemu-i386.sh
-   ```
-
-### One-liner for Quick Testing
-
-From the repository root on your host:
-
-```bash
-# Build image, enter container, build Lites, and run in QEMU
-docker compose -f docker/docker-compose.yml run --rm lites-i386-dev bash -c "
-  docker/scripts/build-lites-i386.sh && 
-  docker/scripts/run-qemu-i386.sh
-"
-```
-
-## Files and Structure
+## Directory Structure
 
 ```
 docker/
-├── Dockerfile.i386-dev          # Main Dockerfile with all dependencies
-├── docker-compose.yml           # Compose configuration for services
-├── scripts/
-│   ├── build-lites-i386.sh     # Build script for i386 Lites
-│   ├── run-qemu-i386.sh        # Launch QEMU with Lites kernel
-│   └── docker-shell.sh         # Convenience script to enter container
-└── README.md                    # This file
+├── README.md                    # This file (overview and quick reference)
+├── DOCKER_GUIDE.md             # Comprehensive Docker build and development guide
+├── CI_CD.md                    # GitHub Actions and automation workflows
+├── TROUBLESHOOTING.md          # Common issues and solutions
+├── Dockerfile.i386-dev         # Docker image definition
+├── docker-compose.yml          # Container orchestration (v2)
+└── scripts/
+    ├── build-lites-i386.sh     # Build automation
+    ├── run-qemu-i386.sh        # QEMU launcher with KVM detection
+    ├── docker-shell.sh         # Container entry helper
+    ├── create-bootable-image.sh    # Bootable disk image creation
+    ├── convert-img-to-qcow2.sh     # Image format conversion
+    └── [additional scripts]
 ```
 
-## Docker Services
+## Documentation Guide
 
-The `docker-compose.yml` defines two services:
+**New to Docker?** → Start with @./DOCKER_GUIDE.md#quick-start
 
-### 1. lites-i386-dev (Development Container)
+**Setting up CI/CD?** → See @./CI_CD.md
 
-Interactive development environment with all build tools.
+**Build failing?** → Check @./TROUBLESHOOTING.md
 
-**Start the service:**
+**Advanced topics?** → See @./DOCKER_GUIDE.md#advanced-usage
+
+## Common Commands
+
+### Build Operations
+
 ```bash
-docker compose -f docker/docker-compose.yml up -d lites-i386-dev
-```
-
-**Enter the container:**
-```bash
-docker compose -f docker/docker-compose.yml exec lites-i386-dev bash
-```
-
-Or use the convenience script:
-```bash
+# Enter container for interactive development
 docker/scripts/docker-shell.sh
+
+# Inside container: build Lites
+docker/scripts/build-lites-i386.sh --clean -j 8
+
+# Clean build (remove all build artifacts)
+make -f Makefile.docker docker-clean
 ```
 
-### 2. lites-qemu-i386 (QEMU Runner)
-
-Pre-configured to automatically run Lites in QEMU when started.
-
-**Start the service:**
-```bash
-docker compose -f docker/docker-compose.yml up lites-qemu-i386
-```
-
-This will automatically:
-1. Start the container
-2. Launch QEMU i386
-3. Boot the Lites kernel
-
-## Detailed Usage
-
-### Building Lites
-
-The `build-lites-i386.sh` script supports multiple options:
+### QEMU Operations
 
 ```bash
-# Clean build with CMake (default)
-docker/scripts/build-lites-i386.sh --clean
-
-# Use Makefile.new instead of CMake
-docker/scripts/build-lites-i386.sh --make
-
-# Parallel build with 8 jobs
-docker/scripts/build-lites-i386.sh -j 8
-
-# Show help
-docker/scripts/build-lites-i386.sh --help
-```
-
-**Environment variables:**
-- `ARCH`: Target architecture (default: i686)
-- `BUILD_DIR`: Build output directory
-- `LITES_MACH_DIR`: Mach kernel headers location
-- `SRCDIR`: Lites source directory
-
-### Running in QEMU
-
-The `run-qemu-i386.sh` script provides flexible QEMU configuration:
-
-```bash
-# Basic usage
+# Run with default settings
 docker/scripts/run-qemu-i386.sh
 
 # With more memory
 docker/scripts/run-qemu-i386.sh -m 512M
 
-# Force KVM acceleration
-docker/scripts/run-qemu-i386.sh --kvm
-
-# Enable GDB debugging on port 1234
+# Enable GDB debugging
 docker/scripts/run-qemu-i386.sh --gdb 1234
 
-# Use VNC display
+# With VNC display
 docker/scripts/run-qemu-i386.sh --vnc
-
-# Show help
-docker/scripts/run-qemu-i386.sh --help
 ```
 
-**QEMU Features:**
-- Serial console on stdio
-- Optional VNC display on port 5900
-- Optional GDB server for kernel debugging
-- Optional QEMU monitor on telnet port 4444
-- KVM acceleration when available
-
-### Development Workflow
-
-Typical development workflow inside the container:
+### Image Management
 
 ```bash
-# 1. Enter the container
-docker/scripts/docker-shell.sh
+# Build bootable disk image
+make -f Makefile.docker docker-bootimg
 
-# 2. Make code changes (files are mounted from host)
-vim core/some_file.c
-
-# 3. Build
-docker/scripts/build-lites-i386.sh
-
-# 4. Test in QEMU
-docker/scripts/run-qemu-i386.sh
-
-# 5. Debug if needed
-docker/scripts/run-qemu-i386.sh --gdb 1234
-# In another terminal:
-gdb build-i386/lites_server
-(gdb) target remote localhost:1234
-(gdb) continue
+# Convert to QCOW2 format
+make -f Makefile.docker docker-qcow2
 ```
 
-## Environment Details
+## Environment Variables
 
-### Installed Tools
-
-The Docker image includes:
-
-**Build Tools:**
-- GCC 12.x with multilib support
-- Clang/LLVM
-- CMake 3.25+
-- Ninja build system
-- Make, Autotools
-
-**Mach/Hurd Tools:**
-- MIG (Mach Interface Generator)
-- GNU Mach headers
-- Hurd development headers
-
-**Cross-compilation:**
-- i686-linux-gnu toolchain
-- Binutils for i386
-
-**Debugging:**
-- GDB with multiarch support
-- QEMU with debugging capabilities
-
-**Other:**
-- tmux for session management
-- ccache for faster rebuilds
-
-### Environment Variables
-
-Inside the container, these are pre-configured:
+Pre-configured in the container:
 
 ```bash
-ARCH=i686
-CC="ccache gcc"
-CXX="ccache g++"
-CFLAGS="-m32 -march=i386 -mtune=i386"
-CXXFLAGS="-m32 -march=i386 -mtune=i386"
-LDFLAGS="-m32"
+ARCH=i686                          # Target architecture
+CC="ccache gcc"                    # C compiler with caching
+CFLAGS="-m32 -march=i386 -mtune=i386"  # i386-specific flags
+LITES_MACH_DIR=/opt/mach/osfmk/kernel/src  # Mach headers location
 ```
 
-## Troubleshooting
-
-### KVM Not Available
-
-If you see "KVM acceleration: not available":
-
-1. **Check host CPU virtualization:**
-   ```bash
-   egrep -c '(vmx|svm)' /proc/cpuinfo
-   ```
-   Should return > 0.
-
-2. **Ensure KVM modules are loaded:**
-   ```bash
-   lsmod | grep kvm
-   ```
-
-3. **Run container with KVM access:**
-   ```bash
-   docker compose -f docker/docker-compose.yml run --privileged --device /dev/kvm lites-i386-dev
-   ```
-
-4. **Nested virtualization:** If running inside a VM, enable nested virtualization in the hypervisor settings.
-
-### Build Failures
-
-**Missing Mach headers:**
-```bash
-# Clone OpenMach into the repository root
-git clone https://github.com/machkernel/openmach.git openmach
-
-# Or use the import script
-scripts/import-mach-headers.sh
-```
-
-**Multilib issues:**
-```bash
-# Ensure 32-bit libraries are installed
-apt-get install gcc-multilib g++-multilib
-```
-
-### QEMU Issues
-
-**Kernel not found:**
-```bash
-# Make sure you've built Lites first
-docker/scripts/build-lites-i386.sh
-
-# Verify the binary exists
-ls -la build-i386/lites_server
-```
-
-**Executable stack warnings:**
-The build scripts automatically add `-Wl,-z,noexecstack` to prevent this.
-
-**Serial console issues:**
-Use `-nographic` mode (default) for reliable serial output.
-
-## Advanced Usage
-
-### Custom Dockerfile
-
-To extend the Docker image:
-
-```dockerfile
-FROM lites-i386-dev:latest
-
-# Add custom tools
-RUN apt-get update && apt-get install -y \
-    your-package-here
-
-# Add custom scripts
-COPY my-scripts/ /usr/local/bin/
-```
-
-### Persistent Volumes
-
-The docker-compose.yml creates volumes for:
-- `ccache-i386`: Compiler cache (faster rebuilds)
-- `build-i386`: Build artifacts
-- `qemu-images`: QEMU disk images
-
-To reset:
-```bash
-docker compose -f docker/docker-compose.yml down -v
-```
-
-### Using with CI/CD
-
-Example GitLab CI configuration:
-
-```yaml
-build-lites-i386:
-  image: lites-i386-dev:latest
-  script:
-    - docker/scripts/build-lites-i386.sh
-  artifacts:
-    paths:
-      - build-i386/
-```
-
-### Networking in QEMU
-
-To enable networking in the QEMU instance:
+Override as needed:
 
 ```bash
-# User-mode networking
-docker/scripts/run-qemu-i386.sh -netdev user,id=net0 -device e1000,netdev=net0
+# Custom build directory
+export BUILD_DIR=/workspace/custom-build
 
-# With port forwarding (SSH on port 2222)
-docker/scripts/run-qemu-i386.sh -netdev user,id=net0,hostfwd=tcp::2222-:22
+# Different architecture target
+export ARCH=x86_64
 ```
+
+## Docker Compose v2 Syntax
+
+This project uses modern Docker Compose v2 (not legacy v1):
+
+```bash
+# Correct (v2)
+docker compose version
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml run --rm lites-i386-dev bash
+
+# Legacy v1 (not used)
+docker-compose version
+docker-compose -f docker/docker-compose.yml build
+```
+
+## Prerequisites
+
+- **Docker Engine**: 20.10 or later
+- **Docker Compose**: v2 (included with Docker Desktop)
+- **Disk space**: 5-10 GB free
+- **Optional**: KVM support for acceleration (Linux only)
+
+### Verify Setup
+
+```bash
+# Check Docker version
+docker --version            # Should be 20.10+
+
+# Check Compose v2
+docker compose version      # Should be v2.x+
+
+# Check available space
+df -h                       # Need 5+ GB free
+
+# Check KVM (Linux only, optional)
+ls -l /dev/kvm             # If exists, KVM available
+```
+
+## System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| Docker | 20.10+ | Latest stable |
+| RAM | 4 GB | 8 GB+ |
+| Disk | 5 GB | 10 GB+ |
+| CPU | 2 cores | 4+ cores |
 
 ## Performance Tips
 
-1. **Use KVM acceleration** when available (massive speedup)
-2. **Enable ccache** (already configured in the image)
-3. **Use Ninja** instead of Make for faster builds
-4. **Increase parallel jobs:** `-j $(nproc)`
-5. **Use persistent volumes** to cache builds
+1. **Enable KVM acceleration** (Linux): 10-50x faster QEMU
+2. **Use parallel builds**: `-j $(nproc)` flag
+3. **Persistent volumes**: Docker Compose volumes cache builds
+4. **ccache**: Already enabled in container for incremental builds
+5. **SSD storage**: Significantly faster than HDD
+
+## Typical Workflows
+
+### Daily Development
+
+```bash
+# 1. Edit code on host (files mounted in container)
+vim core/myfile.c
+
+# 2. Rebuild in container (fast with ccache)
+make -f Makefile.docker docker-build-lites
+
+# 3. Test in QEMU
+make -f Makefile.docker docker-run-qemu
+```
+
+### Debugging Session
+
+```bash
+# Terminal 1: Start QEMU with GDB server
+make -f Makefile.docker docker-gdb
+
+# Terminal 2: Connect GDB
+docker/scripts/docker-shell.sh
+gdb build-i386/lites_server
+(gdb) target remote localhost:1234
+(gdb) break main
+(gdb) continue
+```
+
+### CI/CD Integration
+
+See @./CI_CD.md for complete GitHub Actions and GitLab CI examples.
+
+```bash
+# One-liner for CI (build, test, validate)
+docker compose -f docker/docker-compose.yml run --rm lites-i386-dev \
+  bash -c "docker/scripts/build-lites-i386.sh && docker/scripts/test-docker-build.sh"
+```
+
+## Quick Troubleshooting
+
+**Build fails: Mach headers not found**
+```bash
+# Headers are pre-installed at /opt/mach/osfmk in container
+# If missing, rebuild image:
+make -f Makefile.docker docker-build --no-cache
+```
+
+**KVM not available**
+```bash
+# Check host has KVM
+ls -l /dev/kvm
+
+# Run container with KVM device
+docker compose -f docker/docker-compose.yml run \
+  --device /dev/kvm:/dev/kvm lites-i386-dev
+```
+
+**QEMU won't start**
+```bash
+# Verify kernel binary exists
+ls -l build-i386/lites_server
+
+# Check file type
+file build-i386/lites_server    # Should be: ELF 32-bit LSB executable, Intel 80386
+```
+
+For more issues, see @./TROUBLESHOOTING.md
 
 ## References
 
-- [GNU Mach Building Guide](https://www.gnu.org/software/hurd/microkernel/mach/gnumach/building.html)
-- [QEMU User Documentation](https://www.qemu.org/docs/master/system/target-i386.html)
-- [Docker Multi-platform Builds](https://docs.docker.com/build/building/multi-platform/)
-- [Lites Documentation](../docs/INDEX.md)
+- **Lites Project**: @../README.md (main repository documentation)
+- **Docker Guide**: @./DOCKER_GUIDE.md (comprehensive reference)
+- **CI/CD Setup**: @./CI_CD.md (automation workflows)
+- **Troubleshooting**: @./TROUBLESHOOTING.md (common problems)
+- **Mach Documentation**: https://www.gnu.org/software/hurd/microkernel/mach/gnumach.html
+- **QEMU Documentation**: https://www.qemu.org/docs/master/system/target-i386.html
 
-## See Also
+## Getting Help
 
-- [Main README](../README.md) - Repository overview
-- [Setup Guide](../docs/setup.md) - Host setup instructions
-- [Architecture](../docs/ARCHITECTURE.md) - Lites architecture details
-- [QEMU Scripts](../scripts/run-qemu.sh) - Alternative QEMU runner
+- **Issues**: https://github.com/Oichkatzelesfrettschen/lites/issues
+- **Discussions**: https://github.com/Oichkatzelesfrettschen/lites/discussions
 
-## License
+---
 
-Same as the main Lites repository. See [LICENSE](../LICENSE) for details.
+**License**: Same as main Lites repository (see @../LICENSE)
+
+**Last Updated**: 2025-11-14 (documentation consolidation)

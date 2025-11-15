@@ -1,4 +1,4 @@
-#include "../../include/cap.h"
+#include <cap.h>
 #include <stdlib.h>
 #include "auth.h"
 
