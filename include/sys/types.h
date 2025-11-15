@@ -101,6 +101,82 @@ typedef	long		ssize_t;	/* signed size */
 typedef	long		time_t;		/* time in seconds */
 #endif
 
+/*
+ * Modern integer types for KERNEL compatibility
+ * These types are needed by modern code that expects stdint.h types
+ */
+#ifdef KERNEL
+
+/* Fixed-width unsigned integer types */
+#ifndef _UINT8_T_DEFINED_
+#define _UINT8_T_DEFINED_
+typedef unsigned char       uint8_t;
+typedef unsigned char       u_int8_t;
+#endif
+
+#ifndef _UINT16_T_DEFINED_
+#define _UINT16_T_DEFINED_
+typedef unsigned short      uint16_t;
+typedef unsigned short      u_int16_t;
+#endif
+
+#ifndef _UINT32_T_DEFINED_
+#define _UINT32_T_DEFINED_
+typedef unsigned int        uint32_t;
+typedef unsigned int        u_int32_t;
+#endif
+
+#ifndef _UINT64_T_DEFINED_
+#define _UINT64_T_DEFINED_
+typedef unsigned long long  uint64_t;
+typedef unsigned long long  u_int64_t;
+#endif
+
+/* Fixed-width signed integer types */
+#ifndef _INT8_T_DEFINED_
+#define _INT8_T_DEFINED_
+typedef signed char         int8_t;
+#endif
+
+#ifndef _INT16_T_DEFINED_
+#define _INT16_T_DEFINED_
+typedef signed short        int16_t;
+#endif
+
+#ifndef _INT32_T_DEFINED_
+#define _INT32_T_DEFINED_
+typedef signed int          int32_t;
+#endif
+
+#ifndef _INT64_T_DEFINED_
+#define _INT64_T_DEFINED_
+typedef signed long long    int64_t;
+#endif
+
+/* Linux kernel compatibility types (little-endian) */
+#ifndef _LE_TYPES_DEFINED_
+#define _LE_TYPES_DEFINED_
+typedef unsigned short      __le16;
+typedef unsigned int        __le32;
+typedef unsigned long long  __le64;
+typedef signed short        __s16;
+typedef signed int          __s32;
+typedef signed long long    __s64;
+typedef unsigned short      __u16;
+typedef unsigned int        __u32;
+typedef unsigned long long  __u64;
+#endif
+
+/* Big-endian types for completeness */
+#ifndef _BE_TYPES_DEFINED_
+#define _BE_TYPES_DEFINED_
+typedef unsigned short      __be16;
+typedef unsigned int        __be32;
+typedef unsigned long long  __be64;
+#endif
+
+#endif /* KERNEL */
+
 #ifndef _POSIX_SOURCE
 /* Bit manipulation for device numbers */
 #define	major(x)	((int)(((u_int)(x) >> 8)&0xff))	/* major number */

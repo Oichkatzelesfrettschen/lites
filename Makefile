@@ -56,6 +56,17 @@ CFLAGS ?= -O2 $(C17_FLAG)
 CFLAGS += -Wall -Wextra
 # Define KERNEL for BSD kernel compilation
 CFLAGS += -DKERNEL
+
+# System header isolation for kernel builds (Phase 10.2)
+# Prevent conflicts between BSD and system headers (uid_t, pid_t, etc.)
+# -nostdinc: Don't use standard system include directories
+CFLAGS += -nostdinc
+# Re-add compiler's internal include directory for stddef.h, stdarg.h, etc.
+GCC_INCLUDE := $(shell $(CC) -print-file-name=include)
+ifneq ($(GCC_INCLUDE),include)
+CFLAGS += -I$(GCC_INCLUDE)
+endif
+
 # K&R compatibility flags - allow legacy code to build
 # These will be removed after systematic ANSI-fication
 CFLAGS += -Wno-implicit-int
