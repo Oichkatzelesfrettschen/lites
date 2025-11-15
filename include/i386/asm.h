@@ -54,4 +54,10 @@
 #define DATA_SECTION .data
 #define BSS .bss
 
+/*
+ * System call instruction
+ * SVC (Supervisor Call) - triggers int 0x80 for Unix system calls
+ */
+#define SVC int $0x80
+
 #endif /* _I386_ASM_H_ */
