@@ -1,5 +1,16 @@
 /*	proc.h	6.1	83/07/29	*/
 
+/* Include required types */
+#ifndef KERNEL
+#include <sys/types.h>
+#include <sys/time.h>
+#else
+#ifndef LOCORE
+#include "types.h"
+#include "time.h"
+#endif
+#endif
+
 /*
  * One structure allocated per active
  * process. It contains all data needed

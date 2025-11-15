@@ -1,10 +1,10 @@
 /*	user.h	6.2	83/11/21	*/
 
 #ifdef KERNEL
-#include "../machine/pcb.h"
-#include "../h/dmap.h"
-#include "../h/time.h"
-#include "../h/resource.h"
+#include "machine/pcb.h"
+#include "dmap.h"
+#include "time.h"
+#include "resource.h"
 #else
 #include <machine/pcb.h>
 #include <sys/dmap.h>

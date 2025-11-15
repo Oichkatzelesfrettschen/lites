@@ -9,7 +9,13 @@
  */
 
 /* Include types for compilation */
+#ifndef KERNEL
 #include <sys/types.h>
+#else
+#ifndef LOCORE
+#include "types.h"
+#endif
+#endif
 
 /* Legacy BSD quad type */
 typedef	long long	quad;

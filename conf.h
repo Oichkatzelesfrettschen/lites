@@ -1,5 +1,14 @@
 /*	conf.h	6.1	83/07/29	*/
 
+/* Include types for dev_t */
+#ifndef KERNEL
+#include <sys/types.h>
+#else
+#ifndef LOCORE
+#include "types.h"
+#endif
+#endif
+
 /*
  * Declaration of block device
  * switch. Each entry (row) is

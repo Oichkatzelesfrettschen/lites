@@ -1,6 +1,10 @@
 /*	file.h	6.2	83/09/23	*/
 
 #ifdef KERNEL
+#ifndef LOCORE
+#include "types.h"
+#endif
+
 /*
  * Descriptor table entry.
  * One for each kernel object.

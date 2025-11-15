@@ -54,6 +54,8 @@ CFLAGS ?= -O2 $(C17_FLAG)
 # Note: -Werror disabled for Items1 legacy source (K&R function declarations)
 # Note: -pedantic removed to allow GCC extensions and K&R syntax
 CFLAGS += -Wall -Wextra
+# Define KERNEL for BSD kernel compilation
+CFLAGS += -DKERNEL
 # Harden binaries by disallowing executable stacks by appending the
 # noexecstack flag to the existing linker options. This ensures the
 # generated binaries do not allow execution from the stack.

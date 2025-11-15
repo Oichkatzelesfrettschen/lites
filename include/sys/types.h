@@ -39,15 +39,13 @@
 
 #include <sys/cdefs.h>
 
-/* Basic unsigned types */
-#ifndef _POSIX_SOURCE
+/* Basic unsigned types - always defined for BSD kernel */
 typedef	unsigned char	u_char;
 typedef	unsigned short	u_short;
 typedef	unsigned int	u_int;
 typedef	unsigned long	u_long;
 typedef	unsigned short	ushort;		/* Sys V compatibility */
 typedef	unsigned int	uint;		/* Sys V compatibility */
-#endif
 
 /* Quad types for large integers */
 typedef	unsigned long long u_quad_t;	/* quads */

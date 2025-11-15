@@ -1,13 +1,18 @@
 /*	param.h	6.2	83/09/24	*/
 
+/* Include types first - needed for dev_t and other types used below */
+#ifndef KERNEL
+#include <sys/types.h>
+#else
+#ifndef LOCORE
+#include "types.h"
+#endif
+#endif
+
 /*
  * Machine type dependent parameters.
  */
-#ifdef KERNEL
-#include "../machine/param.h"
-#else
-#include <machine/param.h>
-#endif
+#include "machine/param.h"
 
 #define	NPTEPG		(NBPG/(sizeof (struct pte)))
 
@@ -45,11 +50,7 @@
 /*
  * Signals
  */
-#ifdef KERNEL
-#include "../h/signal.h"
-#else
 #include <signal.h>
-#endif
 
 #define	ISSIG(p) \
 	((p)->p_sig && ((p)->p_flag&STRC || \
@@ -98,14 +99,6 @@
 
 #define	CBSIZE	28		/* number of chars in a clist block */
 #define	CROUND	0x1F		/* clist rounding; sizeof(int *) + CBSIZE -1*/
-
-#ifndef KERNEL
-#include	<sys/types.h>
-#else
-#ifndef LOCORE
-#include	"../h/types.h"
-#endif
-#endif
 
 /*
  * File system parameters and macros.

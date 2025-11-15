@@ -21,6 +21,15 @@
  * pointers to keep track of them in their i/o active queues.
  */
 
+/* Include types for dev_t, caddr_t, daddr_t */
+#ifndef KERNEL
+#include <sys/types.h>
+#else
+#ifndef LOCORE
+#include "types.h"
+#endif
+#endif
+
 /*
  * Bufhd structures used at the head of the hashed buffer queues.
  * We only need three words for these, so this abbreviated
