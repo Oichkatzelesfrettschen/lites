@@ -8,6 +8,12 @@
  * Data in icommon is read in from permanent inode on volume.
  */
 
+/* Include types for compilation */
+#include <sys/types.h>
+
+/* Legacy BSD quad type */
+typedef	long long	quad;
+
 #define	NDADDR	12		/* direct addresses in inode */
 #define	NIADDR	3		/* indirect addresses in inode */
 
