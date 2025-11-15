@@ -38,6 +38,11 @@
  *	@(#)systm.h	8.4 (Berkeley) 2/23/94
  */
 
+#ifndef _SYS_SYSTM_H_
+#define _SYS_SYSTM_H_
+
+#include <sys/cdefs.h>
+
 /*
  * The `securelevel' variable controls the security level of the system.
  * It can only be decreased by process 1 (/sbin/init).
@@ -158,4 +163,149 @@ void	startprofclock __P((struct proc *));
 void	stopprofclock __P((struct proc *));
 void	setstatclockrate __P((int hzrate));
 
+/*
+ * Process management functions
+ */
+int	issig __P((void));
+void	psig __P((void));
+void	setpri __P((struct proc *));
+int	grow __P((unsigned));
+void	sleep __P((void *chan, int pri));
+void	wakeup __P((void *chan));
+void	wakeup_one __P((void *chan));
+int	tsleep __P((void *chan, int pri, const char *wmesg, int timo));
+void	unsleep __P((struct proc *));
+void	setrun __P((struct proc *));
+void	swtch __P((void));
+void	cpu_switch __P((struct proc *));
+int	procxmt __P((void));
+
+/*
+ * Signal handling functions
+ */
+void	savfp __P((void));
+void	restfp __P((void));
+void	psignal __P((struct proc *, int));
+void	pgsignal __P((struct pgrp *, int, int));
+int	issignal __P((struct proc *));
+void	postsig __P((int));
+void	siginit __P((struct proc *));
+void	trapsignal __P((struct proc *, int, u_long));
+void	sigexit __P((struct proc *, int));
+int	sigprop __P((int));
+
+/*
+ * Memory management and address translation
+ */
+void	savu __P((label_t));
+int	backup __P((int *));
+void	setjmp __P((label_t));
+void	longjmp __P((label_t));
+int	savectx __P((void *));
+void	loadctx __P((void *));
+
+/*
+ * Low-level trap and interrupt handling
+ */
+void	trap __P((void));
+void	trap1 __P((int (*f)()));
+void	syscall __P((void));
+void	setrq __P((struct proc *));
+void	remrq __P((struct proc *));
+
+/*
+ * File system and I/O functions
+ */
+void	ihinit __P((void));
+void	bhinit __P((void));
+void	binit __P((void));
+void	iinit __P((void));
+void	bflush __P((int));
+void	bdwrite __P((struct buf *));
+void	bawrite __P((struct buf *));
+void	brelse __P((struct buf *));
+void	bwrite __P((struct buf *));
+void	biodone __P((struct buf *));
+void	biowait __P((struct buf *));
+int	bread __P((struct vnode *, daddr_t, int, struct ucred *, struct buf **));
+int	breada __P((struct vnode *, daddr_t, int, daddr_t, int, struct ucred *, struct buf **));
+struct buf *getblk __P((struct vnode *, daddr_t, int, int, int));
+struct buf *geteblk __P((int));
+struct buf *incore __P((struct vnode *, daddr_t));
+
+/*
+ * Scheduling and resource management
+ */
+void	schedcpu __P((void));
+void	schedpaging __P((void));
+void	roundrobin __P((void *));
+void	schedclock __P((struct proc *));
+void	setpriority __P((struct proc *, int));
+
+/*
+ * Device management
+ */
+int	nodev __P((void));
+int	nulldev __P((void));
+int	enodev __P((void));
+int	nxio __P((void));
+void	nxmove __P((void));
+
+/*
+ * Kernel initialization and system setup
+ */
+void	configure __P((void));
+void	cpu_startup __P((void));
+void	consinit __P((void));
+void	swapinit __P((void));
+void	cninit __P((void));
+
+/*
+ * Utility functions
+ */
+void	_insque __P((void *, void *));
+void	_remque __P((void *));
+int	scanc __P((u_int, u_char *, u_char *, int));
+int	skpc __P((int, int, char *));
+int	locc __P((int, char *, u_int));
+int	ffs __P((int));
+void	microtime __P((struct timeval *));
+void	get_time __P((struct timeval *));
+void	set_time __P((struct timeval *));
+int	imax __P((int, int));
+int	imin __P((int, int));
+long	lmax __P((long, long));
+long	lmin __P((long, long));
+u_int	max __P((u_int, u_int));
+u_int	min __P((u_int, u_int));
+int	abs __P((int));
+long	labs __P((long));
+
+/*
+ * Random number generation
+ */
+void	srandom __P((u_long));
+long	random __P((void));
+
+/*
+ * Quota management
+ */
+void	dqinit __P((void));
+
+/*
+ * Network protocol functions
+ */
+void	pfctlinput __P((int, struct sockaddr *));
+void	pfslowtimo __P((void));
+void	pffasttimo __P((void));
+
+/*
+ * VM and paging functions
+ */
+void	vmmeter __P((void));
+void	vmtotal __P((struct vmtotal *));
+void	vmsched __P((void));
+
 #include <libkern/libkern.h>
+
+#endif /* !_SYS_SYSTM_H_ */

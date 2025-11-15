@@ -199,6 +199,16 @@
 #endif
 
 /*
+ * The __P macro is used for function prototypes in a way that works
+ * with both ANSI C and K&R C compilers.
+ */
+#if defined(__STDC__) || defined(__cplusplus)
+#define __P(protos) protos  /* ANSI C: use prototypes */
+#else
+#define __P(protos) ()      /* K&R C: empty prototype */
+#endif
+
+/*
  * Deprecated and used attribute macros
  */
 #if __has_attribute(deprecated) || __GNUC_PREREQ__(3, 1)
