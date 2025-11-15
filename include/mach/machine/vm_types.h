@@ -83,6 +83,11 @@ typedef	natural_t	vm_offset_t;
 typedef	natural_t	vm_size_t;
 
 /*
+ * vm_address_t is an alias for vm_offset_t
+ */
+typedef vm_offset_t	vm_address_t;
+
+/*
  * These types are _exactly_ as wide as indicated in their names.
  */
 typedef signed char		signed8_t;

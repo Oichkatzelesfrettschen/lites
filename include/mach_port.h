@@ -14,6 +14,16 @@
 #include <mach/port.h>
 #include <mach/kern_return.h>
 
+/* Message type name - used in MIG-generated code */
+typedef natural_t mach_msg_type_name_t;
+
+#define MACH_MSG_TYPE_MOVE_RECEIVE	16	/* Must hold receive rights */
+#define MACH_MSG_TYPE_MOVE_SEND		17	/* Must hold send rights */
+#define MACH_MSG_TYPE_MOVE_SEND_ONCE	18	/* Must hold sendonce rights */
+#define MACH_MSG_TYPE_COPY_SEND		19	/* Must hold send rights */
+#define MACH_MSG_TYPE_MAKE_SEND		20	/* Must hold receive rights */
+#define MACH_MSG_TYPE_MAKE_SEND_ONCE	21	/* Must hold receive rights */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

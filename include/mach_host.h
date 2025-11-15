@@ -14,6 +14,12 @@
 #include <mach/host_info.h>
 #include <mach/kern_return.h>
 
+/* Type definitions used by host operations - must be before function declarations */
+typedef char kernel_version_t[512];
+typedef int mach_clock_id_t;
+typedef mach_port_t mach_clock_t;
+typedef natural_t mach_msg_type_number_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,17 +37,11 @@ kern_return_t host_processor_info(host_t host, processor_flavor_t flavor,
                                   processor_info_array_t *out_processor_info,
                                   mach_msg_type_number_t *out_processor_infoCnt);
 
-kern_return_t host_get_clock_service(host_t host, clock_id_t clock_id,
-                                     clock_t *clock);
+kern_return_t host_get_clock_service(host_t host, mach_clock_id_t clock_id,
+                                     mach_clock_t *clock);
 
 #ifdef __cplusplus
 }
 #endif
-
-/* Type definitions used by host operations */
-typedef char kernel_version_t[512];
-typedef int clock_id_t;
-typedef mach_port_t clock_t;
-typedef natural_t mach_msg_type_number_t;
 
 #endif	/* _MACH_HOST_H_INTERFACE_ */
