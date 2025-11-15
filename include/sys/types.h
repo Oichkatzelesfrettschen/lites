@@ -52,6 +52,9 @@ typedef	unsigned long long u_quad_t;	/* quads */
 typedef	long long	quad_t;
 typedef	quad_t *	qaddr_t;
 
+/* setjmp/longjmp label type - BSD compatibility */
+typedef int		label_t[10];	/* setjmp buffer */
+
 /* Address and system types */
 typedef	char *		caddr_t;	/* core address */
 typedef	long		daddr_t;	/* disk address */
@@ -62,10 +65,20 @@ typedef	unsigned long	ino_t;		/* inode number */
 typedef	unsigned short	mode_t;		/* permissions */
 typedef	unsigned short	nlink_t;	/* link count */
 typedef	quad_t		off_t;		/* file offset */
+
+/* Guard against system header conflicts */
+#ifndef _PID_T_DEFINED_
+#define _PID_T_DEFINED_
 typedef	long		pid_t;		/* process id */
+#endif
+
 typedef	long		segsz_t;	/* segment size */
 typedef	long		swblk_t;	/* swap offset */
+
+#ifndef _UID_T_DEFINED_
+#define _UID_T_DEFINED_
 typedef	unsigned long	uid_t;		/* user id */
+#endif
 
 /* Time types - guard against system header conflicts */
 #ifndef _CLOCK_T_DEFINED_

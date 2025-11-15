@@ -6,6 +6,9 @@
 #ifndef _PROTOCOLS_H_
 #define _PROTOCOLS_H_
 
+/* x-kernel map entry type - opaque pointer */
+typedef void *MapEntry;
+
 /* Empty stub - protocol definitions not used in this build */
 
 #endif /* _PROTOCOLS_H_ */

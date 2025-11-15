@@ -31,6 +31,11 @@
 
 #define	NOGROUP	-1		/* marker for empty group set member */
 
+/* Additional system limits */
+#define	NPROC	64		/* max number of processes */
+#define	MAXCOMLEN 16		/* max command name length */
+#define	MAXNAMLEN 255		/* max filename length */
+
 /*
  * Priorities
  */

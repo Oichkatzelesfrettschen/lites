@@ -56,6 +56,12 @@ CFLAGS ?= -O2 $(C17_FLAG)
 CFLAGS += -Wall -Wextra
 # Define KERNEL for BSD kernel compilation
 CFLAGS += -DKERNEL
+# K&R compatibility flags - allow legacy code to build
+# These will be removed after systematic ANSI-fication
+CFLAGS += -Wno-implicit-int
+CFLAGS += -Wno-int-conversion
+CFLAGS += -Wno-incompatible-pointer-types
+CFLAGS += -Wno-return-mismatch
 # Harden binaries by disallowing executable stacks by appending the
 # noexecstack flag to the existing linker options. This ensures the
 # generated binaries do not allow execution from the stack.
