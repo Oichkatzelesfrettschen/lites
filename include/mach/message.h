@@ -40,6 +40,29 @@ typedef struct {
 } mach_msg_header_t;
 
 /*
+ * Message type descriptor
+ */
+typedef struct {
+	unsigned int	msgt_name : 8,		/* Data element type */
+			msgt_size : 8,		/* Size of each element in bits */
+			msgt_number : 12,	/* Count of elements */
+			msgt_inline : 1,	/* Data inline or pointer */
+			msgt_longform : 1,	/* Long form descriptor */
+			msgt_deallocate : 1,	/* Deallocate port/memory */
+			msgt_unused : 1;	/* Must be zero */
+} mach_msg_type_t;
+
+/*
+ * Message type descriptor (long form)
+ */
+typedef struct {
+	mach_msg_type_t	msgtl_header;
+	unsigned short	msgtl_name;
+	unsigned short	msgtl_size;
+	natural_t	msgtl_number;
+} mach_msg_type_long_t;
+
+/*
  * Message options
  */
 #define MACH_MSG_OPTION_NONE		0x00000000
@@ -56,6 +79,42 @@ typedef struct {
 #define MACH_RCV_NOTIFY			0x00000200
 #define MACH_RCV_INTERRUPT		0x00000400
 #define MACH_RCV_LARGE			0x00000800
+
+/*
+ * Message type descriptors
+ */
+
+/* Basic data types */
+#define MACH_MSG_TYPE_UNSTRUCTURED	0
+#define MACH_MSG_TYPE_BIT		0
+#define MACH_MSG_TYPE_BOOLEAN		0
+#define MACH_MSG_TYPE_INTEGER_16	1
+#define MACH_MSG_TYPE_INTEGER_32	2
+#define MACH_MSG_TYPE_CHAR		8
+#define MACH_MSG_TYPE_BYTE		9
+#define MACH_MSG_TYPE_INTEGER_8		9
+#define MACH_MSG_TYPE_REAL		10
+#define MACH_MSG_TYPE_INTEGER_64	11
+#define MACH_MSG_TYPE_STRING		12
+#define MACH_MSG_TYPE_STRING_C		12
+
+/* Port right transfer operations */
+#define MACH_MSG_TYPE_MOVE_RECEIVE	16	/* Must hold receive rights */
+#define MACH_MSG_TYPE_MOVE_SEND		17	/* Must hold send rights */
+#define MACH_MSG_TYPE_MOVE_SEND_ONCE	18	/* Must hold sendonce rights */
+#define MACH_MSG_TYPE_COPY_SEND		19	/* Must hold send rights */
+#define MACH_MSG_TYPE_MAKE_SEND		20	/* Must hold receive rights */
+#define MACH_MSG_TYPE_MAKE_SEND_ONCE	21	/* Must hold receive rights */
+
+/* Port right aliases */
+#define MACH_MSG_TYPE_PORT_NAME		15	/* Port name, no kernel interpretation */
+#define MACH_MSG_TYPE_PORT_RECEIVE	MACH_MSG_TYPE_MOVE_RECEIVE
+#define MACH_MSG_TYPE_PORT_SEND		MACH_MSG_TYPE_MOVE_SEND
+#define MACH_MSG_TYPE_PORT_SEND_ONCE	MACH_MSG_TYPE_MOVE_SEND_ONCE
+
+/* Special values */
+#define MACH_MSG_TYPE_LAST		22
+#define MACH_MSG_TYPE_POLYMORPHIC	(-1)	/* Dynamic type assignment */
 
 /*
  * Message return codes
